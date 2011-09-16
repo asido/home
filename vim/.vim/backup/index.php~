@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>EURO</title>
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/page.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/slider.css" type="text/css" media="screen" />
+      <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easing.1.2.js"></script>
+	<script src="js/jquery.anythingslider.js" type="text/javascript" charset="utf-8"></script>
+	<?php if (! isset($_GET['home'])) { ?>
+	<!--[if !IE]><!-->
+		<script type="text/javascript" src="js/intro.js"></script>
+	<![endif]-->
+	<!--[if IE 9]>
+		<script type="text/javascript" src="js/intro.js"></script>
+	<![endif]-->
+	<?php } ?>
+
+    <script type="text/javascript">
+    
+        function formatText(index, panel) {
+		  return index + "";
+	    }
+
+        $(function () {
+        
+            $('.anythingSlider').anythingSlider({
+                easing: "easeInOutExpo",        // Anything other than "linear" or "swing" requires the easing plugin
+                autoPlay: false,                 // This turns off the entire FUNCTIONALY, not just if it starts running or not.
+                delay: 5000,                    // How long between slide transitions in AutoPlay mode
+                startStopped: false,            // If autoPlay is on, this can force it to start stopped
+                animationTime: 600,             // How long the slide transition takes
+                hashTags: false,                 // Should links change the hashtag in the URL?
+                buildNavigation: true,          // If true, builds and list of anchor links to link to each slide
+        		pauseOnHover: true,             // If true, and autoPlay is enabled, the show will pause on hover
+        		startText: "",             // Start text
+		        stopText: "",               // Stop text
+		        navigationFormatter: formatText,       // Details at the top of the file on this use (advanced use)
+		        defaultThumb: 'images/kitchens/9.jpg'    //set the default thumbnail if no other are found
+            });
+            
+            $("#slide-jump").click(function(){
+                $('.anythingSlider').anythingSlider(6);
+            });
+
+			<?php if (! isset($_GET['home'])) { ?>
+			if (! jQuery.browser.msie || jQuery.browser.version > 8)
+				$("#page-wrapper").hide();			
+			<?php } ?>
+        });
+    </script>
+
+	<style>
+		html, body {
+			padding: 0px;
+			margin: 0px;
+			width: 100%;
+			height: 100%;
+			background-color: #ffffff;
+		}
+		#canvas-intro {
+			display: block;
+		}
+	</style>
+</head>
+
+<body>
+<!-- INTRO CANVAS -->
+<?php if (! isset($_GET['home'])) { ?>
+	<canvas id="canvas-intro"></canvas>
+<?php } ?>
+<div id="page-wrapper">
+<?php
+include("header.php");
+?>
+<div class="eurocontent">
+<div id="eurocontentinner_home">
+	<div id="page-wrap">
+		<div class="anythingSlider">
+          <div class="wrapper">
+            <ul>
+             <li><!--slide 4-->
+                 <div id="textSlide">
+                    <img class="photo" src="images/kitchens/home_image1.png" alt="kitchen"/>
+                 </div>
+              </li>
+              <li><!--slide 4-->
+                 <div id="textSlide">
+                    <img class="photo" src="images/kitchens/home_image2.png" alt="kitchen"/>
+                 </div>
+              </li>
+              <li><!--slide 4-->
+                 <div id="textSlide">
+                     <img class="photo" src="images/kitchens/home_image3.png" alt="kitchen"/>
+                 </div>
+              </li>
+              <li><!--slide 4-->
+                 <div id="textSlide">
+                     <img class="photo" src="images/kitchens/home_image4.png" alt="kitchen"/>
+                 </div>
+              </li>
+              <li><!--slide 4-->
+                 <div id="textSlide">
+                     <img class="photo" src="images/kitchens/home_image5.png" alt="kitchen"/>
+                 </div>
+              </li>
+              <li><!--slide 4-->
+                 <div id="textSlide">
+                     <img class="photo" src="images/kitchens/home_image6.png" alt="kitchen"/>
+                 </div>
+              </li>
+            </ul>       
+          </div>
+        </div><!-- END AnythingSlider -->  
+    </div>
+</div>
+<div id="euroshade"></div>
+</div>
+<?php
+include("footer.php");
+?>
+</div> <!-- page-wrapper -->
+</body>
+</html>

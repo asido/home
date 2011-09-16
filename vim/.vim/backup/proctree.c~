@@ -1,0 +1,250 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
+#include <ctype.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "proctree.h"
+
+int is_numeric(const char *str)
+{
+	char c;
+	int i = 0;
+
+	while ((c = str[i++]) != '\0') {
+		if (!isdigit(c))
+			return 0;
+	}
+	return 1;
+}
+
+int proc_count()
+{
+	DIR *dir;
+	struct dirent *folder;
+	int count = 0;
+	
+	if ((dir = opendir("/proc")) == NULL)
+		printf("ERROR: opendir");
+	
+	while ((folder = readdir(dir)) != NULL) {
+		if (is_numeric(folder->d_name))
+			++count;
+	}
+	closedir(dir);
+	return count;
+}
+
+char *build_proc_status_dir(char *folder)
+{
+	static char dir[MAX_FILENAME_SIZE];
+	dir[0] = '\0';
+	strcat(dir, "/proc/");
+	strcat(dir, folder);
+	strcat(dir, "/status");
+	return dir;
+}
+
+int get_line(int fd, char *line)
+{
+	int i;
+	char c;
+
+	for (i = 0 ;; ++i) {
+		if (read(fd, &c, 1) == 0)
+			break;
+		if (c == '\n')
+			break;
+		line[i] = c;
+	}
+	line[i] = '\0';
+	return i;
+}
+
+void extract_arg(const char *line, char *buf)
+{
+	int i = 0;
+	char *tmp = strchr(line, ':');
+	++tmp; // to get into space area
+	while (*tmp < 48 || *tmp > 122)
+		++tmp;
+	while (tmp[i] != '\0') {
+		buf[i] = tmp[i];
+		++i;
+	}
+	buf[i] = '\0';
+}
+
+char *get_arg(int fd, const char* arg)
+{
+	char line[MAX_FILENAME_SIZE];
+	static char buf[MAX_ARG_SIZE];
+	buf[0] = '\0';
+	
+	while (get_line(fd, line) != 0) {
+		if (strstr(line, arg) == line) {
+			extract_arg(line, buf);
+			break;
+		}
+	}
+	return buf;
+}
+
+
+int build_proc(struct proc *struct_buf[], int count)
+{
+	DIR *dir;
+	struct dirent *folder;
+	char *status_file_dir;
+	int fd;
+	int i;
+
+	if ((dir = opendir("/proc")) == NULL)
+		printf("ERROR: opendir");
+
+	for (i = 0; i < count; ++i) {
+		if ((folder = readdir(dir)) == NULL)
+			break;
+		if (!is_numeric(folder->d_name)) {
+			--i;
+			continue;
+		}
+		status_file_dir = build_proc_status_dir(folder->d_name);
+		fd = open(status_file_dir, O_RDONLY);
+		struct_buf[i]->pid = atoi(get_arg(fd, "Pid"));
+		lseek(fd, SEEK_SET, 0);
+		struct_buf[i]->ppid = atoi(get_arg(fd, "PPid"));
+		lseek(fd, SEEK_SET, 0);
+		char *tmp = get_arg(fd, "Name");
+		struct_buf[i]->cmd = (char*) malloc(strlen(tmp));
+		strcpy(struct_buf[i]->cmd, tmp);
+		close(fd);
+	}
+	return i - count;
+}
+
+int get_longest_name(int idx[], int idx_size, struct proc *struct_buf[], int count)
+{
+	int length = 0;
+	int i;
+
+	for (i = 0; i < idx_size; ++i)
+		length = max(strlen(struct_buf[idx[i]]->cmd), length);
+	return length;
+}
+
+int get_pid_index(int pid, struct proc *struct_buf[], int count)
+{
+	int i;
+
+	for (i = 0; i < count; ++i) {
+		if (struct_buf[i]->pid == pid)
+			return i;
+	}
+	return -1;
+}
+
+int get_pid_depth(int pid, struct proc *struct_buf[], int count)
+{
+	int ppid;
+	int depth = 0;
+	int pid_idx = get_pid_index(pid, struct_buf, count);
+
+	while ((ppid = struct_buf[pid_idx]->ppid) != 0) {
+		++depth;
+		pid_idx = get_pid_index(ppid, struct_buf, count);
+	}
+	return depth;
+}
+
+int get_child_count(int pid, struct proc *struct_buf[], int count)
+{
+	int i;
+	int cnt = 0;
+
+	for (i = 0; i < count; ++i) {
+		if (struct_buf[i]->ppid == pid)
+			++cnt;
+	}
+	return cnt;
+}
+
+void get_child_indexes(int pid, int index_buf[], struct proc *struct_buf[], int count)
+{
+	int i;
+	int child_count = get_child_count(pid, struct_buf, count);
+	int find_count = 0;
+
+	for (i = 0; i < count && find_count < child_count; ++i) {
+		if (struct_buf[i]->ppid == pid)
+			index_buf[find_count++] = i;
+	}
+}
+
+int get_digit_count(int digit)
+{
+	if (digit < 0)
+		digit = -digit;
+	int count = 1;
+	digit = digit / 10;
+	while (digit > 0) {
+		++count;
+		digit = digit / 10;
+	}
+	return count;
+}
+
+int get_indent_size(int pid, struct proc *struct_buf[], int count)
+{
+	int ppid;
+	int indent = 0;
+	int pid_idx = get_pid_index(pid, struct_buf, count);
+
+	while ((ppid = struct_buf[pid_idx]->ppid) != 0) {
+		indent += strlen(struct_buf[pid_idx]->cmd) + get_digit_count(struct_buf[pid_idx]->pid) + 4;
+		pid_idx = get_pid_index(ppid, struct_buf, count);
+	}
+	return indent;
+}
+
+void print_child(int idx, struct proc *struct_buf[], int count)
+{
+	static int last_ppid;
+
+	if (last_ppid != 1 && last_ppid == struct_buf[idx]->ppid) {
+		int i;
+		int indent = get_indent_size(struct_buf[idx]->pid, struct_buf, count);
+		printf("\n");
+		for (i = 0; i < indent; ++i)
+			printf(" ");
+		
+	}
+	last_ppid = struct_buf[idx]->ppid;
+
+	printf(" -- (%d) %s", struct_buf[idx]->pid, struct_buf[idx]->cmd);
+	
+	int child_count = get_child_count(struct_buf[idx]->pid, struct_buf, count);
+	if (child_count == 0)
+		return;
+	int i;
+	int child_idxs[child_count];
+	get_child_indexes(struct_buf[idx]->pid, child_idxs, struct_buf, count);
+	for (i = 0; i < child_count; ++i)
+		print_child(child_idxs[i], struct_buf, count);
+}
+
+void print_tree(struct proc *struct_buf[], int count)
+{
+	int i;
+	int init_child_count = get_child_count(1, struct_buf, count);
+	int init_childs[init_child_count];
+
+	get_child_indexes(1, init_childs, struct_buf, count);
+	printf("(1) init -- \n");
+	for (i = 0; i < init_child_count; ++i) {
+		printf("        ");
+		print_child(init_childs[i], struct_buf, count);
+		printf("\n");
+	}
+}

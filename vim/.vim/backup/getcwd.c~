@@ -1,0 +1,71 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <limits.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <errno.h>
+
+char *inode_to_fname(char *folder, ino_t inode, char *buf)
+{
+	DIR *fd;
+	struct dirent *dir;
+
+	if ((fd = opendir(folder)) == NULL)
+		printf("ERROR: opendir");
+
+	errno = 0;
+	while ((dir = readdir(fd)) != NULL) {
+		if (dir->d_ino == inode) {
+			printf("%s\n", dir->d_name);
+			strcpy(buf, dir->d_name);
+			return buf;
+		}
+	}
+	if (errno != 0)
+		printf("ERROR: inode_to_fname");
+	return buf;
+}
+
+int populate_folders(char **buf)
+{
+	int i = 0;
+	struct stat *fold_info = (struct stat *) malloc(sizeof(struct stat));
+
+	stat(".", fold_info);
+	chdir("..");
+	inode_to_fname(".", fold_info->st_ino, buf[i]);
+	while (strcmp(buf[i++], ".") != 0) {
+		stat(".", fold_info);
+		chdir("..");
+		inode_to_fname(".", fold_info->st_ino, buf[i]);
+	}
+
+	free(fold_info);
+	return i;
+}
+
+char *_getcwd(char *buf, size_t buf_size)
+{
+	char *folders[FILENAME_MAX];
+	int folder_count;
+
+	int j;
+	for (j = 0; j < FILENAME_MAX; ++j) {
+		folders[j] = (char *) malloc(FILENAME_MAX);
+		*(folders[j]) = '\0';
+	}
+
+	folder_count = populate_folders(folders);
+	*buf = '\0';
+	int i;
+	for (i = folder_count-2; i >= 0; --i) {
+		strcat(buf, "/");
+		strcat(buf, folders[i]);
+	}
+
+	for (j = 0; j < FILENAME_MAX; ++j)
+		free(folders[j]);
+
+	return buf;
+}

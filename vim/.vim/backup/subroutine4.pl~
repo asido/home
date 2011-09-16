@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+
+$one = 1;
+$two = 2;
+$ans = addplusone($one, $two);
+print "Answer is $ans.\n";
+
+sub addplusone {
+	return (@_[0] + $_[1] + 2);
+}

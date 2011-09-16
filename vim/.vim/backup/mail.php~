@@ -1,0 +1,61 @@
+<?php
+
+require_once("phpmailer/class.phpmailer.php");
+
+// $to = 'info@fetchpetcompany.com.au';
+$to = 'asido4@gmail.com';
+
+if ($_POST['mail_type'] == "quiry") {
+
+	echo "quiry";
+} else if ($_POST['mail_type'] == 'workforus') {
+	if (!isset($_POST['category']) ||
+		!isset($_POST['cf8_field_1']) ||
+		!isset($_POST['cf8_field_2']) ||
+		!isset($_POST['cf8_field_4']) ||
+		!isset($_POST['cf8_field_10']) ||
+		!isset($_POST['cf8_field_i']) ||
+		!isset($_POST['cf8_field_p'])) {
+			header("Location: http://www.google.com");
+			exit;
+		}
+
+	$name = $_POST['cf8_field_1'];
+	$address = $_POST['cf8_field_2'];
+	$tel = $_POST['cf8_field_p'];
+	$email = $_POST['cf8_field_4'];
+	$experience = $_POST['cf8_field_10'];
+	$more_info = $_POST['cf8_field_i'];
+
+	$subject = $_POST['category'] . " - Work for us";
+	$msg = file_get_contents("template/workforus_mail.tpl");
+	$msg = str_replace("{NAME}", $name, $msg);
+	$msg = str_replace("{ADDRESS}", $address, $msg);
+	$msg = str_replace("{TEL}", $tel, $msg);
+	$msg = str_replace("{EMAIL}", $email, $msg);
+	$msg = str_replace("{EXPERIENCE}", $experience, $msg);
+	$msg = str_replace("{MORE_INFO}", $more_info, $msg);
+	$headers = 'From: '. $email . "\r\n" .
+		'Reply-To: '. $email . "\r\n";
+
+	$mail = new PHPMailer();
+	$mail->From = $email;
+	$mail->AddReplyTo($email, $name);
+	$mail->AddAddress($to, "MEEEEEE");
+	$mail->Subject = $subject;
+	$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+	$mail->MsgHTML($msg);
+
+	if(!$mail->Send()) {
+	  echo "Mailer Error: " . $mail->ErrorInfo;
+	} else {
+	  echo "Message sent!";
+	}
+	// mail($to, $subject, $msg, $headers);
+} else if ($_POST['mail_type'] == 'franchise') {
+	echo "franchise";
+}
+
+header("Location: ".$_POST['link_back']);
+exit;
+?>

@@ -1,0 +1,165 @@
+<?php
+require_once 'man_functions.php';
+$cat=show_categories();
+$cat_count=count($cat);
+$blog=load_all_post(10,1);
+$post_count=count($blog);
+$total_pages=calculate_totalpages(blog,10);
+$tags1=load_tags();
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.min.js" ></script>
+<script type="text/javascript" src="js/jquery.js" ></script>
+<script type="text/javascript" src="js/blog.js" ></script>
+<script type="text/javascript" src="js/blogview.js" ></script>
+<script type="text/javascript" src="js/blogpageview.js" ></script>
+<script type="text/javascript">
+$(document).ready(function(){
+						   
+$('.t1').click(function() {						
+	event.stopImmediatePropagation()
+});						   
+						   
+$('.m1').click(function() {						
+    $(this).find('.title').slideToggle('fast');
+	event.stopImmediatePropagation()
+});
+
+$('.y1').click(function() {
+    $(this).find('.month').slideToggle('fast');
+});
+});
+						
+</script>
+<title>Blog</title>
+</head>
+<body>
+<?php
+include("header.php");
+?>
+<div class="eurocontent">
+<div id="eurocontentinner">
+	<div class="eu_side"><div class="eu_blogdiv"><h2>Blog Search</h2></div>
+<div class="eu_search">
+<form name="blogfrm" action="searchresults.php" method="get">
+<input type="text" class="eu_input" name="search" />
+<input type="submit" class="eu_submit" value="Search" />
+</form>
+</div>
+
+<div class="eu_blogdiv"><h2>Categories</h2></div>
+  <div class="eu_cat"> <ul><?php
+	
+ if($cat_count>0) {
+		for($i=0;$i<$cat_count;$i++)
+		{
+						
+	 ?>
+<li><a href="#" id="tabb<?php echo $cat[$i]['id']; ?>" onclick="load_blog('<?php echo $cat[$i]['id']; ?>','10','1','tabb<?php echo $cat[$i]['id']; ?>');"><?php  echo $cat[$i]['name'];?></a></li>
+
+<?php }
+ }?></ul></div>
+<div class="eu_blogdiv"><h2>Tags</h2></div>
+<div class="eu_cat">
+<?php
+$tag_array=explode(",",$tags1);
+$c=count($tag_array);
+for($k=0;$k<18;$k++)
+{
+	$i=rand(0,$c-1);
+?>
+<a href="searchresults.php?search=<?php echo $tag_array[$i]; ?>"><?php echo $tag_array[$i]; ?></a>
+<?php
+}
+?>
+</div>
+<div class="eu_blogdiv"><h2>Archives</h2></div>
+<div class="eu_cat">
+<ul>
+<?php
+$res=mysql_query("SELECT DISTINCT YEAR(date) FROM `blog` ORDER BY date DESC");
+while($row=mysql_fetch_array($res))
+{
+	$year=$row['YEAR(date)'];
+?>
+	  <li class="y1"><?php echo $year; ?>
+      <ul class="month" style="display:none; margin-left:5px;">
+      <?php
+	  $res1=mysql_query("SELECT DISTINCT MONTHNAME(date), YEAR(date) FROM `blog` ORDER BY date DESC");
+	  while($row1=mysql_fetch_array($res1))
+	  {
+		  $cyear=$row1['YEAR(date)'];
+	 	  if($year==$cyear)
+	  	  {
+		  	$month=$row1['MONTHNAME(date)'];
+	  ?>
+      	 <li class="m1"><?php echo $month; ?>
+         <ul class="title" style="display:none; margin-left:5px;" >
+         <?php
+		 $res2=mysql_query("select id,title, MONTHNAME(date),YEAR(date) from blog");
+	     while($row2=mysql_fetch_array($res2))
+	   	 {
+		 	$cmonth=$row2['MONTHNAME(date)'];
+			$year1=$row2['YEAR(date)'];
+			if($cmonth==$month && $year1==$year)
+			{
+				$postid=$row2['id'];
+		 ?>			
+         <li class="t1" onclick="load_post(<?php echo $postid ?>,'sample')"><?php echo $row2['title']; ?></li>
+         <?php
+			}
+		 }
+		 ?>
+         </ul>
+	 	 </li>
+      <?php
+	  }
+	  }
+	  ?>
+      </ul>
+      </li>
+<?php
+}
+?>
+</ul>
+</div>
+
+</div>
+<div id="eu_main" class="eu_main">
+
+<div class="eu_head"><div class="eu_blogdiv eu_mainhead"><h1>Blog</h1></div></div>
+<?php
+	
+ if($post_count>0) {
+		for($i=0;$i<$post_count;$i++)
+		{
+						
+	 ?>
+
+<!-- single post -->
+<div class="ri_test_contentright1" style="margin-top:35px">
+<h1 class="ri_test_contentright1_tle"><?php echo $blog[$i]['title']; ?></h1>
+<h2 class="ri_test_contentright1_subtle"><?php echo $blog[$i]['date']; ?></h2>
+<h5 class="ri_test_contentright1_cnt"><?php echo $blog[$i]['content']; ?> </h5>
+<a class="ri_readlink"><h6 class="ri_readmore" style="cursor:pointer" onclick="load_post('<?php echo $blog[$i]['id']; ?>','tabb<?php echo $blog[$i]['id']; ?>');">Read more</h6></a>
+</div>
+<!-- single post -->
+<?php }
+ }?>
+
+</div>
+    
+</div>
+
+<div id="euroshade"></div>
+</div>
+<?php
+include("footer.php");
+?>
+</body>
+</html>

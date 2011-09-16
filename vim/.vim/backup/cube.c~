@@ -1,0 +1,68 @@
+#include <GL/glut.h>
+#include <stdio.h>
+
+int width;
+int height;
+
+void init(void)
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glShadeModel(GL_FLAT);
+}
+
+void display(void)
+{
+	GLint i;
+	glGetIntegerv(GL_MAX_CLIP_PLANES, &i);
+	printf("%d\n", i);
+
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glLoadIdentity();	/* clear the matrix */
+			/* viewing transformation */
+	gluLookAt(1.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	/* the following function is the same as setting the camera with the function above */
+	/* only that it leaves the camera alone at default position (0.0, 0.0, 0.0), */
+	/* but moves the object by -5.0 in Z direction */
+	/* glTranslatef(0.0f, 0.0f, -5.0f); */
+	glScalef(1.0f, 2.0f, 2.5f);	/* modeling tranformation */
+
+	glViewport(0, 0, (GLsizei) width/2, (GLsizei) height);
+	glutWireCube(1.0);
+
+	glLoadIdentity();
+	gluLookAt(-1.0, 1.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	glViewport(width/2, 0, (GLsizei) width/2, (GLsizei) height);
+	glutWireCube(1.0);
+
+	glFlush();
+}
+
+void reshape(int w, int h)
+{
+	width = w;
+	height = h;
+
+	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	/* glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0); */
+	/* the following function effect is same as the above */
+	/* but it sets the camera while the above multiplies the matrix */
+	gluPerspective(60.0, 1.0, 1.5, 20.0);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowSize(500, 500);
+	glutInitWindowPosition(100, 100);
+	glutCreateWindow(argv[0]);
+	init();
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutMainLoop();
+	return 0;
+}

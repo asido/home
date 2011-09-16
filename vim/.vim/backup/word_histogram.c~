@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+main() {
+	int wc[15];
+	int c, i;
+	int current_wc = 0;
+	
+	for(i = 0; i < 15; i++)
+		wc[i] = 0;
+
+	while((c = getchar()) != EOF) {
+		if(c == ' ' || c == '\n' || c == '\t') {
+			if(current_wc > 13)
+				wc[14]++;
+			else
+				wc[current_wc]++;
+			current_wc = 0;
+			continue;
+		}
+		current_wc++;
+	}
+
+	for(i = 0; i < 15; i++) {
+		print(i);
+		printf("%d", wc[i]);
+		int j;
+		for(j = 0; j < wc[i]; j++)
+			printf("|");
+		putchar('\n');
+	}
+}

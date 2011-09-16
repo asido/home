@@ -1,0 +1,84 @@
+From 4a6f606cea2afcce7e814a0b6d0f0e27cef6f690 Mon Sep 17 00:00:00 2001
+From: Arvydas Sidorenko <asido4@gmail.com>
+Date: Wed, 7 Sep 2011 21:11:23 +0200
+Subject: [PATCH 2/2] drivers/staging/crystalhd/: cleanup typedefs
+
+Cleans the typedef declarations in bc_dts_types.h file. Most of them aren't
+used. The ones are used are 'uint32_t' and similar ones, but I don't see the
+point of them since they are declared in stdint.h, unless some sort of embeded
+systems don't have it (no experience with it).
+So simply removing them doesn't cause any compilation errors or warnings on
+my laptop.
+
+Signed-off-by: Arvydas Sidorenko <asido4@gmail.com>
+---
+ drivers/staging/crystalhd/bc_dts_types.h |   41 +-----------------------------
+ 1 files changed, 1 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/staging/crystalhd/bc_dts_types.h b/drivers/staging/crystalhd/bc_dts_types.h
+index d2131e7..42d7cfd 100644
+--- a/drivers/staging/crystalhd/bc_dts_types.h
++++ b/drivers/staging/crystalhd/bc_dts_types.h
+@@ -29,29 +29,8 @@
+ #include <stdint.h>
+ #endif
+ 
+-#ifndef PVOID
+-typedef void	*PVOID;
+-#endif
+-
+-#ifndef BOOL
+-typedef int	BOOL;
+-#endif
+-
+ #if defined(__KERNEL__) || defined(__LINUX_USER__)
+ 
+-#ifdef __LINUX_USER__	/* Don't include these for KERNEL */
+-typedef uint32_t	ULONG;
+-typedef int32_t		LONG;
+-typedef void		*HANDLE;
+-#ifndef VOID
+-typedef void		VOID;
+-#endif
+-typedef void		*LPVOID;
+-typedef uint32_t	DWORD;
+-typedef uint32_t	UINT32;
+-typedef uint32_t	*LPDWORD;
+-typedef unsigned char	*PUCHAR;
+-
+ #ifndef TRUE
+ 	#define TRUE		1
+ #endif
+@@ -70,28 +49,10 @@ typedef unsigned char	*PUCHAR;
+ #else
+ 
+ #ifndef uint64_t
+-typedef struct _uint64_t {
++struct _uint64_t {
+ 	uint32_t low_dw;
+ 	uint32_t hi_dw;
+ } uint64_t;
+ #endif
+ 
+-#ifndef int32_t
+-typedef signed long		int32_t;
+-#endif
+-
+-#ifndef uint32_t
+-typedef unsigned long	uint32_t;
+ #endif
+-
+-#ifndef uint16_t
+-typedef unsigned short	uint16_t;
+-#endif
+-
+-#ifndef uint8_t
+-typedef unsigned char	uint8_t;
+-#endif
+-#endif
+-
+-#endif
+-
+-- 
+1.7.4.4
+

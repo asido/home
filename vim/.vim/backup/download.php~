@@ -1,0 +1,97 @@
+<?php
+session_start();
+require_once("funcsv.php");
+
+connect();
+	if(!session_is_registered('user_id'))
+
+	{
+
+		header("location:login.php");	
+
+	}
+
+ $user_id = $_SESSION['user_id'];
+	m
+function getDownloadedtour($user_id)
+{
+$p = "SELECT * FROM download WHERE userid='$user_id'";
+$q = mysql_query($p);
+	if(mysql_num_rows($q)>0)
+	{
+		
+		return $q;
+	}
+	else
+	{
+		return false;	
+	}
+}
+?>
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>YouTours-Download Tours</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+
+</head>
+<body>
+<div class="content">
+<?php include("header.php");include("menu.php");?>
+	<div class="si-subcontent">																	
+    	<div class="si-subouter">																
+   		  <h1 class="si-subcontenthead dth11">DOWNLOAD TOURS</h1>
+			<table width="1000" class="si-headbar"  cellspacing="0;" cellpadding="0;">
+              <tr>
+                <td width="121" class="si-tableleft"><span class="si-tableheadgreen">Purchase Date</span></td>
+                <td width="280" class="si-othertds"><span class="si-tableheadgreen">Title of the Tour </span></td>
+                <td width="121" class="si-othertds"><span class="si-tableheadgreen">Guide </span></td>
+                <td width="130" class="si-othertds"><span class="si-tableheadgreen">Length of Tour</span></td>
+                <td width="171" class="si-othertds"><span class="si-tableheadgreen">Rate & Review </span></td>
+                <td width="165" class="si-tableright"><span class="si-tableheadgreen"></span></td>
+              </tr>
+			</table>
+          <?php
+		  $re  = getDownloadedtour($user_id);
+while($down_details=mysql_fetch_array($re))
+{
+	$tour_id = $down_details['tourid'];
+	$tour = getTourDetails(false,$tour_id);
+//	echo "<pre>";
+//	print_r($tour);
+	 $uid = $tour[$tour_id]['user_id']; 
+	 $rating = getRating($tour_id);
+		   ?>										
+
+
+
+			<table width="1000" class="si-innerbar"  cellspacing="0;" cellpadding="0;">
+  <tr>
+    <td width="121" class="si-tableleft"><span class="si-tablegray"><?php echo $down_details['purchasedate']; ?></span></td>
+    <td width="280" class="si-othertds"><span class="si-tablegreencap"><?php echo $tour[$tour_id]['title']; ?></span></td>
+    <td width="121" class="si-othertds"><a href="guidebio.php?tour=<?php echo $tour_id;?>"><span class="si-tableblue"><?php echo  getFullname($uid); ?></span></a></td>
+    <td width="130" class="si-othertds"><div class="si-tablegray"><?php echo getAudiolength($tour_id); ?></div></td>
+    <td width="171" class="si-othertds"><span class="si-tableheadgreen">
+    	<div class="si-downratingstars">
+        	<div class="si-downrating1">Rating :</div>
+      		<?php echo printRating($rating);?>
+        </div>
+    	<div class="si-reviewtour"><a href="myreview.php?tour_id=<?php echo $tour_id;?>" class="retou">Review Tour</a></div>
+    </span></td>
+    <td width="165" class="si-tableright"><a href="#"><div class="si-downbutton"></div></a></td>
+  </tr>
+</table>
+<?php
+}
+?>
+	      
+    </div>		<div class="si-pagination">
+			<div class="si-pagination1"></div>
+            <div class="si-pagination2">Page <a href="#" class="pag">1</a> -<a href="#" class="lasx">10</a> | <a href="#" class="nex">Next</a></div>
+            <div class="si-pagination3"></div>
+        </div>																				
+  <?php include("footer.php"); ?>
+</div> 
+</body>
+</html>

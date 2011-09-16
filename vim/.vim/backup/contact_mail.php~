@@ -1,0 +1,31 @@
+<?php
+
+	require_once("lib/swift_mailer/swift_required.php");
+
+	$sender_name = $_POST['name'];
+	$sender_email = $_POST['email'];
+	$sender_message = $_POST['message'];
+
+	$message = "You've got a new message.
+
+Sender contacts:
+	Name: ".$sender_name."
+	E-mail: ".$sender_email."
+
+Original message:
+--------------------------------------------------------------
+".$sender_message."
+--------------------------------------------------------------";
+
+	$transport = Swift_SmtpTransport::newInstance();
+	$mailer = Swift_Mailer::newInstance($transport);
+	$msg = Swift_Message::newInstance("A new message from '".$sender_name."'")
+		->setFrom(array('wellington@wellington.com' => "Wellington"))
+		->setTo(array("byrontyers@gmail.com" => ""))
+		->setBody($message);//'Here is the message itself');
+	$result = $mailer->send($msg);
+	$mailer->
+
+	header("Location: ../contact.html");
+
+?>

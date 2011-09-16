@@ -1,0 +1,86 @@
+package rhinestone.Control;
+
+import rhinestone.TUI.CheckoutUI;
+import rhinestone.Model.Sale;
+
+/**
+ * The class is responsible for controlling the checkouts.
+ *
+ * @author Group 2
+ * @version 2010.12.12
+ */
+public class CheckoutController {
+	private CheckoutUI checkoutUI;
+	private Sale sale;
+
+	//CONSTRUCTOR
+	public CheckoutController() {
+		checkoutUI = new CheckoutUI(this);
+	}
+
+	/**
+	 * Is called by MainMenuController when the user chooses the checkout option.
+	 * It prepares new sale session and asks the UI to print checkout menu.
+	 */
+	public void startCheckout() {
+		sale = new Sale();
+		checkoutUI.startMenu();
+	}
+
+	/**
+	 * Called by UI when the product is scanned.
+	 * @param barcode The bar code of the scanned product.
+	 */
+	public void addProduct(String barcode) {
+		System.out.println("Product added");
+		pause();
+	}
+
+	/**
+	 * Called by UI when the scanning of products is done to finish the sale.
+	 * @param customerCpr The customers cpr is passed. If not null, checks if the person is registered as customer and checks for available discounts.
+	 */
+	public void checkoutProducts(String customerCpr) {
+		if(sale != null) {
+			System.out.println("Products are being checked out...");
+			if(!customerCpr.equals("")) {
+				System.out.println("Checking for available discount for this customer...");
+				pause();
+			}
+			System.out.println("Done\n");
+			System.out.println(" ---- RECEIPT ----");
+			System.out.println("\tProducts: .........");
+			System.out.println("\tTotal price: ........\n");
+			pause();
+		}
+	}
+
+	/**
+	 * Removes the mistacenly added product from the current sale.
+	 * @param barcode The bar code of the product to remove.
+	 */
+	public void removeProduct(String barcode) {
+		System.out.println("Product removed");
+		pause();
+	}
+
+	/**
+	 * Destroys the current sale with all the scanned products.
+	 */
+	public void cancelSale() {
+		sale = null;
+		System.out.println("Sale canceled");
+		pause();
+	}
+
+	/**
+	 * Don't pay attention to this. In final application version it will be removed.
+	 */
+	private void pause() {
+		try {
+			Thread.sleep(1000);
+		} catch(InterruptedException ex) {
+			ex.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,164 @@
+; Library name:	textlib
+; Version:		1.0
+; Created date:	2011/02/19
+; Last update:	2011/02/19
+; Author:		Nobody
+; Description:	A linkable library of text-oriented procedures and tables.
+;
+; Build:
+;	nasm -f elf -g -F stabs textlib.asm
+GLOBAL ClearLine, DumpChar, NewLines, PrintLine		; Procedures
+GLOBAL DumpLin, HexDigits, BinDigits				; Data items
+
+SECTION .bss			; Section containing uninitialised data
+
+	BUFFLEN equ 10
+	Buff	resb BUFFLEN
+
+SECTION .data			; Section containing initialised data
+
+	; Here we have two parts of a signle useful data structure, implementing
+	; the text line of a hex dump utility. The first part displays 16 bytes in
+	; hex separated by spaces. Immediately following is a 16-character line
+	; delimited by vertical bar characters. Because they are adjacent, the two
+	; parts can be referenced separately or as a single contiguous unit.
+	; Remember that if DumpLin is to be used separately, you must append an
+	; EOL before sending it to the Linux console.
+	DumpLin: db " 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
+	DUMPLEN	 equ $-DumpLin
+	ASCLin:	 db "|................|", 10
+	ASCLEN	 equ $-ASCLin
+	FULLLEN	 equ $-DumpLin
+
+	; The HexDigits table is used to convert numeric values to their hex
+	; equivalents. Index by nybble without a scale: [HexDigits+eax]
+	HexDigits: db "0123456789ABCDEF"
+
+	; This table is used for ASCII character translation, into the ASCII
+	; portion of the hex dump line, via XLAT or ordinary memory lookup.
+	; All printable characters "play through" as themselves. The high 128
+	; characters are translated to ASCII period (0x20). The non-printable 
+	; characters in the low 128 are also translated to ASCII period, as is
+	; char 127.
+	DotXlat:
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f
+	db 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f
+	db 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f
+	db 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x5b, 0x5c, 0x5d, 0x5e, 0x5f
+	db 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f
+	db 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+	db 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e
+
+SECTION .text				; Section containing code
+
+
+;----------------------------------------------------------------------------------------------------
+; ClearLine: Clear a hex dump line string to 16 0 values
+; UPDATED 2011/02/18
+; IN:		Nothing
+; RETURNS:	Nothing
+; MODIFIES: Nothing
+; CALLS:	DumpChar
+; DESCRIPTION: The hex dump line string is cleared to binary 0 by
+;			   calling DumpChar 16 times, passing it 0 each time.
+
+ClearLine:
+	push edx		; Save caller's EDX
+	mov edx, 15		; We're going to go 16 pokes, counting form 0
+.poke:
+	mov eax, 0		; Tell DumpChar to poke a '0'
+	call DumpChar	; Insert the '0' into the hex dump string
+	sub edx, 1		; DEC doesn't affect CF!
+	jae .poke		; Loop back if EDX >= 0
+	pop edx			; Restore caller's EDX
+	ret				; Go home
+
+;----------------------------------------------------------------------------------------------------
+; DumpChar:		"Poke" a value into the hex dump line string.
+; UPDATED:		2011/02/18
+; IN:			Pass the 8-bit value to be poked in EAX.
+;				Pass the value's position in the line (0-15) in EDX.
+; RETURNS:		Nothing
+; MODIFIES:		EAX, ASCLin, DumpLin
+; CALLS:		Nothing
+; DESCRIPTION:	The values passed in EAX will be put in both the hex dump
+;				portion and in the ASCII portion, at the position passed
+;				in EDX, represented by a space where it is not a
+;				printable character.
+
+DumpChar:
+	push ebx					; Save caller's EBX
+	push edi					; Save caller's EDI
+	; First we insert the input char into the ASCII portion of the dump line
+	mov bl, byte [DotXlat+eax]	; Translate non-printables to '.'
+	mov byte [ASCLin+edx+1], bl	; Write to ASCII portion
+	; Next we insert the hex equivalent of the input char in the hex portion
+	; of the hex dump line:
+	mov ebx, eax				; Save a second copy of the input char
+	lea edi, [edx*2+edx]		; Calc offset into line string (EDX * 3)
+	; Look up low nybble character and insert it into the string:
+	and eax, 0x0000000f			; Mask out all but the low nybble
+	mov al, byte [HexDigits+eax]; Look up the char equivalent of nybble
+	mov byte [DumpLin+edi+2], al; Write the char equivalent to line string
+	; Look up high nybble character and insert it into the string:
+	and ebx, 0x000000f0			; Mask out all the but second-lowest nybble
+	shr ebx, 4					; Shift high 4 bits of byte into low 4 bits
+	mov bl, byte [HexDigits+ebx]; Look up char equivalent of nybble
+	mov byte [DumpLin+edi+1], bl; Write the char equivalent to line string
+	; Done! Let's go home:
+	pop edi						; Restore caller's EDI
+	pop ebx						; Restore caller's EBX
+	ret							; Return to caller
+
+;----------------------------------------------------------------------------------------------------
+; Newlines:		Sends between 1 and 15 newlines to the Linux console
+; UPDATED:		2011/02/19
+; IN:			# of newlines to send, from 1 to 15
+; RETURNS:		Nothing
+; MODIFIES:		Nothing
+; CALLS:		Kernel sys_write
+; DESCRIPTION:	The number of newline characters (0x0a) specified in EDX
+;				is sent to stdout using INT 0x80 sys_write. This procedure
+;				demonstrates placing constant data in the procedure definition
+;				itself, rather than in the .data or .bss sections.
+Newlines:
+	pushad				; Save all caller's registers
+	cmp edx, 15			; Make sure caller didn't ask for more than 15
+	ja .exit			; If so, exit without doing anything
+	mov ecx, EOLs		; Put address of EOLs table into ECX
+	mov eax, 4			; Specify sys_write
+	mov ebx, 1			; Specify stdout
+	int 0x80			; Make the kernel call
+.exit:
+	popad				; Restore all caller's registers
+	ret					; Go home!
+EOLs: db 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10
+
+;----------------------------------------------------------------------------------------------------
+; PrintLine:	Displays DumpLin to stdout
+; UPDATED:		2011/02/18
+; IN:			Nothing
+; RETURNS:		Nothing
+; MODIFIES:		Nothing
+; CALLS:		Kernel sys_write
+; DESCRIPTION:	The hex dump line string DumpLin is displayed to stdout
+;				using INT 0x80 sys_write. All GP registers are preserved.
+
+PrintLine:
+	pushad				; Save all caller's GP registers
+	mov eax, 4			; Specify sys_write call
+	mov ebx, 1			; Specify File Descriptor 1: Standard Output
+	mov ecx, DumpLin	; Pass offset of line string
+	mov edx, FULLLEN	; Pass size of the line string
+	int 0x80			; Make kernel call to display line string
+	popad				; Restore all caller's GP registers
+	ret					; Return to caller

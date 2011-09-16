@@ -1,0 +1,15 @@
+public class HotTub {
+	private String room;
+
+	public HotTub(String room) {
+		this.room = room;
+	}
+
+	public void on() {
+		System.out.println("Hot tub is on");
+	}
+
+	public void off() {
+		System.out.println("Hot tub is off");
+	}
+}

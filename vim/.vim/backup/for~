@@ -1,0 +1,10 @@
+BEGIN {
+	for(n = 1; n <= 5; n++)
+		print "2^"n, 2**n;
+}
+
+END {
+	manuf = ("hi", "how are you");
+	for(name in manuf)
+		print name, manuf[name];
+}

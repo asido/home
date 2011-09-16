@@ -1,0 +1,14 @@
+Hi,
+You have been invited by {AUTHOR_NAME} ( {AUTHOR_EMAIL} ) to bid on his project.
+
+Project name:	{PROJECT_NAME}
+When:			{PROJECT_DATE}
+Where:			{PROJECT_LOCATION}
+Description:	{PROJECT_DESCRIPTION}
+
+
+To bid on this project, you first have to sign up on Contractor Bridge here:
+http://www.contractorbridge.com/index.php
+
+You can go to the project by opening the following url:
+http://wwww.contractorbridge.com/bid.php?pid={PROJECT_ID}

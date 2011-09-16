@@ -1,0 +1,21 @@
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class UI extends JFrame
+{
+	private JPanel panel;
+
+	public UI()
+	{
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		panel = new JPanel();
+		add(panel);
+	}
+
+	public Graphics2D getGraphics()
+	{
+		return (Graphics2D) panel.getGraphics();
+	}
+}

@@ -1,0 +1,9 @@
+#ifndef DUP_H
+#define DUP_H
+
+#include <fcntl.h>
+
+int dup(int old_fd);
+int dup2(int old_fd, int new_fd);
+
+#endif /* end of include guard: DUP_H */

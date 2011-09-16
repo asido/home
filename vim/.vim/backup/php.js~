@@ -1,0 +1,13 @@
+$('document').ready(function() {
+	$('#r4-left').click(function() {
+		if (isInputOk()) {
+			$('#login-form').submit();
+		}
+	});
+
+	$('#row-rbutton').click(function() {
+		if (isInputOk()) {
+			$('#signup-form').submit();
+		}
+	});
+});

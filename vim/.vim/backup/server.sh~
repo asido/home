@@ -1,0 +1,1 @@
+java -Djava.rmi.server.codebase=file:/home/asus/Desktop/Java/TeachPro/advanced/serverProgrammingElements/RMI/1/classes/ -Djava.security.policy=/home/asus/Desktop/Java/rmi/policy JavaProImpl

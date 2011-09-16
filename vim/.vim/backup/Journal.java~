@@ -1,0 +1,76 @@
+import java.util.ArrayList;
+
+public class Journal {
+	private String title;
+	private String publisher;
+	private int volume;
+	private String year;
+	private ArrayList<String> employees;
+
+	public Journal(String title, String publisher, int volume, String year) {
+		this.title = title;
+		this.publisher = publisher;
+		this.volume = volume;
+		this.year = year;
+		employees = new ArrayList<String>();
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	public void setVolume(int volume) {
+		this.volume = volume;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public int getVolume() {
+		return volume;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void addEmployee(String name) {
+		if(!employees.contains(name)) {
+			employees.add(name);
+			System.out.println(name + " added");
+		}
+		else
+			System.out.println(name + " already exists");
+	}
+
+	public void printEmployees() {
+		System.out.print("Employee names:");
+		for(String employee : employees)
+			System.out.print(" " + employee);
+		System.out.println();
+	}
+
+	public void removeEmployee(String name) {
+		if(employees.remove(name))
+			System.out.println(name + " removed");
+	}
+
+	public boolean containsEmployee(String name) {
+		if(employees.contains(name))
+			return true;
+		return false;
+	}
+}

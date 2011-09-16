@@ -1,0 +1,376 @@
+<script type="text/javascript" language="javascript" src="<?php echo SITELINK;?>js/layerview.js"></script>
+<?php
+//include controller
+include(CONDIR.DS."shop.php");
+include(INCDIR.DS."class.php");
+$class = new sax;
+
+//SEO related things here
+//$title = $homerowfetch['title'];
+//$metadesc = $homerowfetch['title'];
+function resizeImage($originalImage,$toWidth,$toHeight)
+{
+	ini_set("memory_limit","80M");
+// Get the original geometry and calculate scales
+list($width, $height) = getimagesize($originalImage);
+ $xscale=$width/$toWidth;
+ $yscale=$height/$toHeight;
+
+// Recalculate new size with default ratio
+if ($yscale>$xscale){
+	$new_width = round($width * (1/$yscale));
+	$new_height = round($height * (1/$yscale));
+}
+else {
+	$new_width = round($width * (1/$xscale));
+	$new_height = round($height * (1/$xscale));
+}
+
+// Resize the original image
+$imageResized = imagecreatetruecolor($new_width, $new_height);
+$imageTmp     = imagecreatefromjpeg ($originalImage);
+$val=imagecopyresampled($imageResized, $imageTmp, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+$img=imagejpeg($imageResized,$originalImage,100);
+
+//return $new_height;
+return $originalImage;
+}
+?>
+<?php
+if(isset($_POST['AddtoCart']))
+{
+	if($_POST['option1']!="")
+	$_SESSION['CartItemOptions1']=$_POST['option1'];
+	if($_POST['option2']!="")
+	$_SESSION['CartItemOptions2']=$_POST['option2'];
+	if($_POST['option3']!="")
+	$_SESSION['CartItemOptions3']=$_POST['option3'];
+	echo $class->R(SITEROOTSECURE."index.php/cart/add/".$_POST['hiddenref']."/Shopping_Cart");
+}
+$title=$class->F($class->where(TB_CATEGORY,"id",$QST2));
+?>
+<div class="content_areaInRight">
+          
+          <!-- Begin contentBoxArea -->
+          <div class="contentBoxArea">
+            <!-- Begin contentBoxAreaLeft -->
+            <div class="contentBoxAreaLeft" style="width:655px;">
+<?php
+              $i=0;
+				$ord = $_REQUEST['ord'];
+				$frm = $QST3;	
+				$noofrows="21";
+				
+				if(IsSet($QST3)==false)
+				$frm=0;
+				else
+				$frm=@$QST3;
+				$start=$frm*$noofrows;
+				
+			  if($QST2!="")
+			  $query=$class->login(TB_PRODUCT,"display","categoryid","1",$QST2);
+			  else
+			  $query=$class->where(TB_PRODUCT,"display","1");
+			  
+			  $totqry=$query;
+				$totex=mysql_query($totqry);
+				$totrow=mysql_num_rows($totex);
+				$qry=$query." limit $start,$noofrows";
+				$res=mysql_query($qry);
+				if(mysql_num_rows($res)>0)
+				{
+				$i=0;
+				while($resent=mysql_fetch_array($res))
+				{	
+					  
+				$recentimg=$class->F($class->where(TB_PRODUCT_IMAGE,"reference",$resent['reference']));
+			  ?>
+              <?php $itm=str_replace(" ","_",$resent['productname'].".html");?>
+              <?php /*?><a href="#" onclick="MM_showHideLayers('Layer1<?php echo $resent['id'];?>','','show')">
+                            <img src="<?php echo SITEIMG; ?>addtocart.jpg" border="0" /></a><?php */?>
+              <div class="recentlyaddedBox" style="width:210px; min-height:250px;">
+              <input name="addid" id="addid" type="hidden" value="<?php echo $resent['id']?>"/>
+                <table width="200" border="0" align="center">
+                  <tr>
+                    <td height="130" colspan="2" align="center" valign="middle" style="padding-top:10px;">
+                    <?php
+					if($resent['image1']!="")
+					{
+						$cimg=SITEPRO."tum/".$resent['image1'];
+						$imggp="Sax/property/tum/".$resent['image1'];
+					}
+					else
+					{
+					$cimg=SITEIMG."noimg.JPG";
+					$imggp="images/noimg.JPG";
+					}
+					?>
+                    <?php
+					if(file_exists($imggp))
+					{
+					?>
+                    <a href="<?php echo SITELINK;?>products/<?php echo $resent['id']?>/<?php echo $itm;?>">
+                    <img src="<?php echo $cimg;?>" alt="" style="border:4px double #E4E4E4;" border="0"/></a>
+                    <?php }else{?>
+                    <a href="<?php echo SITELINK;?>products/<?php echo $resent['id']?>/<?php echo $itm;?>" class="font2">
+                    <img src="<?php echo SITEIMG."noimg.JPG";?>" alt="" style="border:4px double #E4E4E4;" border="0"/></a>
+                    <?php }?>
+                    
+                    </td>
+                  </tr>
+                  <tr class="font2">
+                    <td colspan="2" align="center" valign="middle">
+                    <!--<a href="<?php //echo SITELINK."cart/add/".$resent['reference']."/Shopping_Cart";?>"><img src="<?php //echo SITEIMG;?>buynow.jpg" border="0" /></a>-->
+                    <a href="<?php echo SITELINK;?>products/<?php echo $resent['id']?>/<?php echo $itm;?>" class="black" style="font-size:11px;">
+                    <b><?php echo substr($resent['productname'],0,23);?></b></a>
+                    </td>
+                  </tr>
+                  <tr class="font2">
+                    <td colspan="2" align="center" valign="middle">
+                    <a href="<?php echo SITELINK;?>products/<?php echo $resent['id']?>/<?php echo $itm;?>" class="black" style="font-size:11px;">
+                    <b><?php echo substr($resent['title1'],0,23);?></b></a></td>
+                  </tr>
+                  <tr class="font2">
+                    <td colspan="2" align="center" valign="middle">
+                    <a href="<?php echo SITELINK;?>products/<?php echo $resent['id']?>/<?php echo $itm;?>" class="black" style="font-size:11px;">
+                    <b><?php echo substr($resent['title2'],0,23);?></b></a></td>
+                  </tr>
+                  <tr class="font2">
+                    <td width="145" align="right" valign="middle">List Price:</td>
+                    <td width="145" align="left" valign="middle" class="offerprice">$<?php echo number_format($resent['listprice']);?></td>
+                  </tr>
+                  <tr class="font3">
+                    <td align="right" valign="middle">Sale Price:</td>
+                    <td align="left" valign="middle">$<?php echo number_format($resent['cost']);?></td>
+                  </tr>
+                </table>
+              </div>
+              <?php }}
+			  $totrec=$class->C($query);
+			  if($totrec<=0){echo "<br><br><span class='red' style='padding-left:100px;'>~ No Products Found in this Category ~</span>";}
+			  ?>
+            </div>
+            <!-- End contentBoxAreaLeft -->
+            <table align="center" width="100%" cellpadding="0" cellspacing="0" >
+                        <tr>
+                          <td>&nbsp;</td>
+                          <td align="center" class="formlabel">&nbsp;</td>
+                          <td align="center">&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td align="center" valign="middle" class="font2">
+						  <?php
+							if($frm>0)
+							{
+							$prev=$frm-1;
+							?>
+                            <a href="<?php echo SITELINK; ?>shop/<?php echo $QST2;?>/<?php echo $prev?>/<?php echo $QST4;?>" class="font2"> 
+                            <img src="<?php echo SITEIMG;?>prev-btn.png" border="0" title="Prev" /></a>
+                            <?php
+							}
+							else
+							echo "<span class='font2'>- end -</span>";
+							?></td>
+                          <td width="60%" align="center" valign="middle" class="font2">
+						  <div style="width:500px; float:left;">
+						  <?php
+							$totpage=ceil($totrow/$noofrows);
+							$curpage=$frm+1;
+							$maxrow=($QST3+5);
+							
+							if($totpage>=$maxrow)
+							$lastrow=$maxrow;
+							else
+							$lastrow=$totpage;
+							
+							$startr=($QST3!="" && $QST3!="Search" && $QST3!="0")? ($QST3-1) : "0";
+							?>
+                            <?php for($i=$startr;$i<$lastrow;$i++)
+							{
+								if($i==($curpage-1))
+								{
+								echo "<span class='white12' style='border:1px solid #C0AE2C; padding:5px 5px 5px 5px; background-color:#C0AE2C;'><b>".($i+1)."</b></span>";
+								}
+								else
+								{
+								?><a href="<?php echo SITELINK; ?>shop/<?php echo $QST2;?>/<?php echo $i?>/<?php echo $QST4;?>" class="font2" style="border:1px solid #C0AE2C; padding:5px 5px 5px 5px;"><b><?php echo ($i+1);?></b></a>
+								<?php }
+							}
+							?>
+                            </div>
+                            </td>
+                          <td width="20%" align="center" valign="middle" class="font2"><?php
+							if($totrow>($start+$noofrows))
+							{
+								$nxt=$frm+1;
+							?>
+							<a href="<?php echo SITELINK; ?>shop/<?php echo $QST2;?>/<?php echo $nxt?>/<?php echo $QST4;?>" class="font12">
+                            <img src="<?php echo SITEIMG;?>next-btn.png" border="0" title="Next" /></a>
+							<?php
+							 }
+							 else
+							 echo "<span class='font2'>- end -</span>";
+							?></td>
+                        </tr>
+                      </table>
+          </div>
+          <!-- End contentBoxArea -->
+        </div>
+<?php /*?><?php
+$valss=mysql_query("select * from ".TB_PRODUCT." order by id DESC");
+while($details=mysql_fetch_array($valss))
+{
+	$cartimg=$class->F($class->where(TB_PRODUCT_IMAGE,"reference",$details['reference']));
+?>
+<div id="Layer1<?php echo $details['id'];?>" style="position:absolute; width:651px; height:285px; z-index:1; vertical-align:middle; visibility: hidden; border: 0px none #CADFFB" class="blackborder" align="center">
+<form action="" method="post" name="form2">
+  <table width="100%"  border="0" cellpadding="0" cellspacing="1" style="background-image:url(<?php echo SITEIMG; ?>admin_bannerBg.JPG); background-repeat:no-repeat;">
+
+    <tr>
+      <td>
+      <table width="105%" height="59%" border="0" align="center" cellpadding="0" cellspacing="0" class="0" ID="Table11" >
+        <tr>
+          <td height="30" colspan="4" align="left" class="titlesmall">
+            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="92%" height="35" align="left" valign="middle">&nbsp;<?php echo $details['productname']?></td>
+                <td width="8%" align="center" valign="middle"><a href="#" class="a_green" onClick="MM_showHideLayers('Layer1<?php echo $details['id'];?>','','hide')">
+                  <img src="<?php echo SITEIMG; ?>close1.jpg" border="0" alt="Close" title="Close"></a>&nbsp;</td>
+                </tr>
+              </table>
+            </td>
+        </tr>
+        <tr align="left" valign="middle">
+          <td width="6%" rowspan="10" align="center" valign="top" class="font12">&nbsp;</td>
+          <td class="font2">&nbsp;<input name="hiddenref" id="hiddenref" type="hidden" value="<?php echo $details['reference']?>" /></td>
+          <td class="font2">&nbsp;</td>
+          <td width="36%" rowspan="12" align="center" class="black12"><span class="font12">
+          <?php
+            if($details['image1']!="" && $details['image1']!="prodimageslg/")
+			{
+				$imgspt=explode("prodimageslg/",$details['image1']);
+				$cimg=SITEPRO."".$imgspt[1];
+			}
+			else
+			$cimg=SITEIMG."noimg.jpg";
+		  ?>
+          <img src="<?php echo $cimg;?>" width="180" height="200" alt="" /></span></td>
+        </tr>
+        <tr align="left" valign="middle">
+          <td width="23%" height="27" class="font2">&nbsp;&nbsp;<span class="font2">List Price</span></td>
+          <td width="35%" class="font2">$<?php echo number_format($details['listprice']);?></td>
+          </tr>
+        <tr align="left" valign="middle">
+          <td height="27" class="font3">&nbsp;&nbsp;<span class="font3">Price</span></td>
+          <td height="27" class="font3">$<?php echo number_format($details['cost']);?></td>
+          </tr>
+        <tr align="left" valign="middle">
+          <td height="27" colspan="2" class="font3">&nbsp;&nbsp;<span class="font2">Options</span></td>
+          </tr>
+          <?php 
+			if($details['option1']!="")
+			{
+			$spt=explode(":",$details['option1']);
+			$val=explode(",",$spt[1]);
+			$tot=count($val);
+			?>
+        <tr align="left" valign="middle">
+          <td height="27" class="font2">
+          &nbsp;&nbsp;<?php echo $spt[0];?>
+          </td>
+          <td height="27" class="black12">
+          <select name="option1" id="option1" class="txtborder" style="width:100px;">
+          <?php for($i=0;$i<$tot;$i++)
+		  {?>
+          <option value="<?php echo $val[$i]?>"><?php echo $val[$i]?></option>
+          <?php }?>
+          </select>
+          </td>
+          </tr>
+          <?php }?>
+          <?php if($details['option2']!="")
+		  {
+			$spt=explode(":",$details['option2']);
+			$val=explode(",",$spt[1]);
+			$tot=count($val);
+		  ?>
+          <tr align="left" valign="middle">
+            <td height="10" colspan="2" class="font2"></td>
+            </tr>
+          <tr align="left" valign="middle">
+          <td height="27" class="font2">
+          &nbsp;&nbsp;<?php echo $spt[0];?>
+          </td>
+          <td height="27" class="black12">
+          <select name="option2" id="option2" class="txtborder" style="width:100px;">
+          <?php for($i=0;$i<$tot;$i++)
+		  {?>
+          <option value="<?php echo $val[$i]?>"><?php echo $val[$i]?></option>
+          <?php }?>
+          </select>
+          </td>
+          </tr>
+          <?php }?>
+          <?php if($details['option3']!="")
+		  {
+		    $spt=explode(":",$details['option3']);
+			$val=explode(",",$spt[1]);
+			$tot=count($val);
+		  ?>
+          <tr align="left" valign="middle">
+            <td height="10" colspan="2" class="font2"></td>
+            </tr>
+          <tr align="left" valign="middle">
+          <td height="27" class="font2">
+          &nbsp;&nbsp;<?php echo $spt[0];?>
+          </td>
+          <td height="27" class="black12">
+          <select name="option3" id="option3" class="txtborder" style="width:100px;">
+          <?php for($i=0;$i<$tot;$i++)
+		  {?>
+          <option value="<?php echo $val[$i]?>"><?php echo $val[$i]?></option>
+          <?php }?>
+          </select>
+          </td>
+          </tr>
+          <?php }?>
+           <tr align="left" valign="middle">
+          <td colspan="2" class="black12" height="10"></td>
+          </tr>
+           <tr align="left" valign="middle">
+          <td height="27" colspan="3" class="font12"><table width="350" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="41%" align="center" valign="middle">
+                <img src="<?php echo SITEIMG; ?>shopcart_16x16.png" border="0" /> <a href="<?php echo SITELINK."cart/S/Shopping_Cart";?>" class="font2">View Cart</a>
+                </td>
+              <td width="19%" align="center" valign="middle">
+                <input type="submit" name="AddtoCart" value="" class="cartbutton" /></td>
+              <td width="40%" align="center" valign="middle"><span class="black12"><a href="<?php echo SITELINK;?>products/<?php echo $resent['id']?>/<?php echo $itm;?>"><img src="<?php echo SITEIMG; ?>readmore_btn.jpg" width="89" height="28" alt="" /></a></span></td>
+              </tr>
+          </table></td>
+          </tr>
+           <tr align="left" valign="middle">
+             <td height="27" class="font12">&nbsp;
+             
+             </td>
+             <td height="27" class="font12">&nbsp;</td>
+             <td height="27" class="font12">&nbsp;</td>
+           </tr>
+           <tr align="left" valign="middle">
+             <td height="27" class="font12">&nbsp;</td>
+             <td height="27" colspan="3" class="black12">&nbsp;</td>
+           </tr>
+           <tr align="left" valign="middle">
+          <td height="27" class="font12">&nbsp;</td>
+          <td height="27" colspan="3" class="black12">&nbsp;</td>
+          </tr>
+		<tr align="left" valign="middle">
+		  <td height="1" colspan="4" class="font12_black"></td>
+		  </tr>
+      </table></td>
+    </tr>
+  </table>
+  </form>
+</div>
+<?php }?>  <?php */?>                          

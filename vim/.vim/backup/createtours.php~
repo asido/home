@@ -1,0 +1,64 @@
+<?php
+require_once("funcsv.php");
+
+//checkLogin();
+?>
+
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>YouTours-Create Your Tour</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="content">
+<div class="contentt">
+	<?php include("loginheader.php");
+	 include("menu.php")?>
+<div class="how">
+<h1 class="crtour">&nbsp;CREATE YOUR TOUR</h1>
+<div class="crtour-cont">Upload Your Unique Tour and multiply Your Ability to share Your Experience while Earning Money for You or your Organisation.Its as easy as 1-2-3, with You Tours' step-by-step video tutorials.</div>  
+</div>  
+ <div class="na-leftpromo">
+ <div class="spacing"></div>
+ <div class="si-leftpromo1 map1">
+     <a href="http://maps.google.com/support/bin/static.py?hl=en&page=guide.cs&guide=21670&topic=21676" class="map1co"><p class="m1cop">&nbsp;&nbsp;&nbsp;1.MAP YOUR TOURS</p></a>
+
+    <div class="si-promocontent1 mcont">Start by mapping your path or simply providing the location for Your Tour. This simple tutorial shows you how to use Google Maps to tell your customers where to go to stay on track with your Tour.</div>
+</div>
+<div class="spacing"></div>
+   <div class="si-leftpromo1 w2">
+     <a href="#" class="w2h"><p class="w2hp">&nbsp;&nbsp;&nbsp;2.WRITE, PHOTO, AND RECORD YOUR TOUR</p></a>
+
+    <div class="si-promocontent1 w2c">Need some help getting Your Tour in downloadable form? Click here for tips on how a little preparation can turn into downloadable dollars in your bank account!</div>
+
+</div>
+<div class="spacing"></div>
+    <div class="si-leftpromo1 u3">
+     <a href="uploadtours.php" class="u3h"><p class="u3hp">&nbsp;&nbsp;&nbsp;3.UPLOAD YOUR TOUR</p></a>
+    <div class="si-promocontent1 u3c">Fill in the details and upload your new Map, photos, and Tour.Once its processed, it will be LIVE for the world to buy. We share the earnings 50-50, with all promotional costs and affilliate commissions coming from Our 50%.</div>
+
+</div>
+
+</div>
+ <div class="na-centerpromo">
+ 
+ </div>
+ 
+ <div class="na-rightpromo">
+ <div class="spacing"></div>
+  <div class="na-rightpromo1">
+  <div class="adcre">
+  
+       <div> <h1>Already Have an <span class="audtou">Audio Tour?</span></h1></div>
+        
+            <div class="creacbtn"><a href="http://youtours.com/uploadtours.php"></a></div>
+       </div>
+  
+  </div>
+ </div>
+ </div>
+    <?php include("footer.php"); ?> 
+</div> 
+</body>
+</html>

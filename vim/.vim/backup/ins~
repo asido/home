@@ -1,0 +1,4 @@
+#!/bin/sed -f
+
+s/.*cat.*/& this line was modified$/
+s/cat/dog/g

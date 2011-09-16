@@ -1,0 +1,8 @@
+#include <assert.h>
+
+int main(int argc, const char *argv[])
+{
+	assert("asdfasdf");
+
+	return 0;
+}

@@ -1,0 +1,10 @@
+#ifndef GUARD_xref_h
+#define GUARD_xref_h
+
+//#include "split.h"
+
+// '= split' at the end sets the default function for this argument.
+// that means that you can skip the second argument when calling this function and the default 'split' will be used in that case
+std::map<std::string, std::vector<int> > xref(std::istream& in, std::vector<std::string> find_words(const std::string&) = split);
+
+#endif

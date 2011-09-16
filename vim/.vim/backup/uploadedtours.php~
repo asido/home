@@ -1,0 +1,342 @@
+<?php
+session_start();
+
+require_once("funcsv.php");
+
+connect();
+
+if(!session_is_registered('user_id'))
+
+	{
+
+		header("location:login.php");	
+
+	}
+$user_id = $_SESSION['user_id'];
+
+$tour_details = getTourDetails3($user_id);
+
+//echo "<pre>";
+if($tour_details!=false){
+$count = mysql_num_rows($tour_details);
+}
+ //print_r($tour_details);
+?><!DOCTYPE html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>YouTours-Uploaded Tours</title>
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script>
+function changePage(pageno)
+{
+	result_top=parseInt($('.result_reel').css('top'));
+	//console.log(result_top);
+	pageno = pageno-1;
+	//console.log(pageno);
+	new_top = pageno*540;
+	//console.log(new_top);
+	new_top = -new_top+'px';
+	//console.log(new_top);
+	$('.result_reel').animate({'top':new_top},1000);
+	//$('.result_reel').css('top',new_top);
+	return false;
+	
+}
+</script>
+
+<style>
+.si-pagination2
+{
+	width:100%;
+}
+.si-pagination2 div:hover
+{
+	text-decoration:underline;
+}
+
+.delete
+
+{
+
+	text-align:center;
+
+	width:100%;
+
+	height:20px;
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:12px;
+	padding-top: 5px;
+margin-bottom: -6px;
+	}
+
+
+
+.up_edit
+
+{
+
+
+
+	background:url(images/edit.png) top no-repeat;
+
+
+
+	height:25px;
+
+	width:90px;
+
+	margin-left:auto;
+
+	margin-right:auto;
+
+		
+
+}
+
+.up_edit:hover
+
+{
+
+background:url(images/edit.png) bottom no-repeat;
+
+	
+
+	
+
+}
+
+.up_remove
+
+{
+
+
+
+	background:url(images/Remove.png) top no-repeat;
+
+
+
+	height:25px;
+
+	width:90px;
+
+		margin-left:auto;
+
+	margin-right:auto;
+
+}
+
+.up_remove:hover
+
+{
+
+
+
+	background:url(images/Remove.png) bottom no-repeat;
+
+	
+
+}
+#facebox .content
+{
+	overflow:auto;
+}
+.si-subouter {
+width: 1000px;
+height: 600px;
+}
+.result_window
+{
+	width:1000px;
+	height:539px;
+	overflow:hidden;
+}
+.result_reel
+{
+	position:relative;
+	top:0px;
+	width:1000px;
+	height:auto;
+	overflow:hidden;
+}
+
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+<div class="content">
+
+<?php include("header.php");include("menu.php");?>
+	  <?php if(isset($_GET['success']))
+
+				{
+
+				 ?>
+
+				<div class="delete">Tour deleted successfully</div>
+
+				<?php }?>
+
+	<div class="si-subcontent">																	
+
+    	<div class="si-subouter">																
+
+   		  <h1 class="si-subcontenthead dth11">UPLOADED TOURS</h1>
+
+	
+
+
+
+          <div class="err"><?php if($tour_details==false)
+
+										{
+
+										echo "You haven't created any tours to display, please click here to <a href=\"http://www.youtours.com/uploadtours.php\">create a tour</a>.";
+
+										
+
+										}
+
+								else
+
+								{
+
+									
+
+									
+
+									
+
+ ?></div>										
+
+			<table width="1000" class="si-headbar"  cellspacing="0;" cellpadding="0;">
+
+              <tr>
+
+                <td width="121" class="si-tableleft"><span class="si-tableheadgreen">Title of the Tour </span></td>
+
+               <!-- <td width="280" class="si-othertds"><span class="si-tableheadgreen">Title of the Tour </span></td>
+
+               -->
+
+                <td width="130" class="si-othertds"><span class="si-tableheadgreen">Length of Tour</span></td>
+
+                 <td width="121" class="si-othertds"><span class="si-tableheadgreen">NO of Reviews </span></td>
+
+                <td width="171" class="si-othertds"><span class="si-tableheadgreen">Rate & Review </span></td>
+
+                <td width="165" class="si-tableright"><span class="si-tableheadgreen"></span></td>
+
+                <td width="165" class="si-tableright"><span class="si-tableheadgreen"></span></td>
+
+              </tr>
+
+			</table>
+<div class="result_window">
+<div class="result_reel">
+
+
+
+<?php
+
+
+
+									while($row = mysql_fetch_array($tour_details))
+									{
+ ?>
+
+
+
+			<table width="1000" class="si-innerbar"  cellspacing="0;" cellpadding="0;">
+
+  <tr>
+
+    <td width="121" class="si-tableleft"><span class="si-tablegray"><a href="tourunique.php?tour=<?php echo $row['tour_id'];?>"><?php echo $row['title']; ?></a></span></td>
+
+<!--    <td width="280" class="si-othertds"><span class="si-tablegreencap">asd</span></td>
+
+-->    
+
+    <td width="130" class="si-othertds"><span class="si-tablegray"><?php echo getAudioLength($row['tour_id']);; ?></span></td>
+
+    <td width="121" class="si-othertds"><span class="si-tableblue"><?php echo getReviewNumber($row['tour_id']); ?></span></td>
+
+    <td width="171" class="si-othertds"><span class="si-tableheadgreen">
+
+    	<div class="si-downratingstars">
+
+        	<div class="si-downrating1">Rating :</div>
+
+      		<?php $rate = getRating($row['tour_id']);
+
+			echo printRating($rate);
+
+			?>
+
+        </div>
+
+    	
+
+    </span></td>
+
+<td width="165" class="si-tableright"><a href="tourupload.php?tid=<?php echo $row['tour_id'];  ?>"><div class="up_edit"></div></a></td>
+
+    <td width="165" class="si-tableright"><a href="removetour.php?tour=<?php echo $row['tour_id'];  ?>"><div class="up_remove"></div></a></td>
+
+  </tr>
+
+</table>
+
+	       <?php
+
+									}}?>  
+                                    </div> 
+
+    </div>
+    </div>
+
+
+
+    
+
+    																						
+
+  
+
+</div>
+
+<div class="si-pagination" style="float: none; margin-left: auto; margin-right: auto;">
+
+			
+            <div class="si-pagination2" style="text-align:center;"><?php 
+			$c = round(($count/7)+0.5);
+			for($m=1;$m<=$c; $m++){ echo "<span href='#' style='cursor:pointer;margin-left:auto;margin-right:auto;width:10px;' onclick='changePage($m);'>&nbsp;$m&nbsp;</span>"; } ?></div>
+          
+
+        </div>
+
+<footer style="float: none; margin-right: auto; margin-left: auto;">
+
+    	<div class="footer-links"><a href="index.php">Home</a>  |  <a href="contactus.php">Contact Us</a>  |  <a href="mediia.php">Media</a>  | <a href="tc.php">Terms & Conditions</a>  | <a href="policy.php">Privacy Policy</a> |   <a href="sitemap.php">Site Map</a></div>
+     
+<div class="copyright">© All Rights Reserved 2011.</div>
+    
+    
+    </footer>
+
+</body>
+
+</html>

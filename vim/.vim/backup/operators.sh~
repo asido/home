@@ -1,0 +1,29 @@
+#!/bin/bash
+# '#'	- removes minimal matching prefixes.
+# '##'	- removes maximal matching prefixes.
+# '%'	- removes minimal matching suffixes.
+# '%%'	- removes maxhimal matching suffices.
+# SYNTAX: ${varname op pattern}
+# 'op' - one of the 4 operators above.
+
+SOURCEFILE=/usr/local/src/prog.c
+
+# Displays character count in string.
+echo ${#SOURCEFILE}
+echo
+
+# Displays all the options.
+echo ${SOURCEFILE#/*/}
+echo ${SOURCEFILE##/*/}
+echo ${SOURCEFILE%/*}
+echo ${SOURCEFILE%%/*}
+echo
+
+# Lets show the file name only.
+FILE=${SOURCEFILE##/*/}
+echo ${FILE%.*}
+echo
+
+# Or lets show the middle folder name.
+FILE=${SOURCEFILE#/*/}
+echo ${FILE%%/*}

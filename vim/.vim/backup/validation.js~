@@ -1,0 +1,196 @@
+function isInputOk(inside_tag) {
+
+	var allOk = true;
+
+
+
+	// checking if every input tag meets the requirements
+
+	var allTags = $(inside_tag + ' input');
+
+	for(var i = 0; i < allTags.length; i++) {
+
+		if(!isTagValid(allTags[i]))
+
+			allOk = false;
+
+	}
+
+
+
+	// if some of the tags doesn't meet the requirements, return false now
+
+	if (!allOk) {
+
+		return false;
+
+	}
+
+
+
+	// Checking if password match
+
+	var pswTags = $('.password');
+
+	if (pswTags[0] && pswTags[1]) {
+
+		if (!isPasswordValid(pswTags[0], pswTags[1])) {
+
+			allOk = false;
+
+		}
+
+	}
+
+
+
+	return allOk;
+
+}
+
+
+
+function isTagValid(thisTag) {
+
+	var tagValid = true;
+
+	var tagClasses = thisTag.className.split(" ");
+
+	for(var m = 0; m < tagClasses.length; m++) {
+
+		if(!validBasedOnClass(thisTag, tagClasses[m]))
+
+			tagValid = false;
+
+	}
+
+	return tagValid;
+
+	
+
+	function validBasedOnClass(thisTag, thisClass) {
+
+		var isValid = true;
+
+		switch(thisClass) {
+
+			case "":
+
+			case "invalid":
+
+				break;
+
+			case "required":
+
+				if(thisTag.value == "") {
+
+					makeTagInvalid(thisTag);
+
+					isValid = false;
+
+				} else {
+
+					makeTagValid(thisTag);
+
+				}
+
+				break;
+
+			case "email":
+
+				if(!validEmail(thisTag.value)) {
+
+					makeTagInvalid(thisTag);
+
+					isValid = false;
+
+				} else {
+
+					makeTagValid(thisTag);
+
+				}
+
+				break;
+
+		}
+
+		return isValid;
+
+		
+
+		function validEmail(email) {
+
+			var invalidChars = " :/;,";
+
+			for(var n = 0; n < invalidChars.length; n++) {
+
+				if(email.indexOf(invalidChars[n]) != -1)
+
+					return false;
+
+			}
+
+			if(email.indexOf("@") < 1)
+
+				return false;
+
+			if(email.indexOf(".") < 3)
+
+				return false;
+
+			if(email.indexOf(".") >= email.length-2)
+
+				return false;
+
+			return true;
+
+		}
+
+	}
+
+}
+
+
+
+function isPasswordValid(tag1, tag2) {
+
+	if (tag1.value != tag2.value) {
+
+		makeTagInvalid(tag1);
+
+		makeTagInvalid(tag2);
+
+		return false;
+
+	} else {
+
+		makeTagValid(tag1);
+
+		makeTagValid(tag2);
+
+		return true;
+
+	}
+
+}
+
+
+
+function makeTagInvalid(tag) {
+
+	if (tag.className.match(" invalid") != (" invalid"))
+
+		tag.className += " invalid";
+
+}
+
+
+
+function makeTagValid(tag) {
+
+	if (tag.className.match(" invalid") == (" invalid"))
+
+		tag.className = tag.className.replace(" invalid", "");
+
+}
+

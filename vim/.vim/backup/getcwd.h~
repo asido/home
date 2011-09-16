@@ -1,0 +1,6 @@
+#ifndef GETCWD_QLE09QD5
+#define GETCWD_QLE09QD5
+
+char *_getcwd(char *buf, size_t buf_size);
+
+#endif /* end of include guard: GETCWD_QLE09QD5 */

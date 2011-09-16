@@ -1,0 +1,13 @@
+package src;
+
+import javax.swing.JButton;
+import javax.swing.JTable;
+
+public class test {
+	public static void main(String[] args) {
+		System.out.println("wtf");
+		JTable table = new JTable();
+		JButton button = new JButton();
+		
+	}
+}

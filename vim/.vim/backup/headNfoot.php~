@@ -1,0 +1,36 @@
+<?php
+
+function show_header()
+{
+	echo '
+		<div id="header">
+			<div id="likemelikeyou-logo">
+				<div id="likemelikeyou-bg"><img alt="" class="stretch" src="images/box.png" /></div>
+				<img alt="" src="images/LikemelikeU.png" />
+			</div>
+			<div id="signup">
+				<span id="signup-txt"><a href="#"> Register Now </a></span>
+				<div id="signup-button"><a href="#"><img alt="" class="stretch" src="images/button-sign.png" /></a></div>
+			</div>
+		</div>
+	';
+}
+
+function show_footer()
+{
+	echo '
+		<div id="footer">
+			<span id="footer-copyright">Likemelikeu © 2011</span>
+			<div id="footer-menu">
+				<a href="#">FAQ</a>
+				<a href="#">Contact</a>
+				<a href="#">Terms &amp; Conditions</a>
+				<a href="#">Privacy</a>
+				<a href="#">Report Abuse</a>
+				<a href="#">Report Site Problem</a>
+			</div>
+		</div>
+	';
+}
+
+?>

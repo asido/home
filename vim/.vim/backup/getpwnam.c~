@@ -1,0 +1,29 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <pwd.h>
+#include "getpwnam.h"
+
+struct _passwd *_getpwnam(const char *name)
+{
+	static struct _passwd *_user;
+	struct passwd *user;
+
+	if (_user == NULL)
+		_user = malloc(sizeof(struct *_passwd));
+
+	setpwent();
+	while ((user = getpwent()) != NULL) {
+		if (strcmp(user->pw_name, name) == 0) {
+			_user->pw_name = user->pw_name;
+			_user->pw_passwd = user->pw_passwd;
+			_user->pw_uid = user->pw_uid;
+			_user->pw_gid = user->pw_gid;
+			_user->pw_gecos = user->pw_gecos;
+			_user->pw_dir = user->pw_dir;
+			_user->pw_shell = user->pw_shell;
+			return _user;
+		}
+	}
+	return NULL;
+}

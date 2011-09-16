@@ -1,0 +1,636 @@
+<?php session_start();
+//include controller
+include(CONDIR.DS."checkout.php");
+include(INCDIR.DS."class.php");
+$class = new sax;
+
+foreach($_GET as $key => $value)
+	$_GET[$key] = mysql_real_escape_string($value);
+foreach($_POST as $key => $value)
+	$_POST[$key] = mysql_real_escape_string($value);
+
+//SEO related things here
+//$title = $homerowfetch['title'];
+//$metadesc = $homerowfetch['title'];
+?>
+<?php
+if(isset($_GET['update']) && $_GET['update']!="")
+{
+	if(!isset($_SESSION['CartReference']))
+	{
+		$uref=$class->createRandomPassword();
+		$_SESSION['CartReference']=$ref;
+	}
+	else
+	{
+		$uref=$_SESSION['CartReference'];
+	}
+		
+	$str="UPDATE ".TB_CART." SET reference='".$uref."' where id='".$_GET['update']."'";	
+	$exe=$class->Q($str);
+	if($exe)
+	echo $class->R("cart.php");
+}
+if($QST2=="add")
+{
+	$chkitem=$class->C($class->login(TB_CART,"productid","reference",$QST3,$_SESSION['CartReference']));
+	if($chkitem>0)
+	{
+		$item=$class->F($class->login(TB_CART,"productid","reference",$QST3,$_SESSION['CartReference']));
+		$qty=($item['quantity']+1);
+		$totalprice=($qty*$item['price']);
+		$str="update ".TB_CART." set quantity='".$qty."',totalamount='".$totalprice."' where ";
+		$str.="productid='".$QST3."' and reference='".$_SESSION['CartReference']."'";
+	}
+	else
+	{
+		if(!isset($_SESSION['CartReference']))
+		{
+			$ref=$class->createRandomPassword();
+			$_SESSION['CartReference']=$ref;
+		}
+		else
+		{
+			$ref=$_SESSION['CartReference'];
+		}
+		$itempord=$class->F($class->where(TB_PRODUCT,"reference",$QST3));
+		$amt=$itempord['cost'];
+		
+		$str="insert into ".TB_CART." set productid='".$QST3."',quantity='1',item_option='".$_SESSION['CartItemOptions']."',";
+		$str.="totalamount='".$amt."',price='".$amt."',username='".$_SESSION['LinbyStationSignin']."',";
+		$str.="reference='".$ref."',adddate='".date("Y-m-d")."'";
+	}
+	//echo $str;
+	$exe=$class->Q($str);
+	if($exe)
+	{
+		unset($_SESSION['CartOption']);
+		echo $class->R(SITEROOTSECURE."index.php/checkout/S/Checkout");
+	}
+	else
+	print $class->R(SITELINK);
+}
+
+/*---------------------------------- Remove Added product from Shopping Cart --------------------------*/
+if($QST3=="remove")
+{
+	$del=$class->Q($class->del(TB_CART,"id",$QST2));
+	echo $class->R(SITEROOTSECURE."index.php/checkout/S/Checkout");
+}
+/*-==================== Update Product Quantity ===========================================-*/
+if(isset($_POST['UpdateShoppingCart']))
+{
+	
+	$valijhihj=mysql_query("select * from ".TB_CART." where reference='".$_SESSION['CartReference']."'");
+	while($qtyid=mysql_fetch_array($valijhihj))
+	{
+		
+		$val="qty".$qtyid['id'];
+		$grandamt=($qtyid['price']*$_POST[$val]);
+		
+		//print "update orders set qty='".$_POST[$val]."',grand_total='".$grandamt."' where id='".$qtyid['id']."'";
+		$update=$class->Q("update ".TB_CART." set quantity='".$_POST[$val]."',totalamount='".$grandamt."' where id='".$qtyid['id']."'");
+		
+	}
+}
+$order=$class->F($class->where(TB_CONFIRM,"reference",$_SESSION['CartReference']));
+/*------------ Confirm Order --------------*/
+if(isset($_POST['ConfirmOrder']))
+{
+	$sym=($_SESSION['CouponType']=="Amount")? "$" : "%";
+	$dis=$sym."".$_SESSION['CouponAmount'];
+	$spt=explode(",",$_POST['international']);
+	
+	$_SESSION['SaxGrandTotal']=($_SESSION['SaxGrandTotal']+$spt[0]);
+	
+	$update="UPDATE ".TB_CART." SET international_tax='".$_POST['international']."',discount_tax='".$dis."',state_tax='".$_POST['usaship']."',";
+	$update.="california_tax='".$_POST['hidden_california']."' where reference='".$_SESSION['CartReference']."'";
+	$exe=$class->Q($update);
+	if($exe)
+	{
+		//echo $amtint;
+		if($_POST['payment']=="1")
+		{
+		$_SESSION['SaxMaxGrandTotal']=$_SESSION['SaxGrandTotal'];
+		//echo $_SESSION['SaxGrandTotal'];
+		echo $class->R(SITEROOTSECURE."index.php/paypal/S/Payment_Transation");
+		}
+		else
+		{
+		$_SESSION['SaxMaxGrandTotal']=$_SESSION['SaxGrandTotal'];
+		//echo $_SESSION['SaxGrandTotal'];
+		
+		$expire=$_POST['expmm']."-".$_POST['expyy'];
+
+$cardnnb = strrev($_POST['card_number']);
+
+		$str="UPDATE ".TB_CONFIRM." SET payment_type='Authorize',cardnumber='".$cardnnb."',expiredate='".$expire."',";
+		$str.="cardholdername='".$_POST['cardholdername']."',security_code='".$_POST['security_code']."' where reference='".$_SESSION['CartReference']."'";	
+		$exe=$class->Q($str);
+		if($exe)
+		echo $class->R(SITEROOTSECURE."index.php/authorize_payment/S/Payment_Transation");
+		//echo $class->R(SITELINK."authorize/S/Authorize_Transation");
+		}
+	}
+}
+?>
+<div class="content_areaInRight">
+          
+          <!-- Begin contentBoxArea -->
+          <div class="contentBoxArea">
+            <!-- Begin contentBoxAreaLeft -->
+            <div class="contentBoxAreaLeft" style="width:655px;">
+            <form action="" method="post" name="form1">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		            <tr align="center">
+		              <td colspan="5" valign="middle">
+                      <?php
+                      $totcount=@$class->C($class->where(TB_CART,"reference",$_SESSION['CartReference']));
+					  if($totcount>0){
+					  ?>
+                      <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+		                <tr>
+		                  <td height="25" colspan="5" align="center" valign="middle" class="font12">&nbsp;</td>
+		                  </tr>
+		                <tr>
+		                  <td height="25" align="center" valign="middle" class="font2"><b>Product Name</b></td>
+		                  <td align="center" valign="middle" class="font2"><b>Options</b></td>
+		                  <td width="16%" align="right" valign="middle" class="font2" style="padding-right:20px;"><b>Unit Price</b></td>
+		                  <td width="16%" align="center" valign="middle" class="font2"><b>Qty</b></td>
+		                  <td width="12%" align="center" valign="middle" class="font2"><b>Cost</b> </td>
+		                  </tr>
+		                <tr>
+		                  <td height="1" colspan="5" align="center" valign="middle" class="bgDotted">&nbsp;</td>
+	                    </tr>
+		                <tr>
+		                  <td colspan="5" align="center" valign="middle" height="10"></td>
+		                  </tr>
+		                <?php
+						 $item=$class->Q($class->where(TB_CART,"reference",$_SESSION['CartReference']));
+						 while($cart=$class->E($item)){
+						 $product=$class->F($class->where(TB_PRODUCT,"reference",$cart['productid']));
+						 $totalamount+=$cart['totalamount'];
+						 $getid=$class->F($class->where(TB_CART,"reference",$cart['reference']));
+						 if($product['categoryid']=="2")
+						 {
+						 	$sax=$product['categoryid'];
+						 }
+						 
+						 $photos=$class->F($class->where(TB_PRODUCT_IMAGE,"reference",$product['reference']));
+						    if($product['image1']!="")
+							{
+								$img=SITEPRO."tum/".$product['image1'];
+							}
+							else
+							$img=SITEIMGALT."noimg.jpg";
+						 ?>
+		                <tr>
+		                  <td height="25" align="center" valign="middle">
+		                    <b>
+	                        <?php echo $product['productname']?><br />
+	                        <?php echo $product['title1']?><br />
+	                        <?php echo $product['title2']?>
+	                        </b><br /><br />
+		                    <span class="font12_red"> 
+                          <a href="<?php echo SITEROOTSECURE;?>index.php/cart/<?php echo $cart['id']?>/remove" style="color:#736F6E;" class="red">[Remove]</a></span></td>
+		                  <td width="18%" height="25" align="center" valign="top" class="font2" style="padding-left:10px;">
+                          <?php
+						  if($cart['item_option']!="")
+						  {
+                          $spt=explode(":",$product['option1']);
+						  echo "<b>".$spt[0]."</b><br> ".$cart['item_option'];
+						  }
+						  if($cart['option2']!="")
+						  {
+                          $spt=explode(":",$product['option2']);
+						  echo "<br><br><b>".$spt[0]."</b><br> ".$cart['option2'];
+						  }
+						  if($cart['option3']!="")
+						  {
+                          $spt=explode(":",$product['option3']);
+						  echo "<br><br><b>".$spt[0]."</b><br> ".$cart['option3'];
+						  }						  
+						  ?>
+		                  </td>
+		                  <td align="right" valign="middle" class="font12" style="padding-right:10px;">
+                          $<?php echo ($cart['price']);?></td>
+		                  <td align="center" valign="middle">
+                          <input type="text" name="qty<?php echo $cart['id']?>" class="txtborder" value="<?php echo $cart['quantity']?>" style="width:40px;"/></td>
+		                  <td align="right" valign="middle" class="font12" style="padding-right:10px; font-weight:bold;">
+                          $<?php echo ($cart['totalamount']);?></td>
+		                  </tr>
+                          <tr>
+		                  <td height="3" colspan="5" align="center" valign="middle"></td>
+		                  </tr>
+		                <tr>
+		                  <td height="1" colspan="5" align="center" valign="middle" class="bgDotted">&nbsp;</td>
+		                  </tr>
+                          <tr>
+		                  <td height="3" colspan="5" align="center" valign="middle"></td>
+		                  </tr>
+		                <?php }
+	 ?>
+		                <tr>
+		                  <td height="30" colspan="2" align="left" valign="top"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		                    <tr>
+		                      <td height="30" colspan="2" align="left" valign="middle" class="font3">Billing Information</td>
+	                        </tr>
+		                    <tr>
+		                      <td width="36%" height="25" align="left" valign="middle" class="font2">Full Name</td>
+		                      <td width="64%" align="left" valign="middle" class="font2"><strong><?php echo $order['cus_fullname']?></strong></td>
+	                        </tr>
+		                    <tr>
+		                      <td height="25" align="left" valign="middle" class="font2">Email Address</td>
+		                      <td align="left" valign="middle" class="font2"><strong><?php echo $order['cus_email']?></strong></td>
+	                        </tr>
+		                    <tr>
+		                      <td height="25" align="left" valign="middle" class="font2">Address</td>
+		                      <td align="left" valign="middle" class="font2"><strong><?php echo $order['cus_address']?></strong></td>
+	                        </tr>
+		                    <tr>
+		                      <td height="25" align="left" valign="middle" class="font2">City</td>
+		                      <td align="left" valign="middle" class="font2"><strong><?php echo $order['cus_city']?></strong></td>
+	                        </tr>
+		                    <tr>
+		                      <td height="25" align="left" valign="middle" class="font2">State</td>
+		                      <td align="left" valign="middle" class="font2"><strong>
+							  <?php echo $cstate=($order['cus_state']!="")? $order['cus_state'] : $order['cus_non_us'];?></strong></td>
+	                        </tr>
+		                    <tr>
+		                      <td height="25" align="left" valign="middle" class="font2">Country</td>
+		                      <td align="left" valign="middle" class="font2"><strong><?php echo $order['cus_country']?></strong></td>
+	                        </tr>
+		                    <tr>
+		                      <td height="25" align="left" valign="middle" class="font2">Zip</td>
+		                      <td align="left" valign="middle" class="font2"><strong><?php echo $order['cus_zip']?></strong></td>
+	                        </tr>
+		                    <tr>
+		                      <td height="25" align="left" valign="middle" class="font2">Phone</td>
+		                      <td align="left" valign="middle" class="font2"><strong><?php echo $order['cus_phone']?></strong></td>
+	                        </tr>
+		                    <tr>
+		                      <td height="25" colspan="2" align="left" valign="middle" class="bgDotted">&nbsp;</td>
+	                        </tr>
+	                      </table>
+		                    <?php if($order['different']=="1"){?>
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		                      <tr>
+		                        <td height="30" colspan="2" align="left" valign="middle" class="font3">Shipping Information</td>
+	                          </tr>
+		                      <tr>
+		                        <td width="36%" height="25" align="left" valign="middle" class="font2">Full Name</td>
+		                        <td width="64%" align="left" valign="middle" class="font2"><strong><?php echo $order['shp_fullname']?></strong></td>
+	                          </tr>
+		                      <tr>
+		                        <td height="25" align="left" valign="middle" class="font2">Email Address</td>
+		                        <td align="left" valign="middle" class="font2"><strong><?php echo $order['shp_email']?></strong></td>
+	                          </tr>
+		                      <tr>
+		                        <td height="25" align="left" valign="middle" class="font2">Address</td>
+		                        <td align="left" valign="middle" class="font2"><strong><?php echo $order['shp_address']?></strong></td>
+	                          </tr>
+		                      <tr>
+		                        <td height="25" align="left" valign="middle" class="font2">City</td>
+		                        <td align="left" valign="middle" class="font2"><strong><?php echo $order['shp_city']?></strong></td>
+	                          </tr>
+		                      <tr>
+		                        <td height="25" align="left" valign="middle" class="font2">State</td>
+		                        <td align="left" valign="middle" class="font2"><strong>
+								<?php echo $state=($order['shp_state']!="")? $order['shp_state'] : $order['shp_non_us'];?></strong></td>
+	                          </tr>
+		                      <tr>
+		                        <td height="25" align="left" valign="middle" class="font2">Country</td>
+		                        <td align="left" valign="middle" class="font2"><strong><?php echo $order['shp_country']?></strong></td>
+	                          </tr>
+		                      <tr>
+		                        <td height="25" align="left" valign="middle" class="font2">Zip</td>
+		                        <td align="left" valign="middle" class="font2"><strong><?php echo $order['shp_zip']?></strong></td>
+	                          </tr>
+		                      <tr>
+		                        <td height="25" align="left" valign="middle" class="font2">Phone</td>
+		                        <td align="left" valign="middle" class="font2"><strong><?php echo $order['shp_phone']?></strong></td>
+	                          </tr>
+                          </table>
+                          <?php }?>
+                          </td>
+		                  <td colspan="3" align="center" valign="top">
+                          <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle" class="font3"><span class="font2">Sub Total</span>&nbsp;</td>
+		                      <td width="50%" align="right" valign="middle" class="font12" style="font-size:12px; font-weight:bold; color:#000;">
+							  <?php echo "$".$totalamount;?></td>
+	                        </tr>
+                            <tr>
+		                      <td colspan="4" height="10" align="right" valign="middle"></td>
+	                        </tr>
+                            <?php if(isset($_SESSION['CouponAmount']))
+							{
+								if($_SESSION['CouponType']=="Amount")
+								{
+								$discount=$_SESSION['CouponAmount'];
+								}
+								else
+								{
+								$discount=(($_SESSION['CouponAmount']/100)*$totalamount);	
+								}
+								?>
+		                    <tr>
+		                      <td height="30" colspan="3" align="right" valign="middle" class="font3">
+                              <span class="font2">Discount Amount</span></td>
+		                      <td align="right" valign="middle" class="font2" style="font-size:12px; font-weight:bold; color:#000;">
+                             - <strong>
+							  <?php echo $ss=($_SESSION['CouponType']=="Amount")? "$" : "";?>
+							  <?php echo $discount;?>
+                              <?php echo $ss=($_SESSION['CouponType']!="Amount")? "%" : "";?></strong></td>
+	                        </tr>
+                            
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle" class="font2" style="padding-right:10px;">&nbsp;</td>
+		                      <td align="right" valign="middle" class="red" style="padding-right:10px;">&nbsp;</td>
+	                        </tr><?php }?>
+							<?php /*?><?php if($sax!=""){?>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle" class="font2" style="padding-right:10px;">Saxophone Charge</td>
+		                      <td align="right" valign="middle" class="red" style="padding-right:10px;">
+                              <strong>$ <?php echo $db['default']['saxophone'];?></strong></td>
+	                        </tr>
+                            <?php }?>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle" class="font2" style="padding-right:10px;">&nbsp;</td>
+		                      <td align="right" valign="middle" class="red" style="padding-right:10px;">&nbsp;</td>
+	                        </tr>
+							<?php */?>
+							<tr>
+							  <td colspan="3" align="right" valign="middle" class="font3"><span class="font2">CA Sales Tax</span></td>
+							  <td align="right" valign="middle" class="font2"><span class="font12" style="font-size:12px; font-weight:bold; color:#000;"><strong>
+                              <?php echo $db['default']['usashippingtax']."%"; ?></strong>
+                                  <input name="hidden_california" id="hidden_california" type="hidden" value="<?php echo $db['default']['usashippingtax']; ?>" />
+							  </span></td>
+						    </tr>
+							<tr>
+							  <td colspan="4" align="right" valign="middle" class="font2">&nbsp;</td>
+						    </tr>
+                            <script type="text/javascript" language="javascript">
+							function totval(str,qry)
+							{
+								var spt=str.split(',');
+								if(str!="0")
+								{
+								var tots=(parseFloat(spt[0])+parseFloat(qry));
+								var tt=(tots.toFixed(2));
+								document.getElementById('totalamount').innerHTML=tt;
+								}
+								if(str=="0")
+								{
+									document.getElementById('totalamount').innerHTML=qry;
+									
+								}
+							}
+							</script>
+							<tr>
+		                      <td colspan="4" align="right" valign="middle" class="font2">
+							  <?php
+							  $tax=(($totalamount*$db['default']['usashippingtax'])/100);
+							  
+							  if(isset($_SESSION['CouponAmount']))
+							  $amt=($totalamount-$discount);
+							  else
+							  $amt=$totalamount;
+							  $vals=number_format(($amt+$tax), 2, '.', '');?>
+                              <select name="international" id="international" class="txtborder" onchange="totval(this.value,'<?php echo $vals;?>')">
+                            <option value="<?php echo $product['usa_standard'].",UPS Ground";?>">$ 
+                            <?php echo $product['usa_standard'];?>
+                            UPS Ground</option>
+                            <option value="<?php echo $product['usa_priority'].",USPS Priority Mail";?>" selected>$ 
+                            <?php echo $product['usa_priority'];?>
+                            USPS Priority Mail</option>
+                            <option value="<?php echo $product['usa_express'].",USPS Express";?>">$ 
+                            <?php echo $product['usa_express'];?>
+                            USPS Express</option>
+                            <option value="<?php echo $product['int_standard'].",USPS Express Mail";?>">$ 
+                            <?php echo $product['int_standard'];?>
+                            USPS Express Mail</option>
+                            <option value="<?php echo $product['int_priority'].",Priority";?>">$ 
+                            <?php echo $product['int_priority'];?>
+                            Priority</option>
+                            <option value="<?php echo $product['int_express'].",Express";?>">$ 
+                            <?php echo $product['int_express'];?>
+                            Express</option>
+                          </select>
+                         </td>
+	                        </tr>
+                            
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle" class="font2" style="padding-right:10px;">&nbsp;</td>
+		                      <td align="right" valign="middle" class="red" style="padding-right:10px;">&nbsp;</td>
+	                        </tr>
+                            <tr>
+		                      <td colspan="4" align="right" valign="middle" class="bgDotted">&nbsp;</td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle" class="font3">
+                              <span class="font2">Total Amount</span></td>
+		                      <td align="right" valign="middle" class="title" style="font-size:18px; color:#000;">
+                              <b>
+                              <span id="totalamount">
+                              <?php 
+							  //echo $amt."<br>"; 
+							  echo "$".number_format(($amt+$tax), 2, '.', '');
+							  $_SESSION['SaxGrandTotal']=number_format(($amt+$tax), 2, '.', '');
+							  ?></span></b>                              
+                              </td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle">&nbsp;</td>
+		                      <td align="right" valign="middle">&nbsp;</td>
+	                        </tr>
+                            <tr>
+		                      <td colspan="3" align="right" valign="middle" class="font2">&nbsp;</td>
+		                      <td align="right" valign="middle">&nbsp;</td>
+	                        </tr>
+                            <tr>
+                              <td colspan="3" align="right" valign="middle">&nbsp;</td>
+                              <td align="right" valign="middle">&nbsp;</td>
+                            </tr>
+                            <tr>
+		                      <td height="23" colspan="3" align="right" valign="middle">&nbsp;</td>
+		                      <td align="right" valign="middle">&nbsp;</td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="4" align="center" valign="middle" class="font3">
+                              Payment method</td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="4" align="left" valign="middle" class="bgDotted">&nbsp;</td>
+	                        </tr>
+		                    <tr>
+		                      <td width="8%" height="30" align="left" valign="middle" class="font2" style="padding-left:10px;">
+                              <input name="payment" type="radio" id="payment1" value="1" onclick="showpay('0');" checked /></td>
+		                      <td width="29%" align="left" valign="middle" class="font2" style="padding-left:10px;">
+                              <img src="<?php echo SITEIMGALT; ?>paypal.gif" border="0" /></td>
+		                      <td width="13%" align="right" valign="middle" class="font2">
+                              <input type="radio" name="payment" id="payment2" onclick="showpay('1');" value="2" /></td>
+		                      <td align="center" valign="middle" class="font2">
+                              <img src="<?php echo SITEIMGALT; ?>authorize_log.png" border="0" /></td>
+	                        </tr>
+                            <script type="text/javascript">
+                            function showpay(str)
+							{
+								if(str=="1")
+								document.getElementById('pt').style.display="block";
+								else
+								document.getElementById('pt').style.display="none";
+							}
+                            </script>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle">&nbsp;</td>
+		                      <td align="center" valign="middle"><img src="<?php echo SITEIMGALT; ?>credit.png" border="0" /></td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="4" align="right" valign="middle" class="bgDotted">&nbsp;</td>
+	                        </tr>
+                            <tr>
+		                      <td colspan="4" align="left" valign="middle">
+                              <div id="pt" style="display:none;">
+                              <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:1px;">Card holder Name</td>
+                        <td align="left" valign="middle" style="padding-left:1px;" class="font2">
+                        <input type="text" name="cardholdername" id="cardholdername" class="txtborder" /></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td width="59%" height="30" align="left" valign="middle" class="font2" style="padding-left:1px;"> Card Number</td>
+                        <td width="41%" align="left" valign="middle" class="font2" style="padding-left:1px;">
+                          <input type="text" name="card_number" id="card_number" class="txtborder" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:1px;">Expire Date</td>
+                        <td align="left" valign="middle" style="padding-left:1px;" class="font2">
+                        <select name="expmm" id="expmm" class="txtborder">
+                        <option value="">MM</option>
+                        <?php for($i=1;$i<=12;$i++){?>
+                        <option value="<?php echo $i?>"><?php echo $i?></option>
+                        <?php }?>
+                        </select>
+                        <select name="expyy" id="expyy" class="txtborder">
+                        <option value="">YYYY</option>
+                        <?php 
+						$curr=date("Y");
+						for($i=$curr;$i<=($curr+10);$i++){?>
+                        <option value="<?php echo $i?>"><?php echo $i?></option>
+                        <?php }?>
+                        </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:1px;">
+                        Security Code
+                        </td>
+                        <td align="left" valign="middle" style="padding-left:1px;" class="font2">
+                        <input type="text" name="security_code" id="security_code" class="txtborder" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" height="10" align="left" valign="middle"></td>
+                        </tr>
+                      <tr>
+                        <td colspan="2" align="left" valign="middle" class="bgDotted">&nbsp;</td>
+                        </tr>
+                    </table>
+                    </div>
+                      </td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="4" align="right" valign="middle" style="padding-right:5px;">&nbsp;</td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="4" align="right" valign="middle" style="padding-right:5px;">
+                              <input type="submit" name="UpdateShoppingCart" value="" class="updatebutton" style="padding-right:15px;"/>
+                              &nbsp;&nbsp;
+                              <input type="submit" name="ConfirmOrder" class="confirmbutton" value="" style="padding-right:20px;"/></td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle">&nbsp;</td>
+		                      <td align="right" valign="middle">&nbsp;</td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle">&nbsp;</td>
+		                      <td align="right" valign="middle">&nbsp;</td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle">&nbsp;</td>
+		                      <td align="right" valign="middle">&nbsp;</td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle">&nbsp;</td>
+		                      <td align="right" valign="middle">&nbsp;</td>
+	                        </tr>
+		                    <tr>
+		                      <td colspan="3" align="right" valign="middle">&nbsp;</td>
+		                      <td align="right" valign="middle">&nbsp;</td>
+	                        </tr>
+	                      </table></td>
+		                  </tr>
+		                <tr>
+		                  <td height="20" colspan="5" align="right" valign="middle">&nbsp;</td>
+	                    </tr>
+		                <tr>
+		                  <td colspan="5" align="right" valign="middle" class="bgDotted">&nbsp;</td>
+	                    </tr>
+		                <tr>
+		                  <td height="50" colspan="5" align="right" valign="middle">&nbsp;</td>
+		                  </tr>
+		                <tr>
+		                  <td height="20" colspan="5" align="right" valign="middle">&nbsp;</td>
+		                  </tr>
+	                  </table>
+                      
+                      <?php }
+						 $totcount=$class->C($class->where(TB_CART,"reference",$_SESSION['CartReference']));
+						 if($totcount<=0){
+						 ?>
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+						 <tr>
+						   <td align="center" valign="middle">&nbsp;</td>
+   			    </tr>
+						 <tr>
+						   <td height="25" align="center" valign="middle" class='red'>
+                           There are currently no items in your shopping cart.
+						   </td>
+			    </tr>
+						 <tr>
+						   <td height="25" align="center" valign="middle" class="font2">
+                           If you would like to get started browsing our store </td>
+    			</tr>
+						 <tr>
+						   <td height="25" align="left" valign="middle"><a href='<?php echo SITELINK;?>' class='font2' style="padding-left:365px;">please Click here</a></td>
+			    		</tr>
+					   </table>
+					   <?php }?>
+                      
+                      </td>
+	                </tr>
+		            <tr>
+		              <td width="64%" rowspan="31" align="center" valign="top" class="font12" style="padding-left:10px;">&nbsp;</td>
+		              <td colspan="3" align="left" valign="middle" class="font12" style="padding-left:10px;">&nbsp;</td>
+	                </tr>
+	              </table>
+                 </form> 
+            </div>
+            <!-- End contentBoxAreaLeft -->
+          </div>
+          <!-- End contentBoxArea -->
+        </div>

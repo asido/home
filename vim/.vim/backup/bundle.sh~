@@ -1,0 +1,12 @@
+#!/bin/bash
+# bundle: group files into distribution package
+
+echo "# To unbundle, bash this file"
+for i; do
+	echo "if [[ \$# = 0 || \$* = *$i* ]]; then"
+	echo "echo $i 1>&2"
+	echo "cat >$i <<'End of $i'"
+	cat $i
+	echo "End of $i"
+	echo "fi"
+done

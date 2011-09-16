@@ -1,0 +1,80 @@
+<?php
+
+require_once('php/auth.php');
+
+$logged = $auth->logged_in();
+
+if (!$logged) {
+	if (!$auth->cookie_login()) {
+		header('Location: login.php');
+		exit;
+	}
+}
+
+$points = $auth->get_points($_SESSION['username']);
+if ($points < 50) {
+	header('Location: category.php');
+	exit;
+}
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script type="text/javascript" src="js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="js/submit.js"></script>
+<script type="text/javascript" src="js/validation.js"></script>
+</head>
+
+<body>
+
+	<?php
+		include_once('php/html.php');
+		HTML::show_logged_header();
+	?>
+
+	<div id="addquestion-wrapper">
+		<div id="cms-inner1">
+			<div class="cms-black">Questions :</div>
+			<form id="cms-question-form" method="post" action="cmsques.php">
+				<input type="text" name="cms-q" id="cms-q" /><br/><br/>
+				<div class="cms-black">Answers :</div>
+				<input type="text" name="cms-a1" id="cms-a1" class="cms-answers" /><br/>
+				<input type="text" name="cms-a2" id="cms-a2" class="cms-answers" /><br/>
+				<input type="text" name="cms-a3" id="cms-a3" class="cms-answers" /><br/>
+				<input type="text" name="cms-a4" id="cms-a4" class="cms-answers" /><br/>
+				<input type="text" name="cms-a5" id="cms-a5" class="cms-answers" /><br/>
+				<input type="text" name="cms-a6" id="cms-a6" class="cms-answers" /><br/>
+				<input type="text" name="cms-a7" id="cms-a7" class="cms-answers" /><br/>
+				<input type="text" name="cms-a8" id="cms-a8" class="cms-answers" /><br/>
+				<div id="cms-dropdown">
+					<div class="cms-black">Select group :</div>
+					<select id="cms-select" name='category'>
+						<?php
+						$groups = $auth->get_groups($_SESSION['username']);
+						foreach ($groups as $group)
+							echo '<option value="'.$group['name'].'">'.$group['name'].'</option>';
+						?>
+						<!-- <option value="profile">Profile</option> -->
+						<!-- <option value="sports">Sports</option> -->
+						<!-- <option value="politics">Politics</option> -->
+						<!-- <option value="music">Music</option> -->
+						<!-- <option value="top10">Top 10</option> -->
+						<!-- <option value="top100">Top 100</option> -->
+					</select>
+				</div>
+				<div id="user-cms-question-submit" class="cms-button"><span class="cms-button-text"><a href="#">Add Question</a></span></div>
+			</form>	<!-- cms-question-form -->
+		</div>
+	</div><!-- addquestion-wrapper -->
+
+	<?php
+		HTML::show_background();
+		HTML::show_footer();
+	?>
+
+</body>

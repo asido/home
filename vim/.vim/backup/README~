@@ -1,0 +1,58 @@
+					AxidOS -- Hobby OS
+==============================================================
+
+------------------------------------
+		FOLDER STRUCTER
+------------------------------------
+src			: source folder
+src/libc	: source code of C library to use
+src/inc		: asm include files
+build		: this is where the compiled binary is put by the build.sh script
+DEMO		: if you have it, you can delete this folder. It's my personal study
+			material, code samples and such
+
+
+--------------------------
+		build.sh
+--------------------------
+This script will build the OS for you.
+
+Dependencies:
+-------------
+dosfstools	: this is required to make floppy image used to boot the OS
+nasm		: the boot loader is written in Netwide Assembler (NASM)
+gcc			: seriously, if anyone needs explanation what this does, go play ping pong or smth, because you are in a wrong place
+All the rest are default tools which comes with every basic linux installation: mount, dd, echo...
+
+FLOPPY.IMG is a bootable floppy image. Put it in x86 emulators virtual floppy drive or
+move to a real floppy disk if you have one (dd if=FLOPPY.IMG of=/dev/fda)
+
+
+----------------------------
+		DEBUGGING
+----------------------------
+You can launch the OS in debug mode from the very first instruction in boot loader.
+I use QEMU + GDB for that:
+	Run QEMU:
+		qemu -fda FLOPPY.IMG -S -gdb tcp::1234 -serial stdio
+	Then in another terminal attach GDB (type in gdb shell):
+		(gdb) target remote localhost:1234
+	Put some breakpoints or whatever and start qemu execution:
+		(gdb) c
+
+Furthermore, here are some handy settings for GDB:
+	For debugging 16-bit code, don't forget to set 16-bit disassembling:
+		(gdb) set architecture i8086
+	Set disassembling syntax to Intel (default is AT&T):
+		(gdb) set disassembly-flavor intel
+	Show current executing instruction after every stop:
+	  	For v7.0 and above:
+	  	(gdb) set disassemble-next-line on
+	  	For the rest (works for all, but not so nice output):
+		(gdb) display/i $pc
+	You can also try to set nice disassembling TUI to see if it works for you. For me it's too bugy:
+		(gdb) layout asm
+
+Another option could be use Bochs debugger. There is also a very nice application for it
+called Peter-Bochs debugger. I really advice you to check it out if you aren't comfortable
+with command line GDB.

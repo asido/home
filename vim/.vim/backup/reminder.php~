@@ -1,0 +1,93 @@
+<?php
+
+require_once('php/database.php');
+require_once('php/auth.php');
+
+if (isset($_POST['email'])) {
+	$reminded = false;
+	$email = $_POST['email'];
+	$db = database::get_instance();
+	if (!$db->free_field("username", $email))
+		$reminded = $auth->remind_password($email);
+}
+
+$logged = false;
+
+if ($auth->logged_in() || $auth->cookie_login()) {
+	$logged = true;
+}
+
+if (!$logged && isset($_POST['username']) && isset($_POST['password'])) {
+	$success = $auth->login($_POST['username'], $_POST['password'], isset($_POST['login-remember']));
+	$logged = $success;
+}
+
+if ($logged) {
+	header('Location: category.php');
+	exit;
+}
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="js/submit.js"></script>
+<script type="text/javascript" src="js/validation.js"></script>
+<script type="text/javascript" src="js/notif.js"></script>
+<script>
+<?php
+require_once('php/config.php');
+require_once('php/auth.php');
+
+if (isset($success) && !$success) {
+	$message = CONFIG::LOGIN_FAIL;
+	echo "$(document).ready(
+			function() {
+				show_notif(\"#regnotif\", \"".$message."\");
+				set_login_form(\"#login-form\", \"".mysql_real_escape_string($_POST['username'])."\");
+			}
+		);";
+}
+?>
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikeMeLikeYou</title>
+</head>
+
+<body>
+
+<?php
+include_once('php/html.php');
+
+if ($logged)
+	HTML::show_logged_header();
+else
+	HTML::show_header("reminder.php");
+
+if (!isset($reminded)) {
+?>
+<div id="center-top" class="div-center">
+	<form method="post" action="reminder.php">
+		<div class="lb-mtitle">Enter your e-mail:</p>
+		<input type="text" name="email" />
+		<input type="submit" value="Send" />
+	</form>
+</div>
+<?php
+} else {
+	echo '<div id="center-top" class="div-center">
+			<div class="lb-mtitle">'.($reminded ? CONFIG::PASSWORD_RECOVERY_SUCCESS : CONFIG::PASSWORD_RECOVERY_FAIL).'</div>
+		</div>
+	';
+}
+
+HTML::show_background();
+HTML::show_footer();
+?>
+
+</body>
+</html>

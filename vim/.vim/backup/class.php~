@@ -1,0 +1,289 @@
+<?php
+class sax
+{
+	$EMAIL_FOOTER = "<br/><hr><br/><font color=\"#353535\">SAX-CCESSORIES LLC<br/>www.sax-ccessories.com<br/>info@sax-ccessories.com</font>";
+
+	function imageResize($width, $height, $target) 
+	{
+		if ($width > $height) 
+		{
+			$percentage = ($target / $width);
+		} 
+		else 
+		{
+			$percentage = ($target / $height);
+		}
+		$width = round($width * $percentage);
+		$height = round($height * $percentage);
+		return "width=\"$width\" height=\"$height\"";
+	}
+	function Q($str)
+	{
+		$qry=mysql_query($str);
+		return $qry;
+	}
+	function o($str)
+	{
+		$qry=mysql_query($str);
+		return $qry;
+	}
+	
+	function F($str)
+	{
+		$qry=mysql_fetch_array(mysql_query($str));
+		return $qry;
+	}
+	
+	function E($str)
+	{
+		$qry=mysql_fetch_array($str);
+		return $qry;
+	}	
+	
+	function C($str)
+	{
+		$qry=@mysql_num_rows(mysql_query($str)); // Silence! - Will
+		return $qry;
+	}
+	
+	function query($str)
+	{
+		$qry="select * from ".$str;
+		return $qry;
+	}
+	
+	function del($str,$col,$val)
+	{
+		$qry="delete from ".$str." where ".$col."='".$val."'";
+		return $qry;
+	}
+	
+	function where($str,$col,$val)
+	{
+		$qry="select * from ".$str." where ".$col."='".$val."'";
+		return $qry;
+	}
+	
+	function login($str,$col,$col2,$val,$val2)
+	{
+		$qry="select * from ".$str." where ".$col."='".$val."' and ".$col2."='".$val2."'";
+		return $qry;
+	}
+	
+	function R($str)
+	{
+		$qry="<script>window.location='".$str."';</script>";
+		return $qry;
+	}
+	/**/
+	function photo($file,$folder)
+	{
+		$random=rand(00000001,9999999);
+		$musicsource = $folder."_".$random."_".$_FILES[$file]['name'];
+		move_uploaded_file($_FILES[$file]['tmp_name'], $folder."/".$musicsource);
+		return $musicsource;
+	}
+	
+	function ddmmyy($str)
+	{
+		$dd=explode("-",$str);
+		$dmy=$dd[2]."-".$dd[1]."-".$dd[0];
+		return $dmy;
+	}
+	
+	function createRandomPassword() 
+	{   
+		$chars = "abcdefghijkmnopqrstuvwxyz023456789";    
+		srand((double)microtime()*1000000);    
+		$i = 0;    
+		$pass = '' ;    
+		while ($i <= 7) 
+		{        
+		$num = rand() % 33;        
+		$tmp = substr($chars, $num, 1);        
+		$pass = $pass . $tmp;        
+		$i++;    
+		}    
+		return $pass;
+	}
+	
+	/*----------------Post Time show------------------------*/
+	function nicetime($date)
+	{
+		if(empty($date)) {
+			return "No date provided";
+		}
+	   
+		$periods         = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
+		$lengths         = array("60","60","24","7","4.35","12","10");
+	   
+		$now             = time();
+		$unix_date         = strtotime($date);
+	   
+		   // check validity of date
+		if(empty($unix_date)) {   
+			return "Bad date";
+		}
+	
+		// is it future date or past date
+		if($now > $unix_date) {   
+			$difference     = $now - $unix_date;
+			$tense         = "ago";
+		   
+		} else {
+			$difference     = $unix_date - $now;
+			$tense         = "from now";
+		}
+	   
+		for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
+			$difference /= $lengths[$j];
+		}
+	   
+		$difference = round($difference);
+	   
+		if($difference != 1) {
+			$periods[$j].= "s";
+		}
+	   
+		return "$difference $periods[$j] {$tense}";
+	}
+	
+	
+	function sentmail($to,$sub,$from,$content)
+	{
+				$subject =$sub;
+				// Details
+				$message=$content;
+				// Mail of sender
+				$mail_from=$from;
+				// From
+				$header = "From: ".$from."\n"; 
+				$header.="Content-Type: text/html; charset=iso-8859-1";
+				
+				// Enter your email address
+				$to =$to;  
+				$sent=mail($to,$subject,$message,$header);
+				return $sent;
+	}
+	
+	function txtbox($cc,$ty,$nn,$val)
+	{
+		$qry="<input class='".$cc."' type='".$ty."' name='".$nn."' id='".$nn."' value='".$val."'/>";
+		return $qry;
+	}
+	
+	function txtarea($cc,$nn,$val)
+	{
+		$qry="<textarea class='".$cc."' name='".$nn."' id='".$nn."'>".$val."</textarea>";
+		return $qry;
+	}
+	
+	function txtbutton($cc,$nn,$val)
+	{
+		$qry="<input type='submit' class='".$cc."' name='".$nn."' value='".$val."' />";
+		return $qry;
+	}
+	
+	function dateDifference($day_1,$day_2) {
+	$diff = strtotime($day_1) - strtotime($day_2);
+
+	$sec   = $diff % 60;
+	$diff  = intval($diff / 60);
+	$min   = $diff % 60;
+	$diff  = intval($diff / 60);
+	$hours = $diff % 24;
+	$days  = intval($diff / 24);
+
+	return array($sec,$min,$hours,$days);
+	}
+
+	function subscribe()
+	{
+		if(isset($_SESSION['thai_signin']))
+		{
+			$cut=mysql_num_rows(mysql_query("select * from subscription where username='".$_SESSION['thai_signin']."'"));
+			if($cut>0)
+			{
+				$usersub=mysql_fetch_array(mysql_query("select * from subscription where username='".$_SESSION['thai_signin']."'"));
+				if($usersub['membertype']=="Platinum")
+				$usertype="5";
+				else if($usersub['membertype']=="Gold")
+				$usertype="4";
+				else if($usersub['membertype']=="Silver")
+				$usertype="3";
+			}
+			else
+			$usertype="2";
+		}
+		else
+		$usertype="1";
+		$permission=mysql_fetch_array(mysql_query("select * from usersettings where id='".$usertype."'"));
+		
+		return $permission;
+	}
+	
+	
+	function month($str)
+	{
+		$mm=array("","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
+		for($i=0;$i<=12;$i++)
+		{
+			if($str==$i)
+			{
+				return $mm[$i];
+			}
+		}
+	}
+
+}
+
+/*--------------------------------- Language translation --------------------------------------------*/
+
+class Google_Translate_API {
+ 
+      function translate($text, $from = '', $to = '') {
+  
+      $url = 'http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q='.rawurlencode($text).'&langpair='.rawurlencode($from.'|'.$to);
+  
+      $response = file_get_contents(
+  
+      $url,
+  
+      null,
+  
+      stream_context_create(
+  
+      array(
+  
+      'http'=>array(
+  
+      'method'=>"GET",
+  
+      'header'=>"Referer: http://".$_SERVER['HTTP_HOST']."/\r\n"
+  
+      )
+  
+      )
+  
+      )
+  
+      );
+  
+      if (preg_match("/{\"translatedText\":\"([^\"]+)\"/i", $response, $matches)) {
+  
+      return self::_unescapeUTF8EscapeSeq($matches[1]);
+  
+      }
+  
+      return false;
+  
+      }
+  
+      function _unescapeUTF8EscapeSeq($str) {
+  
+      return preg_replace_callback("/\\\u([0-9a-f]{4})/i", create_function('$matches', 'return html_entity_decode(\'&#x\'.$matches[1].\';\', ENT_NOQUOTES, \'UTF-8\');'), $str);
+  
+      }
+  
+      }
+?>

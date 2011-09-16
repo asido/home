@@ -1,0 +1,27 @@
+Only in awesome-3.4.10: .build-slacker-i486-slackware-linux-4.4.4
+diff -crB awesome-3.4.10/event.c ORG_awesome-3.4.10/event.c
+*** awesome-3.4.10/event.c	2011-08-26 23:48:08.122903676 +0200
+--- ORG_awesome-3.4.10/event.c	2011-05-16 16:35:17.000000000 +0200
+***************
+*** 581,589 ****
+      }
+      else
+      {
+!         /* get keysym ignoring all EXCEPT NumLock modifiers */
+!         xcb_keysym_t keysym = key_getkeysym(ev->detail,
+!                         (ev->state & globalconf.numlockmask ? ev->state : 0 ));
+          client_t *c;
+          if((c = client_getbywin(ev->event)))
+          {
+--- 582,589 ----
+      }
+      else
+      {
+!         /* get keysym ignoring all modifiers */
+!         xcb_keysym_t keysym = key_getkeysym(ev->detail, 0);
+          client_t *c;
+          if((c = client_getbywin(ev->event)))
+          {
+Only in awesome-3.4.10: .lvimrc
+Only in awesome-3.4.10: .tags
+Only in awesome-3.4.10: xepyhr.sh

@@ -1,0 +1,14 @@
+#ifndef SET_GET_ENV_A2BXU57D
+#define SET_GET_ENV_A2BXU57D
+
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
+extern char **environ;
+char *buffer;
+
+int setenv(const char *name, const char *value, int overwrite);
+int unsetenv(const char *name);
+
+#endif /* end of include guard: SET_GET_ENV_A2BXU57D */

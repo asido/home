@@ -1,0 +1,60 @@
+#include <stdio.h>
+
+#define MAX_SIZE 1000
+
+int getLine(char line[], int size);
+int strIndex(char source[], char pattern[]);
+
+int main() {
+	char line[MAX_SIZE];
+	char pattern[] = "st";
+	
+	while(getLine(line, MAX_SIZE) > 0) {
+		printf("%d\n", strIndex(line, pattern));
+	}
+
+	return 0;
+}
+
+int getLine(char line[], int size) {
+	int l = 0;
+	char ch;
+
+	while(--size > 0 && (ch = getchar()) != EOF && ch != '\n')
+		line[l++] = ch;
+	if(ch == '\n')
+		line[l++] = ch;
+	line[l] = '\0';
+	return l;
+}
+
+int strIndex(char source[], char pattern[]) {
+	int i;
+	int j = 0;
+	int g;
+	int idx = -1;
+	int tmpIdx;
+
+	for(i = 0; source[i] != '\0'; i++) {
+		if(source[i] == pattern[j]) {
+			tmpIdx = i;
+			for(g = i, j = 0; source[g] == pattern[j] && pattern[j] != '\0'; g++, j++)
+				;
+			if(pattern[j] == '\0')
+				idx = tmpIdx;
+			j = 0;
+		}
+	}
+
+	return idx;
+}
+
+int kma()
+{
+	print("hei");
+}
+
+void ho()
+{
+
+}

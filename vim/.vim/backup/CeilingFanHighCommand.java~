@@ -1,0 +1,24 @@
+public class CeilingFanHighCommand implements Command {
+	private CeilingFan fan;
+	private int prevSpeed;
+
+	public CeilingFanOnCommand(CeilingFan fan) {
+		this.fan = fan;
+	}
+
+	public void execute() {
+		prevSpeed = fan.getSpeed();
+		fan.high();
+	}
+	
+	public void undo() {
+		if(prevSpeed == CeilingFan.HIGH)
+			fan.high();
+		else if(prevSpeed == CeilingFan.MEDIUM)
+			fan.medium();
+		else if(prevSpeed == CeilingFan.LOW)
+			fan.low();
+		else if(prevSpeed == CeilingFan.OFF)
+			fan.off();
+	}
+}

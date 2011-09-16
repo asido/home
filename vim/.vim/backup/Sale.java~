@@ -1,0 +1,25 @@
+package Model;
+
+import java.util.HashMap;
+import java.util.GregorianCalendar;
+
+/**
+ * Abstract class Sale - write a description of the class here
+ * 
+ * @author (Radu)
+ * @version (version number or date here)
+ */
+public class Sale
+{
+    // instance variables - replace the example below with your own
+    private HashMap<Product, Integer> list;
+    private double totalPrice;
+    private double VAT;
+    private GregorianCalendar date;
+    private String staffId;
+
+    public Sale()
+    {
+        
+    }
+}

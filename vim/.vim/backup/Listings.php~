@@ -1,0 +1,2252 @@
+<?php
+/**
+ * @copyright 68 Classifieds
+ *
+ * @author 68 Designs, LLC
+ * @version $Revision: 432 $
+ * @package 68Classifieds
+ * @link http://www.68classifieds.com
+ *
+ * @Updated: $Date: 2009-11-04 20:51:22 -0500 (Wed, 04 Nov 2009) $
+ */
+
+/**
+ * Listings class handles actions specific to listings.
+ */
+class Listings {
+
+	/**
+	 * Get Listing
+	 *
+	 * Gets a single listing by its ID. Then
+	 * assigns it to the template class.
+	 *
+	 * @param 	int $id The listing id to get.
+	 * @uses	getListingFields
+	 * @access 	public
+	 */
+	function getListingById($id, $action = '')
+	{
+		global $db, $class_tpl, $preview, $modules;
+		$Users = Library::loadLibrary('Users');
+		if (!is_numeric($id))
+		{
+			trigger_error('Listings::getListing: Numeric value for id required');
+		}
+		$id = (int) $id;
+		$sSQL = 'SELECT * FROM ' . PREFIX . 'listings WHERE id = ' . Filter::mysql_quote($id) . ' ';
+		if (!defined('IN_ADMIN') && $action != "modify")
+		{
+			$sSQL .= ' AND display="Y" AND expiration > NOW()';
+		}
+		if (!defined('IN_ADMIN') && $action == "modify")
+		{
+			$sSQL .= ' AND owner=' . (int) $_SESSION['uid'] . '';
+		}
+		if ($_SESSION['userlevel'] == 1 && isset($_GET['preview']))
+		{
+			$sSQL = 'SELECT * FROM ' . PREFIX . 'listings WHERE id = ' . Filter::mysql_quote($id) . ' ';
+		}
+		$result = $db->query($sSQL);
+		if ($result->isError())
+		{
+			trigger_error('Listing::getListing: Unable to fetch listing');
+			return false;
+		}
+		if ($result->num_rows() > 0)
+		{
+			$rs = $result->fetch();
+			foreach ($rs as $key => $value)
+			{
+				if ($key != 'shortDescription' and $key != 'description')
+				{
+					$rs[$key] = Filter::special_chars($value);
+				}
+			}
+			$user = $Users->getUserNameById($rs['owner']);
+			$rs['l_UserName'] = $user['username'];
+			$rs['categoryname'] = $this->getCategoryNameById($rs['section']);
+			$rs['data'] = $this->getListingImages($id);
+			$rs['expirationdays'] = $this->daysDiff(date("Y-m-d"), $rs['expiration']);
+			$rs['lid'] = Filter::special_chars($rs['id']);
+			$rs['title'] = Filter::special_chars($rs['title']);
+			if (defined('IN_ADMIN'))
+			{
+				$rs['l_Status_Text'] = $this->getStatusByValue($rs['display']);
+				$rs['usernotes'] = $user['usernotes'];
+			}
+
+			if ($action == "modify")
+			{
+				if (isset($_GET['section']))
+				{
+					$section = (int) $_GET['section'];
+				}
+				else
+				{
+					$section = (int) $rs['section'];
+				}
+				$rs['title'] = Filter::special_chars($rs['title']);
+				$class_tpl->assign('section', $section);
+				$modules->call_hook('listing_modify', $id);
+				$class_tpl->assign('extra_listing_fields', $this->modify_listing_fields($id, $section));
+				if (defined('IN_ADMIN'))
+				{
+					$modules->call_hook('admin_listing_modify', $id);
+				}
+			}
+			foreach ($rs as $key => $value)
+			{
+				$class_tpl->assign($key, $value);
+			}
+			if ($preview == 'Y')
+			{
+				$class_tpl->assign('extrafields', $this->getListingFields($id));
+			}
+			$result->freeResult();
+			return $rs;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Gets all listings by the parameters. This method is used anywhere listings are shown in a grid.
+	 * Please do not mess with this file if you do not know what you are doing.
+	 *
+	 * @param	array $options The search parameters
+	 * @param 	integer $current_row The current page number
+	 * @param 	integer $max The maximum number of rows per page
+	 * @global	object Template
+	 * @global 	object Modules
+	 * @uses 	updateSearchCount
+	 * @uses 	getListingSingleImage
+	 * @uses		Modules::call_hook()
+	 * @return 	array List of listings to be displayed
+	 */
+	function getAllListings($options, $current_row, $max)
+	{
+		global $db, $class_tpl, $modules;
+
+		if (defined('IN_ADMIN'))
+		{
+			$sSQL = 'SELECT * FROM ' . PREFIX . 'listings as p';
+		}
+		else
+		{
+			$inSQL = "";
+			$count = 0;
+			$pidwhere = FALSE;
+			$pids = $modules->call_hook('searchlistings_extras', ''); // Call any module functions
+			/**
+			 * Get all the extra fields.
+			 */
+			foreach (@$_GET as $objItem => $objValue)
+			{
+				if (substr($objItem, 0, 3) == "opt" && $objValue != "")
+				{
+					$total = count($objValue);
+					if (substr($objItem, 0, 11) == "opt_datemax")
+					{
+						$count = $count - 1;
+					}
+					elseif (substr($objItem, 0, 11) == "opt_datemin" && $objValue != "")
+					{
+						$opt_datemin = str_replace('opt_datemin', '', $objItem);
+						$opt_datemax = $_GET["opt_datemax$opt_datemin"];
+						if ($count > 0 && $pids)
+						{
+							$sql2 = "SELECT pID FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($opt_datemin) . " AND pID IN (" . rtrim($pids, ',') . ") sValue >= " . Filter::mysql_quote($objValue) . " AND sValue <= " . Filter::mysql_quote($opt_datemax);
+						}
+						else
+						{
+							$sql2 = "SELECT pID FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($opt_datemin) . " AND sValue >= " . Filter::mysql_quote($objValue) . " AND sValue <= " . Filter::mysql_quote($opt_datemax);
+						}
+						$result = $db->query($sql2);
+						$i = $result->num_rows();
+						while ($row = $result->fetch())
+						{
+							$pids .= $row['pID'] . ',';
+						}
+						if ($i == 0)
+						{
+							$pidwhere = TRUE;
+							continue;
+						}
+					}
+					if (substr($objItem, 0, 6) == "optmax")
+					{
+						$count = $count - 1;
+					}
+					elseif (substr($objItem, 0, 6) == "optmin" && $objValue != "")
+					{
+						if ($objValue >= 0)
+						{
+							$optmin = str_replace('optmin', '', $objItem);
+							$optmax = (int) $_GET["optmax$optmin"];
+
+							if ($count > 0 && $pids)
+							{
+								$sql2 = "SELECT pID FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($optmin) . " AND pID IN (" . rtrim($pids, ',') . ") AND sValue BETWEEN " . Filter::mysql_quote($objValue) . " AND " . Filter::mysql_quote($optmax);
+							}
+							else
+							{
+								$sql2 = "SELECT pID FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($optmin) . " AND sValue BETWEEN " . Filter::mysql_quote($objValue) . " AND " . Filter::mysql_quote($optmax);
+							}
+							$result = $db->query($sql2);
+							$i = $result->num_rows();
+							while ($row = $result->fetch())
+							{
+								$pids .= $row['pID'] . ',';
+							}
+							if ($i == 0)
+							{
+								$pidwhere = TRUE;
+								continue;
+							}
+						}
+					}
+					elseif (is_array($objValue)) //checkbox searching
+					{
+						$option = str_replace('opt', '', $objItem);
+						$option = (int) $option;
+						$search = '';
+						foreach ($objValue as $key)
+						{
+							$search2 = $key . '|';
+							$search .= "AND sValue LIKE " . Filter::mysql_quote_like($search2) . " ";
+						}
+						if ($count > 0 && $pids)
+						{
+							$sql2 = "SELECT pID FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($option) . " " . Filter::mysql_quote($search) . " AND pID IN (" . rtrim($pids, ',') . ")";
+						}
+						else
+						{
+							$sql2 = "SELECT pID FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($option) . " " . $search;
+						}
+						$result = $db->query($sql2);
+						$i = $result->num_rows();
+						while ($row = $result->fetch()) //auto stripslashes
+						{
+							$pids .= $row['pID'] . ',';
+						}
+						if ($i == 0)
+						{
+							$pidwhere = TRUE;
+							continue;
+						}
+					}
+					else
+					{
+						$option = str_replace('opt', '', $objItem);
+						$option = (int) $option;
+						if ($count > 0 && $pids)
+						{
+							$sql2 = "SELECT pID FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($option) . " AND sValue = " . Filter::mysql_quote($objValue) . " AND pID IN (" . rtrim($pids, ',') . ")";
+						}
+						else
+						{
+							$sql2 = "SELECT pID FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($option) . " AND sValue=" . Filter::mysql_quote($objValue);
+						}
+						$result = $db->query($sql2);
+						$i = $result->num_rows();
+						while ($row = $result->fetch()) //auto stripslashes
+						{
+							$pids .= $row['pID'] . ',';
+						}
+						if ($i == 0)
+						{
+							$pidwhere = TRUE;
+							continue;
+						}
+					}
+					$count++;
+				}
+			}
+			$firstsql = $modules->call_hook('searchlistings_first', ''); // Call any module functions
+			$select = $modules->call_hook('searchlistings_select', ''); // Call any module functions
+			$joins = $modules->call_hook('searchlistings_joins', ''); // Call any module functions
+			$sSQL = $firstsql . " SELECT p.id, p.owner, p.title, p.featured, p.section, p.shortDescription, p.description, p.price, p.dateadded, p.expiration, p.display, p.pHighlighted, p.pBold, p.hitcount, p.url, u.username,u.address,u.email, u.phone, u.state, u.city, u.country, u.extra, u.extra2, u.extra3 " . $select . " FROM " . PREFIX . "listings AS p LEFT JOIN " . PREFIX . "users AS u ON p.owner = u.id " . $joins;
+		}
+		//where clause
+		$where = "WHERE 1=1";
+		if (isset($_REQUEST['fromdate']) && $_REQUEST['fromdate'] != "" || isset($options['fromdate']) && $options['fromdate'] != '')
+		{
+			$enddate = date("Y-m-d");
+			$fromdate = (empty($options['fromdate'])) ? $_REQUEST['fromdate'] : $options['fromdate'];
+			if (isset($_REQUEST['enddate']) && $_REQUEST['enddate'] != "")
+			{
+				$enddate = $_REQUEST['enddate'];
+			}
+			$where .= " AND dateadded BETWEEN " . Filter::mysql_quote($fromdate) . " AND " . Filter::mysql_quote($enddate . " 23:59:59");
+		}
+
+		$where .= (empty($pidwhere)) ? '' : " AND 1<>1";
+
+		$where .= (empty($pids)) ? '' : " AND p.id IN (" . rtrim($pids, ',') . ")";
+		$where .= (empty($options['owner'])) ? '' : " AND p.owner = " . Filter::mysql_quote((int) $options['owner']);
+		$where .= (empty($options['section'])) ? '' : " AND p.section = " . Filter::mysql_quote((int) $options['section']);
+		$where .= (empty($options['featured'])) ? '' : " AND p.featured = 'Y'";
+		$where .= (empty($_REQUEST['owner'])) ? '' : " AND p.owner = " . Filter::mysql_quote((int) $_REQUEST['owner']);
+		$where .= (empty($_REQUEST['l_Category'])) ? '' : " AND p.section = " . Filter::mysql_quote((int) $_REQUEST['l_Category']);
+		$where .= (empty($options['cats'])) ? '' : " AND p.section IN (" . implode(', ', $options['cats']) . ")"; //allows you to pass an array of cats.
+		$where .= (empty($_REQUEST['l_ID'])) ? '' : " AND p.id = " . Filter::mysql_quote((int) $_REQUEST['l_ID']);
+		$where .= (empty($_REQUEST['adid'])) ? '' : " AND p.id = " . Filter::mysql_quote((int) $_REQUEST['adid']);
+		$where .= (empty($options['o_ID'])) ? '' : " AND p.orderID = " . Filter::mysql_quote((int) $options['o_ID']);
+		$where .= $modules->call_hook('searchlistings_where', '');
+
+		if (!defined('IN_ADMIN'))
+		{
+			if (isset($_REQUEST['searchtext']) && $_REQUEST['searchtext'] != '' || isset($options['searchtext']) && $options['searchtext'] != '')
+			{
+				$searchtext = (empty($options['searchtext'])) ? $_REQUEST['searchtext'] : $options['searchtext'];
+				$trimmed = trim(mysql_real_escape_string($searchtext));
+				$trimmed_array = explode(" ", $trimmed);
+				foreach ($trimmed_array as $trimm)
+				{
+					$where .= " AND (p.id LIKE " . Filter::mysql_quote_like($trimm) . " OR p.title LIKE " . Filter::mysql_quote_like($trimm) . " OR p.shortDescription LIKE " . Filter::mysql_quote_like($trimm) . " OR p.description LIKE " . Filter::mysql_quote_like($trimm) . ")";
+				}
+			}
+		}
+		else
+		{
+			if (isset($_REQUEST['searchtext']) && $_REQUEST['searchtext'] != '')
+			{
+				$trimmed = trim(mysql_real_escape_string($_REQUEST['searchtext']));
+				$trimmed_array = explode(" ", $trimmed);
+				foreach ($trimmed_array as $trimm)
+				{
+					$where .= " AND (p.id LIKE " . Filter::mysql_quote_like($trimm) . " OR p.title LIKE " . Filter::mysql_quote_like($trimm) . " OR p.shortDescription LIKE " . Filter::mysql_quote_like($trimm) . " OR p.description LIKE " . Filter::mysql_quote_like($trimm) . ")";
+				}
+			}
+		}
+
+		if (!defined('IN_ADMIN'))
+		{
+			$minprice = trim(floatval(@$_REQUEST['minprice']));
+			$maxprice = trim(floatval(@$_REQUEST['maxprice']));
+			if ($minprice == "")
+				$minprice = 0;
+			if ($maxprice == "" || $maxprice == 0)
+				$maxprice = 99999999999;
+
+			$where .= " AND p.price BETWEEN " . Filter::mysql_quote($minprice) . " AND " . Filter::mysql_quote($maxprice);
+			$where .= ' AND p.expiration > NOW() AND p.display = "Y"';
+			$where .= (empty($options['arr_childs'])) ? '' : " AND p.section IN (" . implode(', ', $options['arr_childs']) . ")";
+			$where .= (empty($_REQUEST['phone'])) ? '' : " AND u.phone LIKE " . Filter::mysql_quote_like($_REQUEST['phone']);
+			$where .= (empty($_REQUEST['adid'])) ? '' : " AND p.id = " . Filter::mysql_quote((int) $_REQUEST['adid']);
+			$where .= (empty($_REQUEST['state'])) ? '' : " AND u.state = " . Filter::mysql_quote($_REQUEST['state']);
+			$where .= (empty($_REQUEST['city'])) ? '' : " AND u.city LIKE " . Filter::mysql_quote_like($_REQUEST['city']);
+			$where .= (empty($_REQUEST['country'])) ? '' : " AND u.country = " . Filter::mysql_quote($_REQUEST['country']);
+			$where .= $modules->call_hook('searchquery_where', $_REQUEST); // Call any module functions
+			//now group by
+			$groupbysql = " GROUP BY p.id, p.owner, p.title, p.featured, p.section, p.description, p.dateadded, p.expiration, u.state, u.city, u.country";
+			$groupby = $modules->call_hook('searchquery_groupby', $groupbysql); // Call any module functions
+			if ($groupby)
+			{
+				$where .= $groupby;
+			}
+			else
+			{
+				$where .= $groupbysql;
+			}
+		}
+
+		//Sort by
+		$sortfield = (empty($options['sortfield'])) ? @$_REQUEST['sortfield'] : $options['sortfield'];
+		if (isset($_REQUEST['sortfield']))
+		{
+			$sortfield = $_REQUEST['sortfield'];
+		}
+		$sortorder = isset($_REQUEST['sortorder']) ? $_REQUEST['sortorder'] : '';
+		if ($sortfield == '')
+		{
+			if (!empty($_COOKIE['sortlistings']['sortfield']))
+			{
+				$sortfield = $_COOKIE['sortlistings']['sortfield'];
+			}
+			elseif (!empty($options['sortfield']))
+			{
+				$sortfield = $options['sortfield'];
+			}
+			else
+			{
+				$sortfield = 'dateadded';
+			}
+		}
+		else
+		{
+			setcookie("sortlistings[sortfield]", $sortfield, time() + 604800, '/');
+		}
+		if ($sortorder == '')
+		{
+			if (!empty($_COOKIE['sortlistings']['sortorder']))
+			{
+				$sortorder = $_COOKIE['sortlistings']['sortorder'];
+			}
+			elseif (!empty($options['sortorder']))
+			{
+				$sortorder = $options['sortorder'];
+			}
+			else
+			{
+				$sortorder = 'desc';
+			}
+		}
+		else
+		{
+			setcookie("sortlistings[sortorder]", $sortorder, time() + 604800, '/');
+		}
+		if (!defined('IN_ADMIN'))
+		{
+			switch ($sortfield) {
+				case 'id' :
+					$sqlsort = 'id';
+				break;
+				case 'title' :
+					$sqlsort = 'title';
+				break;
+				case 'price' :
+					$sqlsort = 'price';
+				break;
+				case 'dateadded' :
+					$sqlsort = 'dateadded';
+				break;
+				case 'expiration' :
+					$sqlsort = 'expiration';
+				break;
+				case 'display' :
+					$sqlsort = 'display';
+				break;
+				case 'city' :
+					$sqlsort = 'city';
+				break;
+				case 'state' :
+					$sqlsort = 'state';
+				break;
+				case 'country' :
+					$sqlsort = 'country';
+				break;
+				case 'hitcount' :
+					$sqlsort = 'hitcount';
+				break;
+				case 'featured' :
+					$sqlsort = 'featured';
+				break;
+				default :
+					$sqlsort = 'dateadded';
+				break;
+			}
+		}
+		else
+		{
+			switch ($sortfield) {
+				case 'id' :
+					$sqlsort = 'id';
+				break;
+				case 'title' :
+					$sqlsort = 'title';
+				break;
+				case 'price' :
+					$sqlsort = 'price';
+				break;
+				case 'dateadded' :
+					$sqlsort = 'dateadded';
+				break;
+				case 'expiration' :
+					$sqlsort = 'expiration';
+				break;
+				case 'display' :
+					$sqlsort = 'display';
+				break;
+				case 'hitcount' :
+				case 'new' :
+					$sqlsort = 'hitcount';
+				break;
+				case 'featured' :
+					$sqlsort = 'featured';
+				break;
+				default :
+					$sqlsort = 'dateadded';
+			}
+		}
+
+		//hook to over ride sorting
+		$msort = $modules->call_hook('searchlistings_sort', $sqlsort);
+		if (!empty($msort))
+		{
+			$sqlsort = $msort;
+		}
+
+		$sortorder = strtolower($sortorder);
+		if ($sortorder != 'desc')
+		{
+			$sortorder = 'asc';
+			$oppositesort = 'desc';
+		}
+		else
+		{
+			$oppositesort = 'asc';
+		}
+		$listingSQL = $sSQL . ' ' . $where . ' ORDER BY ' . $sqlsort . ' ' . $sortorder . ', dateadded DESC';
+
+		//get the number of listings
+		$resultSet = $db->query($listingSQL);
+		$numrows = $resultSet->num_rows();
+		$resultSet->freeResult();
+		if ($numrows == 0)
+		{
+			$numrows = 1;
+		}
+		//now do the real search
+		$i = 0;
+		$offset = ($current_row - 1) * $max;
+		$searchSQL = sprintf("%s LIMIT %d, %d", $listingSQL, $offset, $max);
+
+		$result = $db->query($searchSQL);
+		$results = array();
+		$i = 0;
+
+		$html_fields = array('shortDescription', 'description');
+		$mod_html_fields = $modules->call_hook('searchlistings_htmlfields', '');
+		if (!empty($mod_html_fields))
+		{
+			$mod_html_fields = explode(',', $mod_html_fields);
+			$html_fields = array_merge($html_fields, $mod_html_fields);
+		}
+
+		while ($row = $result->fetch()) //slahes auto removed
+		{
+			//HTML only allowed in description and short description
+			foreach ($row as $row_key => $row_value)
+			{
+				if (!in_array($row_key, $html_fields))
+				{
+					$row[$row_key] = Filter::special_chars($row_value);
+				}
+			}
+
+			$row['id'] = $row['id'];
+			$row['title'] = $row['title'];
+		
+			$modules->call_hook('listing_title', $row['title']);
+			$row['status'] = $row['display'];
+			$aaa=$row['id'];
+			$bbb=2;
+			###ajcode###
+			
+						$sql4 = "SELECT sValue from class_products_fields WHERE pID=$aaa and fID=2";
+						$w = mysql_query($sql4);
+			$vv=1;
+						if(mysql_num_rows($w)>0)
+			
+						{     
+						$vv=0;
+			
+								$onerow=mysql_fetch_array($w);
+			
+								$val=$onerow['sValue'];
+						}
+						
+						$arr_ext=str_replace("|"," | ",$val);
+						$arr_ext = substr($arr_ext, 0, strlen($arr_ext)-2);
+						$row['disp']=$arr_ext;
+			
+			###ajcode end####
+			if (defined('IN_ADMIN'))
+			{
+				$row['l_Status_Text'] = $this->getStatusByValue($row['display']);
+			}
+			else
+			{
+				$row['image'] = $this->getListingSingleImage($row['id']);
+				$row['class'] = '';
+				if ($row['pBold'] == "Y")
+				{
+					$row['class'] .= "bold ";
+				}
+				if ($row['pHighlighted'] == "Y")
+				{
+					$row['class'] .= "highlighted ";
+				}
+				if ($row['featured'] == "Y")
+				{
+					$row['class'] .= "featured ";
+				}
+				$row['link'] = $modules->call_hook('listing_url', $row);
+				if ($row['link'] == '')
+				{
+					$row['link'] = "viewlisting.php?view=" . $row['id'];
+				}
+				$row['custom'] = $modules->call_hook('listings_grid', $row);
+					
+				$this->updateSearchCount($row['id']);
+				$sql = mysql_fetch_array(mysql_query("SELECT `image` FROM `class_prodimages` WHERE `pid`=".$row['id']));
+				$row['preview_image'] = $sql['image'];
+			}
+			$results[] = $row;
+		}
+		//setup paging
+		$Pagination = new Pagination();
+		$Pagination->paging($numrows);
+
+		//setup sorting
+		$sortable = array('id', 'title', 'price', 'dateadded', 'expiration', 'display', 'city', 'state', 'country', 'featured');
+		$Pagination->querystring($sortable);
+		return array("list" => $results, "info" => array("total" => $numrows, "sqlsort" => $sqlsort, "sortorder" => $sortorder, "oppositesort" => $oppositesort));
+	}
+
+	/**
+	 * Get Single Extra Field Value. This is useful for using with {@link getAllListings}. It allows
+	 * you to pull out extra fields and dislay them in showlistings.
+	 *
+	 * Example: If you have an extra field with the id of 2:
+	 * <code>$row['extra']=$this->getExtraField($row['id'], 2);</code>
+	 *
+	 *
+	 * @link getAllListings
+	 * @param int $id The listing id.
+	 * @param int $fieldid The field id.
+	 * @access public
+	 */
+	function getExtraField($id, $fieldid)
+	{
+		global $db;
+		$sSQL = "SELECT sValue FROM " . PREFIX . "products_fields WHERE pID=" . Filter::mysql_quote($id) . " AND fID=" . Filter::mysql_quote($fieldid);
+		$result = $db->query($sSQL);
+		if ($result->isError())
+		{
+			trigger_error('Listing::getListing: Unable to fetch listing');
+			return false;
+		}
+		if ($result->num_rows() > 0)
+		{
+			$rs = $result->fetch();
+			$value = $rs['sValue']; //safe html
+		}
+		$result->freeResult();
+		return $value;
+	}
+
+	/**
+	 * Gets the listings status by its ID
+	 *
+	 * @param int $id The status id.
+	 * @return str The status as defined in the language file.
+	 * @access public
+	 */
+	function getStatusByValue($id)
+	{
+		switch ($id) {
+			case "Y" :
+				$status = LANG_STATUS_ACTIVE;
+			break;
+			case "N" :
+				$status = LANG_STATUS_NOT_ACTIVE;
+			break;
+			case "C" :
+				$status = LANG_ORDER_STATUS_NOT_COMPLETED;
+			break;
+			case "E" :
+				$status = LANG_STATUS_EXPIRED;
+			break;
+			case "S" :
+				$status = LANG_STATUS_SOLD;
+			break;
+		}
+		return $status;
+	}
+
+	/**
+	 * Get listings for a member
+	 *
+	 * @param 	array $options The search parameters
+	 * @param 	integer $current_row The current page number
+	 * @param 	integer $max The maximum number of rows per page
+	 * @global 	object db Database functions
+	 * @global 	object class_tpl Template functions
+	 * @access 	public
+	 * @return 	array List of listings to be displayed
+	 * @uses		Core::getCheckoutSettings()
+	 * @uses		Modules::call_hook()
+	 */
+	function getListingsForMember($userid, $current_row, $max)
+	{
+		global $db, $class_tpl, $modules, $Core;
+		$checkoutSettings = $Core->getCheckoutSettings();
+		$where = $modules->call_hook('userbrowselistings_where', '');
+		$sSQL = "SELECT id,title,section,price,display,hitcount,dateadded,expiration,orderID,oType,oStatus,oProductID," . PREFIX . "products.pGroup FROM " . PREFIX . "listings LEFT JOIN " . PREFIX . "orders ON orderID=oID LEFT JOIN " . PREFIX . "products ON " . PREFIX . "products.pID=" . PREFIX . "orders.oProductID WHERE owner = " . Filter::mysql_quote($userid) . " " . $where . " ORDER BY dateadded DESC";
+		//get the number of listings
+		$resultSet = $db->query($sSQL);
+		$numrows = $resultSet->num_rows();
+		$resultSet->freeResult();
+		if ($numrows == 0)
+		{
+			$numrows = 1;
+		}
+
+		//now do the real search
+		$i = 0;
+		$offset = ($current_row - 1) * $max;
+		$searchSQL = sprintf("%s LIMIT %d, %d", $sSQL, $offset, $max);
+		$result = $db->query($searchSQL);
+		if ($result->num_rows() > 0)
+		{
+			while ($row = $result->fetch())
+			{
+				$row['title'] = Filter::special_chars($row['title']);
+				$row['status'] = $row['display'];
+				if ($checkoutSettings['renewal'] == 'Y')
+				{
+					if ($this->daysDiff(date("Ymd"), $row['expiration']) <= $checkoutSettings['renewalDays'])
+					{
+						$row['renew'] = TRUE;
+					}
+				}
+				$row['expirationTime'] = strtotime($row['expiration']);
+
+				//add in check for renewal permissions for front-end resolves issue:352
+				$row['renew_allowed'] = 'Y';
+				if (isset($_SESSION['uid']) and $_SESSION['uid'] != 1 and $_SESSION['uid'] == $userid)
+				{
+					if ($_SESSION['userlevel'] != $row['pGroup'])
+					{
+						$row['renew_allowed'] = 'N';
+					}
+				}
+
+				$results[] = $row;
+			}
+			//setup paging
+			$Pagination = new Pagination();
+			$Pagination->paging($numrows);
+			return array("list" => $results, "info" => array("total" => $numrows));
+			$result->freeResult();
+			return $results;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Gets the number of days between two dates
+	 *
+	 * @param 	string $start_date The starting date
+	 * @param 	string $end_date The ending date
+	 * @return	int Number of days between start and expiration
+	 * @access public
+	 */
+	function daysDiff($start_date, $end_date)
+	{
+		return floor(abs(strtotime($start_date) - strtotime($end_date)) / 86400);
+	}
+
+	/**
+	 * Gets a users name by their id.
+	 *
+	 * @param 	int $id The user id.
+	 * @return 	str username
+	 * @access 	public
+	 */
+	function getUserNameById($id)
+	{
+		global $db;
+		$id = (int) $id;
+		$sSQL = "SElECT username,notes FROM " . PREFIX . "users WHERE id=" . Filter::mysql_quote($id);
+		$result = $db->query($sSQL);
+		$rs = $result->fetch();
+		$result->freeResult();
+		return $rs;
+	}
+
+	/**
+	 * Get a category name by its id.
+	 *
+	 * @param 	int $id The category id.
+	 * @return 	str Category name
+	 * @access 	public
+	 */
+	function getCategoryNameById($id)
+	{
+		global $db;
+		$id = (int) $id;
+		$sSQL = "SElECT name FROM " . PREFIX . "categories WHERE id=" . Filter::mysql_quote($id);
+		$result = $db->query($sSQL);
+		$rs = $result->fetch();
+		$result->freeResult();
+		return Filter::special_chars($rs['name']);
+	}
+
+	/**
+	 * Find out if a listing is a favorite for a user.
+	 *
+	 * @param 	int $id The listing id.
+	 * @param 	int $userid The user's id.
+	 * @return 	True or False
+	 * @access 	public
+	 */
+	function isFavorite($id, $userid)
+	{
+		global $db;
+		$id = (int) $id;
+		$userid = (int) $userid;
+		$sSQL = sprintf("SELECT pID FROM " . PREFIX . "favorites WHERE uID=%s AND pID=%s", Filter::mysql_quote($userid), Filter::mysql_quote($id));
+		$result = $db->query($sSQL);
+		$rows = $result->num_rows();
+		$result->freeResult();
+		if ($rows > 0)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Get a single listings images
+	 *
+	 * @param int $id The listing id.
+	 * @return array of listing images
+	 * @access public
+	 */
+	function getListingImages($id)
+	{
+		global $db;
+		$id = (int) $id;
+		$sSQL = 'SELECT id, pid,title, image, rank FROM ' . PREFIX . 'prodimages WHERE pid = ' . Filter::mysql_quote($id) . ' ORDER BY rank ASC';
+
+		$result = $db->query($sSQL);
+
+		if ($result->isError())
+		{
+			trigger_error('Listing::getListingImages: Unable to fetch images');
+			return false;
+		}
+		if ($result->num_rows() == 0)
+		{
+			return false;
+		}
+		while ($rs = $result->fetch())
+		{
+			$rs['title'] = Filter::special_chars($rs['title']);
+			$size = @getimagesize('photos/' . $rs['image']);
+			$rs['width'] = $size[0];
+			$rs['height'] = $size[1];
+			$image[] = $rs;
+		}
+		$result->freeResult();
+		return $image;
+	}
+
+	/**
+	 * Get a single image for a listing
+	 *
+	 * @param 	int $id The listing id.
+	 * @return 	array of listing images
+	 * @access 	public
+	 */
+	function getListingSingleImage($id)
+	{
+		global $db;
+		$id = (int) $id;
+		$sSQL = 'SELECT id, pid, title, image, rank FROM ' . PREFIX . 'prodimages WHERE pid = ' . Filter::mysql_quote($id) . ' ORDER BY rank ASC LIMIT 1';
+
+		$result = $db->query($sSQL);
+
+		if ($result->isError())
+		{
+			trigger_error('Listing::getListingImage: Unable to fetch images');
+			return false;
+		}
+		if ($result->num_rows() > 0)
+		{
+			$rs = $result->fetch();
+			$rs['title'] = Filter::special_chars($rs['title']);
+			$image = $rs['image'];
+			$result->freeResult();
+			return $image;
+		}
+		else
+		{
+			return FALSE;
+		}
+
+	}
+
+	/**
+	 * User Change Listing Status
+	 *
+	 * Available options for status is:
+	 * <ul>
+	 * <li>Y: Active</li>
+	 * <li>N: Inactive</li>
+	 * <li>5: Delete</li>
+	 * </ul>
+	 *
+	 * @param 	str $status The new status.
+	 * @param 	int $id The listing id to get.
+	 * @access 	public
+	 * @return 	boolean Returns true if the listing is updated or false if not
+	 * @uses		Modules::call_hook()
+	 */
+	function changeDisplay($status, $id, $orderid = 0)
+	{
+		global $db, $modules;
+		$id = (int) $id;
+		$orderid = (int) $orderid;
+		if ($status == 5)
+		{
+			$this->deleteListing($id);
+		}
+		else
+		{
+			if ($orderid != 0)
+			{
+				$sSQL = "UPDATE " . PREFIX . "listings SET display=" . Filter::mysql_quote($status) . " WHERE orderID=" . Filter::mysql_quote($orderid);
+			}
+			else
+			{
+				$sSQL = "UPDATE " . PREFIX . "listings SET display=" . Filter::mysql_quote($status) . " WHERE id=" . Filter::mysql_quote($id);
+			}
+			$db->query($sSQL);
+			if (!$db->isError())
+			{
+				$data = array('id' => $id, 'status' => $status, 'orderid' => $orderid);
+				$modules->call_hook('change_display_status', $data); // Call any module functions
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * This sets the expiration for a listing based off the order id.
+	 *
+	 * @param 	int $id The product id to get.
+	 * @param 	int $orderid The order id to get.
+	 * @param 	bool $renewal True or False if it is a renewal.
+	 * @uses		Modules::call_hook()
+	 */
+	function setExpiration($id, $orderid, $renewal = FALSE, $listingid = FALSE)
+	{
+		global $db, $modules;
+		$id = (int) $id;
+		$orderid = (int) $orderid;
+
+		$sSQL = "SELECT id,expiration FROM " . PREFIX . "listings WHERE orderID=" . Filter::mysql_quote($orderid);
+		$result = $db->query($sSQL);
+		$rs = $result->fetch();
+		$listingid = $rs['id'];
+		$currentExpiration = $rs['expiration'];
+		if ($currentExpiration > date("Y-m-d H:i:s") && $renewal == TRUE)
+		{
+			$arr = explode("-", $currentExpiration);
+			$now = date("Y-m-d", mktime(0, 0, 0, $arr[1], (int) $arr[2], $arr[0]));
+		}
+		else
+		{
+			$now = date("Y-m-d");
+		}
+		$result->freeResult();
+
+		$sSQL = "SELECT pExpiration FROM " . PREFIX . "products WHERE pID=" . Filter::mysql_quote($id);
+		$result = $db->query($sSQL);
+		$rs2 = $result->fetch();
+
+		$time = date("H:i:s");
+		$date = explode("-", $now);
+		$listtime = $rs2['pExpiration'];
+		switch ($listtime) {
+			case "365" :
+				$expiration = date("Y-m-d", mktime(0, 0, 0, $date[1], $date[2], $date[0] + 1));
+			break;
+			case "730" :
+				$expiration = date("Y-m-d", mktime(0, 0, 0, $date[1], $date[2], $date[0] + 2));
+			break;
+			case "1825" :
+				$expiration = date("Y-m-d", mktime(0, 0, 0, $date[1], $date[2], $date[0] + 5));
+			break;
+			case "3650" :
+				$expiration = date("Y-m-d", mktime(0, 0, 0, $date[1], $date[2], $date[0] + 10));
+			break;
+			default :
+				$expiration = date("Y-m-d", mktime(0, 0, 0, $date[1], $date[2] + $listtime, $date[0]));
+		}
+		$set_expiration = TRUE;
+		($modules->call_hook('bypass_expiration', $listingid)) ? $set_expiration = FALSE : FALSE;
+		if ($set_expiration)
+		{
+			$sSQL = "UPDATE " . PREFIX . "listings SET expiration=" . Filter::mysql_quote($expiration . " " . $time) . " WHERE ";
+			if ($listingid)
+			{
+				$sSQL .= "id=" . Filter::mysql_quote($listingid);
+			}
+			else
+			{
+				$sSQL .= "orderID=" . Filter::mysql_quote($orderid);
+			}
+			$db->query($sSQL);
+		}
+	}
+
+	/**
+	 * Delete Listing
+	 *
+	 * @uses		removeExtraFields()
+	 * @uses 	removeImages()
+	 * @param 	int $id The listing id to delete.
+	 * @param	int $userid Not used if inside admin.
+	 * @param	string $cron Only used if inside cron file.
+	 * @access 	public
+	 * @return 	boolean Returns true if the listing is deleted or false if not
+	 * @uses		Modules::call_hook()
+	 */
+	function deleteListing($id, $userid = '', $cron = 'N')
+	{
+		global $db, $modules;
+		$id = (int) $id;
+		$userid = (int) $userid;
+		$cron = Filter::equals($cron, 'Y', 'N');
+		if (!is_numeric($id))
+		{
+			trigger_error('Listings::deleteListing: Numeric value for id required');
+		}
+		if (defined('IN_ADMIN') || $cron == 'Y')
+		{
+			$sSQL = "DELETE FROM " . PREFIX . "listings WHERE id=" . Filter::mysql_quote($id);
+		}
+		else
+		{
+			$sSQL = "DELETE FROM " . PREFIX . "listings WHERE id=" . Filter::mysql_quote($id) . " AND owner=" . Filter::mysql_quote($userid);
+		}
+		$db->query($sSQL);
+		if (!$db->isError())
+		{
+			//put other delete clauses here.
+			//deleteImages deleteExtraFields, etc...
+			$this->removeExtraFields($id);
+			$this->removeImages($id);
+			$modules->call_hook('delete_listing', $id);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Delete all UsersListing
+	 *
+	 * @param 	int $userid The user id to delete.
+	 * @uses		deleteListing()
+	 * @return 	boolean Returns true if the listing is deleted or false if not
+	 * @uses		Modules::call_hook()
+	 */
+	function deleteUsersListings($userid)
+	{
+		global $db, $modules;
+		$userid = (int) $userid;
+		if ($userid == 0)
+		{
+			trigger_error('Listings::deleteUsersListings: Numeric value for id required');
+		}
+		$sSQL = 'SELECT id FROM ' . PREFIX . 'listings WHERE owner=' . Filter::mysql_quote($userid);
+		$result = $db->query($sSQL);
+		while ($rs = $result->fetch())
+		{
+			$this->deleteListing($rs['id']);
+			$modules->call_hook('deleted_user_listings', $userid);
+		}
+		return true;
+	}
+
+	/**
+	 * Add Listing
+	 *
+	 * @param 	array $data An array of listing data
+	 * @param	boolean $admin Not used.
+	 * @access 	public
+	 * @return 	boolean Returns listing id if the listing is added or false if not
+	 * @uses		Modules::call_hook()
+	 * @uses		addListingFields()
+	 */
+	function addListing($data, $admin = FALSE)
+	{
+		global $db, $modules;
+
+		// Add in possible missing fields
+		$now = date_now();
+		$data['featured'] = isset($data['featured']) ? Filter::equals($data['featured'], 'Y', 'N') : 'N';
+		$data['bold'] = isset($data['bold']) ? Filter::equals($data['bold'], 'Y', 'N') : 'N';
+		$data['highlighted'] = isset($data['highlighted']) ? Filter::equals($data['highlighted'], 'Y', 'N') : 'N';
+		$data['url'] = isset($data['url']) ? $data['url'] : '';
+		$data['sales_percentage']=isset($_POST['sales_percentage'])?$_POST['sales_percentage']:0;
+
+		$sSQL = sprintf("INSERT INTO " . PREFIX . "listings (owner, title, shortDescription, description, section, price, display, dateadded, expiration, orderID, featured, pBold, pHighlighted, url, sales_percentage) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)", Filter::mysql_quote($data['owner']), Filter::mysql_quote($data['title']), Filter::mysql_quote($data['shortDescription']), Filter::mysql_quote($data['description']), Filter::mysql_quote($data['section']), Filter::mysql_quote($data['price']), Filter::mysql_quote($data['display']), Filter::mysql_quote($now), Filter::mysql_quote($data['expiration']), Filter::mysql_quote($data['orderID']), Filter::mysql_quote($data['featured']), Filter::mysql_quote($data['bold']), Filter::mysql_quote($data['highlighted']), Filter::mysql_quote($data['url']), Filter::mysql_quote($data['sales_percentage']) );
+		$result = $db->query($sSQL);
+		if (!$db->isError())
+		{
+			$listingid = $result->insert_id();
+			$this->addListingFields($listingid);
+			$arr = array('id' => $listingid, 'status' => $data['display']);
+			$modules->call_hook('add_listing', $arr); // Call any module functions
+			return $listingid;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Add extra fields to a listing
+	 *
+	 * @param 	int $id The id of the listing
+	 */
+	function addListingFields($id)
+	{
+		global $db, $_FILES;
+		$i = 0;
+		//do they have any attachments
+		if (empty($_FILES))
+		{
+			foreach ($_FILES as $key => $error)
+			{
+				$fid = (int) ltrim($key, 'opt');
+				$sql = "SELECT fID,fExtensions FROM `" . PREFIX . "fields` WHERE fID=" . Filter::mysql_quote($fid) . " ORDER BY fOrder ASC";
+				$result3 = $db->query($sql);
+				$row = $result3->fetch();
+				$extensions = $row['fExtensions'];
+				$allowed_ext = explode(',', $extensions);
+				$go = FALSE;
+				if ($_FILES["$key"]["name"] != "")
+				{
+					$tmp_name = $_FILES["$key"]["tmp_name"];
+					$ext = substr(strrchr($_FILES["$key"]['name'], '.'), 1);
+					for($i = 0; $i < count($allowed_ext); $i++)
+					{
+						if ($allowed_ext[$i] == "$ext")
+						{
+							$go = TRUE;
+						}
+					}
+					if ($go == TRUE)
+					{
+						$name = Filter::clean_filename($_FILES["$key"]["name"]);
+						@move_uploaded_file($tmp_name, FILESYSTEM_PATH . "/uploads/" . $id . "_" . $name);
+						$objValue = $id . "_" . $name;
+						if (is_file(FILESYSTEM_PATH . '/uploads/' . $objValue))
+						{
+							$sSQL = "INSERT INTO " . PREFIX . "products_fields SET ";
+							$sSQL .= "pID=" . Filter::mysql_quote($id) . ", ";
+							$sSQL .= "fID=" . Filter::mysql_quote($fid) . ", ";
+							$sSQL .= "sValue=" . Filter::mysql_quote($objValue);
+							$result = @mysql_query($sSQL);
+							if (!$result)
+							{
+								die(mysql_error());
+							}
+							$i++;
+						}
+					}
+				}
+			}
+		}
+		if (empty($_POST))
+		{
+			return;
+		}
+		foreach ($_POST as $objItem => $objValue)
+		{
+			if (substr($objItem, 0, 3) == "opt")
+			{
+				if ($objValue != "")
+				{
+					$fid = ltrim($objItem, 'opt');
+					if (is_array($objValue))
+					{
+						$extras = "";
+						foreach ($objValue as $key)
+						{
+							$extras .= $key . '|';
+						}
+						$objValue = $extras;
+					}
+					$sSQL = "INSERT INTO " . PREFIX . "products_fields SET ";
+					$sSQL .= "pID=" . Filter::mysql_quote($id) . ", ";
+					$sSQL .= "fID=" . Filter::mysql_quote($fid) . ", ";
+					$sSQL .= "sValue=" . Filter::mysql_quote(Filter::checkout_html(Filter::filterword($objValue)));
+					$result = @mysql_query($sSQL);
+					if (!$result)
+					{
+						die(mysql_error());
+					}
+					$i++;
+				} //end if
+			} // end if
+		} // end foreach
+	}
+
+	/**
+	 * Edit Listing
+	 *
+	 * @param 	array $data An array of listing data
+	 * @access 	public
+	 * @return 	boolean Returns listing id if the listing is added or false if not
+	 * @uses		Modules::call_hook()
+	 * @uses		Mailer::sendMail()
+	 * @uses		editListingFields()
+	 */
+	function editListing($data)
+	{
+		global $db, $modules, $Mailer;
+
+		//ensure options are set
+		$data['featured'] = isset($data['featured']) ? Filter::equals($data['featured'], 'Y', 'N') : 'N';
+		$data['bold'] = isset($data['bold']) ? Filter::equals($data['bold'], 'Y', 'N') : 'N';
+		$data['highlighted'] = isset($data['highlighted']) ? Filter::equals($data['highlighted'], 'Y', 'N') : 'N';
+
+		//should the status change?
+		if (!defined('IN_ADMIN'))
+		{
+			$sSQL = "SELECT checkoutNotification, checkoutModifyStatus FROM " . PREFIX . "checkout_settings WHERE checkoutID=1";
+			$result = $db->query($sSQL);
+			$rs = $result->fetch();
+			if ($rs['checkoutNotification'] == 'Y')
+			{
+				$to = ADMIN_EMAIL;
+				$content = 'modifylisting.tpl';
+				$vars = $data;
+				$Mailer->sendMail($to, $content, $vars);
+			}
+			if ($rs['checkoutModifyStatus'] == 'Y')
+			{
+				$data['display'] = 'N';
+			}
+		}
+		if (isset($data['oldstatus']) && isset($data['status']) && $data['oldstatus'] != "" && $data['oldstatus'] != $data['status'])
+		{
+			$status = array('id' => $data['id'], 'status' => $data['display']);
+			$modules->call_hook('change_display_status', $status); // Call any module functions
+		}
+		if (!defined('IN_ADMIN'))
+		{
+			$updateSQL = '';
+			if (isset($data['section']))
+			{
+				$updateSQL = 'section=' . (int) $data['section'] . ', ';
+			}
+			$sSQL = sprintf("UPDATE " . PREFIX . "listings SET " . $updateSQL . " title=%s,shortDescription=%s,description=%s,featured=%s,price=%s,display=%s,url=%s,pBold=%s,pHighlighted=%s,sales_percentage=%s WHERE id=%s AND owner=%s", Filter::mysql_quote($data['title']), Filter::mysql_quote($data['shortDescription']), Filter::mysql_quote($data['description']), Filter::mysql_quote($data['featured']), Filter::mysql_quote($data['price']), Filter::mysql_quote($data['display']), Filter::mysql_quote($data['url']), Filter::mysql_quote($data['bold']), Filter::mysql_quote($data['highlighted']),Filter::mysql_quote($data['sales_percentage']), Filter::mysql_quote($data['id']), Filter::mysql_quote($data['owner']));
+		}
+		else
+		{
+			$sSQL = sprintf("UPDATE " . PREFIX . "listings SET owner=%s,title=%s,section=%s,shortDescription=%s,description=%s,featured=%s,price=%s,display=%s,dateadded=%s,expiration=%s,url=%s,pBold=%s,pHighlighted=%s,sales_percentage=%s WHERE id=%s", Filter::mysql_quote($data['owner']), Filter::mysql_quote($data['title']), Filter::mysql_quote($data['section']), Filter::mysql_quote($data['shortDescription']), Filter::mysql_quote($data['description']), Filter::mysql_quote($data['featured']), Filter::mysql_quote($data['price']), Filter::mysql_quote($data['display']), Filter::mysql_quote($data['dateadded']), Filter::mysql_quote($data['expiration']), Filter::mysql_quote($data['url']), Filter::mysql_quote($data['bold']), Filter::mysql_quote($data['highlighted']),Filter::mysql_quote($data['sales_percentage']), Filter::mysql_quote($data['id']));
+		}
+		$db->query($sSQL);
+		if (!$db->isError())
+		{
+			$this->editListingFields($data['id']);
+			$arr = array('id' => $data['id'], 'status' => $data['display']);
+			$modules->call_hook('listing_modified', $arr); // Call any module functions
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Get a listing based off an order id.
+	 *
+	 * @param 	int $orderid The order id.
+	 * @access 	public
+	 * @return 	int The listing id.
+	 */
+	function getListingByOrderID($orderid)
+	{
+		global $db;
+		$sSQL = 'SELECT id FROM ' . PREFIX . 'listings WHERE orderID=' . Filter::mysql_quote($orderid);
+		$result = $db->query($sSQL);
+		if ($result->num_rows() > 0)
+		{
+			$rs = $result->fetch();
+			$result->freeResult();
+			return $rs['id'];
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Get a category based off the listing id.
+	 *
+	 * @param 	int $id The listing id.
+	 * @access 	public
+	 * @return 	int The category id.
+	 */
+	function getCategoryForListing($id)
+	{
+		global $db;
+		$id = (int) $id;
+		$sSQL = 'SELECT section FROM ' . PREFIX . 'listings WHERE id=' . Filter::mysql_quote($id);
+		$result = $db->query($sSQL);
+		$rs = $result->fetch();
+		$result->freeResult();
+		return $rs['section'];
+	}
+
+	/**
+	 * Updates a listing with new extra options. Like bold, featured, highlighted.
+	 *
+	 * @param 	int $id The listing id.
+	 * @param 	array $data Array of the selected features
+	 * @return 	boolean Returns true or false
+	 */
+	function addFeatures($id, $data)
+	{
+		global $db;
+		$id = (int) $id;
+		$data['oFeatured'] = !empty($data['oFeatured']) ? Filter::equals($data['oFeatured'], 'Y', 'N') : 'N';
+		$data['oBold'] = !empty($data['oBold']) ? Filter::equals($data['oBold'], 'Y', 'N') : 'N';
+		$data['oHighlighted'] = !empty($data['oHighlighted']) ? Filter::equals($data['oHighlighted'], 'Y', 'N') : 'N';
+
+		$sSQL = "UPDATE " . PREFIX . "listings SET
+				display='N',
+				featured=" . Filter::mysql_quote($data['oFeatured']) . ",
+				pBold=" . Filter::mysql_quote($data['oBold']) . ",
+				pHighlighted=" . Filter::mysql_quote($data['oHighlighted']) . "
+			  WHERE id=" . Filter::mysql_quote($id);
+		$db->query($sSQL);
+	}
+
+	/**
+	 * Adds extra fields to a listing when modifying it.
+	 *
+	 * @param 	int $id The listing id.
+	 */
+	function editListingFields($id)
+	{
+		global $db, $_FILES;
+
+		//do they have any attachments
+		$noDelete = '';
+		$i = 0;
+		$id = (int) $id;
+		if (!empty($_FILES))
+		{
+			foreach ($_FILES as $key => $error)
+			{
+				$fid = (int) ltrim($key, 'opt');
+				$noDelete .= Filter::mysql_quote($fid) . ",";
+
+				$sql = "SELECT fID,fExtensions FROM `" . PREFIX . "fields` WHERE fID=" . Filter::mysql_quote($fid) . " ORDER BY fOrder ASC";
+				$result3 = $db->query($sql);
+				$row = $result3->fetch();
+				$extensions = $row['fExtensions'];
+				$allowed_ext = explode(',', $extensions);
+				$go = FALSE;
+
+				if ($_FILES["$key"]["name"] != "")
+				{
+					$sSQL = "SELECT sValue FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($fid) . ' AND pID=' . Filter::mysql_quote($id);
+					$result = $db->query($sSQL);
+					$rs = $result->fetch();
+					@unlink(FILESYSTEM_PATH . '/uploads/' . $rs['sValue']);
+					$sSQL = "DELETE FROM " . PREFIX . "products_fields WHERE fID=" . Filter::mysql_quote($fid) . ' AND pID=' . Filter::mysql_quote($id);
+					$db->query($sSQL);
+					$tmp_name = $_FILES["$key"]["tmp_name"];
+
+					$ext = substr(strrchr($_FILES["$key"]['name'], '.'), 1);
+
+					for($i = 0; $i < count($allowed_ext); $i++)
+					{
+						if ($allowed_ext[$i] == "$ext")
+						{
+							$go = TRUE;
+						}
+					}
+					if ($go == TRUE)
+					{
+						$name = Filter::clean_filename($_FILES["$key"]["name"]);
+						@move_uploaded_file($tmp_name, FILESYSTEM_PATH . "/uploads/" . $id . "_" . $name);
+						$objValue = $id . "_" . $name;
+						if (is_file(FILESYSTEM_PATH . '/uploads/' . $objValue))
+						{
+							$sSQL = "INSERT INTO " . PREFIX . "products_fields SET ";
+							$sSQL .= "pID=" . Filter::mysql_quote($id) . ", ";
+							$sSQL .= "fID=" . Filter::mysql_quote($fid) . ", ";
+							$sSQL .= "sValue=" . Filter::mysql_quote($objValue);
+							$result = @mysql_query($sSQL);
+							if (!$result)
+							{
+								die(mysql_error());
+							}
+							$i++;
+						}
+					}
+				}
+			}
+		}
+		$noDelete = rtrim($noDelete, ',');
+		if ($noDelete == "")
+		{
+			$sSQL = "DELETE FROM " . PREFIX . "products_fields WHERE pID=" . Filter::mysql_quote($id);
+		}
+		else
+		{
+			$sSQL = "DELETE FROM " . PREFIX . "products_fields WHERE pID=" . Filter::mysql_quote($id) . " AND fID NOT IN (" . $noDelete . ")";
+		}
+		$db->query($sSQL);
+		if (empty($_POST))
+		{
+			return;
+		}
+		foreach ($_POST as $objItem => $objValue)
+		{
+			if (substr($objItem, 0, 3) == "opt")
+			{
+				if ($objValue != "")
+				{
+					$fid = ltrim($objItem, 'opt');
+					if (is_array($objValue))
+					{
+						$extras = "";
+						foreach ($objValue as $key)
+						{
+							$extras .= $key . '|';
+						}
+						$objValue = $extras;
+					}
+					$sSQL = "INSERT INTO " . PREFIX . "products_fields SET ";
+					$sSQL .= "pID=" . Filter::mysql_quote($id) . ", ";
+					$sSQL .= "fID=" . Filter::mysql_quote($fid) . ", ";
+					$sSQL .= "sValue=" . Filter::mysql_quote(Filter::checkout_html(Filter::filterword($objValue)));
+					$result = @mysql_query($sSQL);
+					if (!$result)
+					{
+						die(mysql_error());
+					}
+					$i++;
+				} //end if
+			} // end if
+		} // end foreach
+	}
+
+	/**
+	 * Update the replied count for a listing. Used when someone contacts the owner.
+	 *
+	 * @param 	int $id The id of the listing
+	 * @access 	public
+	 * @return 	boolean true or false
+	 */
+	function updateRepliedCount($id)
+	{
+		global $db;
+		$sSQL = 'UPDATE ' . PREFIX . 'listings SET repliedcount=repliedcount+1 WHERE id = ' . (int) $id;
+		$db->query($sSQL);
+		if (!$db->isError())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Update the Hit Count. Used when viewing the viewlisting.php file.
+	 *
+	 * @param 	int $id The id of the listing
+	 * @return 	boolean true or false
+	 */
+	function updateHitCount($id)
+	{
+		global $db;
+		$sSQL = 'UPDATE ' . PREFIX . 'listings SET hitcount=hitcount+1 WHERE id = ' . (int) $id;
+		$db->query($sSQL);
+		if (!$db->isError())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Update the Search Count. Used when viewing a listing on showlistings.php or searchresults.php
+	 *
+	 * @param 	int $id The id of the listing
+	 * @return 	boolean true or false
+	 */
+	function updateSearchCount($id)
+	{
+		global $db;
+		$sSQL = "UPDATE " . PREFIX . "listings SET searchcount=searchcount+1 WHERE id=" . (int) $id;
+		$db->query($sSQL);
+		if (!$db->isError())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Update the Search Count. Used when viewing a listing on showlistings.php or searchresults.php
+	 *
+	 * @param 	int $id The id of the listing
+	 * @return 	boolean true or false
+	 */
+	function removeExtraFields($id)
+	{
+		global $db;
+		$id = (int) $id;
+		if ($id == 0)
+		{
+			trigger_error('Listings::removeImages: Numeric value for id required');
+		}
+		$sSQL = "SELECT sValue FROM " . PREFIX . "products_fields WHERE pID=" . Filter::mysql_quote($id);
+		$result = $db->query($sSQL);
+		$rs = $result->fetch();
+		if (file_exists(FILESYSTEM_PATH . '/uploads/' . $rs['sValue']))
+		{
+			@unlink(FILESYSTEM_PATH . '/uploads/' . $rs['sValue']);
+		}
+		$sSQL = 'DELETE FROM ' . PREFIX . 'products_fields WHERE pID=' . Filter::mysql_quote($id);
+		$db->query($sSQL);
+	}
+
+	/*
+	* Delete a listings images
+	*
+	* @param int $id The listing id to remove the images from.
+	* @access public
+	*/
+	function removeImages($id)
+	{
+		global $db;
+		$id = (int) $id;
+		if ($id == 0)
+		{
+			trigger_error('Listings::removeImages: Numeric value for id required');
+		}
+		$path = FILESYSTEM_PATH . '/photos';
+		$thumbPath = FILESYSTEM_PATH . '/thumbs';
+		$suffix = "small_";
+
+		$sSQL = sprintf("SELECT image FROM " . PREFIX . "prodimages WHERE pid=%s", Filter::mysql_quote($id));
+		$result = $db->query($sSQL);
+		if ($result->num_rows() > 0)
+		{
+			while ($rs = $result->fetch())
+			{
+				$fileName = $rs['image'];
+				$sSQL = sprintf("DELETE FROM " . PREFIX . "prodimages WHERE pid=%s", Filter::mysql_quote($id));
+				$db->query($sSQL);
+				if (!$db->isError())
+				{
+					if (file_exists($thumbPath . '/small_' . $fileName))
+					{
+						@unlink($thumbPath . '/small_' . $fileName);
+					}
+					if (file_exists($path . '/' . $fileName))
+					{
+						@unlink($path . '/' . $fileName);
+					}
+				}
+			}
+		}
+	}
+
+	/*
+	* Remove one image
+	*
+	* @param 	int $id The image id to remove the image.
+	* @access 	public
+	*/
+	function removeOneImage($id)
+	{
+		global $db;
+		$id = (int) $id;
+		if ($id == 0)
+		{
+			trigger_error('Listings::removeOneImage: Numeric value for id required');
+		}
+		$path = FILESYSTEM_PATH . '/photos';
+		$thumbPath = FILESYSTEM_PATH . '/thumbs';
+		$suffix = "small_";
+
+		$sSQL = sprintf("SELECT image FROM " . PREFIX . "prodimages WHERE id=%s", Filter::mysql_quote($id));
+		$result = $db->query($sSQL);
+		if ($result->num_rows() > 0)
+		{
+			while ($rs = $result->fetch())
+			{
+				$fileName = $rs['image'];
+				$sSQL = sprintf("DELETE FROM " . PREFIX . "prodimages WHERE id=%s", Filter::mysql_quote($id));
+				$db->query($sSQL);
+				if (!$db->isError())
+				{
+					if (file_exists($thumbPath . '/small_' . $fileName))
+					{
+						@unlink($thumbPath . '/small_' . $fileName);
+					}
+					if (file_exists($path . '/' . $fileName))
+					{
+						@unlink($path . '/' . $fileName);
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Gets extra fields when modifying a listing
+	 *
+	 * @param 	int $id The id of the listing
+	 * @param	int $section The category the listing is placed in.
+	 * @return 	string HTML for all the extra fields.
+	 */
+	function modify_listing_fields($id, $section)
+	{
+		global $db;
+		$optdata = "";
+		$selected = "";
+		$defaultValue = "";
+		$checked = "";
+		$sSQL = "SELECT f.fID, f.fOrder FROM `" . PREFIX . "fields` AS f INNER JOIN " . PREFIX . "fields_bindings AS fb ON fb.fieldID = f.fID AND fb.catID = " . Filter::mysql_quote($section) . " ORDER BY fOrder ASC";
+		$result2 = $db->query($sSQL);
+		$rows = $result2->num_rows();
+		if ($rows > 0)
+		{
+			while ($rs2 = $result2->fetch())
+			{
+				$sql = "SELECT fID,fName,fDefault,fType,fRange,fRangeValue,fRequired,fExtensions FROM `" . PREFIX . "fields` WHERE fID=" . Filter::mysql_quote($rs2['fID']) . " ORDER BY fOrder ASC";
+				$result3 = $db->query($sql);
+				$row = $result3->fetch();
+				$selectedNone = '';
+				//get the user values
+				$sql4 = "SELECT pID,fID,sValue FROM " . PREFIX . "products_fields WHERE pID=" . Filter::mysql_quote($id) . " AND fID=" . Filter::mysql_quote($rs2['fID']);
+				$result4 = $db->query($sql4);
+				$arow = $result4->fetch();
+				if ($arow['sValue'] != "")
+				{
+					$defaultValue = $arow['sValue'];
+				}
+				else
+				{
+					$defaultValue = $row['fDefault'];
+				}
+				if ($row['fRequired'] == "Y")
+				{
+					$star = LANG_STAR;
+				}
+				else
+				{
+					$star = "";
+				}
+				if ($row['fType'] == "P")
+				{
+					//it is a parent select list//
+					$optdata .= '
+									<script language="javascript" type="text/javascript">
+									<!--
+									$(function() {
+										$("#parent' . $row['fID'] . '").change(function()
+										{
+											$("#optResponse' . $row['fID'] . '").show();
+											$("#optResponse' . $row['fID'] . '").html(\'<img src=\"images/ajax-loader.gif\" />\');
+											$.ajax({
+												url: \'ajax.php\',
+												data: \'action=extra_listing_fields2&section=\' + $(\'#parent' . $row['fID'] . ' option:selected\').val(),
+												type: \'post\',
+												success: function (msg) {
+													$("#optResponse' . $row['fID'] . '").html(msg);
+												}
+											});
+										});
+									});
+									// -->
+									</script>
+									';
+
+					$optdata .= "<p><label for='" . $row['fID'] . "'>" . $star . " " . $row['fName'] . ":</label><select name=\"opt" . $row['fID'] . "\" id=\"parent" . $row['fID'] . "\">";
+					$ssql = "SELECT optID,fieldID,optValue,optSub FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($row['fID']) . " ORDER BY optValue";
+					$resultsets = $db->query($ssql);
+					$optdata .= "<option value=\"\">" . LANG_PLEASE_SELECT . "</option>\n";
+					while ($opt = $resultsets->fetch())
+					{
+						if ($arow['sValue'] == $opt['optValue'])
+							$selected = " SELECTED";
+						$optdata .= "<option value=\"" . $opt['optValue'] . "\"" . $selected . ">" . $opt['optValue'] . "</option>\n";
+						$selected = "";
+					}
+					$optdata .= "</select></p>";
+					//does it have a child?
+					$ssql = "SELECT DISTINCT optSub FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($row['fID']) . " AND optSub IS NOT NULL ORDER BY optValue";
+					$resultsets = $db->query($ssql);
+					$i = 0;
+					if ($resultsets->num_rows() > 0)
+					{
+						$optdata .= "<div id=\"optResponse" . $row['fID'] . "\">\n";
+						while ($opt = $resultsets->fetch())
+						{
+							$sql4 = "SELECT p.pID,p.fID,p.sValue,f.fName FROM " . PREFIX . "products_fields AS p LEFT JOIN " . PREFIX . "fields AS f ON p.fID=f.fID  WHERE p.pID=" . Filter::mysql_quote($id) . " AND p.fID=" . Filter::mysql_quote($opt['optSub']);
+							$resultset4 = $db->query($sql4);
+							$childRS = $resultset4->fetch();
+							//it is a child select list//
+							if ($resultset4->num_rows() > 0)
+							{
+								$optdata .= "<p><label for=\"opt" . $childRS['fID'] . "\">" . $star . " " . $childRS['fName'] . ":</label> <select name=\"opt" . $childRS['fID'] . "\">";
+								$ssql5 = "SELECT optID,fieldID,optValue,optSub FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($childRS['fID']) . " ORDER BY optValue";
+								$resultset5 = $db->query($ssql5);
+								while ($opt5 = $resultset5->fetch())
+								{
+									if ($childRS['sValue'] == $opt5['optValue'])
+										$selected = " SELECTED";
+									$optdata .= "<option value=\"" . $opt5['optValue'] . "\"" . $selected . ">" . $opt5['optValue'] . "</option>\n";
+									$selected = "";
+								}
+								$optdata .= "</select></p>";
+								$i++;
+							}
+						}
+						$optdata .= '</div>';
+					}
+					else
+					{
+						$optdata .= '<div id="optResponse' . $row['fID'] . '" name="optResponse' . $row['fID'] . '"' . ">\n</div>";
+					}
+				}
+				elseif ($row['fType'] == "Y")
+				{
+					//it is a child select list//
+					$optdata .= "<p><label for='opt" . $row['fID'] . "'>" . $star . " " . $row['fName'] . ":</label><select name=\"opt" . $row['fID'] . "\" id=\"opt" . $row['fID'] . "\">";
+					$ssql = "SELECT optID,fieldID,optValue,optSub FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($row['fID']) . " ORDER BY optValue";
+					$resultsets = $db->query($ssql);
+					while ($opt = $resultsets->fetch())
+					{
+						if ($arow['sValue'] == $opt['optValue'])
+							$selected = " SELECTED";
+						$optdata .= "<option value=\"" . $opt['optValue'] . "\"" . $selected . ">" . $opt['optValue'] . "</option>\n";
+						$selected = "";
+					}
+					$optdata .= "</select></p>";
+				}
+				elseif ($row['fType'] == "D" && $row['fRange'] == "N")
+				{
+					//it is a select list//
+					$optdata .= "<p><label for='opt" . $row['fID'] . "'>" . $star . " " . $row['fName'] . ":</label><select name=\"opt" . $row['fID'] . "\" id=\"opt" . $row['fID'] . "\">";
+					$ssql = "SELECT optID,fieldID,optValue,optSub FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($row['fID']) . " ORDER BY optValue";
+					$resultsets = $db->query($ssql);
+					$optdata .= "<option value=\"\">" . LANG_PLEASE_SELECT . "</option>\n";
+					while ($opt = $resultsets->fetch())
+					{
+						if (isset($_POST['opt' . $row['fID']]))
+						{
+							if ($_POST['opt' . $row['fID']] == $opt['optValue'])
+								$selected = " SELECTED";
+						}
+						else
+						{
+							if ($defaultValue == $opt['optValue'])
+								$selected = " SELECTED";
+						}
+
+						$optdata .= "<option value=\"" . $opt['optValue'] . "\"" . $selected . ">" . $opt['optValue'] . "</option>\n";
+						$selected = "";
+					}
+					$optdata .= "</select></p>";
+				}
+				elseif ($row['fType'] == "D" && $row['fRange'] == "Y")
+				{
+					$fRV = explode("|", $row['fRangeValue']);
+					$fRV0 = (float) $fRV[0];
+					$fRV1 = (float) $fRV[1];
+					$fRV2 = (float) $fRV[2];
+					//it is a select list with a range//
+					$optdata .= "<p><label for='opt" . $row['fID'] . "'>" . $star . " " . $row['fName'] . ":</label><select name=\"opt" . $row['fID'] . "\" id=\"opt" . $row['fID'] . "\">";
+					if ($defaultValue == '')
+						$selectedNone = " SELECTED";
+					$optdata .= "<option value=\"" . $selectedNone . "\">" . LANG_PLEASE_SELECT . "</option>\n";
+					if ($fRV2 != 0)
+					{
+						while ($fRV0 <= $fRV1)
+						{
+							if (isset($_POST['opt' . $row['fID']]))
+							{
+								if ($_POST['opt' . $row['fID']] == $fRV0)
+									$selected = " SELECTED";
+							}
+							else
+							{
+								if (empty($selectedNone))
+								{
+									if ($defaultValue == $fRV0)
+										$selected = " selected";
+								}
+							}
+
+							$optdata .= "<option value=\"" . $fRV0 . "\"" . $selected . ">" . $fRV0 . "</option>\n";
+							$selected = "";
+							$fRV0 = $fRV0 + $fRV2;
+						}
+					}
+					$optdata .= "</select></p>";
+				}
+				elseif ($row['fType'] == "C")
+				{
+					//checkbox
+					$optdata .= "<div class=\"fieldgrp\"><label for='opt" . $row['fID'] . "'>" . $star . " " . $row['fName'] . ":</label><div class=\"field\">";
+					$ssql = "SELECT optID,fieldID,optValue,optOrder FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($row['fID']) . " ORDER BY optValue";
+					$resultsets = $db->query($ssql);
+					$selectedOpt = explode("|", $arow['sValue']);
+					while ($opt = $resultsets->fetch())
+					{
+						if (isset($_POST['opt' . $row['fID']]))
+						{
+							if (in_array($opt['optValue'], $_POST['opt' . $row['fID']]))
+							{
+								$checked = " CHECKED";
+							}
+						}
+						else
+						{
+							if (in_array($opt['optValue'], $selectedOpt))
+							{
+								$checked = " CHECKED";
+							}
+						}
+						$optdata .= "<input type=\"checkbox\" name=\"opt" . $row['fID'] . "[]\" value=\"" . $opt['optValue'] . "\"" . $checked . " />" . $opt['optValue'] . "<br />\n";
+						$checked = "";
+					}
+					$optdata .= "</div></div><div class=\"clear\"></div>\n";
+				}
+				elseif ($row['fType'] == "S")
+				{
+					//single text field
+					if (isset($_POST['opt' . $row['fID']]))
+					{
+						$defaultValue = $_POST['opt' . $row['fID']];
+					}
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><input type=\"text\" name=\"opt" . $row['fID'] . "\" id=\"opt" . $row['fID'] . "\" size=\"" . FIELD_SIZE . "\" value=\"" . $defaultValue . "\" /></p>\n";
+				}
+				elseif ($row['fType'] == "M")
+				{
+					//multi text field
+					if (isset($_POST['opt' . $row['fID']]))
+					{
+						$defaultValue = $_POST['opt' . $row['fID']];
+					}
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><textarea name=\"opt" . $row['fID'] . "\" cols=\"35\" rows=\"5\">" . $defaultValue . "</textarea></p>\n";
+				}
+				elseif ($row['fType'] == "B")
+				{
+					//birthdate or date field
+					$optdata .= '<script language="javascript" type="text/javascript">
+								$(function() {
+										$("#opt' . $row['fID'] . '").date_input();
+									});
+								</script>';
+
+					if (isset($_POST['opt' . $row['fID']]))
+					{
+						$defaultValue = $_POST['opt' . $row['fID']];
+					}
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><input class=\"date_input\" type=\"text\" id=\"opt" . $row['fID'] . "\" name=\"opt" . $row['fID'] . "\" value=\"" . $defaultValue . "\" readonly=\"1\" /></p>\n";
+				}
+				elseif ($row['fType'] == "F")
+				{
+					//file upload
+					if ($arow['sValue'] != "")
+					{
+						$rowspan = " rowspan='2'";
+					}
+					else
+					{
+						$rowspan = "";
+					}
+					$label = "<div class='fieldgrp'><p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label>";
+					if ($arow['sValue'] != "")
+					{
+						$ext = substr(strrchr($arow['sValue'], "."), 1);
+						if ($ext == "pdf")
+						{
+							$icon = '<img src="' . URL . '/images/icon_pdf.png" alt="' . $arow['sValue'] . '" />';
+						}
+						elseif ($ext == "zip")
+						{
+							$icon = '<img src="' . URL . '/images/icon_zip.png" alt="' . $arow['sValue'] . '" />';
+						}
+						else
+						{
+							$icon = '<img src="' . URL . '/images/icon_page.png" alt="' . $arow['sValue'] . '" />';
+						}
+
+						$optdata .= $label . "<div class='field'><input type=\"file\" name=\"opt" . $row['fID'] . "\" onChange=\"checkOneFileUpload(this,'" . $row['fExtensions'] . "',true,'','','','','','','')\" />\n";
+						$optdata .= "<br /><span id='del_" . $row['fID'] . "'>" . $icon . " " . $arow['sValue'];
+						$optdata .= " - <a href=\"javascript:void(0);\" onclick=\"deleteUpload('" . $row['fID'] . "')\">" . LANG_DELETE . "</a><br /></span></div><div class='clear'></div>\n";
+					}
+					else
+					{
+						$optdata .= $label . "<input type=\"file\" name=\"opt" . $row['fID'] . "\" onChange=\"checkOneFileUpload(this,'" . $row['fExtensions'] . "',true,'','','','','','','')\" /></div>\n";
+					}
+				}
+			}
+		}
+		return $optdata;
+	}
+
+	/**
+	 * Gets extra fields when adding a listing
+	 *
+	 * @param	int $section The category the listing is placed in.
+	 * @return 	string HTML for all the extra fields.
+	 */
+	function extra_listing_fields($section)
+	{
+		global $db, $lid;
+		$optdata = "";
+		$selected = "";
+		$defaultValue = "";
+		$checked = "";
+		$sSQL = "SELECT f.fID, f.fOrder FROM `" . PREFIX . "fields` AS f INNER JOIN " . PREFIX . "fields_bindings AS fb ON fb.fieldID = f.fID AND fb.catID = " . Filter::mysql_quote($section) . " ORDER BY fOrder ASC";
+		$result2 = $db->query($sSQL);
+		$rows = $result2->num_rows();
+		if ($rows > 0)
+		{
+			while ($rs2 = $result2->fetch())
+			{
+				$sql = "SELECT fID,fName,fDefault,fType,fRange,fRangeValue,fRequired,fExtensions FROM `" . PREFIX . "fields` WHERE fID=" . Filter::mysql_quote($rs2['fID']) . " ORDER BY fOrder ASC";
+				$result3 = $db->query($sql);
+				$row = $result3->fetch();
+				#get the user values
+				$sql4 = "SELECT pID,fID,sValue FROM " . PREFIX . "products_fields WHERE pID=" . Filter::mysql_quote($lid) . " AND fID=" . Filter::mysql_quote($rs2['fID']);
+				$result4 = $db->query($sql4);
+				$arow = $result4->fetch();
+				if ($arow['sValue'] != "")
+				{
+					$defaultValue = $arow['sValue'];
+				}
+				else
+				{
+					$defaultValue = $row['fDefault'];
+				}
+				if ($row['fRequired'] == "Y")
+				{
+					$star = LANG_STAR;
+				}
+				else
+				{
+					$star = "";
+				}
+				if ($row['fType'] == "P")
+				{
+					//it is a parent select list//
+					$optdata .= '
+									<script language="javascript" type="text/javascript">
+									<!--
+									$(function() {
+										$("#parent' . $row['fID'] . '").change(function()
+										{
+											$("#optResponse' . $row['fID'] . '").show()
+											$.ajax({
+												url: \'ajax.php\',
+												data: \'action=extra_listing_fields2&section=\' + $(\'#parent' . $row['fID'] . ' option:selected\').val(),
+												type: \'post\',
+												success: function (msg) {
+													$("#optResponse' . $row['fID'] . '").html(msg);
+												}
+											});
+										});
+									});
+									// -->
+									</script>
+									';
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><select id=\"parent" . $row['fID'] . "\" name=\"opt" . $row['fID'] . "\">";
+					$ssql = "SELECT optID,fieldID,optValue,optSub FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($row['fID']) . " ORDER BY optValue";
+					$resultsets = $db->query($ssql);
+					$optdata .= "<option value=\"\">" . LANG_PLEASE_SELECT . "</option>\n";
+					while ($opt = $resultsets->fetch())
+					{
+						if ($arow['sValue'] == $opt['optValue'])
+							$selected = " SELECTED";
+						$optdata .= "<option value=\"" . $opt['optValue'] . "\"" . $selected . ">" . $opt['optValue'] . "</option>\n";
+						$selected = "";
+					}
+					$optdata .= '</select></p><div id="optResponse' . $row['fID'] . '" style=""></div>';
+				}
+				if ($row['fType'] == "D" && $row['fRange'] == "N")
+				{
+					//it is a select list//
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><select id=\"opt" . $row['fID'] . "\" name=\"opt" . $row['fID'] . "\">";
+					$ssql = "SELECT optID,fieldID,optValue,optSub FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($row['fID']) . " ORDER BY optValue";
+					$resultsets = $db->query($ssql);
+					$optdata .= "<option value=\"\">" . LANG_PLEASE_SELECT . "</option>\n";
+					while ($opt = $resultsets->fetch())
+					{
+						if ($arow['sValue'] == $opt['optValue'])
+							$selected = " SELECTED";
+						if (isset($_POST['opt' . $row['fID']]) && $_POST['opt' . $row['fID']] == $opt['optValue'])
+							$selected = " SELECTED";
+						$optdata .= "<option value=\"" . $opt['optValue'] . "\"" . $selected . ">" . $opt['optValue'] . "</option>\n";
+						$selected = "";
+					}
+					$optdata .= "</select></p>";
+				}
+				// Added by Blair April 13th
+
+
+				elseif ($row['fType'] == "D" && $row['fRange'] == "Y")
+				{
+					$fRV = explode("|", $row['fRangeValue']);
+					$fRV0 = (float) $fRV[0];
+					$fRV1 = (float) $fRV[1];
+					$fRV2 = (float) $fRV[2];
+					//it is a select list with a range//
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><select name=\"opt" . $row['fID'] . "\">";
+					$optdata .= "<option value=\"\">" . LANG_PLEASE_SELECT . "</option>\n";
+					if ($fRV2 != 0)
+					{
+						while ($fRV0 <= $fRV1)
+						{
+							$selected = '';
+							if (isset($_POST['opt' . $row['fID']]) && $_POST['opt' . $row['fID']] == $fRV0)
+								$selected = " SELECTED";
+
+			// if($arow['sValue']==$opt['optValue']) $selected=" SELECTED";
+							$optdata .= "<option value=\"" . $fRV0 . "\"" . $selected . ">" . $fRV0 . "</option>\n";
+							// $selected="";
+							$fRV0 = $fRV0 + $fRV2;
+						}
+					}
+					$optdata .= "</select></p>";
+				}
+
+				// End Added by Blair April 13th
+				elseif ($row['fType'] == "C")
+				{
+					//checkbox
+					$optdata .= "<div class='fieldgrp'><label for='" . $row['fID'] . "'>" . $star . " " . $row['fName'] . ":</label><div class=\"field\">";
+					$ssql = "SELECT optID,fieldID,optValue,optOrder FROM " . PREFIX . "fields_options WHERE fieldID=" . Filter::mysql_quote($row['fID']) . " ORDER BY optValue";
+					$resultsets = $db->query($ssql);
+					$selectedOpt = explode("|", $arow['sValue']);
+					while ($opt = $resultsets->fetch())
+					{
+						if (in_array($opt['optValue'], $selectedOpt))
+						{
+							$checked = " CHECKED";
+						}
+						if (isset($_POST['opt' . $row['fID']]) && in_array($opt['optValue'], $_POST['opt' . $row['fID']]))
+						{
+							$checked = " CHECKED";
+						}
+						$optdata .= "<input type=\"checkbox\" id=\"" . $row['fID'] . "\" name=\"opt" . $row['fID'] . "[]\" value=\"" . $opt['optValue'] . "\"" . $checked . " />" . $opt['optValue'] . "<br />\n";
+						$checked = "";
+					}
+					$optdata .= "</div></div><div class=\"clear\"></div>\n";
+				}
+				elseif ($row['fType'] == "B")
+				{
+					//birthdate or date field
+					$optdata .= '<script language="javascript" type="text/javascript">
+									$(function() {
+											$("#opt' . $row['fID'] . '").date_input();
+										});
+									</script>';
+
+					if (isset($_POST['opt' . $row['fID']]))
+						$defaultValue = $_POST['opt' . $row['fID']];
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><input class=\"date_input\" type=\"text\" size=\"" . FIELD_SIZE . "\" id=\"opt" . $row['fID'] . "\" name=\"opt" . $row['fID'] . "\" value=\"" . $defaultValue . "\" readonly=\"1\" /></p>\n";
+				}
+				elseif ($row['fType'] == "S")
+				{
+					//single text field
+					if (isset($_POST['opt' . $row['fID']]))
+						$defaultValue = $_POST['opt' . $row['fID']];
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><input type=\"text\" id=\"opt" . $row['fID'] . "\" name=\"opt" . $row['fID'] . "\" value=\"" . $defaultValue . "\" /></p>\n";
+				}
+				elseif ($row['fType'] == "M")
+				{
+					//multi text field
+					if (isset($_POST['opt' . $row['fID']]))
+						$defaultValue = $_POST['opt' . $row['fID']];
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><textarea id=\"opt" . $row['fID'] . "\" name=\"opt" . $row['fID'] . "\" cols=\"35\" rows=\"5\" />" . $defaultValue . "</textarea></p>\n";
+				}
+				elseif ($row['fType'] == "F")
+				{
+					//file upload
+					$optdata .= "<p><label for=\"opt" . $row['fID'] . "\">" . $star . " " . $row['fName'] . ":</label><input type=\"file\" id=\"opt" . $row['fID'] . "\" name=\"opt" . $row['fID'] . "\" onChange=\"checkOneFileUpload(this,'" . $row['fExtensions'] . "',true,'','','','','','','')\" /></p>\n";
+				}
+			}
+		}
+		return $optdata;
+	}
+
+	/**
+	 * Generate javascript validation for extra fields.
+	 *
+	 * @param	int $section The category the listing is placed in.
+	 * @param	string $modify Whether the listing is being modified or added.
+	 * @return 	string HTML for all the extra fields.
+	 */
+	function extra_listing_fields_validation($section, $modify = 'N')
+	{
+		global $db;
+		$sSQL = "SELECT f.fID, f.fOrder FROM `" . PREFIX . "fields` AS f INNER JOIN " . PREFIX . "fields_bindings AS fb ON fb.fieldID = f.fID AND fb.catID = " . Filter::mysql_quote($section) . " ORDER BY fOrder ASC";
+		$result2 = $db->query($sSQL);
+		$rows = $result2->num_rows();
+		$output = "";
+		if ($rows > 0)
+		{
+			while ($rs2 = $result2->fetch())
+			{
+				$sql = "SELECT fID,fName,fExtensions,fDefault,fType,fRequired FROM `" . PREFIX . "fields` WHERE fID=" . Filter::mysql_quote($rs2['fID']) . " ORDER BY fOrder ASC";
+				$result3 = $db->query($sql);
+				$row = $result3->fetch();
+				if ($row['fRequired'] == "Y")
+				{
+					if ($row['fType'] == "C")
+					{
+						$output .= "var checkboxcount=0;\n";
+						$output .= 'for(i=0;i<document.getElementsByName(\'opt' . $row['fID'] . '[]\').length;i++)' . "\n";
+						$output .= '{if(document.getElementsByName(\'opt' . $row['fID'] . '[]\')[i].checked) { checkboxcount+=1; }' . "\n";
+						$output .= '}' . "\n";
+						$output .= 'if(checkboxcount==0){alert("' . LANG_JAVASCRIPT_PLEASE_ENTER . ' \'' . $row['fName'] . '\'.");return false;}' . "\n";
+					}
+					elseif ($row['fType'] == "F")
+					{
+						$output .= 'if (frm.opt' . $row['fID'] . '.value != "")' . "\n";
+						$output .= '{' . "\n";
+						$output .= 'checkFileUpload(frm,\'' . $row['fExtensions'] . '\',true,\'\',\'\',\'\',\'\',\'\',\'\',\'\');return document.MM_returnValue' . "\n";
+						$output .= '}' . "\n";
+						$output .= "\n";
+
+						$output .= 'if (modify==2) { ' . "\n";
+						$output .= 'if (frm.opt' . $row['fID'] . '.value == "")' . "\n";
+						$output .= '{' . "\n";
+						$output .= 'alert("' . LANG_JAVASCRIPT_PLEASE_ENTER . ' \'' . $row['fName'] . '\'.");' . "\n";
+						$output .= 'frm.opt' . $row['fID'] . '.focus();' . "\n";
+						$output .= 'return (false);' . "\n";
+						$output .= '}' . "\n";
+						$output .= '}' . "\n";
+
+					}
+					else
+					{
+						$output .= 'if (frm.opt' . $row['fID'] . '.value == "")' . "\n";
+						$output .= '{' . "\n";
+						$output .= 'alert("' . LANG_JAVASCRIPT_PLEASE_ENTER . ' \'' . $row['fName'] . '\'.");' . "\n";
+						$output .= 'frm.opt' . $row['fID'] . '.focus();' . "\n";
+						$output .= 'return (false);' . "\n";
+						$output .= '}' . "\n";
+					}
+				}
+			}
+		}
+		return $output;
+	}
+
+	/**
+	 * Get Listing extra fields.
+	 *
+	 * @param	int $section The category the listing is placed in.
+	 * @return 	array  All the extra fields associated with the listing.
+	 */
+	function getListingFields($id)
+	{
+		global $db;
+		$extra = array();
+		$sSQL = "SELECT f.fID,sValue FROM " . PREFIX . "products_fields AS p, `" . PREFIX . "fields` AS f WHERE p.pID=" . Filter::mysql_quote($id) . " AND f.fSeen='Y' AND p.fID=f.fID ORDER BY f.fOrder ASC";
+		$result = $db->query($sSQL);
+		$i = 0;
+		while ($rs = $result->fetch())
+		{
+			$sql = "SELECT fID,fName,fType FROM `" . PREFIX . "fields` WHERE fID=" . Filter::mysql_quote($rs['fID']) . " AND fSeen='Y' ORDER BY fOrder ASC";
+			$result2 = $db->query($sql);
+			$rs2 = $result2->fetch();
+			if (strpos($rs['sValue'], "|"))
+			{
+				$rs['sValue'] = explode("|", $rs['sValue']);
+			}
+			if ($rs2['fType'] == "F")
+			{
+				$ext = substr(strrchr($rs['sValue'], "."), 1);
+				if ($ext == "pdf")
+				{
+					$icon = '<img src="images/icon_pdf.png" />';
+				}
+				elseif ($ext == "zip")
+				{
+					$icon = '<img src="images/icon_zip.png" />';
+				}
+				else
+				{
+					$icon = '<img src="images/icon_page.png" />';
+				}
+				$rs['sValue'] = $icon . " <a href=\"uploads/" . $rs['sValue'] . "\" target=\"_blank\">" . $rs['sValue'] . "</a>";
+			}
+			if (is_string($rs['sValue']))
+			{
+				$rs['sValue'] = $rs['sValue'];
+			}
+			$tmp = array('fID' => $rs['fID'], 'title' => $rs2['fName'], 'value' => $rs['sValue']);
+			$extra[$i++] = $tmp;
+			$i++;
+		}
+		return $extra;
+	}
+
+	/**
+	 * Count a specific user's listings
+	 *
+	 * @access public
+	 * @param integer $userid
+	 * @return mixed false on failure integer on success
+	 * @internal be sure to evaluate by type it is possible that a user has 0 listings
+	 */
+	function countByUser($userid)
+	{
+		global $db;
+		$sql = 'SELECT COUNT(*) AS total FROM ' . PREFIX . 'listings WHERE owner=' . (int) $userid;
+		$result = $db->query($sql);
+		if ($db->isError() || $result->isError())
+		{
+			$result->freeResult();
+			return false;
+		}
+		$rs = $result->fetch();
+		$result->freeResult();
+		return $rs['total'];
+	}
+	
+	
+
+	
+	
+}
+
+
+
+
+/* End of file Listings.php */
+/* Location: ./upload/includes/classes/kernel/Listings.php */

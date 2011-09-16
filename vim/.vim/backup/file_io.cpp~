@@ -1,0 +1,28 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using std::cout;
+using std::endl;
+using std::ofstream;
+using std::ifstream;
+using std::string;
+
+int main() {
+	ofstream file_in;
+	file_in.open("file.txt");
+	file_in << "This will show up in a file.\n";
+	file_in.close();
+
+	string str;
+	ifstream file_out;
+	file_out.open("file.txt");
+	while(!file_out.eof()) {
+		file_out >> str;
+		cout << str << " ";
+	}
+	cout << endl;
+	file_out.close();
+
+	return 0;
+}

@@ -1,0 +1,38 @@
+;===============================================================================
+;				Interrupt Service Routine (ISR) wrapper.
+;===============================================================================
+extern i86_pit_irq
+global i86_pit_irq_wrapper
+
+extern i86_kybrd_irq
+global i86_kybrd_irq_wrapper
+
+extern i86_flpy_irq
+global i86_flpy_irq_wrapper
+
+section .text
+align 4
+
+i86_pit_irq_wrapper:
+	pushad
+	cli
+	call i86_pit_irq
+	sti
+	popad
+	iret
+
+i86_kybrd_irq_wrapper:
+	pushad
+	cli
+	call i86_kybrd_irq
+	sti
+	popad
+	iret
+
+i86_flpy_irq_wrapper
+	pushad
+	cli
+	call i86_flpy_irq
+	sti
+	popad
+	iret

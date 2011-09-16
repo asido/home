@@ -1,0 +1,51 @@
+$(document).ready(function() {
+	$("#csv-upload-btn").click(function() {
+		$("#csv-file-browse").trigger("click");
+	});
+
+	$("#csv-file-browse").change(function() {
+		var data = { 
+			category : $("#category").val()
+		};
+
+		if (this.value == "" || data['category'] == "0")
+			return false;
+		if (data['category'] == "0") {
+			alert("Select the category first");
+			return false;
+		}
+
+		if (file_format_ok(this.value)) {
+			$("#csv-product-form").ajaxSubmit({
+				url: 'csv-upload.php',
+				dataType: 'json',
+				type: 'POST',
+				data: data,
+				beforeSubmit: function() {
+				},
+				success: function(ret_val) { 
+					alert(ret_val.ret);
+				},
+				error: function(var1, var2, var3) { 
+					alert("fail: " + var1 + " || " + var2 + " || " + var3);
+				}
+			});
+			return false;
+		} else
+			alert("csv excel format supported only");
+	});
+
+	var hash = {
+		'.csv' : 1,
+	};
+
+	function file_format_ok(val)
+	{
+		var re = /\..+$/;
+		var ext = val.match(re);
+		if (hash[ext])
+			return true;
+		else
+			return false;
+	}
+});

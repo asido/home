@@ -1,0 +1,217 @@
+;******************************************
+;		stdio.inc
+;			- Input/Output routines
+;******************************************
+
+%ifndef __STDIO_INC_
+%define __STDIO_INC_
+
+bits 16
+
+;------------------------------------------
+; PUTS16()
+;	- Prints a null terminated string
+; DS => SI: 0 terminated string
+;------------------------------------------
+PUTS16:
+	pusha				; save registers
+.loop1:
+	lodsb				; load next byte from string from SI to AL
+	or al, al			; does AL=0?
+	jz .puts16_done		; yep, null terminator found - bail out
+	mov ah, 0x0E		; nope - print the character
+	int 0x10			; invoke BIOS
+	jmp .loop1			; repeat until null terminator found
+.puts16_done:
+	popa				; restore registers
+	ret					; we are done, so return
+
+
+;********************************************
+; 32-bit Protected Mode Routines
+;********************************************
+
+bits 32
+
+%define VIDMEM		0xB8000		; video memory
+%define COLS		80			; width of screen
+%define LINES		25			; height of screen
+%define CHAR_ATTRIB	0xb2			; character attribute (white text on light blue background)
+
+_CurX db 0	; current x/y location
+_CurY db 0
+
+;---------------------------------------------------
+;	PUTCH32()
+;		- Prints a character to screen
+;	BL => character to print
+;---------------------------------------------------
+PUTCH32:
+	pusha			; save registers
+	mov edi, VIDMEM	; get pointer to video memory
+
+	; get current position
+	;------------------------------------------------------------------------------------------
+	; Remember: currentPos = x + y * COLS! x and y are in _CurX and _CurY.
+	; Because there are two bytes per character, COLS=number of characters in a line.
+	; We have to multiply this by 2 to get number of bytes per line. This is the screen width,
+	; so multiply screen with * _CurY to get current line
+	mov ecx, COLS*2			; Mode 7 has 2 bytes per char, so it's COLS*2 bytes per line
+	mov al, byte [_CurY]	; get Y position
+	mul ecx					; multiply Y * COLS
+	push eax				; save eax - the multiplication
+
+	; Now y * screen width is in eax. Now, just add _CurX. But, again remember that _CurX is relative
+	; to the current character count, not byte count. Because there are two bytes per character, we
+	; have to multiply _CurX by 2 first, then add it to our screen width * y.
+	mov al, byte [_CurX]	; multiply _CurX by 2 because it is 2 bytes per char
+	mov cl, 2
+	mul cl
+	pop ecx					; pop Y*COLS result
+	add eax, ecx
+
+	; Now eax contains the offset address to draw the character at, so just add it to the base address
+	; of video memory (Stored in edi)
+	xor ecx, ecx
+	add edi, eax			; add it to the base address
+
+	; watch for new line
+	cmp bl, 0x0A			; is it a newline character?
+	je .row					; yep - go to next row
+
+	; print a character
+	mov dl, bl				; get character
+	mov dh, CHAR_ATTRIB		; the character attribute
+	mov word [edi], dx		; write to video display
+
+	; update next position
+	inc byte [_CurX]		; go to next character
+	cmp byte [_CurX], COLS	; are we at the end of the line?
+	je .row					; yep - go to next row
+	jmp .done
+
+	; go to next row
+.row:
+	mov byte [_CurX], 0		; go back to col 0
+	inc byte [_CurY]		; go to next row
+
+	; restore registers & return
+.done:
+	popa					; restore registers
+	ret						; and return
+
+;--------------------------------------------------------
+;	PUTS32()
+;		- Prints a null terminated string
+;	EBX => address of string to print
+;--------------------------------------------------------
+PUTS32:
+	; store registers
+	pusha				; save registers
+	push ebx			; copy the string address
+	pop edi
+
+.loop:
+	; get character
+	mov bl, byte [edi]	; get next character
+	cmp bl, 0			; is it 0 (null terminator) ?
+	je .done			; yep - bail out
+
+	; print the character
+	call PUTCH32		; nope - print it out
+
+	; go to next character
+	inc edi				; go to next character
+	jmp .loop
+
+.done:
+	; update hardware cursor
+	;-------------------------------------------------------------
+	; Its more efficiant to update the cursor after displaying
+	; the complete string because direct VGA is slow
+	mov bh, byte [_CurY]	; get current position
+	mov bl, byte [_CurX]
+	call MOV_CUR			; update cursor
+
+	popa					; restore registers
+	ret						; and return
+
+;----------------------------------------------------------
+;	MOVE_CUR()
+;		- Update hardware cursor
+;	BH => Y pos
+;	BL => X pos
+;----------------------------------------------------------
+MOV_CUR:
+	pusha			; save registers
+
+	; get current position
+	;-------------------------------------------------------------------------------------------
+	; Here, _CurX and _CurY are relitave to the current position on screen, not in memory.
+	; That is, we don't need to worry about the byte alignment we do when displaying characters,
+	; so just follow the forumla: location = _CurX + _CurY * COLS
+	xor eax, eax
+	mov ecx, COLS
+	mov al, bh		; get Y pos
+	mul ecx			; multiply Y*COLS
+	add al, bl		; now add X
+	mov ebx, eax
+
+	; set low byte index to VGA register
+	mov al, 0x0F
+	mov dx, 0x03D4
+	out dx, al
+
+	mov al, bl
+	mov dx, 0x03D5
+	out dx, al			; low byte
+
+	; set high byte index to VGA register
+	xor eax, eax
+
+	mov al, 0x0E
+	mov dx, 0x03D4
+	out dx, al
+
+	mov al, bh
+	mov dx, 0x3D5
+	out dx, al			; high byte
+
+	popa
+	ret
+
+;---------------------------------------------------------------------
+;	CLR_SCR_32()
+;		- Clears screen
+;---------------------------------------------------------------------
+CLR_SCR_32:
+	pusha
+	cld
+	mov edi, VIDMEM
+	mov ax, COLS
+	mov bx, LINES
+	mul bx
+	mov cx, ax
+	mov ah, CHAR_ATTRIB
+	mov al, ' '
+	rep stosw
+
+	mov byte [_CurX], 0
+	mov byte [_CurY], 0
+	popa
+	ret
+
+;-----------------------------------------------------------------
+;	GOTO_XY()
+;		- Set current X/Y location
+;	AL => X position
+;	AH => Y position
+;-----------------------------------------------------------------
+GOTO_XY:
+	pusha
+	mov [_CurX], al			; just set the current position
+	mov [_CurY], ah
+	popa
+	ret
+
+%endif ; __STDIO_INC_

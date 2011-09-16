@@ -1,0 +1,158 @@
+<?php
+/*******************************************
+ * Database query to get poll info
+ ******************************************/
+// get vote from form
+$vote = $_REQUEST['vote'];
+
+// log in to database
+if (!$db_con = new mysqli('localhost', 'poll', 'poll', 'poll')) {
+	echo "Could not connect to database<br/>";
+	exit;
+}
+
+if (!empty($vote)) {
+	$vote = addslashes($vote);
+	$query = "UPDATE poll_results
+			SET num_votes = num_votes + 1
+			WHERE candidate = '".$vote."'";
+	if (!($result = @ $db_con->query($query))) {
+		echo "Could not connect to database<br/>";
+		exit;
+	}
+}
+
+// get current results of poll, regardless of whether they voted
+$query = "SELECT * FROM poll_results";
+if (!($result = @ $db_con->query($query))) {
+	echo "Could not connect to database<br/>";
+	exit;
+}
+
+$num_candidates = $result->num_rows;
+
+// calculate total number of votes so far
+$total_votes = 0;
+while ($row = $result->fetch_object()) {
+	$total_votes += $row->num_votes;
+}
+
+// reset result pointer
+$result->data_seek(0);
+
+
+/*******************************************
+ * Initial calculations for graph
+ ******************************************/
+// set up constants
+putenv("GDFONTPATH=/usr/share/fonts/TTF");
+$width = 500;		// width of image in pixels - this will fit in 640x480
+$left_margin = 50;	// space to leave on left of graph
+$right_margin = 50;	// ditto right
+$bar_height = 40;
+$bar_spacing = $bar_height / 2;
+$font = 'arial';
+$title_size = 16;	// point
+$main_size = 12;	// point
+$small_size = 12;	// point
+$text_indent = 10;	// position for text labels from edge of image
+
+// set up initial point to draw from
+$x = $left_margin + 60;	// place to draw baseline of the graph
+$y = 50;				// ditto
+$bar_unit = ($width - ($x + $right_margin)) / 100;	// one "point" on the graph
+
+// calculate height of graph - bars plus gaps plus some margin
+$height = $num_candidates * ($bar_height + $bar_spacing) + 50;
+
+
+/*******************************************
+ * Set up base image
+ ******************************************/
+// create a blank canvas
+$im = imagecreatetruecolor($width, $height);
+
+// alocate colors
+$white = imagecolorallocate($im, 255, 255, 255);
+$blue = imagecolorallocate($im, 0, 64, 128);
+$black = imagecolorallocate($im, 0, 0, 0);
+$pink = imagecolorallocate($im, 255, 78, 243);
+
+$text_color = $black;
+$percent_color = $black;
+$bg_color = $white;
+$line_color = $black;
+$bar_color = $blue;
+$number_color = $pink;
+
+// create "canvas" to draw on
+imagefilledrectangle($im, 0, 0, $width, $height, $bg_color);
+
+// draw outline around canvas
+imagerectangle($im, 0, 0, $width-1, $height-1, $line_color);
+
+// add title
+$title = "Poll Results";
+$title_dimensions = imagettfbbox($title_size, 0, $font, $title);
+$title_length = $title_dimensions[2] - $title_dimensions[0];
+$title_height = abs($title_dimensions[7] - $title_dimensions[1]);
+$title_above_line = abs($title_dimensions[7]);
+$title_x = ($width - $title_length) / 2;					// center it in X
+$title_y = ($y - $title_height) / 2 + $title_above_line;	// center in Y gap
+imagettftext($im, $title_size, 0, $title_x, $title_y, $text_color, $font, $title);
+
+// draw a base line from a little above first bar location to little below last
+imageline($im, $x, $y-5, $x, $height-15, $line_color);
+
+
+/*******************************************
+ * Draw data into graph
+ ******************************************/
+// get each line of database data and draw corresponding bars
+while ($row = $result->fetch_object()) {
+	if ($total_votes > 0) {
+		$percent = intval(($row->num_votes / $total_votes) * 100);
+	} else {
+		$percent = 0;
+	}
+
+	// display percent for this value
+	$percent_dimensions = imagettfbbox($main_size, 0, $font, $percent."%");
+	$percent_length = $percent_dimensions[2] - $percent_dimensions[0];
+	imagettftext($im, $main_size, 0, $width - $percent_length - $text_indent,
+			$y + ($bar_height / 2), $percent_color, $font, $percent."%");
+
+	// length of bar for this value
+	$bar_length = $x + ($percent * $bar_unit);
+
+	// draw bar for this value
+	imagefilledrectangle($im, $x, $y-2, $bar_length, $y+$bar_height, $bar_color);
+
+	// draw title for this value
+	imagettftext($im, $main_size, 0, $text_indent, $y + ($bar_height / 2),
+			$text_color, $font, $row->candidate);
+
+	// draw outline showing 100%
+	imagerectangle($im, $bar_length+1, $y-2, ($x + (100 * $bar_unit)), $y + $bar_height, $line_color);
+
+	// display numbers
+	imagettftext($im, $small_size, 0, $x + (100 * $bar_unit) - 50, $y + ($bar_height / 2),
+			$number_color, $font, $rown->num_votes."/".$total_votes);
+
+	// move down to next bar
+	$y = $y + ($bar_height + $bar_spacing);
+}
+
+
+/*******************************************
+ * Display image
+ ******************************************/
+Header("Content-type: image/png");
+imagepng($im);
+
+
+/*******************************************
+ * Clean up
+ ******************************************/
+imagedestroy($im);
+?>

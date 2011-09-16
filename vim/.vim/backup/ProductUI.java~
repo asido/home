@@ -1,0 +1,305 @@
+package rhinestone.TUI;
+
+import rhinestone.Control.ProductController;
+import rhinestone.Model.Product;
+import rhinestone.Model.Machinery;
+import rhinestone.Model.Pack;
+
+/**
+ * ProductUI is responsible for product management user interface.
+ * It prints the menu and prompts user inputs whenever needed.
+ *
+ * @author Group 2
+ * @version 2010.12.16
+ */
+public class ProductUI extends UI {
+	private static final String DESCRIPTION_MESSAGE = "Description: ";
+	private static final String PRICE_MESSAGE = "Price: ";
+	private static final String DIY_MESSAGE = "Amount available in DIY: ";
+	private static final String TIMBERYARD_MESSAGE = "Amount available in timberyard: ";
+	private static final String LOCATION_MESSAGE = "Location: ";
+	private static final String MIN_AMOUNT_MESSAGE = "Minimal amount in stock: ";
+	private static final String MAX_AMOUNT_MESSAGE = "Maximal amount in stock: ";
+
+	private ProductController controller;
+
+	public ProductUI(ProductController controller) {
+		this.controller = controller;
+	}
+
+	/**
+	 * The logic of the UI.
+	 */
+	public void startMenu() {
+		boolean finished = false;
+		while(!finished) {
+			printMenu();
+			int choice = promptChoiceInput();
+			switch(choice) {
+				case 1:
+					addProductChoice();
+					break;
+				case 2:
+					printProductChoice();
+					break;
+				case 3:
+					editProductChoice();
+					break;
+				case 4:
+					deleteProductChoice();
+					break;
+				case 5:
+					addMachineryChoice();
+					break;
+				case 6:
+					printMachineryChoice();
+					break;
+				case 7:
+					editMachineryChoice();
+					break;
+				case 8:
+					deleteMachineryChoice();
+					break;
+				case 9:
+					createPackChoice();
+					break;
+				case 10:
+					printPackChoice();
+					break;
+				case 11:
+					editPackChoice();
+					break;
+				case 12:
+					deletePackChoice();
+					break;
+				case 13:
+					finished = true;
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	/**
+	 * The menu which the users sees when he gets here.
+	 */
+	protected void printMenu() {
+		System.out.println(" ----- CRUD PRODUCT MENU -----");
+		System.out.println("\t(-1-)  Add product");
+		System.out.println("\t(-2-)  Print product");
+		System.out.println("\t(-3-)  Edit product");
+		System.out.println("\t(-4-)  Delete product");
+		System.out.println("\t(-5-)  Add machinery");
+		System.out.println("\t(-6-)  Print machinery");
+		System.out.println("\t(-7-)  Edit machinery");
+		System.out.println("\t(-8-)  Delete machinery");
+		System.out.println("\t(-9-)  Create pack");
+		System.out.println("\t(-10-) Print pack");
+		System.out.println("\t(-11-) Edit pack");
+		System.out.println("\t(-12-) Delete pack");
+		System.out.println("\t(-13-) Back");
+	}
+
+	/**
+	 * Down there are a methods which are called by startMenu method
+	 * depending on the users choice
+	 */
+	private void addProductChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		String name = promptStringInput(NAME_MESSAGE);
+		String description = promptStringInput(DESCRIPTION_MESSAGE);
+		double price = promptDoubleInput(PRICE_MESSAGE);
+		int amountInDIY = promptIntInput(DIY_MESSAGE);
+		int amountInTimberyard = promptIntInput(TIMBERYARD_MESSAGE);
+		int minAmount = promptIntInput(MIN_AMOUNT_MESSAGE);
+		int maxAmount = promptIntInput(MAX_AMOUNT_MESSAGE);
+		controller.addProduct(barcode, name, description, price, amountInDIY, amountInTimberyard, minAmount, maxAmount);
+		pause();
+	}
+
+	private void addMachineryChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		String name = promptStringInput(NAME_MESSAGE);
+		String description = promptStringInput(DESCRIPTION_MESSAGE);
+		double price = promptDoubleInput(PRICE_MESSAGE + "(for 1 day) ");
+		String location = promptStringInput(LOCATION_MESSAGE);
+		controller.addMachinery(barcode, name, description, price, location);
+	}
+
+	private void printProductChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		Product product = controller.getProduct(barcode);
+		printItem(product);
+		pause();
+	}
+
+	private void printMachineryChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		Machinery machinery = controller.getMachinery(barcode);
+		printItem(machinery);
+		pause();
+	}
+
+	private void editProductChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		Product product = controller.removeProduct(barcode);
+		if(product != null) {
+			System.out.println(" --- EDIT PRODUCT ---");
+			System.out.println("Leave field blank to keep the existing value.");
+			System.out.println("Old barcode: " + product.getBarcode());
+			barcode = promptStringInput(BARCODE_MESSAGE);
+			System.out.println("Old name: " + product.getName());
+			String name = promptStringInput(NAME_MESSAGE);
+			System.out.println("Old description: " + product.getDescription());
+			String description = promptStringInput(DESCRIPTION_MESSAGE);
+			System.out.println("Old price: " + product.getPrice());
+			String price = promptStringInput(PRICE_MESSAGE);
+			System.out.println("Old amount in DIY: " + product.getAmountInDIY());
+			String amountInDIY = promptStringInput(DIY_MESSAGE);
+			System.out.println("Old amound in timberyard: " + product.getAmountInTimberyard());
+			String amountInTimberyard = promptStringInput(TIMBERYARD_MESSAGE);
+			System.out.println("Old minimum amount: " + product.getMinAmount());
+			String minAmount = promptStringInput(MIN_AMOUNT_MESSAGE);
+			System.out.println("Old maximum amount: " + product.getMaxAmount());
+			String maxAmount = promptStringInput(MAX_AMOUNT_MESSAGE);
+
+			controller.updateProduct(product, barcode, name, description, price, amountInDIY, amountInTimberyard, minAmount, maxAmount);
+		}
+	}
+
+	private void editMachineryChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		Machinery machinery = controller.removeMachinery(barcode);
+		if(machinery != null) {
+			System.out.println(" --- EDIT MACHINERY ---");
+			System.out.println("Leave field blank to keep the existing value.");
+			System.out.println("Old barcode: " + machinery.getBarcode());
+			barcode = promptStringInput(BARCODE_MESSAGE);
+			System.out.println("Old name: " + machinery.getName());
+			String name = promptStringInput(NAME_MESSAGE);
+			System.out.println("Old description: " + machinery.getDescription());
+			String description = promptStringInput(DESCRIPTION_MESSAGE);
+			System.out.println("Old price: " + machinery.getPrice());
+			String price = promptStringInput(PRICE_MESSAGE);
+			System.out.println("Old location: " + machinery.getLocation());
+			String location = promptStringInput(LOCATION_MESSAGE);
+
+			controller.updateMachinery(machinery, barcode, name, description, price, location);
+		}
+	}
+
+	private void deleteProductChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		controller.removeProduct(barcode);
+		pause();
+	}
+
+	private void deleteMachineryChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		controller.removeMachinery(barcode);
+		pause();
+	}
+
+	private void createPackChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		String name = promptStringInput(NAME_MESSAGE);
+		String description = promptStringInput(DESCRIPTION_MESSAGE);
+		controller.createPack(barcode, name, description);
+	}
+
+	private void printPackChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		Pack pack = controller.getPack(barcode);
+		printItem(pack);
+	}
+
+	private void editPackChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		if(controller.getPack(barcode) != null) {
+			boolean finished = false;
+			while(!finished) {
+				printPackMenu();
+				int choice = promptChoiceInput();
+				switch(choice) {
+					case 1:
+						addProductToPackChoice(barcode);
+						break;
+					case 2:
+						removeProductFromPackChoice(barcode);
+						break;
+					case 3:
+						finished = true;
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		else
+			System.err.println("Pack with bar code " + barcode + " does NOT exists.");
+	}
+
+	private void addProductToPackChoice(String packBarcode) {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		int amount = promptIntInput(AMOUNT_MESSAGE);
+		Product product = controller.getProduct(barcode);
+		if(product != null) {
+			try {
+				controller.addProductToPack(packBarcode, product, amount);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else
+			System.err.println("Product with bar code " + barcode + " does NOT exists.");
+	}
+
+	private void removeProductFromPackChoice(String packBarcode) {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		int amount = promptIntInput(AMOUNT_MESSAGE + " (0 if all) ");
+		Product product = controller.getProduct(barcode);
+		if(product != null)
+			controller.removeProductFromPack(packBarcode, product, amount);
+		else
+			System.err.println("Product with bar code " + barcode + " does NOT exists.");
+	}
+
+	private void printPackMenu() {
+		System.out.println("\t\t|1| Add product to pack");
+		System.out.println("\t\t|2| Remove product from pack");
+		System.out.println("\t\t|3| Back");
+	}
+
+	private void deletePackChoice() {
+		String barcode = promptStringInput(BARCODE_MESSAGE);
+		controller.removePack(barcode);
+	}
+
+	/**
+	 * Prints the products on the screen.
+	 * @param product The product which is going to be printed.
+	 */
+	private void printItem(Object item) {
+		if(item instanceof Product)
+			System.out.println((Product)item);
+		else if(item instanceof Machinery)
+			System.out.println((Machinery)item);
+		else if(item instanceof Pack)
+			System.out.println((Pack)item);
+		else if(item == null)
+			System.out.println("Item with this bar code does NOT exist.");
+	}
+
+	/**
+	 * Makes 1000ms (1s) pause, which in final application version will be removed.
+	 * Just for visual look for now.
+	 */
+	private void pause() {
+		try {
+			Thread.sleep(1000);
+		} catch(InterruptedException ex) {
+			ex.printStackTrace();
+		}
+	}
+}

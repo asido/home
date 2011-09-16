@@ -1,0 +1,12 @@
+#!/usr/bin/perl -w
+
+use File::Find;
+
+$dir = "/home/asido/src/perl/EXERCISES";
+find(\&remove_file, $dir);
+
+sub remove_file {
+	if($_ =~ /.*\.ico$/ || $_ =~ /.*~/) {
+		system("rm -i $_");
+	}
+}

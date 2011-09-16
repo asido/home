@@ -1,0 +1,364 @@
+/* INDEX & SIGNUP FORMS */
+
+function clearForms() {
+	$('#hire-form input, #work-form input').each ( function ()
+	{
+		if ( (this.type == 'text') || (this.type == 'password') || (this.type == 'textarea') ) 
+		{
+			this.value = '';
+			if (this.type == 'text') $(this).addClass('default-input-text').blur();
+		}
+	});
+	window.
+}
+
+function setForm(formId, name, businessName, address, state, phone, email)
+{
+	var form = $('#'+formId); if (form.length == 0) return;
+	form.find('#name').attr('value', name).removeClass('default-input-text');
+	form.find('#business_type').attr('value', businessName).removeClass('default-input-text');
+	form.find('#address').attr('value', address).removeClass('default-input-text');
+	form.find('#state').attr('value', state).removeClass('default-input-text');
+	// form.find('#expertise').attr('value', expertise).removeClass('default-input-text');
+	form.find('#email').attr('value', email).removeClass('default-input-text');
+	form.find('#phone').attr('value', phone).removeClass('default-input-text');
+}
+
+function checkEmailFormat(email)
+{
+	var e = email.split("@"); if(e.length !== 2) return false;
+	if (e[0].length == 0) return false;
+	if (e[1].length == 0) return false;
+	e = e[1].split("."); if (e.length < 2) return false;
+	
+	return true;
+}
+
+function showNotif(notif, text, time, type)
+{
+	if (typeof(notif) == "string") notif = $(notif); if (notif.length == 0) return;
+	if (!time) time = 4000; if (!type) type = 'error';
+	var p = notif.find('p').empty().text(text);
+	notif.fadeIn(null, function () { var notif = $(this); setTimeout(function () { notif.fadeOut() }, time); });
+}
+
+function checkSignUpForm(form)
+{
+	var notif = $(form).find('#regnotif').css('display', 'none');
+	if ($(form).find(".default-input-text").length > 0) { showNotif(notif, 'All fields are necessary to proceed!'); return false; }
+	var $NAME_LENGTH = 1;
+	var $ADDR_LENGTH = 0;
+	var $STATE_LENGTH = 0;
+	var $PASS_LENGTH = 6;
+	
+	if (!form) return false;
+		
+	
+	if (form.name.value.length < $NAME_LENGTH) 	{ showNotif(notif, "The name should be at least "+$NAME_LENGTH+" characters long."); return false; }
+	if (form.address.value.length < $ADDR_LENGTH) 
+												{ showNotif(notif, "The address should be at least "+$ADDR_LENGTH+" characters long."); return false;
+												}
+	if (form.state.value.length < $STATE_LENGTH) { showNotif(notif, "The state value should be at least "+$STATE_LENGTH+" characters long."); return false;
+									}
+	
+	if (form.phone.value.length == 0) { showNotif(notif, "Please type in a phone number."); return false; }
+	
+	// if (form.expertise.value.length == 0) { showNotif(notif, "Please select an expertise."); return false; }
+	
+	if (!checkEmailFormat(form.email.value)) { showNotif(notif, "The email you have typed in is invalid!"); return false; }
+	
+	if (form.password.value.length < $PASS_LENGTH) 	{ showNotif(notif, "The password should be at least "+$PASS_LENGTH+" characters long."); return false;
+												}
+	if (form.password.value !== form.cpassword.value) 
+												{ form.cpassword.value = ''; showNotif(notif, "The passwords you typed in do not match!"); return false
+												}
+}
+
+function signup_selectTab(tab)
+{
+	switch (tab)
+	{
+		case 'hire':
+			$('#hire').addClass('selected');
+			$('#work').removeClass('selected');
+			$('#work-form').css('display', 'none');
+			clearForms();
+			$('#hire-form').css('display', 'block');
+			break;
+		case 'work':
+			$('#work').addClass('selected');
+			$('#hire').removeClass('selected');
+			$('#hire-form').css('display', 'none');
+			clearForms();
+			$('#work-form').css('display', 'block');
+			break;
+	}
+}
+
+/* DEFAULT INPUT TEXT */ 
+
+function set_default_text(input_jq, text)
+{
+	input_jq
+		.val(text)
+		.addClass('default-input-text')
+		.focus( function ()
+		{
+			if ($(this).hasClass('default-input-text'))
+			{
+				$(this).val('').removeClass('default-input-text');
+			}
+		})
+		.blur( function ()
+		{
+			if ($(this).val().length === 0)
+			{
+				$(this).addClass('default-input-text').val(text);
+			}
+		});
+}
+
+
+/* DATE FIELD */
+
+function get_date_of(date, format)
+{
+	var d; var m; var y;
+	for (var i=0; i<3; i++)
+	{
+		if (format[i].indexOf("d") > -1) { d = i; continue; }
+		if (format[i].indexOf("m") > -1) { m = i; continue; }
+		if (format[i].indexOf("y") > -1) { y = i; continue; }
+	}
+	
+	d = date[d] ? date[d] : null;
+	m = date[m] ? date[m] : null;
+	
+	var py = ['0', '2'];
+	
+	if (date[y] && (date[y].length < format[y].length) )
+	{
+		for (i = date[y].length; i<format[y].length; i++)
+		{
+			date[y] = py[i-py.length] + date[y];
+		}
+	}
+	
+	y = date[y] ? date[y] : null;
+	
+	return { d : d, m : m, y : y };
+}
+
+function get_date_str(date, format, splitter)
+{
+	var str = "";
+	
+	for (var i=0; i<3; i++)
+	{
+		if (format[i].indexOf("d") > -1) { str += date.d ? (date.d.length < format[i].length ? "0" : "") + date.d + (i < 2 ? splitter : "") : ""; continue; }
+		if (format[i].indexOf("m") > -1) { str += date.m ? (date.m.length < format[i].length ? "0" : "") + date.m + (i < 2 ? splitter : "") : ""; continue; }
+		if (format[i].indexOf("y") > -1) { str += date.y ? date.y + (i < 2 ? splitter : "") : ""; continue; }
+	}
+	
+	return str;
+}
+
+function datefield(field, splitter)
+{
+	if (!splitter) splitter = " ";
+	var text 		= field.val();
+	var format 		= [ "mm", "dd", "yyyy" ];
+	var maxyear		= 2037;	// year is limited in php to 2037
+	var bkspace		= String.fromCharCode(8);
+	
+	field
+		.val(format.join(splitter))
+		.addClass('default-input-text')
+		.focus( function ()
+		{
+			if ($(this).hasClass('default-input-text'))
+			{
+				$(this).val('').removeClass('default-input-text');
+			}
+		})
+		.keypress( function (e)
+		{
+			var char = String.fromCharCode(e.which ? e.which : e.keyCode);
+			//alert(char + " ="+e.keyCode);
+			var value = $(this).val(); var spl_value = value.split(splitter);
+			if ( char == bkspace ) 
+			{
+				$(this).val( value.substr(0, value.length - 1) );
+			}
+			
+			if ( ("0123456789"+splitter).indexOf(char) == -1 ) { return false; }
+			
+			var date = get_date_of(value.split(splitter), format);
+			
+			if (char == splitter) { $(this).val(get_date_str(date, format, splitter)); return false; }
+			else
+			{
+				var last = spl_value.length - 1;
+				if ( (format[last].length === spl_value[last].length + 1 ) && (last < 2) ) { $(this).val(value + char + splitter); return false; }	
+			}
+		})
+		.blur( function ()
+		{
+			if ($(this).val().length === 0)
+			{
+				$(this).addClass('default-input-text').val(text);
+				return;
+			}
+			
+			var value = $(this).val();
+			var date  = get_date_of(value.split(splitter), format);
+			
+			var dt = new Date(); var today = new Date();
+			
+			if (date.d) dt.setDate(date.d);
+			if (date.m) dt.setMonth(date.m-1, dt.getDate());
+			if (date.y) 
+			{
+				if ( date.y > maxyear ) date.y = maxyear;
+				dt.setFullYear(date.y, dt.getMonth(), dt.getDate());
+			}
+			
+			if (dt < today) dt = today;
+			
+			date = { d : dt.getDate().toString(), m : (dt.getMonth()+1).toString(), y : dt.getFullYear().toString() };
+			$(this).val(get_date_str(date, format, splitter));
+		});
+}
+
+function parse_css_int (css)
+{
+	css = css.substring(0, css.length - 2);
+	return parseInt(css);
+}
+
+function dialogbox(query)
+{
+	var o = $(query);
+	o.each ( function ()
+	{
+		$(this).find(">*").each ( function ()
+		{
+			$(this).parent().show();
+			var t = ( $(window).height() - $(this).height() )*0.5;
+			var l = ( $(window).width() - $(this).width() ) * 0.5;
+			$(this).css({'position' : 'relative', 'top' : t+"px", 'left' : l+"px"});
+			$(this).parent().hide();
+		});
+	});
+	
+	return o;
+}
+
+/*
+ *
+ *
+	chainElement *** Robert O
+	
+	parameters://
+		-a -> jquery object to repeat inside parent
+		
+		-a -> parent to add
+		-b -> string or jquery object to repeat
+		
+		-a -> parent to add
+		-b -> string or jq to repeat
+		-c -> object triggered from parent
+ *
+ *
+ */
+
+function chainElement( a, b, c, f )
+{
+	var template;
+	var parent;
+	
+	if ( !b )
+	{
+		parent = a.parent();
+		template = $('<div>').append( a.clone() ).remove().html();
+	}
+	else
+	{
+		parent = a;
+		var typeb = typeof(b).toLowerCase();
+		if ( typeb == "string" )
+		{
+			template = b;
+		}
+		else
+		if ( typeb == "object" )
+		{
+			template = $('<div>').apppend( b.clone() ).remove().html();
+		}
+	}
+	
+	var obj			= c ? a.find( c + ":last" ) : a;
+	var exec		= false;
+	
+	obj.change( function ()
+	{
+		if ( !exec )
+		{
+			if ( $(this).val().length > 0 )
+			{
+				exec 	= true;
+				var d 	= $(template); 
+				parent
+					.append( 
+						d
+					);
+				
+				chainElement( a, b, c, f );
+				
+				if ( f ) f( obj );
+			}
+		}
+	});
+	
+	return $(obj);
+}
+
+function delete_bid_comment(pid, id)
+{
+	if (confirm("This option will delete the the comment.\nPress OK to continue.")) {
+		var data = "id="+id;
+		$.ajax({
+			url: "../php/ajax/del_bid_comment.php",
+			type: "POST",
+			dataType: 'json',
+			data: data,
+			cache: false,
+			beforeSend: function() {},
+			complete: function() {},
+			error: function() {
+				alert("Error deleting the comment. Try again later");
+			},
+			success: function(ret) {
+				window.location = "bid.php?pid="+pid;
+			}
+		});
+	}
+}
+
+/* ENABLE FORMS TO ENTER SUBMIT */
+var d_e_f	= DISABLE_ENTER_FORM ? true : false;
+
+if ( d_e_f )
+$(document).ready ( function () {
+
+	$('form').keypress( function (e)
+	{
+		var code = e.which ? e.which : e.keyCode;
+		if (code === 13) $(this).submit();
+	});
+
+	$("#forgot").click(function() {
+		window.location.href="forgot_password.php";
+	});
+
+});// JavaScript Document

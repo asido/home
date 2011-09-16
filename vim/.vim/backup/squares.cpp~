@@ -1,0 +1,25 @@
+#include <iostream>
+#include <iomanip>
+#include <ios>
+
+using std::cout;		// <iostream>
+using std::endl;		// <iostream>
+using std::setw;		// <iomanip>
+using std::streamsize;	// <ios>
+
+int main() {
+	double max = 100;
+	streamsize first_w = 0;
+	streamsize sec_w = 0;
+	
+	for(double i = max; i > 1; i /= 10)
+		first_w++;
+	for(double i = max * max; i > 1; i /= 10)
+		sec_w++;
+
+	for(double i = 1; i <= max; i++) {
+		cout << setw(first_w) << std::setprecision(10) << i << setw(sec_w+3) << i * i << endl;
+	}
+
+	return 0;
+}

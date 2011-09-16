@@ -1,0 +1,29 @@
+<html>
+<head>
+	<link href="css/styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	
+	
+<div class="search-criteria-popup">
+	<div class="search-criteria-popup-header">
+		<div class="headline">Refine Search Criteria</div>
+		<div class="x"></div>
+	</div>
+	<div class="search-criteria-popup-content">
+
+			<div class="input input-1">
+				Also answered Questions:<br/>
+				<input type="text" />
+			</div>
+			<div cass="input input-2">
+				Answer:<br/>
+				<input type="text" />
+			</div>
+
+	</div>
+</div>
+	
+	
+</body>
+</html>

@@ -1,0 +1,38 @@
+package rhinestone.Control;
+
+import rhinestone.TUI.MainMenuUI;
+
+public class MainMenuController {
+	private MainMenuUI mainMenuUI;
+	private CheckoutController checkoutController;
+	private CRUDProductController crudProductController;
+	private LeasingController leasingController;
+
+	public MainMenuController() {
+		checkoutController = new CheckoutController();
+		crudProductController = new CRUDProductController();
+		leasingController = new LeasingController();
+		mainMenuUI = new MainMenuUI(this);
+        mainMenuUI.startMenu();
+	}
+
+	public void moveToCheckout() {
+		checkoutController.startCheckout();
+	}
+
+	public void moveToCRUDProducts() {
+		crudProductController.startProductCRUD();
+	}
+
+	public void moveToLeasing() {
+		leasingController.startLeasing();
+	}
+	
+	public void moveToStatistics() {
+		System.out.println("Moving to statistics...");
+	}
+
+	public void moveToOrders() {
+		System.out.println("Moving to orders...");
+	}
+}

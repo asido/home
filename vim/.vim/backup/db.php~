@@ -1,0 +1,124 @@
+<?php
+
+require_once('php/config.php');
+require_once('php/upload/upload.php');	
+$db = SCONFIG::dbconnect();
+
+
+$files	= $db->query( 'select * from `projects`' );
+$files	= $db->to_array( $files );
+print_r($files);
+exit;
+
+foreach ( $files as $file )
+{
+	$name	= $file['docname'];
+	$name	= basename( $name );
+	
+	echo $db->query('UPDATE documents SET original_name = "' . $name . '" WHERE docid = ' . $file['docid']);
+}
+
+exit;
+
+echo $db->query('ALTER TABLE  `documents` ADD  `original_name` TEXT NOT NULL');
+
+exit;
+
+
+$q = $db->query('select * from frndrequest' );
+$q = $db->to_array($q);
+print_r( $q );
+exit;
+$db->query('DELETE FROM documents');
+
+$r	= $db->query('SELECT docname from documents');
+$r	= $db->to_array ( $r );
+
+foreach ( $r as $file )
+{
+	echo 'documents/' . $file['docname'];
+	upload::delete( 'documents/' . $file['docname'] );
+}
+
+exit;
+
+
+$db->query('ALTER TABLE  `projects` ADD  `expiring` TINYINT( 1 ) NOT NULL'); exit;
+
+for ( $i = 0; $i < 10; $i++ )
+{
+	echo $db->query(
+			'	INSERT INTO `projects`
+				VALUES( NULL, 1, "testjob", "d", "2011-04-28", "l", 0, "ontiurobert@yahoo.com", 1 )
+			');
+}
+
+exit;
+$r = $db->query('SELECT * FROM projects');
+$r = $db->to_array( $r );
+
+print_r( $r );
+exit;
+
+/*$db->query('DELETE from notification where type="friend-request"' );
+exit;*/
+
+/*$db->query('UPDATE notification set news=1');
+exit;*/
+/*
+require_once( 'php/notification.php' );
+$notif = new notification();
+
+$notif->insert(1, 'friend-accepted', 'author-id=2' );
+
+exit;
+
+/*$db->query(
+			'	DELETE FROM notification' );
+
+
+
+$notif->insert( 1, 'bid-invitation', 
+
+	array(
+		'project-id' 	=> 35,
+		'author-id'		=> 1
+		));
+
+exit;
+
+*/
+
+$db->query( 'DELETE FROM frndrequest WHERE uid=30 and fid=1' );
+$db->query( 'DELETE FROM frndrequest WHERE uid=1 and fid=30' );
+
+$r = $db->query( 'SELECT * FROM frndrequest' );
+$r = $db->to_array( $r );
+print_r( $r);
+
+
+exit;
+
+$db->query('UPDATE notification SET news = 1');
+
+exit;
+
+	
+	
+
+
+
+
+exit;
+
+// echo $db->query('alter table users add business_type varchar(50);');
+// echo $db->query('update users set business_type = "Selling" where state = "Guelph";');
+// echo $db->query('update users set active = 1 where email = "asido4@gmail.com";');
+
+$r = $db->query("delete from users where email = 'asido4@gmail.com'");
+$r = $db->to_array($r);
+print_r($r);
+
+echo mysql_error();
+
+?>

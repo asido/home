@@ -1,0 +1,8 @@
+#!/usr/bin/per -w
+
+$count = 0;
+$num = @ARGV;
+print "You entered $num arguments on the command line:\n";
+for(@ARGV) {
+	print ++$count, ". $_\n";
+}

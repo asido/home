@@ -1,0 +1,68 @@
+#include <GL/glut.h>
+#include <stdio.h>
+
+GLuint listName;
+
+static void init(void)
+{
+	listName = glGenLists(1);
+	glNewList(listName, GL_COMPILE);
+		glColor3f(1.0f, 0.0f, 0.0f); /* current color red */
+		glBegin(GL_TRIANGLES);
+		glVertex2f(0.0f, 0.0f);
+		glVertex2f(1.0f, 0.0f);
+		glVertex2f(0.0f, 1.0f);
+		glEnd();
+		glTranslatef(1.5f, 0.0f, 0.0f); /* move position */
+	glEndList();
+	glShadeModel(GL_FLAT);
+}
+
+void drawLine(void)
+{
+	glBegin(GL_LINES);
+	glVertex2f(0.0f, 0.5f);
+	glVertex2f(15.0f, 0.5f);
+	glEnd();
+}
+
+void display(void)
+{
+	GLuint i;
+
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.0f, 1.0f, 0.0f); /* currect color green */
+	for (i = 0; i < 10; ++i)	 /* draw 10 triangles	*/
+		glCallList(listName);
+	drawLine();		/* Is this line green? NO!	*/
+					/* Where is the line drawn?	*/
+	glFlush();
+}
+
+void reshape(int w, int h)
+{
+	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	if (w <= h)
+		gluOrtho2D(-10.0f, 10.0f, -2.0f * (GLfloat)h / (GLfloat)w, 2.0f * (GLfloat)h / (GLfloat)w);
+	else
+		gluOrtho2D(-10.0f * (GLfloat)w / (GLfloat)h, 10.0f * (GLfloat)w / (GLfloat)h, -2.0f, 2.0f);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(-10.0f, 0.0f, 0.0f);
+}
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowSize(900, 500);
+	glutInitWindowPosition(100, 100);
+	glutCreateWindow(argv[0]);
+	init();
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutMainLoop();
+	return 0;
+}

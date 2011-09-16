@@ -1,0 +1,9 @@
+{*$Revision: 165 $*}
+<!-- Thanks Page -->
+<div class="coninner">
+
+<fieldset>
+	<legend>{$smarty.const.LANG_THANK_YOU}</legend>
+	<p>{$message}</p>
+</fieldset>
+</div>

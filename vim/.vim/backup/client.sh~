@@ -1,0 +1,1 @@
+java -Djava.security.policy=/home/asido/src/Java/tutorial_src/teachpro/advanced/serverProgrammingElements/RMI/policy RMIApplet

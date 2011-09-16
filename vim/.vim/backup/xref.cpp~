@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <istream>
+#include <algorithm>
+#include <iostream>
+#include "xref.h"
+
+bool contains(std::vector<int>& v, const int);
+
+// find all the lines that refer to each word in the input
+// Tricky part: check this function header in a header file!
+std::map<std::string, std::vector<int> > xref(std::istream& in, std::vector<std::string> find_words(const std::string&)) {
+	string line;
+	int line_number = 0;
+	map<string, vector<int> > ret;
+
+	// read the next line
+	while(getline(in, line)) {
+		line_number++;
+
+		// break the input line into words
+		vector<string> words = find_words(line);
+
+		// remember that each word occurs on the current line
+		for(vector<string>::const_iterator it = words.begin(); it != words.end(); it++) {
+			if(!ret[*it].empty())
+				if(find(ret[*it].begin(), ret[*it].end(), line_number) != ret[*it].end())
+					continue;
+			ret[*it].push_back(line_number);
+		}
+	}
+
+	return ret;
+}

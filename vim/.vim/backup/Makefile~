@@ -1,0 +1,63 @@
+#########################################################################################
+#		This is the top Makefile, which executes all makefiles inside src folder
+#########################################################################################
+
+# Final kernel executable name
+PROGRAM			= KERNEL
+
+# Current working directory
+PWD				= $(shell pwd)
+
+# Assembler
+export AS		= nasm
+export ASFLAGS	=
+
+# C compiler
+export CC		= gcc
+# Don't use -O2 optimization, it tripple faults the CPU !
+export CFLAGS	= -c -Wall -g -gstabs -Wextra -fno-builtin -nodefaultlibs -nostartfiles -nostdlib
+# libraries
+export CLIB		= -I $(PWD)/include/lib -I $(PWD)/include/hal -I $(PWD)/include/kernel32 -I $(PWD)/include/drivers/keyboard -I $(PWD)/include/drivers/floppy
+
+# if 'force=y' flag is specified, do not include -Werror flag for C compiler
+ifneq ($(force),y)
+	CFLAGS += -Werror
+endif
+
+# Linker
+LD				= ld
+LDFLAGS			= -T linker.ld
+
+# Do not:
+# o  use make's built-in rules and variables
+#    (this increases performance and avoids hard-to-debug behaviour);
+# o  print "Entering directory ...";
+MAKEFLAGS = -rR --no-print-directory
+
+# Default rule
+default:
+	cd boot; make
+	cd lib; make
+	cd hal; make
+	cd drivers/keyboard; make
+	cd drivers/floppy; make
+	cd kernel32; make
+	$(LD) $(LDFLAGS) -o $(PROGRAM) boot/*.o lib/*.o hal/*.o drivers/keyboard/*.o drivers/floppy/*.o kernel32/*.o
+	./floppy.sh
+
+# Full rule, which first cleans all the build files and then does the build from scratch
+all: clean default
+
+# Does the cleanup
+clean:
+	@find . \( -name '*.o' -o -name '*.SYS' -o -name '*.bin' \) -print -exec rm -f '{}' \;
+	@rm -f $(PROGRAM)
+
+# Print help
+help:
+	@echo 'Make options:'
+	@echo '    all		- Build all targets marked with [*]'
+	@echo '  * default	- Default rule, which just builds the kernel executable'
+	@echo '  * clean	- Removes generated files'
+	@echo '    help	- Prints this help text'
+	@echo '    force=y	- By default C compiler uses -Werror flag, unless this flag is set'

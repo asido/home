@@ -1,0 +1,59 @@
+
+$(function(){
+	$('#tour').click(function(){
+			$('#tour').css('border','#bbe73f thin solid');
+			$('#city').css('border','#bbe73f thin solid');
+	});
+	$('#city').click(function(){
+
+			$('#tour').css('border','#bbe73f thin solid');
+			$('#city').css('border','#bbe73f thin solid');
+	});
+	});
+function searchvalidate()
+{
+	if ((document.forms["an_search"].elements["tour"].value =="")&& (document.forms["an_search"].elements["city"].value =="") )
+	{
+		$('#tour').css('border','#f00 thin solid');
+		$('#city').css('border','#f00 thin solid');
+
+		return false;
+	}
+	else
+	{
+		document.forms["an_search"].submit();	
+		
+	}
+}
+
+function an_logvalidate()
+{
+	
+	if (document.forms['form1'].elements["email"].value =="")
+	{
+		document.getElementById("vinu_shadow").innerHTML="Enter Email address";
+		document.form1.email.focus();
+		return false;
+	}
+var emailid=document.forms['form1'].elements['email'];
+var pattern_emailid=/^[a-z][a-z0-9_\.\-]{2,100}@[a-z0-9]{2,100}(\.[a-z]{2,100})+$/;
+var emailval=emailid.value;
+//alert(emailval);
+	if(!pattern_emailid.test(emailval))
+		{
+			document.getElementById("vinu_shadow").innerHTML="Enter valid email";
+			document.form1.email.focus();
+			return false;
+		}
+		if (document.forms['form1'].elements["password"].value =="")
+	{
+		document.getElementById("vinu_shadow").innerHTML="Enter password";
+		document.form1.password.focus();
+		return false;
+	}
+	document.getElementById("vinu_shadow").innerHTML="";
+	
+	document.forms["form1"].submit();
+}
+
+// JavaScript Document

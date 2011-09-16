@@ -1,0 +1,93 @@
+$(document).ready(function() {
+	$('#faq-show-all').click(function() {
+		if (!$('#faq-txt1').is(':animated')) {
+			for (var i = 0; i <= $('div[id^="faq-txt"]').length; ++i) {
+				if (!$('#faq-b'+i).hasClass('faq-open') && !$('#faq-txt1').is(':animated')) {
+					$('#faq-b'+i).toggleClass('faq-open');
+					$('#faq-txt'+i).slideToggle('slow');
+				}
+			}
+		}
+	});
+
+	$('#faq-hide-all').click(function() {
+		if (!$('#faq-txt1').is(':animated')) {
+			for (var i = 0; i <= $('div[id^="faq-txt"]').length; ++i) {
+				if ($('#faq-b'+i).hasClass('faq-open')) {
+					$('#faq-b'+i).toggleClass('faq-open');
+					$('#faq-txt'+i).slideToggle('slow');
+				}
+			}
+		}
+	});
+
+	$('#faq-title1').click(function() {
+		if (!$('#faq-txt1').is(':animated')) {
+			$('#faq-b1').toggleClass('faq-open');
+			$('#faq-txt1').slideToggle('slow');
+		}
+	});
+	
+	$('#faq-title2').click(function() {
+		if (!$('#faq-txt2').is(':animated')) {
+			$('#faq-b2').toggleClass('faq-open');
+			$('#faq-txt2').slideToggle('slow');
+		}
+	});
+	
+	$('#faq-title3').click(function() {
+		if (!$('#faq-txt3').is(':animated')) {
+			$('#faq-b3').toggleClass('faq-open');
+			$('#faq-txt3').slideToggle('slow');
+		}
+	});
+
+	$('#faq-title4').click(function() {
+		if (!$('#faq-txt4').is(':animated')) {
+			$('#faq-b4').toggleClass('faq-open');
+			$('#faq-txt4').slideToggle('slow');
+		}
+	});
+
+	$('#faq-title5').click(function() {
+		if (!$('#faq-txt5').is(':animated')) {
+			$('#faq-b5').toggleClass('faq-open');
+			$('#faq-txt5').slideToggle('slow');
+		}
+	});
+
+	$('#faq-title6').click(function() {
+		if (!$('#faq-txt6').is(':animated')) {
+			$('#faq-b6').toggleClass('faq-open');
+			$('#faq-txt6').slideToggle('slow');
+		}
+	});
+
+	$('#faq-title7').click(function() {
+		if (!$('#faq-txt7').is(':animated')) {
+			$('#faq-b7').toggleClass('faq-open');
+			$('#faq-txt7').slideToggle('slow');
+		}
+	});
+
+	$('#faq-title8').click(function() {
+		if (!$('#faq-txt8').is(':animated')) {
+			$('#faq-b8').toggleClass('faq-open');
+			$('#faq-txt8').slideToggle('slow');
+		}
+	});
+	
+	$('#faq-title9').click(function() {
+		if (!$('#faq-txt9').is(':animated')) {
+			$('#faq-b9').toggleClass('faq-open');
+			$('#faq-txt9').slideToggle('slow');
+		}
+	});
+
+	$('#faq-title10').click(function() {
+		if (!$('#faq-txt10').is(':animated')) {
+			$('#faq-b10').toggleClass('faq-open');
+			$('#faq-txt10').slideToggle('slow');
+		}
+	});
+});

@@ -1,0 +1,54 @@
+#!/usr/bin/perl -w
+
+use File::stat;
+
+# Provides all files in the provided directory.
+my @files = glob('/home/asido/*');
+# Stores the amount of files in the directory. Could be the length of @files array, but that way we would count in the directories as well.
+my $file_count = 0;
+# Empty hash to store 'extension' => 'size' pairs.
+my %extensions = ();
+
+# Loop through all the files in the directory one by one.
+for(@files) {
+	# If file is a directory, skip this file.
+	if(-d $_) {
+		next;
+	}
+
+	# Increment the file count.
+	$file_count++;
+
+	# stat() is File::stat module and returns a lot of information about the file.
+	$size = stat($_)->size;
+
+	if($_ !~ m/\./) {
+		unless(exists($extensions{'no ext'})) {
+			$extensions{'no ext'} = $size;
+		}
+		else {
+			$extensions{'no ext'} += $size;
+		}
+		next;
+	}
+
+	# Extracting the file extension only.
+	$ext = $_;
+	$ext =~ s/.*\.//;
+
+	# If hash doesn't have the files extension as a key - create one.
+	unless(exists($extensions{$ext})) {
+		$extensions{$ext} = $size;
+	}
+	else {
+		$extensions{$ext} += $size;
+	}
+}
+
+print "Total files: $file_count\n";
+
+# Iterate through all extensions and write their size.
+while(($key, $value) = each(%extensions)) {
+	$mb = $value / 1024;
+	print "'$key' = " . sprintf("%.1f", $mb) . "KB.\n";
+}

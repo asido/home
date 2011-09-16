@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+
+use File::Find;
+use File::Copy;
+
+$dir = '/home/asido/src/perl/EXERCISES/6_copy_ico';
+
+find(\&wanted, $dir);
+
+sub wanted {
+	if($_ =~ /.*\.ico$/) {
+		copy($_, 'icons/'.$_);
+		print "$_ successfully coppied to 'icons' folder\n";
+	}
+}

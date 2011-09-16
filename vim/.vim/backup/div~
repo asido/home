@@ -1,0 +1,4 @@
+#!/bin/sed -f
+
+1,4 w first d
+5,$ w last

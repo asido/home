@@ -1,0 +1,8 @@
+var conf = {
+	
+	// default clip configuration
+	defaults: {
+		autoPlay: false,
+		autoBuffering: true,
+	}
+}

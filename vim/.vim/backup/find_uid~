@@ -1,0 +1,10 @@
+BEGIN {
+	FS=":";
+	saveit = 0;
+}
+
+$3 > saveit {saveit = $3}
+
+END {
+	print "Next available UID is " saveit + 1;
+}

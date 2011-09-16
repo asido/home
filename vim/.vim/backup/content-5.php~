@@ -1,0 +1,76 @@
+<?php
+
+require_once('../php/database.php');
+
+if (isset($_POST['old_psw']) && isset($_POST['new_psw']) && isset($_POST['confirm_psw']) && isset($_POST['admin_email'])) {
+	if ($_POST['old_psw'] == "" || $_POST['new_psw'] == "" || $_POST['confirm_psw'] == "" || $_POST['admin_email'] == "") {
+		echo '{ "msg" : "Not all input provided." }';
+		exit;
+	}
+	if ($_POST['new_psw'] !== $_POST['confirm_psw']) {
+		echo '{ "msg" : "Passwords doesn\'t match" }';
+		exit;
+	}
+
+	$db = database::get_instance();
+	$query = "UPDATE `admin_users`
+			  SET `password` = '".sha1($_POST['new_psw'])."'
+			  WHERE `username` = '".$_POST['admin_email']."'
+			  AND `password` = '".sha1($_POST['old_psw'])."'";
+	$db->query($query);
+
+	echo '{ "msg" : "'.(mysql_affected_rows() > 0 ? 'Password changed.' : 'Wrong email or old password.').'" }';
+	exit;
+}
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="js/submit.js"></script>
+<script type="text/javascript" src="js/validation.js"></script>
+<script type="text/javascript" src="js/notif.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikeMeLikeYou</title>
+</head>
+
+<body>
+
+<span class="arial-blue-strong">Admin Setings</span>
+
+<div class="loading-cloud-large">
+    <span class="arial-gray-large">Change Password</span>
+    <form id="password-change-form" method="POST" action="content-5.php">
+    	<div class="password-row">
+        	<div class="password-gray">Old Password :</div>
+            <input type="text" name="old_psw" class="password-inputs" />
+    	</div>
+        <div class="password-row">
+        	<div class="password-gray">New Password :</div>
+            <input type="text" name="new_psw" class="password-inputs" />
+    	</div>
+        <div class="password-row">
+        	<div class="password-gray">Confirm Password :</div>
+            <input type="text" name="confirm_psw" class="password-inputs" />
+    	</div>
+        <div class="password-row">
+        	<div class="password-gray">Administrator Email :</div>
+            <input type="text" name="admin_email" class="password-inputs" />
+    	</div>   
+        <div class="password-row">
+        	<div id="update-button"><a href="#">Update</a></div>
+    	</div>  
+    
+    </form>
+    </div><!--cloud-container-->               
+    
+</div><!--loading-cloud-large-->
+
+</body>
+</html>

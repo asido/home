@@ -1,0 +1,119 @@
+<head>
+
+<script>
+$(document).ready(function() {
+	$('#more-comments').click(function() {$('#tab-thread').trigger('click');});
+});
+</script>
+</head>
+<span class="arial-blue-strong">Welcome Administrator</span>
+<div class="loading-cloud-small">
+    <div id="textbox-1" class="loading-textbox">
+		<span class="helvetica-white">
+		<?php
+			require_once('../php/database.php');
+			
+			$db = database::get_instance();
+			$sql = $db->query("SELECT COUNT(`active`)
+							   FROM `users`
+							   WHERE `last_login` >= CURDATE()");
+			$result = mysql_fetch_array($sql);
+			echo $result[0];
+		?>
+		</span>
+        <br />
+        <span class="arial-gray">MEMBERS</span>
+    </div><!--loading-textbox-->
+    <div class="arial-info">Have logged in today</div>
+</div><!--loading-cloud-small-->
+
+<div class="loading-cloud-large">
+    <span class="arial-gray-large">Statistics Snapshot</span>
+    <div class="statistics-cloud">
+        <span class="arial-gray">For :</span>
+        <form id="statistics-form" method="post" action="">
+            <select id="select-months">
+                <option selected="selected">Month</option>
+                <option>January</option>
+                <option>February</option>
+            </select>
+            <div class="admin-button">GO</div>
+        </form>
+    </div><!--statistics-cloud-->
+    <div id="cloud-container">
+        <div id="textbox-2" class="loading-textbox">
+			<span class="helvetica-white">
+			<?php
+				$sql = $db->query("SELECT COUNT(`active`)
+								   FROM `users`");
+				$result = mysql_fetch_array($sql);
+				echo $result[0];
+			?>
+			</span>
+            <br />
+            <span class="arial-gray">MEMBERS</span>
+        </div><!--loading-textbox-->
+        <div id="textbox-3" class="loading-textbox">
+			<span class="helvetica-white">
+			<?php
+				$answer_tables = array();
+				$query = "SHOW TABLES";
+				$all_tables = $db->to_array($db->query($query));
+				$all_table_count = count($all_tables);
+				for ($i = 0; $i < $all_table_count; $i++) {
+					// remove the last check for string "guests" in order to include guest users answered questions
+					if (strpos($all_tables[$i][0], "answers") && strpos($all_tables[$i][0], "guests") === false)
+						array_push($answer_tables, $all_tables[$i][0]);
+				}
+
+				$answer_table_count = count($answer_tables);
+				$total_answers = 0;
+				for ($i = 0; $i < $answer_table_count; $i++) {
+					$query = "SELECT * FROM `".$answer_tables[$i]."`";
+					$result = $db->query($query);
+					$total_answers += count($db->to_array($result));
+				}
+				echo $total_answers;
+			?>
+			</span>
+            <br />
+            <span class="arial-gray">ANSWERS</span>
+        </div><!--loading-textbox-->
+    </div><!--cloud-container-->               
+    
+</div><!--loading-cloud-large-->
+
+<div class="admin-comments">
+    <span class="arial-gray-large">Latest Comments</span>
+    <!-- <div class="comments-box"> -->
+    <!-- 	<div class="comments-left"> -->
+    <!--     	<div class="comments-image"></div> -->
+    <!--         <div class="comments-name">Michael Teofilo</div> -->
+    <!--     </div> -->
+    <!--     <div class="comments-right">Lorem ipsum dolor sit amet, consectetur la plasa </div> -->
+    <!-- </div> -->
+    <!-- <div class="comments-box"> -->
+    <!-- 	<div class="comments-left"> -->
+    <!--     	<div class="comments-image"></div> -->
+    <!--         <div class="comments-name">Michael Teofilo</div> -->
+    <!--     </div> -->
+    <!--     <div class="comments-right">Lorem ipsum dolor sit amet, consectetur la plasa </div> -->
+    <!-- </div> -->
+	<?php
+		require_once('../php/database.php');
+		require_once('addComment.php');
+
+		$db = database::get_instance();
+
+		$query = "SELECT username, comment
+				  FROM comments";
+		$result = $db->query($query);
+		$count = mysql_num_rows($result);
+		for ($i = $count - 1; $i >= $count - 2; $i--) {
+			mysql_data_seek($result, $i);
+			$row = mysql_fetch_row($result);
+			print_comment($row[0], $row[1]);
+		}
+	?>
+    <div id="more-comments">MORE</div>
+</div>		

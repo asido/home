@@ -1,0 +1,7 @@
+#!/usr/bin/perl -w
+
+$folder = "/var/log/tomcat/catalina.out";
+open($log, "$folder");
+while($line = <$log>) {
+	print $line if($line =~ /.*\d+.\d+.\d+.\d+.*/);
+}

@@ -1,0 +1,36 @@
+//****************************************************************************
+//**
+//**    panic.cpp
+//**
+//****************************************************************************
+
+#include <hal.h>
+#include <stdarg.h>
+#include <stdio.h>
+
+//! something is wrong--bail out
+void kernel_panic(const char* fmt, ...)
+{
+	disable();
+
+	va_list		args;
+	/* static char buf[1024]; */
+
+	va_start(args, fmt);
+
+// We will need a vsprintf() here. I will see if I can write
+// one before the tutorial release
+
+	va_end (args);
+
+	char* disclamer="!!! FATAL !!!";
+
+	clear_screen(0x1f);
+	goto_xy(0,0);
+	puts(disclamer);
+
+	printf("*** STOP: %s", fmt);
+
+	for (;;);
+}
+

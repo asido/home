@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/style.css" type="text/css" rel="stylesheet" />
+<title>PlanToTeach</title>
+<script type="text/javascript" src="js/jquery-1.5.2.js"></script>
+<script type="text/javascript" src="js/popup.js"></script>
+</head>
+
+<?php
+	require_once('php/html.php');
+	HTML::show_logged_header('schemes');
+?>
+
+<div id="schemes-wrap" class="content-wrap">
+
+<div id="subscribe-popup"> 
+	<iframe id="subscribe-popup-frame" name="subscribe" src="popup/createScheme.php"></iframe> 
+</div> 
+
+	<div class="content content-small">
+    	<div id="scheme-big-box" class="box">
+        	<div class="header">Schemes</div>
+            <div class="table-wrap">
+            	<table class="box-table">
+                	<tr>
+                    	<td width="130px" class="th">Subject</td>
+                        <td width="150px" class="th">Scheme Name</td>
+                        <td width="110px" class="th">Year Group</td>
+                        <td width="130px" class="th">Time</td>
+                        <td width="150px" class="th">Date</td>
+                        <td class="th">Edit</td>
+                                                        
+                    </tr>
+                    <tr>
+                    	<td width="130px" class="td-odd">Mathematics</td>
+                        <td width="150px" class="td-even td-red">Triangle properties</td>
+                        <td width="110px" class="td-odd">7th year</td>
+                        <td width="130px" class="td-even">1:00PM - 2:00PM </td>
+                        <td width="150px" class="td-odd">Tuesday,March 1 -8</td>
+                        <td class="td-even"><div class="edit-icon"><a href="schemePg.php">&nbsp;</a></div></td>
+                    </tr>
+                    <tr>
+                    	<td width="130px" class="td-odd">Mathematics</td>
+                        <td width="150px" class="td-even td-red">Triangle properties</td>
+                        <td width="110px" class="td-odd">7th year</td>
+                        <td width="130px" class="td-even">1:00PM - 2:00PM </td>
+                        <td width="150px" class="td-odd">Tuesday,March 1 -8</td>
+                        <td class="td-even"><div class="edit-icon"><a href="schemePg.php">&nbsp;</a></div></td>
+                    </tr>
+                    <tr>
+                    	<td width="130px" class="td-odd">Mathematics</td>
+                        <td width="150px" class="td-even td-red">Triangle properties</td>
+                        <td width="110px" class="td-odd">7th year</td>
+                        <td width="130px" class="td-even">1:00PM - 2:00PM </td>
+                        <td width="150px" class="td-odd">Tuesday,March 1 -8</td>
+                        <td class="td-even"><div class="edit-icon"><a href="schemePg.php">&nbsp;</a></div></td>
+                    </tr>
+                    <tr>
+                    	<td width="130px" class="td-odd">Mathematics</td>
+                        <td width="150px" class="td-even td-red">Triangle properties</td>
+                        <td width="110px" class="td-odd">7th year</td>
+                        <td width="130px" class="td-even">1:00PM - 2:00PM </td>
+                        <td width="150px" class="td-odd">Tuesday,March 1 -8</td>
+                        <td class="td-even"><div class="edit-icon"><a href="schemePg.php">&nbsp;</a></div></td>
+                    </tr>
+                    <tr>
+                    	<td width="130px" class="td-odd">Mathematics</td>
+                        <td width="150px" class="td-even td-red">Triangle properties</td>
+                        <td width="110px" class="td-odd">7th year</td>
+                        <td width="130px" class="td-even">1:00PM - 2:00PM </td>
+                        <td width="150px" class="td-odd">Tuesday,March 1 -8</td>
+                        <td class="td-even"><div class="edit-icon"><a href="schemePg.php">&nbsp;</a></div></td>
+                    </tr>
+                    <tr>
+                    	<td width="130px" class="td-odd">Mathematics</td>
+                        <td width="150px" class="td-even td-red">Triangle properties</td>
+                        <td width="110px" class="td-odd">7th year</td>
+                        <td width="130px" class="td-even">1:00PM - 2:00PM </td>
+                        <td width="150px" class="td-odd">Tuesday,March 1 -8</td>
+                        <td class="td-even"><div class="edit-icon"><a href="schemePg.php">&nbsp;</a></div></td>
+                    </tr>
+                </table>
+                <br/>
+                <br/>
+            </div><!--table-wrap-->
+        </div><!--lessons-box-->
+        <div id="button-scheme"></div>
+    
+    </div><!--content-->
+</div><!--content-wrap-->
+
+<?php
+	HTML::show_footer();
+?>
+
+<body>
+</body>
+</html>

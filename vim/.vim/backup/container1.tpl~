@@ -1,0 +1,444 @@
+{*
+ * Checkout Form
+ *
+ * Software for 68 Classifieds - Adept Marketing S.A.R.L.
+ *
+ * @author Mansoor
+ * @copyright Copyright (c) 2010, Webeteer.in All Rights Reserved.
+ * @link http://www.webeteer.in
+ * @package Quick Checkout Module
+ * @category Templates
+ * @version 1.0
+ * @internal For use with 68C v4.1.10 - 4.1.x
+ * @internal PHP5 or greater
+ *}
+<link href="modules/templatecodes/css/impromptu.css" rel="stylesheet" type="text/css" />
+<link href="modules/quick_checkout/css/default.css" rel="stylesheet" type="text/css" />
+
+{if $customCSS}
+<link href="modules/quick_checkout/css/custom.css" rel="stylesheet" type="text/css" />
+{/if}
+<script type="text/javascript" src="modules/templatecodes/scripts/unpacked/jquery.collapsible.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.impromptu.min.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.textlimit.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.form.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.json-2.2.min.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/swfupload/swfupload.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.swfupload.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.scrollTo-1.4.2-min.js"></script>
+<script type="text/javascript" src="javascript/upload.js"></script>
+
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery-galleryview-1.1/jquery.galleryview-1.1.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery-galleryview-1.1/jquery.timers-1.1.2.js"></script>
+
+<link rel="stylesheet" href="modules/templatecodes/scripts/jquery-galleryview-1.1/style.css" type="text/css" />
+
+
+
+
+
+{literal}
+<script type="text/javascript">
+$(document).ready(function() {
+	//assign the initial step
+	var step = "{/literal}{$step}{literal}";
+	//setup the collapsible
+	$('.collapsible').collapsible();
+	$('.collapsible').collapsible('open');
+	//assign the initial open container and open it
+	var openContainer = "{/literal}{$openContainer}{literal}";
+	if (step == '') {
+		step = 1;
+		$('#categoryContainer').collapsible('open');
+	} else {
+		$(openContainer).collapsible('open');
+	}
+	//assign inital order and listing id
+	var orderid = 0;
+	var listingid = 0;
+	var categoryDefault = '<div class="container">{/literal}{$smarty.const.MOD_QC_DEFAULT_CHOOSE_CATEGORY}{literal}</div>';
+	var productDefault = '<div class="container">{/literal}{$smarty.const.MOD_QC_DEFAULT_CHOOSE_PRODUCT}{literal}</div>';
+	var listingDefault = '<div class="container">{/literal}{$smarty.const.MOD_QC_DEFAULT_SAVE_LISTING}{literal}</div>';
+
+	//step 1 javascript
+	function hideDropdownsBelow(start_from)
+	{
+		for (var i = start_from; i < 10; ++i) {
+			$("#subcategory"+i).hide();
+			$(".dropdwn"+i).hide();
+		}
+	}
+
+	function showChildCategories(parent, depth)
+	{
+		$.ajax({
+			url: "modules.php",
+			type: "post",
+			data: "mod=quick_checkout&cmd=subcategory&parent=" + parent.val(),
+			beforeSend: function() {
+				hideDropdownsBelow(depth);
+			},
+			success: function(subcategories) {
+				if (subcategories == "")
+					goto_step2(parent)
+				else {
+					$("#subcategory"+depth).html(subcategories);
+					$("#subcategory"+depth).show();
+					$(".dropdwn"+depth).show();
+				}
+			}
+		});
+	}
+
+
+	function goto_step2(category)
+	{
+		// goto step2
+		$('#categoryContainer').find('.panelLoading').show();
+		$('span.status').removeClass('invalid, valid').addClass('incomplete');
+		{/literal}{if !isset($skipBilling)}{literal}
+		$('#ubillingContainer').find('span.status').removeClass().addClass('status valid');
+		{/literal}{/if}{literal}
+		//default the html value of all other containers
+		$('#listingContainer, #imagesContainer, #previewContainer, #paymentContainer').next().html(listingDefault);
+		$('#listingContainer, #imagesContainer, #previewContainer, #paymentContainer').collapsible('open');
+
+		{/literal}{if !isset($skipDiscount)}{literal}
+		$('#couponContainer').next().html(listingDefault);
+		$('#couponContainer').collapsible('open');
+		{/literal}{/if}{literal}
+		{/literal}{if !isset($skipGateway)}{literal}
+		$('#paymentOptionsContainer').next().html(listingDefault);
+		$('#paymentOptionsContainer').collapsible('open');
+		{/literal}{/if}{literal}
+
+		$('#listingContainer').next().html(productDefault);
+		inArray = $.inArray(parent.val(), noListCats);
+		if (inArray !== -1) {
+			$('#category').parent().append('<label class="error">{/literal}{$smarty.const.MOD_QC_ERROR_CATEGORY_NOT_ALLOWED}{literal}</label>');
+			$('#categoryContainer').find('span.status').removeClass().addClass('status').addClass('invalid');
+			{/literal}{if !isset($skipProduct)}{literal}
+			$('#productsContainer').find('.panelLoading').hide();
+			$('#productsContainer').next().html(categoryDefault);
+			{/literal}{/if}{literal}
+			return false;
+		}
+		//can have listings, does it have products?
+		$.ajax({
+			url: "modules.php",
+			type: "post",
+			data: "mod=quick_checkout&cmd=vcheckout1&category=" + parent.val(),
+			success: function(msg) {
+				if (msg != 'success') {
+					$('#category').parent().append('<label class="error">' + msg + '</label>');
+					$('#categoryContainer').collapsible('open');
+					$('#categoryContainer').find('span.status').removeClass('valid incomplete').addClass('invalid');
+					$('#categoryContainer').find('.panelLoading').hide();
+					{/literal}{if !isset($skipProduct)}{literal}
+					$('#productsContainer').next().html(categoryDefault);
+					$('#productsContainer').collapsible('open');
+					{/literal}{/if}{literal}
+				} else {
+					//remove any previous errors
+					$('#category').parent().find('.error').remove();
+					//change the category container status to valid
+					$('#categoryContainer').find('span.status').removeClass('incomplete invalid').addClass('valid');
+					$('#categoryContainer').find('.panelLoading').hide();
+					//load the products container
+					{/literal}{if !isset($skipProduct)}{literal}
+					$('#productsContainer').next().load('modules.php?mod=quick_checkout&cmd=checkout2&category=' + parent.val(), function (){
+
+						//$('#productsContainer').next().find('.container').css('height', $('#productsContainer').next().find('.container').innerHeight());
+						$('#productsContainer').collapsible('open');
+					});
+					{/literal}{else}{literal}
+						$.ajax({
+							url: "modules.php",
+							type: "post",
+							data: "mod=quick_checkout&cmd=vcheckout2&category=" + parent.val() + '&product={/literal}{$defaultProduct}{literal}',
+							success: function(msg) {
+								if (msg != 'success') {
+									$('#categoryContainer').collapsible('open');
+								} else {
+									//now fetch the listing form
+									$('#listingContainer').next().load('modules.php?mod=quick_checkout&cmd=checkout3&category=' + parent.val() + '&product={/literal}{$defaultProduct}{literal}', function() {
+										$('#listingContainer, #imagesContainer, #previewContainer, #paymentContainer').find('span.status').removeClass('valid invalid').addClass('incomplete');
+										$('#listingContainer').collapsible('open');
+										$('#categoryContainer').collapsible('open');
+									});
+								}
+							}
+						});
+					{/literal}{/if}{literal}
+				}
+			}
+		});
+	}
+
+	var noListCats = {/literal}{$noListCatsJS}{literal};
+	$('#category').change(function() {
+		showChildCategories($(this), 1);
+	});
+
+	$('#subcategory1').change(function() {
+		showChildCategories($(this), 2);
+	});
+
+	$('#subcategory2').change(function() {
+		showChildCategories($(this), 3);
+	});
+
+	$('#subcategory3').change(function() {
+		showChildCategories($(this), 4);
+	});
+
+	$('#subcategory4').change(function() {
+		showChildCategories($(this), 5);
+	});
+
+	$('#subcategory5').change(function() {
+		showChildCategories($(this), 6);
+	});
+
+	$('#subcategory6').change(function() {
+		showChildCategories($(this), 7);
+	});
+
+	$('#subcategory7').change(function() {
+		showChildCategories($(this), 8);
+	});
+
+	$('#subcategory8').change(function() {
+		showChildCategories($(this), 9);
+	});
+
+	$('#subcategory9').change(function() {
+		showChildCategories($(this), 10);
+	});
+
+	$('#subcategory2').change(function() {
+	});
+
+	{/literal}{if !isset($skipProduct)}{literal}
+	//step 2 javascript
+	$(".productInfo a").live('click', function(e) {
+		e.preventDefault();
+		var container = $(this).parent().next().next().html();
+		$.prompt(container.replace('productDetails', ''));
+	});
+	$("input[name='product']").live('click', function() {
+		$('#productsContainer').find('.panelLoading').show();
+		$('span.status').removeClass('invalid, valid').addClass('incomplete');
+
+		{/literal}{if !isset($skipBilling)}{literal}
+		$('#ubillingContainer').find('span.status').removeClass().addClass('status valid');
+		{/literal}{/if}{literal}
+
+		$('#categoryContainer').find('span.status').removeClass().addClass('status valid');
+		//default the html value of all other containers
+		$('#listingContainer, #imagesContainer, #previewContainer, #paymentContainer').next().html(listingDefault);
+		$('#imagesContainer, #previewContainer, #paymentContainer').collapsible('open');
+
+		{/literal}{if !isset($skipGateway)}{literal}
+		$('#paymentOptionsContainer').next().html(listingDefault);
+		$('#paymentOptionsContainer').collapsible('open');
+		{/literal}{/if}{literal}
+		{/literal}{if !isset($skipDiscount)}{literal}
+		$('#couponContainer').next().html(listingDefault);
+		$('#couponContainer').collapsible('open');
+		{/literal}{/if}{literal}
+
+		$.ajax({
+			url: "modules.php",
+			type: "post",
+			data: "mod=quick_checkout&cmd=vcheckout2&category=" + $('#category').val() + '&product=' + $("input[name=product]:checked").val(),
+			success: function(msg) {
+	        	if (msg != 'success') {
+	        		$("input[name=product]").parent().append('<label class="error">' + msg + '</label>');
+					$('#categoryContainer, #productsContainer').collapsible('open');
+					$('#productsContainer').find('span.status').removeClass('valid incomplete').addClass('invalid');
+					$('#productsContainer').find('.panelLoading').hide();
+	        	} else {
+	        		//make it valid, since radio will always have a valid product for category
+	        		$('#productsContainer').find('span.status').removeClass('invalid incomplete').addClass('valid');
+	        		//now fetch the listing form
+	        		$('#listingContainer').next().load('modules.php?mod=quick_checkout&cmd=checkout3&category=' + $('#category').val() + '&product=' + $("input[name=product]:checked").val(), function() {
+	        			$('#listingContainer, #imagesContainer, #previewContainer, #paymentContainer').find('span.status').removeClass('valid invalid').addClass('incomplete');
+	        			$('#listingContainer').collapsible('open');
+	        			$('#productsContainer').find('.panelLoading').hide();
+	        			$('#categoryContainer, #productsContainer').collapsible('open');
+		        	});
+	        	}
+	      	}
+	    });
+	});
+	{/literal}{/if}{literal}
+
+	{/literal}{if !isset($skipBilling)}{literal}
+	$('#userModify').click(function(e) {
+		e.preventDefault();
+		var stateOptions = {
+			state0: {
+				html: $('#userModifyContent').html(),
+				submit: function(v,m) {
+					if (v == false) {
+						$.prompt.close();
+						return true;
+					}
+					var error = false;
+					//lets check the fields
+					var firstname = m.find('#b_firstname');
+					if (firstname.val() == '') {
+						firstname.prev().addClass('frmErrorMsg');
+						error = true;
+					} else {
+						firstname.prev().removeClass('frmErrorMsg');
+					}
+					var lastname = m.find('#b_lastname');
+					if (lastname.val() == '') {
+						lastname.prev().addClass('frmErrorMsg');
+						error = true;
+					} else {
+						lastname.prev().removeClass('frmErrorMsg');
+					}
+					var address = m.find('#b_address');
+					if (address.val() == '') {
+						address.prev().addClass('frmErrorMsg');
+						error = true;
+					} else {
+						address.prev().removeClass('frmErrorMsg');
+					}
+					var city = m.find('#b_city');
+					if (city.val() == '') {
+						city.prev().addClass('frmErrorMsg');
+						error = true;
+					} else {
+						city.prev().removeClass('frmErrorMsg');
+					}
+					var state = m.find('#b_state');
+					if (state.val() == '') {
+						state.prev().addClass('frmErrorMsg');
+						error = true;
+					} else {
+						state.prev().removeClass('frmErrorMsg');
+					}
+					var country = m.find('#b_country');
+					if (country.val() == '') {
+						country.prev().addClass('frmErrorMsg');
+						error = true;
+					} else {
+						country.prev().removeClass('frmErrorMsg');
+					}
+					var zip = m.find('#b_zip');
+					if (zip.val() == '') {
+						zip.prev().addClass('frmErrorMsg');
+						error = true;
+					} else {
+						zip.prev().removeClass('frmErrorMsg');
+					}
+					if (error == true) {
+						m.find('label.frmErrorMsg').show();
+						return false;
+					} else {
+						m.find('label.frmErrorMsg').hide();
+					}
+					var phone = m.find('#b_phone');
+					var bsame = m.find('#b_same');
+					var b_same = 'N';
+					if (bsame.length > 0) {
+						b_same = 'Y';
+					}
+					$.ajax({
+						type: "POST",
+						url: 'modules.php?mod=quick_checkout&cmd=userModifyAjax',
+						data: "b_firstname=" + firstname.val() + "&b_lastname=" + lastname.val() +
+							  "&b_address=" + address.val() + "&b_city=" + city.val() + "&b_state=" + state.val()  +
+							  "&b_country=" + country.val() + "&b_zip=" + zip.val() + "&b_phone=" + phone.val() +
+							  "&b_same=" + b_same,
+						success:  function (msg) {
+							if (msg == 'success') {
+								//$.prompt.goToState('state1');
+							}
+							return false;
+						},
+						error: function() { return false; }
+					});
+					$.prompt.goToState('state1');
+					return false;
+				},
+				prefix:'jqismooth',
+				buttons: {Submit:true, Cancel:false},
+				focus: 1
+			},
+			state1: {
+				html: "{/literal}{$smarty.const.MOD_QC_NOTICE_BILLING_SAVED_AJAX}{literal}",
+				prefix:'jqismooth',
+				buttons: {Ok:true},
+				focus: 2,
+				submit: function () {
+					$('.userInfo').load('modules.php?mod=quick_checkout&cmd=billingList');
+					$('#userModifyContent').load('modules.php?mod=quick_checkout&cmd=userAjaxForm');
+					return true;
+				}
+			}
+		};
+		$.prompt(stateOptions);
+	});
+	{/literal}{/if}{literal}
+});
+</script>
+<link href="modules/quick_checkout/templates/quick_checkout/checkout/css/style.css" rel="stylesheet" type="text/css" />
+{/literal}
+<div class="coninner">
+
+<div class="collapsible" id="categoryContainer"><span class="status incomplete"></span><span class="panelLoading"></span>
+<div style="width:100%;"><div class="step1pic" style="margin-left: -70px;margin-top: 10px;"></div><div class="stephead" style="margin-top:10px; margin-left:-20px;">Choose your Category</div>
+</div></div>
+<div class="cwrapper">{include file='quick_checkout/checkout/step1.tpl'}</div>
+{if !isset($skipProduct)}
+<div class="collapsible " id="productsContainer" ><span class="status incomplete"></span><span class="panelLoading"></span>{$smarty.const.MOD_QC_HEADER_CHOOSE_PRODUCT}</div>
+<div class="cwrapper"><div class="container">{$smarty.const.MOD_QC_DEFAULT_CHOOSE_CATEGORY}</div></div>
+{/if}
+<div class="step2pic" style="margin-left: 190px;margin-top: 10px;"></div><div class="stephead" style="margin-top:10px; width:135px;">Create Listing</div>
+<div class="collapsible" id="listingContainer" ><span class="status incomplete"></span><span class="panelLoading"></span></div>
+<div class="cwrapper"><div class="container">{$smarty.const.MOD_QC_DEFAULT_CHOOSE_PRODUCT}</div></div>
+
+
+<div class="step3pic" style="margin-left: 190px;margin-top: 10px;"></div><div class="stephead" style="margin-top:10px; width:135px;">Upload Images</div>
+<div class="collapsible" id="imagesContainer" ></span><span class="status incomplete"></span><span class="panelLoading"></span></div>
+<div class="cwrapper"><div class="container">{$smarty.const.MOD_QC_DEFAULT_SAVE_LISTING}</div></div>
+
+
+<div class="step4pic" style="margin-left: 190px;margin-top: 10px;"></div><div class="stephead" style="margin-top:10px; width:190px;">Preview and Complete</div>
+<div class="collapsible" id="previewContainer"><span class="status incomplete"></span><span class="panelLoading"></span></div>
+<div class="cwrapper" style="width:695px;"><div class="container">{$smarty.const.MOD_QC_DEFAULT_SAVE_LISTING}</div></div>
+
+{if !isset($skipBilling)}
+<div style="display:none;" class="collapsible" id="ubillingContainer"><span class="toggle"></span><span class="status valid"></span><span class="panelLoading"></span>{$smarty.const.MOD_QC_HEADER_VERIFY_BILLING}</div>
+<div class="cwrapper" style="display:none;">
+	<div class="container" style="display:none;">
+		<ul class="userInfo" style="display:none;">
+        	{include file='quick_checkout/user/billingList.tpl'}
+        </ul>
+        <a  style="display:none;"href="modules.php?mod=quick_checkout&cmd=userModify" id="userModify">{$smarty.const.MOD_QC_LINK_MODIFY_BILLING}</a>
+        <div id="userModifyContent" style="display:none">
+        	{include file='quick_checkout/user/userAjax.tpl'}
+        </div>
+	</div>
+</div>
+
+{/if}
+{if !isset($skipDiscount)}
+<div class="collapsible" id="couponContainer"><span class="status incomplete"></span><span class="panelLoading"></span>{$smarty.const.MOD_QC_HEADER_ADD_DISCOUNT}</div>
+<div class="cwrapper"><div class="container">{$smarty.const.MOD_QC_DEFAULT_SAVE_LISTING}</div></div>
+{/if}
+
+{if !isset($skipGateway)}
+<div style="display:none;" class="collapsible" id="paymentOptionsContainer"><span class="status incomplete"></span><span class="panelLoading"></span></div>
+<div style="display:none;" class="cwrapper"><div class="container" style="display:none"></div></div>
+{/if}
+
+<div class="collapsible" id="paymentContainer"><span class="status incomplete"></span><span class="panelLoading"></span>{$smarty.const.MOD_QC_HEADER_COMPLETE_PAYMENT}</div>
+<div class="cwrapper" style="width:675px;"><div class="container">{$smarty.const.MOD_QC_DEFAULT_SAVE_LISTING}</div></div>
+</div>

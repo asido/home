@@ -1,0 +1,98 @@
+#define _XOPEN_SOURCE 500
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <string.h>
+#include <limits.h>
+#include <errno.h>
+#include <dirent.h>
+#include <ftw.h>
+#include <sys/inotify.h>
+
+#define EVENT_BUF_SIZE (10 * (sizeof(struct inotify_event) + NAME_MAX + 1))
+
+int inotify_fd;
+char *folder;
+
+int register_wd(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
+{
+	int wd;
+
+	if (typeflag & FTW_D) {
+		if ((wd = inotify_add_watch(inotify_fd, fpath, IN_ALL_EVENTS)) == -1)
+			printf("ERROR: inotify_add_watch for file %s\n", fpath);
+		else
+			printf("path: %s || wd = %d\n", fpath, wd);
+	}
+
+	return 0;
+}
+
+void handle_event(struct inotify_event *event)
+{
+	static uint32_t cookie;
+	static char rename[FILENAME_MAX];
+	int fd = open("inotify.log", O_APPEND | O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	char msg[FILENAME_MAX + 100];
+
+	if (event->mask & IN_CREATE) {
+		sprintf(msg, "File created: %s\n", event->name);
+		if (event->mask & IN_ISDIR)
+			nftw(folder, register_wd, 20, 0);
+	}
+	if (event->mask & IN_DELETE)
+		sprintf(msg, "File deleted: %s\n", event->name);
+	if (event->mask & IN_MOVED_FROM) {
+		strcpy(rename, event->name);
+		cookie = event->cookie;
+	}
+	if (event->mask & IN_MOVED_TO && cookie == event->cookie)
+		sprintf(msg, "File renamed from %s to %s\n", rename, event->name);
+
+	int str_len = strlen(msg);
+	if (str_len > 0)
+		write(fd, msg, str_len);
+	close(fd);
+}
+
+int main(int argc, char *argv[])
+{
+	if (argc != 2 || strcmp(argv[1], "--help") == 0) {
+		printf("Usage: %s path...\n", argv[0]);
+		exit(EXIT_SUCCESS);
+	}
+
+	folder = argv[1];
+
+	if ((inotify_fd = inotify_init()) == -1) {
+		printf("ERROR: inotify_init\n");
+		exit(EXIT_FAILURE);
+	}
+	printf("inotify_fd = %d\n", inotify_fd);
+
+	nftw(folder, register_wd, 20, 0);
+
+	char event_buf[EVENT_BUF_SIZE];
+	int read_len;
+	abort();
+	for (;;) {
+		read_len = read(inotify_fd, event_buf, EVENT_BUF_SIZE);
+		if (read_len == 0) {
+			printf("read() returned 0 !\n");
+			exit(EXIT_FAILURE);
+		} else if (read_len == -1) {
+			printf("ERROR: read\n");
+			exit(EXIT_FAILURE);
+		}
+
+		char *p;
+		for (p = event_buf; p < event_buf + read_len; ) {
+			struct inotify_event *event = (struct inotify_event *) p;
+			handle_event(event);
+			p += sizeof(struct inotify_event *) + event->len;
+		}
+	}
+
+	exit(EXIT_SUCCESS);
+}

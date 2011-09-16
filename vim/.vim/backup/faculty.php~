@@ -1,0 +1,113 @@
+<?php 
+
+require_once('php/auth.php');
+
+$logged = false;
+
+if ($auth->logged_in() || $auth->cookie_login())
+	$logged = true;
+
+if (!$logged) {
+	header('Location: login.php');
+	exit;
+}
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/style.css" type="text/css" rel="stylesheet" />
+<title>PlanToTeach</title>
+</head>
+
+<?php
+	require_once('php/html.php');
+	HTML::show_logged_header('faculty');
+?>
+
+<div id="faculty-wrap" class="content-wrap">
+	<div id="faculty-content" class="content content-small">
+    	
+        <div class="row">
+        	<div id="search-bar">
+            	<input type="text" id="search" class="input-gray" />
+            </div><!--search-bar-->
+        </div><!--row-->
+        
+        <div class="row">
+        	<div class="box faculty">
+            	<div class="search-frame">
+                	<div class="search-image"></div>
+                </div>
+                <div class="search-info">
+                	<span class="font-content f13 strong">First Name : <span class="td-red">Jithin</span></span><br/>
+                    <span class="font-content f13 strong">Last Name : <span class="td-red">Francis</span></span><br/>
+                    <span class="font-content f13 strong">Department : <span class="td-red">Science</span></span><br/>
+                    <span class="font-content f13 strong">Email : <span class="td-red">franchi111@gmail.com</span></span>
+                </div><!--search-info-->
+            </div><!--box-->
+            
+            <div class="box faculty abs-right">
+            	<div class="search-frame">
+                	<div class="search-image"></div>
+                </div>
+                <div class="search-info">
+                	<span class="font-content f13 strong">First Name : <span class="td-red">Jithin</span></span><br/>
+                    <span class="font-content f13 strong">Last Name : <span class="td-red">Francis</span></span><br/>
+                    <span class="font-content f13 strong">Department : <span class="td-red">Science</span></span><br/>
+                    <span class="font-content f13 strong">Email : <span class="td-red">franchi111@gmail.com</span></span>
+                </div><!--search-info-->
+            </div><!--box-->
+        </div><!--row-->
+        
+        <div class="row">
+        	<div class="box faculty">
+            	<div class="search-frame">
+                	<div class="search-image"></div>
+                </div>
+                <div class="search-info">
+                	<span class="font-content f13 strong">First Name : <span class="td-red">Jithin</span></span><br/>
+                    <span class="font-content f13 strong">Last Name : <span class="td-red">Francis</span></span><br/>
+                    <span class="font-content f13 strong">Department : <span class="td-red">Science</span></span><br/>
+                    <span class="font-content f13 strong">Email : <span class="td-red">franchi111@gmail.com</span></span>
+                </div><!--search-info-->
+            </div><!--box-->
+            
+            <div class="box faculty abs-right">
+            	<div class="search-frame">
+                	<div class="search-image"></div>
+                </div>
+                <div class="search-info">
+                	<span class="font-content f13 strong">First Name : <span class="td-red">Jithin</span></span><br/>
+                    <span class="font-content f13 strong">Last Name : <span class="td-red">Francis</span></span><br/>
+                    <span class="font-content f13 strong">Department : <span class="td-red">Science</span></span><br/>
+                    <span class="font-content f13 strong">Email : <span class="td-red">franchi111@gmail.com</span></span>
+                </div><!--search-info-->
+            </div><!--box-->
+        </div><!--row-->
+        
+        <div class="row">
+        	<div class="toggle-bar">
+                <ul class="toggle-bar-list-up">
+                    <li><div id="slideprev-up" class="toggle-arrow-left"></div></li>
+                    <li><div id="slide1-up" class="toggle-text slide-selected">1</div></li>
+                    <li><div id="slide2-up" class="toggle-text">2</div></li>
+                    <li><div id="slide3-up" class="toggle-text">3</div></li>
+                    <li><div id="slidenext-up" class="toggle-arrow-right"></div></li>
+                </ul>
+            </div><!--toggle-bar-->
+
+        </div><!--row-->
+        
+    </div><!--content-->
+</div><!--content-wrap-->
+
+<?php
+	HTML::show_footer();
+?>
+
+<body>
+</body>
+</html>

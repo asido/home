@@ -1,0 +1,6 @@
+#!/bin/bash
+if [[ $1 = '-gdb' ]]; then
+	qemu -fda FLOPPY.IMG -S -gdb tcp::1234 -serial stdio
+else
+	qemu -fda FLOPPY.IMG
+fi

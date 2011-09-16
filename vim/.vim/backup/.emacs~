@@ -1,0 +1,8 @@
+(load-file "~/.emacs.d/cedet-1.0/common/cedet.el")
+(global-ede-mode 1)					; enable the project management system
+(semantic-load-enable-code-helpers)	; enable prototype help and smart completion
+(global-srecode-minor-mode 1)		; enable template insertion menu
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/jdee-2.4.0.1/lisp"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/cedet-1.0/common"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/elib-1.0"))
+(require 'jde)

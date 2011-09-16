@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ $# != 2 ]; then
+	echo "Usage: manuf.sh field file" 1>&2;
+	exit 1;
+fi
+
+gawk < $2 '
+		{count[$'$1']++}
+	END {
+		for(item in count)
+			printf "%-20s%-20s\n",\
+				item, count[item];
+	}' | sort;

@@ -1,0 +1,14 @@
+<?php
+echo "Function sets supported in this list are:<br/>";
+$extensions = get_loaded_extensions();
+foreach ($extensions as $ext) {
+	echo $ext."<br/>";
+	echo "<ul>";
+	$ext_funcs = get_extension_funcs($ext);
+	foreach ($ext_funcs as $func) {
+		echo "<li>".$func."</li>";
+	}
+	echo "</ul>";
+}
+show_source('list_functions.php');
+?>

@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+
+use feature 'say';
+say 'output by say.';
+print 'output by print';
+say 'end.';

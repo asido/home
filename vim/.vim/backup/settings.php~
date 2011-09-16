@@ -1,0 +1,292 @@
+<?php 
+$setting=$class->F($class->query(TB_SETTINGS));
+if(isset($_POST['UpdateSettings']))
+{
+	$rand=$class->createRandomPassword();
+	
+	if($_FILES['site_logo']['name'] != "") 
+	{
+		@unlink("property/".$setting['site_logo']);
+	$imgsourcename = "logo_".$rand."_".$_FILES['site_logo']['name'];
+	move_uploaded_file($_FILES['site_logo']['tmp_name'], "property/".$imgsourcename);
+	}
+	
+	if($_FILES['site_header']['name'] != "") 
+	{
+		@unlink("property/".$setting['site_header']);
+	$imgsourceheader = "header_".$rand."_".$_FILES['site_header']['name'];
+	move_uploaded_file($_FILES['site_header']['tmp_name'], "property/".$imgsourceheader);
+	}
+	
+	$checkst=$class->C($class->query(TB_SETTINGS));
+	if($checkst>0)
+	{
+		
+		if($imgsourcename!=""){$exe1=$class->Q("UPDATE ".TB_SETTINGS." SET site_logo='".$imgsourcename."'");}	
+		if($imgsourceheader!=""){$exe2=$class->Q("UPDATE ".TB_SETTINGS." SET site_header='".$imgsourceheader."'");}	
+		$add=$class->Q("UPDATE ".TB_SETTINGS." SET db_username='".$_POST['authorizw_loginid']."',db_password='".$_POST['authorizw_tran_key']."'");
+	}
+	else
+	{
+		$add=$class->Q("INSERT INTO ".TB_SETTINGS." SET site_logo='".$imgsourcename."',site_header='".$imgsourceheader."',db_username='".$_POST['authorizw_loginid']."',db_password='".$_POST['authorizw_tran_key']."'");
+	}
+	
+	$fh= fopen("includes/config.php", "w");
+	$exclude_arr = array("phpsessid", "submit", "submit_action");	
+	$towrite_str = "<?php\n\n";
+	$towrite_str .= "";	
+	foreach ($_REQUEST as $key => $value)
+	{
+		if(!in_array(strtolower($key), $exclude_arr))
+		{
+			$towrite_str .= "\$db['default']['$key'] = \"" . trim($value) . "\";\n\n";
+		}
+	}
+	$towrite_str .= "require_once('connectionsettings.php');";
+	$towrite_str .= "\n\n?>";	
+	if(fwrite($fh, $towrite_str))
+	{
+	fclose($fh);
+	echo "<script>window.location='home.php?action=settings&succ'</script>";
+	}
+	else
+	{
+	fclose($fh);
+	echo "<script>window.location='home.php?action=settings&err'</script>";
+	}
+}
+?>
+<span class="procedures">
+              <ul><span class="title">Site Settings</span>
+                <form name="form1" id="form1" action="" method="post" enctype="multipart/form-data">
+					<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="bordersytle">
+                    <tr>
+                      <td height="25" colspan="3" align="left" valign="middle">&nbsp;
+                      <?php 
+					  if(isset($_GET['succ'])){echo "<span class='green'>Successfully Updated</span>";}
+					  if(isset($_GET['err'])){echo "<span class='red'>Error, please try again</span>";}
+					  ?>
+                      </td>
+                      </tr>
+                    <tr>
+                      <td width="41%" align="left" valign="middle" class="black12">Site Display</td>
+                      <td colspan="2" align="left" valign="middle" class="black12">
+                      <input type="radio" <?php if($db['default']['site_display']=="1"){echo "checked";}?> name="site_display" id="radio" value="1" />
+                      Yes 
+                      <input type="radio" <?php if($db['default']['site_display']=="0"){echo "checked";}?> name="site_display" id="radio2" value="0" />
+                      No</td>
+                  </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Site Title</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="site_title" id="site_title" class="txtborder" value="<?php echo $db['default']['site_title']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Site URL</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="site_url" id="site_url" class="txtborder" value="<?php echo $db['default']['site_url']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <!-- <tr> -->
+                    <!--   <td align="left" valign="middle" class="black12">Site Logo</td> -->
+                    <!--   <td width="25%" align="left" valign="middle"> -->
+                    <!--   <input type="file" name="site_logo" id="site_logo"/></td> -->
+                    <!--   <td width="34%" align="left" valign="middle"> -->
+                    <!--   <img src="property/<?php echo $setting['site_logo']?>" border="0" width="50" height="20" /> -->
+                    <!--   </td> -->
+                    <!-- </tr> -->
+                    <!-- <tr> -->
+                    <!--   <td align="left" valign="middle">&nbsp;</td> -->
+                    <!--   <td colspan="2" align="left" valign="middle">&nbsp;</td> -->
+                    <!-- </tr> -->
+                    <!-- <tr> -->
+                    <!--   <td align="left" valign="middle" class="black12">Site Header image</td> -->
+                    <!--   <td align="left" valign="middle"> -->
+                    <!--   <input type="file" name="site_header" id="site_header"/></td> -->
+                    <!--   <td align="left" valign="middle"> -->
+                    <!--   <img src="property/<?php echo $setting['site_header']?>" border="0" width="50" height="20" /></td> -->
+                    <!-- </tr> -->
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Mailing Address</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <textarea name="mail_address" class="txtborder" id="mail_address"><?php echo $db['default']['mail_address']; ?></textarea></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Telephone Number</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="telephone" id="telephone" class="txtborder" value="<?php echo $db['default']['telephone']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Fax Number</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="faxnumber" id="faxnumber" class="txtborder" value="<?php echo $db['default']['faxnumber']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Admin E-mail  Address</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="admin_email" id="admin_email" class="txtborder" value="<?php echo $db['default']['admin_email']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Orders E-mail Address</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="order_email" id="order_email" class="txtborder" value="<?php echo $db['default']['order_email']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Info E-mail Address</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="info_email" id="info_email" class="txtborder" value="<?php echo $db['default']['info_email']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Paypal E-mail address</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="paypal" id="paypal" class="txtborder" value="<?php echo $db['default']['paypal']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Authorize Login Id</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="authorizw_loginid" id="authorizw_loginid" class="txtborder" value="<?php echo $db['default']['authorizw_loginid']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Authorize Transation Key</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="authorizw_tran_key" id="authorizw_tran_key" class="txtborder" value="<?php echo $db['default']['authorizw_tran_key']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Database Host</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="db_host" id="db_host" class="txtborder" value="<?php echo $db['default']['db_host']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Database Name</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="db_name" id="db_name" class="txtborder" value="<?php echo $db['default']['db_name']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Database Username</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="db_username" id="db_username" class="txtborder" value="<?php echo $db['default']['db_username']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">Database Password</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="text" name="db_password" id="db_password" class="txtborder" value="<?php echo $db['default']['db_password']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">
+                      Twitter URL
+                      </td>
+                      <td colspan="2" align="left" valign="middle" class="font2">
+                      <input type="text" name="twitter" id="twitter" class="txtborder" style="width:300px;" value="<?php echo $db['default']['twitter']; ?>"/></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle" class="font2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">CA Sales Tax</td>
+                      <td colspan="2" align="left" valign="middle" class="font2">
+                      <input type="text" name="usashippingtax" id="usashippingtax" style="width:40px;" class="txtborder" value="<?php echo $db['default']['usashippingtax']; ?>"/> %
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle" class="font2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">SEO</td>
+                      <td align="left" valign="middle" class="font2">Meta Description</td>
+                      <td align="left" valign="middle" class="font2">Meta Keywords</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td align="left" valign="middle" class="font2">
+                      <textarea name="db_meta_description" class="txtborder" id="db_meta_description" style="width:200px; height:200px;"><?php echo $db['default']['db_meta_description']; ?></textarea>
+                      </td>
+                      <td align="left" valign="middle" class="font2">
+                      <textarea name="db_meta_keywords" class="txtborder" id="db_meta_keywords" style="width:200px; height:200px;"><?php echo $db['default']['db_meta_keywords']; ?></textarea></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle" class="black12">&nbsp;</td>
+                      <td align="left" valign="middle" class="font2">&nbsp;</td>
+                      <td align="left" valign="middle" class="font2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">
+                      <input type="submit" name="UpdateSettings" class="buttonbg" value="Update" /></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="middle">&nbsp;</td>
+                      <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                    </tr>
+                  </table>
+                  </form>
+              </ul>
+            </span>

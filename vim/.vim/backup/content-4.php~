@@ -1,0 +1,81 @@
+<span class="arial-blue-strong">Thread</span>
+<?php
+@session_start();
+print_r($_SESSION);
+?>
+<script>
+	$('#post-button').click(function() {
+			//var content_wrap = $('#loading-wrapper');
+			var url = 'admin/addComment.php';
+			var val = $('#post-comment').val();
+
+			//$.post(url, { comment:val });
+			
+			$.post(url, { comment:val }, function (response) { $('#comments').prepend( $( response ) ); } );
+			/*
+			content_wrap.html(\"<img src='images/ajax_preloader.gif' width='64' height='64' class='preloader' />\");
+			
+			$.get(url, function(content) {
+				content_wrap.hide();
+				content_wrap.html(content);
+				content_wrap.fadeIn('slow');								
+			});
+			*/
+	});
+	
+</script>
+
+<div class="loading-cloud-large">
+    <span class="arial-gray-large">Post a comment</span>
+    <form id="post-comment-form">
+    	<div id="textarea-wrap"><textarea id="post-comment"></textarea></div>
+    <input type="button" value="Post" id="post-button">
+    </form>
+    </div><!--statistics-cloud-->
+    
+            
+    
+</div><!--loading-cloud-large-->
+
+<div id="comments-container" class="admin-comments">
+    <span class="arial-gray-large">Latest Comments</span>
+	<div id="comments">
+    <!-- <div class="comments-box"> -->
+    <!-- 	<div class="comments-left"> -->
+    <!--     	<div class="comments-image"></div> -->
+    <!--         <div class="comments-name">Michael Teofilo</div> -->
+    <!--     </div> -->
+    <!--     <div class="comments-right">Lorem ipsum dolor sit amet, consectetur la plasa </div> -->
+    <!-- </div> -->
+    <!-- <div class="comments-box"> -->
+    <!-- 	<div class="comments-left"> -->
+    <!--     	<div class="comments-image"></div> -->
+    <!--         <div class="comments-name">Michael Teofilo</div> -->
+    <!--     </div> -->
+    <!--     <div class="comments-right">Lorem ipsum dolor sit amet, consectetur la plasa </div> -->
+    <!-- </div> -->
+    <!-- <div class="comments-box"> -->
+    <!-- 	<div class="comments-left"> -->
+    <!--     	<div class="comments-image"></div> -->
+    <!--         <div class="comments-name">Michael Teofilo</div> -->
+    <!--     </div> -->
+    <!--     <div class="comments-right">Lorem ipsum dolor sit amet, consectetur la plasa </div> -->
+    <!-- </div> -->
+	<?php
+		require_once('../php/database.php');
+		require_once('addComment.php');
+
+		$db = database::get_instance();
+
+		$query = "SELECT username, comment
+				  FROM comments";
+		$result = $db->query($query);
+		for ($i = mysql_num_rows($result) - 1; $i >= 0; $i--) {
+			mysql_data_seek($result, $i);
+			$row = mysql_fetch_row($result);
+			print_comment($row[0], $row[1]);
+		}
+	?>
+	</div><!-- comments -->
+    <div id="more-comments"><a href="#">MORE >></a></div>
+</div>		

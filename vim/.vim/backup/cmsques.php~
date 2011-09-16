@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="js/submit.js"></script>
+<script type="text/javascript" src="js/validation.js"></script>
+<script type="text/javascript" src="js/notif.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikeMeLikeYou</title>
+</head>
+
+<body>
+
+<span class="arial-blue-strong">Add Question</span>
+
+            <div id="loading-cloud-large cms-inner1">
+            	<div class="cms-black">Questions :</div>
+                <form id="cms-question-form" method="post" action="cmsques.php">
+					<input type="text" name="cms-q" id="cms-q" /><br/><br/>
+					<div class="cms-black">Answers :</div>
+					<input type="text" name="cms-a1" id="cms-a1" class="cms-answers" /><br/>
+					<input type="text" name="cms-a2" id="cms-a2" class="cms-answers" /><br/>
+					<input type="text" name="cms-a3" id="cms-a3" class="cms-answers" /><br/>
+					<input type="text" name="cms-a4" id="cms-a4" class="cms-answers" /><br/>
+					<input type="text" name="cms-a5" id="cms-a5" class="cms-answers" /><br/>
+					<input type="text" name="cms-a6" id="cms-a6" class="cms-answers" /><br/>
+					<input type="text" name="cms-a7" id="cms-a7" class="cms-answers" /><br/>
+					<input type="text" name="cms-a8" id="cms-a8" class="cms-answers" /><br/>
+					<div id="cms-dropdown">
+						<div class="cms-black">Select category :</div>
+						<select id="cms-select" name='category'>
+							<option value="profile">Profile</option>
+							<option value="sports">Sports</option>
+							<option value="politics">Politics</option>
+							<option value="music">Music</option>
+							<option value="top10">Top 10</option>
+							<option value="top100">Top 100</option>
+						</select>
+					</div>
+            	</form>	<!-- cms-question-form -->
+                <div id="cms-question-submit" class="cms-button"><span class="cms-button-text"><a href="#">Add Question</a></span></div>
+				<form id="cms-file-form" method="POST" enctype="multipart/form-data">
+					<input type="hidden" name="MAX_FILE_SIZE" value="100000000" />
+					<input id="cms-file-browse" name="csv_file" type="file" class="cms-import cms-button" style="z-index: -5;" accept="csv">
+					<div id="cms-file-button" class="cms-import cms-button"><span class="cms-button-text"><a href="#">Import From Excel</a></span></div>
+					</input>
+				</form>
+            </div>
+<!-- 
+			<span class="arial-blue-strong">Add Category</span>
+            <div id="cms-inner2">
+            	<div id="cms-inner2-content">
+                	<span class="cms-black"> Category Name : </span>
+                    <form id="cms-category-form" method="post" action="">
+                    	<input type="text" name="cms-c1" id="cms-c1" class="cms-answers" />
+                	<div id="cms-button-add"><span class="cms-button-text"><a href="#">Add</a></span></div>
+                    </form>
+                </div>
+            </div>
+			<div id="cms-bg3">
+				<ul id="cms-col1" class="cms-col">
+					<li><span class="cms-blue"><a href="#">Sports</a></span></li>
+					<li><span class="cms-blue"><a href="#">Politics</a></span></li>
+					<li><span class="cms-blue"><a href="#">Religion</a></span></li>
+					<li><span class="cms-blue"><a href="#">Top 100 Questions</a></span></li>
+					<li><span class="cms-blue"><a href="#">Top 10 Questions</a></span></li>
+				</ul>
+				<ul id="cms-col2" class="cms-col">
+					<li><span class="cms-blue"><a href="#">Properties</a></span></li>
+				</ul>
+			</div>
+-->
+
+</body>
+</html>

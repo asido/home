@@ -1,0 +1,16 @@
+#!/bin/bash
+
+FUNPATH=
+for arg in $@; do
+	if [[ "$FUNPATH" = "" ]]; then
+		FUNPATH=$arg
+	else
+		FUNPATH=$FUNPATH:$arg
+	fi
+done
+
+IFS=":"
+for path in $FUNPATH; do
+	#. $path
+	echo $path
+done

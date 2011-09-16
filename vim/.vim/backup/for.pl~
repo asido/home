@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+
+@array=("Mo", "Larry", "Curly");
+
+for(@array) {	# you can use this version as well to define your own variable instead of default '$_': for $var (@array)
+	$_ = uc($_);
+	print "$_ says hello.\n";
+}
+
+print "Array has changed: @array\n";

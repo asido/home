@@ -1,0 +1,16 @@
+use Timestamp::Simple qw(stamp);
+
+# Save timestamp in a variable.
+$ts = stamp;
+
+# Strip off the year.
+#$ts =~ s/....(.*)/$1/;
+$ts = substr($ts, 4);
+
+# Create a unique filename.
+$fn = "myfile." . $ts;
+
+# Open, write to, and close the file.
+open(OUTFILE, '>', "$fn");
+print OUTFILE "Hi there!\n";
+close(OUTFILE);

@@ -1,0 +1,51 @@
+<?php
+
+require_once( 'php/auth/auth.php' );
+require_once( 'php/config.php' );
+
+if ($auth->logged_in() == false) 
+	{
+		if ($auth->cookie_log_in() == false) 
+			header('Location:index.php'); 
+	}
+
+	$user_info	= $auth->logged_in(true);
+	$emails		= $_POST['email'];
+	if ( !isset( $email ) )
+	{
+		header( 'Location: refer.php?m=1' );
+		exit;
+	}
+	
+	$emails			= str_replace( ' ', '', $email );
+	$emails			= explode( ',', $emails );
+	
+	$comment		= $_POST['comment'];
+	$comment_html	= str_replace( '\r\n', '</br>', $comment );
+	$comment_html	= str_replace( '\n',   '</br>', $comment_html );
+	
+	$values			= array (
+									'NAME'			=>	$user_info['name'],
+									'EMAIL'			=>	$user_info['email'],
+									'COMMENT_HTML'	=>	$comment_html,
+									'COMMENT'		=>	$comment	);
+	
+	$sent			= false;
+	
+	$template_html	= file_get_contents( SCONFIG::REFER_MAIL_HTML_TEMPLATE );
+	$template_txt	= file_get_contents( SCONFIG::REFER_MAIL_PLAIN_TEXT_TEMPLATE );
+	$template_html	= STEMPLATE::set_template( $values, $template_html );
+	$template_txt	= STEMPLATE::set_template( $values, $template_txt  );
+	
+	foreach ( $emails as $email )
+	{
+		if ( !SCONFIG::checkEmailFormat($email) )	continue;
+		if ( !$auth->freeField( 'email', $email ) ) continue;
+		if (
+				SCONFIG::send_email( 'You are invited to ContractorBridge', $user_info['email'], $user_info['name'], $email, '', $template_txt, $template_html )
+			)
+				$sent = true;
+	}
+	
+	header( 'Location: refer.php?m='. ( $sent ? '4' : '3' ) );
+?>

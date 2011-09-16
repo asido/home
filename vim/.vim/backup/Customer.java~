@@ -1,0 +1,25 @@
+public class Customer extends Thread
+{
+	private WaitList wait_list;
+
+	public Customer(WaitList wait_list)
+	{
+		super("Customer");
+		this.wait_list = wait_list;
+	}
+
+	public void run()
+	{
+		Main.LOCK.lock();
+		boolean locked = true;
+		if (!wait_list.is_full()) {
+			wait_list.sit_down(this);
+			Main.LOCK.unlock();
+			locked = false;
+			System.out.println("CUSTOMER: sitting down.");
+		} else
+			System.out.println("CUSTOMER: the shop is full. Going to look for another one.");
+		if (locked)
+			Main.LOCK.unlock();
+	}
+}

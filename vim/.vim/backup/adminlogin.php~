@@ -1,0 +1,90 @@
+<?php
+
+require_once('php/admin_auth.php');
+
+if (isset($_GET['logout']) && $_GET['logout'] == 1) {
+	$admin_auth->logout();
+	header('Location: adminlogin.php');
+	exit;
+}
+
+$logged = $admin_auth->logged_in();
+
+if (isset($_POST['username']) && isset($_POST['password'])) {
+	$logging = 1;
+	$logged = $admin_auth->login($_POST['username'], $_POST['password']);
+}
+
+if ($logged)
+	header("Location: admin-dash.php");
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="js/submit.js"></script>
+<script type="text/javascript" src="js/validation.js"></script>
+<script type="text/javascript" src="js/notif.js"></script>
+<script>
+<?php
+require_once('php/config.php');
+
+if (isset($logging) && !$logged) {
+	$message = CONFIG::LOGIN_FAIL;
+	echo "$(document).ready(
+			function() {
+				show_notif(\"#regnotif\", \"".$message."\");
+				set_login_form(\"#login-form\", \"".$_POST['username']."\");
+			}
+		);";
+}
+?>
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikeMeLikeYou</title>
+</head>
+
+<body>
+
+	<?php
+		require_once('php/html.php');
+		HTML::show_admin_header();
+	?>
+
+	<div id="admin-login">
+		<div id="right-icon"></div>
+		<div id="right-logintitle">Admin Login</div>
+		
+		<form id="admin-login-form" method="post" action="adminlogin.php">
+			<div id="login-row1" class="login-row">
+				<div class="login-rleft"> Username : </div>
+				<input type="text" class="login-rform required username" name="username" />
+			</div>
+			<div id="login-row2" class="login-row">
+				<div class="login-rleft"> Password : </div>
+				<input type="password" class="login-rform required" name="password" />
+			</div>
+			<div id="regnotif" class="login-notif"></div>
+			<div id="login-row4" style="padding-top: 35px;" class="login-row">
+				<div id="r4-admin-left">
+					<div class="r4-txt"><a href="#">Login</a></div>
+				</div>
+		</form>
+				<div id="r4-right">
+					<div class="r4-txt"><span><a href="login.php">To home page</a><span></div>
+				</div>
+			</div>
+
+	</div>
+
+<?php
+	require_once('php/html.php');
+	HTML::show_background();
+	HTML::show_footer();
+?>
+</body>
+</html>

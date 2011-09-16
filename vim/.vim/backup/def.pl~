@@ -1,0 +1,5 @@
+#!/usr/bin/perl
+
+if(!defined($var)) {
+	print "var is NOT defined\n";
+}

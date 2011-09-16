@@ -1,0 +1,57 @@
+<?php
+	
+	require ( 'database.php' );
+	
+	$cmd 	= $_POST['cmd'];
+	if ( !isset($cmd) ) exit;
+	
+	require ( 'guests.php' );
+	
+	$guest 	= new guest ();
+	
+	switch ( $cmd )
+	{
+		case 'get' :
+			
+			$q = $guest->get_question( $_POST['exceptions'] );
+			echo '{ ';
+			if ($q)
+			{
+				echo 
+					'
+						"question_id"		: '	.$q['id']. ',
+						"question"			: "'.$q['question'].'",
+						"answer1"			: "'.$q['answer1'].'",
+						"answer2"			: "'.$q['answer2'].'",
+						"answer3"			: "'.$q['answer3'].'",
+						"answer4"			: "'.$q['answer4'].'",
+						"reset_exceptions"	: '	.$q['reset_exceptions']. ',
+					';
+			}
+			else 
+				echo
+					'
+						"question"		: null,
+					';
+			
+			echo '	"answered"		: ' . count ( $guest->get_answers() ) . ', ' . 			// getting the number of answered questions
+				 '
+				 	"total"			: ' . $guest->questions_num() . ', ' .					// getting total questions
+				 '
+				 	"guest_key"		: "' . $guest->guest_key() . '"' ;
+			
+			echo ' }';
+			exit;
+		
+		case 'set':
+			
+			$q = $_POST['question_id'];
+			$a = $_POST['answer_num'];
+			if ( ! (
+						isset ($q) &&
+						isset ($a) ) ) exit;
+			
+			$guest->set_answer( $q, $a );
+			exit;
+	}
+?>

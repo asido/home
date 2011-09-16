@@ -1,0 +1,115 @@
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Point;
+import java.awt.geom.Ellipse2D;
+import javax.swing.JPanel;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+
+public class Animal extends JPanel implements MouseListener
+{
+	private final int xPig = 10;
+	private final int yPig = 50;
+	private final int xGiraffe = 300;
+	private final int yGiraffe = 40;
+	private Rectangle pigRect;
+	private Rectangle giraffeRect;
+	private boolean drawPigText;
+	private boolean drawGiraffeText;
+
+	public Animal()
+	{
+		addMouseListener(this);
+		drawPigText = false;
+		drawGiraffeText = false;
+		pigRect = new Rectangle(xPig, yPig, 110, 50);
+		giraffeRect = new Rectangle(xGiraffe, yGiraffe, 110, 50);
+	}
+
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		drawBackground(g);
+		drawPig(g);
+		drawGiraffe(g);
+	}
+
+	private void drawBackground(Graphics g)
+	{
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setPaint(new GradientPaint(300, 400, new Color(11, 82, 4), 300, 200, new Color(26, 194, 10)));
+		g2d.fillRect(0, 200, 600, 200);
+	}
+
+	private void drawGiraffe(Graphics g)
+	{
+		g.setColor(Color.BLACK);
+		// bubble
+		g.drawOval(xGiraffe, yGiraffe, 110, 80);
+		g.drawLine(xGiraffe+50, yGiraffe+80, xGiraffe+80, yGiraffe+90);
+		//head
+		g.drawOval(xGiraffe+85, yGiraffe+90, 20, 20);
+		// neck
+		g.drawLine(xGiraffe+95, yGiraffe+110, xGiraffe+105, yGiraffe+185);
+		// body
+		g.fillOval(xGiraffe+90, yGiraffe+180, 100, 40);
+		// legs
+		g.drawLine(xGiraffe+110, yGiraffe+217, xGiraffe+100, yGiraffe+255);
+		g.drawLine(xGiraffe+110, yGiraffe+217, xGiraffe+120, yGiraffe+255);
+		g.drawLine(xGiraffe+170, yGiraffe+217, xGiraffe+160, yGiraffe+255);
+		g.drawLine(xGiraffe+170, yGiraffe+217, xGiraffe+180, yGiraffe+255);
+
+		if(drawGiraffeText)
+		{
+			g.drawString("Woaahh..!", xGiraffe+25, yGiraffe+25);
+			g.drawString("I am high!", xGiraffe+20, yGiraffe+50);
+		}
+
+	}
+
+	private void drawPig(Graphics g)
+	{
+		g.setColor(Color.BLACK);
+		// bubble
+		g.drawOval(xPig, yPig, 110, 50);
+		g.drawLine(xPig+50, yPig+50, xPig+100, yPig+100); 
+		// head
+		g.drawOval(xPig+100, yPig+110, 30, 30);
+		// body
+		g.fillOval(xPig+120, yPig+125, 100, 40);
+		// legs
+		g.drawLine(xPig+140, yPig+160, xPig+130, yPig+190);
+		g.drawLine(xPig+140, yPig+160, xPig+150, yPig+190);
+		g.drawLine(xPig+200, yPig+160, xPig+190, yPig+190);
+		g.drawLine(xPig+200, yPig+160, xPig+210, yPig+190);
+		// tail
+		g.drawLine(xPig+220, yPig+145, xPig+235, yPig+135);
+
+		if(drawPigText)
+			g.drawString("Hello, i am a pig!", xPig+7, yPig+30);
+	}
+
+	public void mouseClicked(MouseEvent event)
+	{
+		Point point = new Point(event.getX(), event.getY());
+
+		if(pigRect.contains(point))
+		{
+			drawPigText = true;
+			repaint();
+		}
+
+		if(giraffeRect.contains(point))
+		{
+			drawGiraffeText = true;
+			repaint();
+		}
+	}
+	public void mouseEntered(MouseEvent event) {}
+	public void mouseExited(MouseEvent event) {}
+	public void mousePressed(MouseEvent event) {}
+	public void mouseReleased(MouseEvent event) {}
+}

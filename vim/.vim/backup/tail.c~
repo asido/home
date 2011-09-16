@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+#include <fcntl.h>
+
+int get_line(int fd, char *line)
+{
+	int i;
+	char c;
+
+	for (i = 0 ;; ++i) {
+		if (read(fd, &c, 1) == 0)
+			break;
+		if (c == '\n')
+			break;
+		line[i] = c;
+	}
+	line[i] = '\0';
+	return i;
+}
+
+int main(int argc, char *argv[])
+{
+	int fd, i;
+	char line[1000];
+
+	if (argc != 2 || strcmp(argv[1], "--help") == 0) {
+		printf("Usage: %s file", argv[0]);
+		exit(EXIT_SUCCESS);
+	}
+
+	if ((fd = open(argv[1], O_RDONLY)) == -1) {
+		printf("ERROR: open");
+		exit(EXIT_SUCCESS);
+	}
+	lseek(fd, -200, SEEK_END);
+	for (i = 0; i < 10; ++i) {
+		get_line(fd, line);
+		printf("%s\n", line);
+	}
+
+	exit(EXIT_SUCCESS);
+}

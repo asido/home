@@ -1,0 +1,32 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="css/styles.css" type="text/css" media="screen" charset="utf-8">
+	<script src="../../js/jquery-1.4.2.js" type="text/javascript"></script>
+	<script src="../../js/popup.js" type="text/javascript"></script>
+	<script src="js/validation.js" type="text/javascript"></script>
+	<script src="js/submit.js" type="text/javascript"></script>
+
+	<title>Subscribe</title>
+	
+</head>
+
+<body>
+	<div id="popup-wrapper">
+		<div id="popup-title">
+			<h1>Email Subscription<span id="subscribe-close-x">X</span></h1>
+		</div><!-- popup-title -->
+		<div id="popup-content">
+			<!-- <div id="post-icon"></div> -->
+			<div id="popup-form">
+				<form id="subscribe-form" method="post" action="../../php/new_subscriber.php">
+					<input type="text" id="name-input" name="name" class="required" value="Name">
+					<input type="text" id="company-input" name="company" value="Company">
+					<input type="text" id="email-input" name="email" class="email" value="Email Address">
+					<div id="subscribe-submit-button"></div>
+				</form>
+			</div>
+		</div><!-- popup-content -->
+	</div><!-- popup-wrapper ->
+</body>
+</html>

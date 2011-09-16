@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function count_down() {
+	# 'typeset' keyword makes the variable local for the function only
+	typeset count=$1
+	while [ "$count" -gt 0 ]; do
+		echo "$count..."
+		sleep 1
+		((count--))
+	done
+	echo "KABOOOOOOM !!!"
+}
+
+count=10
+count_down "$1"
+# Because of 'typeset' keyword in the function above,
+# 'count' variable value will remain 10.
+echo "$count"

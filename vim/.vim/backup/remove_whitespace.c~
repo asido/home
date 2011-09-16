@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int main() {
+	int ch;
+	int lastCh;
+
+	while((ch = getchar()) != EOF) {
+		if(ch == ' ' && lastCh == ' ')
+			continue;
+		lastCh = ch;
+		putchar(ch);
+	}
+}

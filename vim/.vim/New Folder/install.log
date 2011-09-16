@@ -1,0 +1,220 @@
+
+chdir(/usr/share/vim)
+fchdir() to previous dir
+sourcing "$VIM/vimrc"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 52: sourcing "/usr/share/vim/vim73/syntax/syntax.vim"
+Searching for "syntax/synload.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/syntax/synload.vim"
+Searching for "/usr/share/vim/vimfiles/syntax/synload.vim"
+Searching for "/usr/share/vim/vim73/syntax/synload.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 19: sourcing "/usr/share/vim/vim73/syntax/synload.vim"
+Searching for "syntax/syncolor.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vimfiles/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vim73/syntax/syncolor.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 21: sourcing "/usr/share/vim/vim73/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+continuing in /usr/share/vim/vim73/syntax/synload.vim
+Searching for "/usr/share/vim/vimfiles/after/syntax/syncolor.vim"
+Searching for "/home/asido/.vim/after/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/syntax/synload.vim
+continuing in /usr/share/vim/vim73/syntax/syntax.vim
+Searching for "filetype.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/filetype.vim"
+Searching for "/usr/share/vim/vimfiles/filetype.vim"
+Searching for "/usr/share/vim/vim73/filetype.vim"
+chdir(/usr/share/vim/vim73)
+fchdir() to previous dir
+line 25: sourcing "/usr/share/vim/vim73/filetype.vim"
+Searching for "ftdetect/*.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/ftdetect/*.vim"
+Searching for "/usr/share/vim/vimfiles/ftdetect/*.vim"
+Searching for "/usr/share/vim/vim73/ftdetect/*.vim"
+Searching for "/usr/share/vim/vimfiles/after/ftdetect/*.vim"
+Searching for "/home/asido/.vim/after/ftdetect/*.vim"
+not found in 'runtimepath': "ftdetect/*.vim"
+finished sourcing /usr/share/vim/vim73/filetype.vim
+continuing in /usr/share/vim/vim73/syntax/syntax.vim
+Searching for "/usr/share/vim/vimfiles/after/filetype.vim"
+Searching for "/home/asido/.vim/after/filetype.vim"
+finished sourcing /usr/share/vim/vim73/syntax/syntax.vim
+continuing in /usr/share/vim/vimrc
+Searching for "filetype.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/filetype.vim"
+Searching for "/usr/share/vim/vimfiles/filetype.vim"
+Searching for "/usr/share/vim/vim73/filetype.vim"
+chdir(/usr/share/vim/vim73)
+fchdir() to previous dir
+line 63: sourcing "/usr/share/vim/vim73/filetype.vim"
+finished sourcing /usr/share/vim/vim73/filetype.vim
+continuing in /usr/share/vim/vimrc
+Searching for "/usr/share/vim/vimfiles/after/filetype.vim"
+Searching for "/home/asido/.vim/after/filetype.vim"
+Searching for "ftplugin.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/ftplugin.vim"
+Searching for "/usr/share/vim/vimfiles/ftplugin.vim"
+Searching for "/usr/share/vim/vim73/ftplugin.vim"
+chdir(/usr/share/vim/vim73)
+fchdir() to previous dir
+line 63: sourcing "/usr/share/vim/vim73/ftplugin.vim"
+finished sourcing /usr/share/vim/vim73/ftplugin.vim
+continuing in /usr/share/vim/vimrc
+Searching for "/usr/share/vim/vimfiles/after/ftplugin.vim"
+Searching for "/home/asido/.vim/after/ftplugin.vim"
+Searching for "indent.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/indent.vim"
+Searching for "/usr/share/vim/vimfiles/indent.vim"
+Searching for "/usr/share/vim/vim73/indent.vim"
+chdir(/usr/share/vim/vim73)
+fchdir() to previous dir
+line 63: sourcing "/usr/share/vim/vim73/indent.vim"
+finished sourcing /usr/share/vim/vim73/indent.vim
+continuing in /usr/share/vim/vimrc
+Searching for "/usr/share/vim/vimfiles/after/indent.vim"
+Searching for "/home/asido/.vim/after/indent.vim"
+finished sourcing $VIM/vimrc
+chdir(/home/asido)
+fchdir() to previous dir
+sourcing "$HOME/.vimrc"
+Searching for "filetype.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/filetype.vim"
+Searching for "/usr/share/vim/vimfiles/filetype.vim"
+Searching for "/usr/share/vim/vim73/filetype.vim"
+chdir(/usr/share/vim/vim73)
+fchdir() to previous dir
+line 11: sourcing "/usr/share/vim/vim73/filetype.vim"
+finished sourcing /usr/share/vim/vim73/filetype.vim
+continuing in /home/asido/.vimrc
+Searching for "/usr/share/vim/vimfiles/after/filetype.vim"
+Searching for "/home/asido/.vim/after/filetype.vim"
+Searching for "ftplugin.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/ftplugin.vim"
+Searching for "/usr/share/vim/vimfiles/ftplugin.vim"
+Searching for "/usr/share/vim/vim73/ftplugin.vim"
+chdir(/usr/share/vim/vim73)
+fchdir() to previous dir
+line 11: sourcing "/usr/share/vim/vim73/ftplugin.vim"
+finished sourcing /usr/share/vim/vim73/ftplugin.vim
+continuing in /home/asido/.vimrc
+Searching for "/usr/share/vim/vimfiles/after/ftplugin.vim"
+Searching for "/home/asido/.vim/after/ftplugin.vim"
+Searching for "syntax/syncolor.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vimfiles/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vim73/syntax/syncolor.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 17: sourcing "/usr/share/vim/vim73/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+continuing in /home/asido/.vimrc
+Searching for "/usr/share/vim/vimfiles/after/syntax/syncolor.vim"
+Searching for "/home/asido/.vim/after/syntax/syncolor.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 18: sourcing "/usr/share/vim/vim73/syntax/syntax.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 15: sourcing "/usr/share/vim/vim73/syntax/nosyntax.vim"
+finished sourcing /usr/share/vim/vim73/syntax/nosyntax.vim
+continuing in /usr/share/vim/vim73/syntax/syntax.vim
+Searching for "syntax/synload.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/syntax/synload.vim"
+Searching for "/usr/share/vim/vimfiles/syntax/synload.vim"
+Searching for "/usr/share/vim/vim73/syntax/synload.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 19: sourcing "/usr/share/vim/vim73/syntax/synload.vim"
+Searching for "syntax/syncolor.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vimfiles/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vim73/syntax/syncolor.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 21: sourcing "/usr/share/vim/vim73/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+continuing in /usr/share/vim/vim73/syntax/synload.vim
+Searching for "/usr/share/vim/vimfiles/after/syntax/syncolor.vim"
+Searching for "/home/asido/.vim/after/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/syntax/synload.vim
+continuing in /usr/share/vim/vim73/syntax/syntax.vim
+finished sourcing /usr/share/vim/vim73/syntax/syntax.vim
+continuing in /home/asido/.vimrc
+Searching for "colors/wombat256mod.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/colors/wombat256mod.vim"
+Searching for "/usr/share/vim/vimfiles/colors/wombat256mod.vim"
+Searching for "/usr/share/vim/vim73/colors/wombat256mod.vim"
+chdir(/usr/share/vim/vim73/colors)
+fchdir() to previous dir
+line 19: sourcing "/usr/share/vim/vim73/colors/wombat256mod.vim"
+Searching for "syntax/syncolor.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vimfiles/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vim73/syntax/syncolor.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 10: sourcing "/usr/share/vim/vim73/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+continuing in /usr/share/vim/vim73/colors/wombat256mod.vim
+Searching for "/usr/share/vim/vimfiles/after/syntax/syncolor.vim"
+Searching for "/home/asido/.vim/after/syntax/syncolor.vim"
+Searching for "syntax/syncolor.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vimfiles/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vim73/syntax/syncolor.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 13: sourcing "/usr/share/vim/vim73/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+continuing in /usr/share/vim/vim73/colors/wombat256mod.vim
+Searching for "/usr/share/vim/vimfiles/after/syntax/syncolor.vim"
+Searching for "/home/asido/.vim/after/syntax/syncolor.vim"
+Searching for "syntax/syncolor.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vimfiles/syntax/syncolor.vim"
+Searching for "/usr/share/vim/vim73/syntax/syncolor.vim"
+chdir(/usr/share/vim/vim73/syntax)
+fchdir() to previous dir
+line 15: sourcing "/usr/share/vim/vim73/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/syntax/syncolor.vim
+continuing in /usr/share/vim/vim73/colors/wombat256mod.vim
+Searching for "/usr/share/vim/vimfiles/after/syntax/syncolor.vim"
+Searching for "/home/asido/.vim/after/syntax/syncolor.vim"
+finished sourcing /usr/share/vim/vim73/colors/wombat256mod.vim
+continuing in /home/asido/.vimrc
+Searching for "filetype.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/filetype.vim"
+Searching for "/usr/share/vim/vimfiles/filetype.vim"
+Searching for "/usr/share/vim/vim73/filetype.vim"
+chdir(/usr/share/vim/vim73)
+fchdir() to previous dir
+line 32: sourcing "/usr/share/vim/vim73/filetype.vim"
+finished sourcing /usr/share/vim/vim73/filetype.vim
+continuing in /home/asido/.vimrc
+Searching for "/usr/share/vim/vimfiles/after/filetype.vim"
+Searching for "/home/asido/.vim/after/filetype.vim"
+Searching for "ftplugin.vim" in "/home/asido/.vim,/usr/share/vim/vimfiles,/usr/share/vim/vim73,/usr/share/vim/vimfiles/after,/home/asido/.vim/after"
+Searching for "/home/asido/.vim/ftplugin.vim"
+Searching for "/usr/share/vim/vimfiles/ftplugin.vim"
+Searching for "/usr/share/vim/vim73/ftplugin.vim"
+chdir(/usr/share/vim/vim73)
+fchdir() to previous dir
+line 32: sourcing "/usr/share/vim/vim73/ftplugin.vim"
+finished sourcing /usr/share/vim/vim73/ftplugin.vim
+continuing in /home/asido/.vimrc
+Searching for "/usr/share/vim/vimfiles/after/ftplugin.vim"
+Searching for "/home/asido/.vim/after/ftplugin.vim"
+finished sourcing $HOME/.vimrc
+Opening the X display took 1 msec
+Reading viminfo file "/home/asido/.viminfo" info oldfiles
+Opening the X display took 4 msec
+line 0: sourcing ".mkrecord"{'version': 0.3, 'files': [{'file': '/home/asido/.vim/ftplugin/perl/perlomni.vim', 'checksum': ''}, {'file': '/home/asido/.vim/plugin/perlomni-util.vim', 'checksum': ''}, {'file': '/home/asido/.vim/plugin/perlomni-data.vim', 'checksum': ''}, {'file': '/home/asido/.vim/bin/grep-hashkeys.pl', 'checksum': ''}, {'file': '/home/asido/.vim/bin/grep-pattern.pl', 'checksum': ''}, {'file': '/home/asido/.vim/bin/grep-objvar.pl', 'checksum': ''}, {'file': '/home/asido/.vim//test.vim', 'checksum': ''}], 'install_type': 'makefile', 'script_version': '2.42', 'package': 'perl-completion.vim', 'generated_by': 'Vim-Makefile'}
+Done
+    finished sourcing .mkrecord
+    continuing in command line
+    Writing viminfo file "/home/asido/.viminfo"

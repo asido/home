@@ -1,0 +1,151 @@
+<?php
+	require_once('php/auth/auth.php');
+	require_once('php/config.php');
+	require_once('php/db/dbmysql.php');
+	
+	$logged = $auth->logged_in();
+	if ($logged == false) 
+	{ 
+		if (!$auth->cookie_log_in()) { header('Location:index.php'); exit; }
+	}
+	
+	$db = SCONFIG::dbconnect();
+	
+	/* EDIT - HIGHTLIST AND DISABLE ALREADY INVITED PEOPLE */
+	
+		if ( !empty ( $_GET['pid'] ) && is_numeric( $_GET['pid'] ) )
+		{
+			$pid		= $db->format_string( $pid );
+			$invited	= $db->get('projects', 'invited', 'id=' . $pid );
+			
+			if ( ! $invited ) exit;
+			
+			$invited	= explode( ',', $invited );
+		}
+	
+	/* END EDIT */
+	
+	$r	= $db->query('SELECT u.`id`, u.`name`, u.`email`, u.`type`, u.`profile_image` AS `pic_id`, p.`filename` AS `pic_src` FROM `users` u, `users_pic` p WHERE u.`active`=1 AND (u.`profile_image`=p.`id`)');
+	
+	if (!$r) { header('Location:dashboard.php'); exit; }
+	
+	$fr= STEMPLATE::get_friends($logged['id']);
+	
+	$p = array();
+	while ($row = $db->fetch($r))
+	{
+		if ( in_array($row['id'], $fr) ) 
+		{
+			if ( $pid )
+			{
+				if ( in_array( $row['email'], $invited ) )
+				{
+					$row['invited']	= true;
+				}
+			}
+			array_push($p, $row);
+		}
+	}
+	
+	
+	
+	$people = STEMPLATE::to_facebox_list($p);	
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Invite</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script src="js/mainfunc.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/facebox.js"></script>
+<link rel="stylesheet" type="text/css" href="css/facebox.css"/>
+<script type="text/javascript" src="js/facebox_ext.js"></script>
+<script type="text/javascript">
+var fb; 
+var saved_selection = '';
+
+function loadSelection()
+{
+	fb.setSelection(saved_selection);
+}
+
+$(function(){
+	$('#show').click(function(){
+		jQuery.facebox({ div: '#invite' });
+	});
+	var fbchange = function ()
+					{
+						$('#emailtextarea').val(fb.getSelection());
+						$('#selection-length').text(fb.selectionLength());
+					}
+	
+	fb = new FaceBoxExt("invite_friendlist", fbchange);
+	
+	$('#all')
+		.click ( function ()
+		{
+			fb.selectAll();
+		});
+	
+	$('#emailtextarea')
+		.blur( function ()
+		{
+			fb.setSelection($(this).val());
+		})
+		.keypress( function (e)
+		{
+			var code = e.which ? e.which : e.keyCode;
+			if (code === 13) $(this).blur();
+		});
+		
+	$('#invite_searchbtn')
+		.click ( function ()
+		{
+			fb.filter($('#searchtext').val());
+		});
+	
+	$('#inviteb')
+		.click ( function ()
+		{
+			var selection = fb.getSelection();
+			if (selection == '') { parent.setSubcontractors(null); return; }
+			
+				saved_selection = selection;
+				selection = selection.split(", ");
+				
+				parent.setSubcontractors(selection);
+		});
+	$('#cancelb')
+		.click ( function ()
+		{
+			parent.setSubcontractors(null);
+		});
+});
+
+
+</script>
+</head>
+
+<body>
+<div id="invite">
+<div id="invite_content" >
+	<div style="padding:10px; padding-bottom:0px;">Invite to Bid</div>
+    <div id="invite_friendlist">
+		<?php echo $people; ?>
+    </div>
+    <div id="all">All</div>
+    <div id="selected1">Selected(<span id="selection-length">0</span>)</div>
+    <div id="invite_search">
+        	 <div id="invite_searchbtn"></div>
+            <input type="text" id="searchtext" />
+    </div>
+    <div style="padding:5px 10px 5px 10px; clear:both; border-top:#9fcd3a thin solid; margin-top:5px;">Invite By Email Address: <span style="font-size:11px;">Use comma to seperate emails</span></div>
+    <textarea id="emailtextarea"></textarea>
+    <div id="inviteb" class="invitebtn">Invite</div>
+    <div id="cancelb" class="invitebtn">Cancel</div>
+</div>
+</div>
+</body>
+</html>

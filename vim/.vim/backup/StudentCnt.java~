@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+
+public class StudentCnt {
+	private ArrayList<Student> students;
+
+	public StudentCnt() {
+		students = new ArrayList<Student>();
+	}
+
+	public void addStudent(Student student) {
+		students.add(student);
+	}
+
+	public void printByName(String name) {
+		for(Student student : students) {
+			if(student.getName().equals(name)) 
+				printStudent(student);
+		}	
+	}
+
+	public void printByPhone(String phone) {
+		for(Student student : students) {
+			if(student.getPhone().equals(phone))
+				printStudent(student);
+		}
+	}
+
+	private void printStudent(Student student) {
+		System.out.println("Student Info: ");
+		System.out.println("\tName: " + student.getName());
+		System.out.println("\tPhone: " + student.getPhone());	
+	}
+
+	public void printPassed() {
+
+	}
+
+	public void printFailed() {
+
+	}
+}

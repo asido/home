@@ -1,0 +1,152 @@
+{*$Revision: 400 $*}
+{* Display the breadcrumb *}
+{include file="categories/breadcrumb.tpl"}
+
+{modulehook function="tpl_viewlisting_head" options=""}
+
+{* Are you an administrator? *}
+{dynamic}
+{if $smarty.session.userlevel==1}
+{include file="viewlisting/listingadminlinks.tpl"}
+{/if}
+{/dynamic}
+{* Now show the main table *}
+<table class="tableborder">
+	<tr>
+	  <th colspan="3"><strong>{$title}</strong></th>
+	</tr>
+	<tr>
+	     <td colspan="2" valign="top" class="pformleft">
+			{* This the image display portion *}
+			{if $viewphotos=="Y" && $data <> ''}
+				{html_table_adv loop=$data cols=$cols table_attr='width="100%"'}
+					<a href="photos/[[image]]" title="[[title]]" class="thickbox" rel="gallery"><img src="thumbs/small_[[image]]" alt="[[title]]" /></a><br />
+				{/html_table_adv}
+			{else}
+				<img src="templates/{$smarty.const.MAIN_TEMPLATE}/images/nophoto.gif" width="100" hspace="5" vspace="5" border="1" />
+			{/if}
+			{* This ends the image display portion *}
+		 </td>
+     </tr>
+	<tr>
+	<td valign="top" class="pformleft">
+	
+	
+	
+		<table width="80%" border="0" cellpadding="0" cellspacing="3" class="norm">
+			<tr>
+				<td class="borderleft"><strong>{$smarty.const.LANG_DESCRIPTION}:</strong></td>
+				<td class="borderright">{$description}</td>
+			</tr>
+		     {if $viewseller=="Y"}
+			<tr> 
+				<td class="borderleft"><strong>{$smarty.const.LANG_SELLER}:</strong></td>
+				<td class="borderright">
+					{if $preview!="Y"}
+						<a href="viewmember.php?member={$owner}">{$username}</a>
+					{else}
+						{$username}
+					{/if}
+				</td>
+			</tr>
+			{/if}
+			{if $viewaddress=="Y"}
+			<tr>
+				<td class="borderleft"><strong>{$smarty.const.LANG_ADDRESS}:</strong></td>
+				<td class="borderright">{$address}</td>
+			</tr>
+			{/if}
+			{if $viewcity=="Y"}
+			<tr>
+				<td class="borderleft"><strong>{$smarty.const.LANG_CITY}:</strong></td>
+				<td class="borderright">{$city}</td>
+			</tr>
+			{/if}
+			{if $viewstate=="Y"}
+			<tr>
+				<td class="borderleft"><strong>{$smarty.const.LANG_STATE}:</strong></td>
+				<td class="borderright">{$state}</td>
+			</tr>
+			{/if}
+			{if $viewcountry=="Y"}
+			<tr> 
+				<td class="borderleft"><strong>{$smarty.const.LANG_COUNTRY}:</strong></td>
+				<td class="borderright">{$country}</td>
+			</tr>
+			{/if}
+			{if $viewphone=="Y"}
+			<tr> 
+				<td class="borderleft"><strong>{$smarty.const.LANG_PHONE}:</strong></td>
+				<td class="borderright">{$phone}</td>
+			</tr>
+			{/if}
+			{if $viewprice=="Y"}
+			<tr> 
+				<td class="borderleft"><strong>{$smarty.const.LANG_PRICE}:</strong></td>
+				<td class="borderright">{$price|format_money}</td>
+			</tr>
+			{/if}
+			{if $viewdate=="Y"}
+			<tr>
+				<td class="borderleft"><strong>{$smarty.const.LANG_DATE_ADDED}:</strong></td>
+				<td class="borderright">{$dateadded|date_format:$dateformat}</td>
+			</tr>
+			{/if}
+			{if $viewexpiration=="Y"}
+			<tr> 
+				<td class="borderleft"><strong>{$smarty.const.LANG_EXPIRATION}:</strong></td>
+				<td class="borderright">{$expirationdays} Day(s)</td>
+			</tr>
+			{/if}
+			{if $url<>""}
+			<tr> 
+				<td class="borderleft"><strong>{$smarty.const.LANG_EXT_URL}:</strong></td>
+				<td class="borderright">{$url|linkurl:45}</td>
+			</tr>
+			{/if}
+			{if $viewhits=="Y"}
+			<tr> 
+				<td class="borderleft"><strong>{$smarty.const.LANG_VIEWS}:</strong></td>
+				<td class="borderright">{$hitcount}</td>
+			</tr>
+			{/if}
+			{* Extra Fields *}
+			{foreach from=$extrafields item=extras}
+			<tr>
+				<td class="borderleft"><strong>{$extras.title}:</strong></td>
+				<td class="borderright">
+					{if isset($extras.value)}
+					  {foreach key=key item=item from=$extras.value}
+						{$item}<br />
+						{foreachelse}
+						{$extras.value}
+					  {/foreach}
+					 {/if}
+				</td>
+			</tr>
+			{/foreach}
+			{* End Extra Fields *}
+		</table>
+<br>
+      </td>
+    <td valign="top" class="pformleft">
+		{if $preview!="Y"}
+			{dynamic}
+			{include file=viewlisting/listingextras2.tpl}
+			{/dynamic}
+		{/if}
+	</td>
+	</tr>
+  <tr>
+     <td colspan="2"><strong>{$smarty.const.LANG_DESCRIPTION}: </strong><br />{$description|nl2br}</td>
+  </tr>
+</table>
+{if $pmon=="Y" && $smarty.session.uid > 0}
+	
+{elseif $allowcontact=="Y" && $display=="Y"}
+	{dynamic}
+	{include file=contact/contactowner.tpl}
+	{/dynamic}
+{/if}
+
+{modulehook function="tpl_viewlisting_footer" options=""}

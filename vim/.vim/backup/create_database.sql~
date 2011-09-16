@@ -1,0 +1,22 @@
+-- CREATE DATABASE likemelikeu;
+
+-- Create a new user
+-- GRANT select, insert, update, delete
+-- ON likemelikeu.*
+-- TO likemelikeu@'%'	-- use specific domain instead of '%' to restrict the user to login only from it ('%' allows all domains including localhost)
+-- IDENTIFIED BY 'likemelikeu';
+
+-- USE likemelikeu;
+
+-- Table which is going to store all the users
+CREATE TABLE users
+(
+	username	varchar(50)	not null,
+	password	char(40)	not null,
+	zip			varchar(20),
+	PRIMARY KEY (username)
+);
+
+-- Create a default user
+INSERT INTO users VALUES
+('likemelikeu', SHA1('likemelikeu'), NULL);

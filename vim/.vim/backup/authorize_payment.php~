@@ -1,0 +1,281 @@
+<?php
+foreach($_GET as $key => $value)
+	$_GET[$key] = mysql_real_escape_string($value);
+foreach($_POST as $key => $value)
+	$_POST[$key] = mysql_real_escape_string($value);
+
+//include controller
+include(CONDIR.DS."paypal.php");
+include(INCDIR.DS."class.php");
+include(VIEWDIR.DS."simlib.php");
+$class = new sax;
+?>
+<script type="text/javascript">
+function order()
+{
+	document.paypal.submit();
+}
+</script>
+<?php
+$inv_no=0;
+$itemname='';
+$item=@$class->Q($class->where(TB_CART,"reference",$_SESSION['CartReference']));
+while($cart=$class->E($item))
+{
+	$conddetails=@$class->F($class->where(TB_CONFIRM,"reference",$cart['reference']));
+	$product=$class->F($class->where(TB_PRODUCT,"reference",$cart['productid']));
+	
+	//$itemname.='Product Name : '.$product['productname']."<br>".$product['title1']."<br />".$product['title2']."<br />";
+	$itemname.='Product Name : '.$product['productname'].",".$product['title1'].",".$product['title2'].",";
+	//$itemname.="Price : ".$cart['price']."<br>Qty : ".$cart['quantity']."<br>Shipping Type : ".$cart['international_tax']."<br>";
+	$itemname.="Price : ".$cart['price'].",Qty : ".$cart['quantity'].",Shipping Type : ".$cart['international_tax'].",";
+	
+	if($cart['discount_tax']!="%" && $cart['discount_tax']!="$")
+	$itemname.='Discount Amount : '.$cart['discount_tax'].",";
+	
+	if($conddetails['cus_state']=="California"){$itemname.="CA Sales Tax : ".$cart['state_tax'];}
+	$inv_no=$conddetails['id'];
+}
+
+$version="3.1";
+$loginid = 'e9w22bn5m';
+$x_tran_key = '2n3WqMbq7F4VX47W';
+$sequence = rand(1, 10000);
+?>
+<div class="content_areaInRight">
+          
+          <!-- Begin contentBoxArea -->
+          <div class="contentBoxArea">
+            <!-- Begin contentBoxAreaLeft -->
+            <div class="contentBoxAreaLeft">
+              <div style="width:655px;"><span class="title">Payment Transaction</span>
+                <table width="100%" border="0" align="center">
+                  <tr>
+                    <td width="6" align="left" valign="middle">&nbsp;
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:1px solid #F7D1B1;">
+                      <tr>
+                        <td height="35" align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td width="50%" height="30" align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;
+                        
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <?php
+                      //$cr_card_no=$details['cardnumber'];
+					  //$cr_card_expdate=$details['expiredate'];
+					  //$x_Description=$itemname;
+					  //$first_name=$details['cus_fullname'];
+					  //$address=$details['cus_address'];
+					 // $city=$details['cus_city'];
+					  //$state=$details['cus_state'];
+					  //$zip=$details['cus_zip'];
+					  //$country=$details['cus_country'];
+					  //$phone=$details['cus_phone'];
+					  //$email=$details['cus_email'];
+					  //$currencycode='USD';
+					  
+					   ?>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">
+                      <!--<FORM action="https://secure.authorize.net/gateway/transact.dll" method="POST" name='paypal'>
+                      <?php //$ret = InsertFP ('e9w22bn5m', '2n3WqMbq7F4VX47W', $_SESSION['SaxMaxGrandTotal'], $sequence);?>
+		              <input type="hidden" name="x_Version" value='<?php //echo $version;?>'>
+		              <input type="hidden" name="x_delim_data" value="True">
+                      <input type="hidden" name="x_login" value='e9w22bn5m'>
+                      <input type="hidden" name="x_tran_key" value='2n3WqMbq7F4VX47W'>
+                      <input type="hidden" name="x_amount" value='<?php //echo $_SESSION['SaxMaxGrandTotal'];?>'>
+                      <input type="hidden" name="x_card_num" value='<?php //echo $cr_card_no;?>'>
+                      <input type="hidden" name="x_exp_date" value='<?php //echo $cr_card_expdate;?>'>
+                      <input type="hidden" name="x_description" value='<?php //echo $x_Description;?>'>
+                      <input type="hidden" name="x_cust_id" value=''>
+                      <input type="hidden" name="x_first_name" value='<?php //echo $first_name;?>'>
+                      <input type="hidden" name="x_address" value='<?php //echo $address;?>'>
+                      <input type="hidden" name="x_city" value='<?php //echo $city;?>'>
+                      <input type="hidden" name="x_state" value='<?php //echo $state;?>'>
+                      <input type="hidden" name="x_zip" value='<?php //echo $zip;?>'>
+                      <input type="hidden" name="x_country" value='<?php //echo $country;?>'>
+                      <input type="hidden" name="x_phone" value='<?php //echo $phone;?>'>
+                      <input type="hidden" name="x_email" value='<?php //echo $email;?>'>
+                      <INPUT TYPE="hidden" name="x_relay_response" VALUE="True">
+                      <INPUT type="hidden" name="x_relay_url" VALUE="http://www.sax-ccessories.com/payment/<?php //echo $reference;?>/Payment_Details">
+                      <INPUT TYPE="hidden" name="x_test_request" VALUE="False">
+                      <INPUT type="hidden" name="x_currency_code" value='<?php //echo $currencycode;?>'>
+                      <INPUT type="hidden" name="x_show_form" value="PAYMENT_FORM">
+                      </form>-->
+		            <script>
+                    //order();
+                    </script>
+		            
+<?PHP
+$settings=@$class->F($class->query("sax_settings"));
+
+$detailsautho=@$class->F($class->where(TB_CONFIRM,"reference",$_SESSION['CartReference']));
+$stsdfsdfates=($detailsautho['cus_state']!="")? $detailsautho['cus_state'] : $detailsautho['cus_non_us'];
+//echo 'test'.$detailsautho['cus_state'];
+$reference=@$_SESSION['CartReference'];
+// By default, this sample code is designed to post to our test server for
+// developer accounts: https://test.authorize.net/gateway/transact.dll
+// for real accounts (even in test mode), please make sure that you are
+// posting to: https://secure.authorize.net/gateway/transact.dll
+// $post_url = "https://test.authorize.net/gateway/transact.dll";
+$post_url = "https://secure.authorize.net/gateway/transact.dll";
+$post_values = array(
+	
+	// the API Login ID and Transaction Key must be replaced with valid values
+	//"x_login"			=> 'e9w22bn5m',
+	//"x_tran_key"		=> '2m92SS6Pzpq79kUx',
+	
+	"x_login"			=> $settings['db_username'],
+	"x_tran_key"		=> $settings['db_password'],
+
+	"x_version"			=> "3.1",
+	"x_delim_data"		=> "TRUE",
+	"x_delim_char"		=> "|",
+	"x_relay_response"	=> "FALSE",
+
+	"x_type"			=> "AUTH_CAPTURE",
+	"x_method"			=> "CC",
+	"x_card_num"		=> strrev($detailsautho['cardnumber']),// "4111111111111111",
+	"x_card_code"		=> $detailsautho['security_code'],
+	"x_exp_date"		=> $detailsautho['expiredate'], //"0115",
+	//"x_invoice_num"		=> ($item['id']+500),
+	"x_invoice_num"		=> $inv_no,
+	
+
+	"x_amount"			=> $_SESSION['SaxMaxGrandTotal'], //"19.99",
+	"x_description"		=> $itemname,
+
+	"x_email_customer"  => "TRUE",
+	"x_first_name"		=> $detailsautho['cus_fullname'], //"John",
+	"x_last_name"		=> $detailsautho['cus_lastname'],
+	"x_address"			=> $detailsautho['cus_address'], //"1234 Street",
+	"x_state"			=> $stsdfsdfates, //"WA",
+	"x_city"			=> $detailsautho['cus_city'], //"California",
+	"x_country"			=> $detailsautho['cus_country'], //"USA",
+	"x_relay_url"		=> 'http://www.sax-ccessories.com/payment/'.$reference.'/Payment_Details', //"USA",
+	
+	"x_email"			=> $detailsautho['cus_email'],
+	"x_zip"				=> $detailsautho['cus_zip'], //"98004"
+	// Additional fields can be added here as outlined in the AIM integration
+	// guide at: http://developer.authorize.net
+);
+//background-color: rgb(255, 255, 255);
+// This section takes the input fields and converts them to the proper format
+// for an http post.  For example: "x_login=username&x_tran_key=a1B2c3D4"
+$post_string = "";
+foreach( $post_values as $key => $value )
+	{ $post_string .= "$key=" . urlencode( $value ) . "&"; }
+$post_string = rtrim( $post_string, "& " );
+
+// This sample code uses the CURL library for php to establish a connection,
+// submit the post, and record the response.
+// If you receive an error, you may want to ensure that you have the curl
+// library enabled in your php configuration
+$request = curl_init($post_url); // initiate curl object
+	curl_setopt($request, CURLOPT_HEADER, 0); // set to 0 to eliminate header info from response
+	curl_setopt($request, CURLOPT_RETURNTRANSFER, 1); // Returns response data instead of TRUE(1)
+	curl_setopt($request, CURLOPT_POSTFIELDS, $post_string); // use HTTP POST to send form data
+	curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE); // uncomment this line if you get no gateway response.
+	$post_response = curl_exec($request); // execute curl post and store results in $post_response
+	// additional options may be required depending upon your server configuration
+	// you can find documentation on curl options at http://www.php.net/curl_setopt
+curl_close ($request); // close curl object
+
+// This line takes the response and breaks it into an array using the specified delimiting character
+$response_array = explode($post_values["x_delim_char"],$post_response);
+
+// The results are output to the screen in the form of an html numbered list.
+echo "<OL>\n";
+$k=1;
+foreach ($response_array as $value)
+{
+	if($k=="4")
+	{
+		if($value == "This transaction has been approved.")
+		{
+			if (isset($_SESSION['custom_offer_key']))
+				$class->Q("UPDATE `sax_custom_offers` SET `paid`=1 WHERE `unique_key`='".$_SESSION['custom_offer_key']."'");
+
+			echo "<LI>" . $value . "&nbsp;</LI>\n";
+			$item=@$class->Q($class->where(TB_CART,"reference",$_SESSION['CartReference']));
+			while($cart=$class->E($item))
+			{
+				$product=$class->F($class->where(TB_PRODUCT,"reference",$cart['productid']));
+				$class->Q("update ".TB_PRODUCT." set quantity=quantity-".$cart['quantity']." where reference='".$cart['productid']."'");
+			}
+			echo $class->R("http://www.sax-ccessories.com/payment/".$reference."/Payment_Details");
+		}
+		else
+			echo "<LI>" . $value . "&nbsp;</LI>\n";
+	}
+	$k++;
+}
+echo "</OL>\n";
+// individual elements of the array could be accessed to read certain response
+// fields.  For example, response_array[0] would return the Response Code,
+// response_array[2] would return the Response Reason Code.
+// for a list of response fields, please review the AIM Implementation Guide
+?>
+<?php 
+unset($_SESSION['CartReference']);
+unset($_SESSION['CouponAmount']);
+unset($_SESSION['CouponType']);
+unset($_SESSION['SaxGrandTotal']);
+?>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                    </table></td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <!-- End contentBoxAreaLeft -->
+          </div>
+          <!-- End contentBoxArea -->
+        </div>    

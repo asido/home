@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void getHex(char hex[]);
+int strLength(char str[]);
+int hex2dec(char hex[], int length);
+
+int main() {
+	char hex[1000];
+	int dec;
+	int length;
+
+	getHex(hex);
+	length = strLength(hex);
+	dec = hex2dec(hex, length);
+	printf("%d\n", dec);
+
+	return 0;
+}
+
+void getHex(char hex[]) {
+	char ch;
+	int i;
+
+	for(i = 0; (ch = getchar()) != EOF && ch != '\n'; i++)
+		hex[i] = ch;
+	hex[i] = '\0';
+}
+
+int strLength(char str[]) {
+	 int i;
+	 for(i = 0; str[i] != '\0'; i++)
+		 ;
+	 return i;
+}
+
+int hex2dec(char hex[], int length) {
+	int digit = 1;
+	int i;
+
+	for(i = length; i >= 0; i--) {
+		printf("%d\n", atoi(hex));
+	}
+	return 0;
+}

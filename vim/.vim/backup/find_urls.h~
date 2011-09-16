@@ -1,0 +1,7 @@
+#ifndef GUARD_find_urls_h
+#define GUARD_find_urls_h
+
+std::vector<std::string> find_urls(const std::string&);
+void print_urls(std::ostream&, const std::vector<std::string>&);
+
+#endif

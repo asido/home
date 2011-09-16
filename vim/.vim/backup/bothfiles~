@@ -1,0 +1,14 @@
+# To unbundle, bash this file
+if [[ $# = 0 || "$@" = file1 ]]; then
+echo file1 1>&2
+cat >file1 <<'End of file1'
+This is a file.
+It contains 2 lines.
+End of file1
+fi
+echo file2 1>&2
+cat >file2 <<'End of file2'
+This is another file.
+It contains
+3 lines.
+End of file2

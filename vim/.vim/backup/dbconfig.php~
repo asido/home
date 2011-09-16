@@ -1,0 +1,18 @@
+<?php
+
+$dbuser = 'admin';
+$dbpass = 'admin';
+$dbhost = 'localhost';
+$dbname = 'webeteer_contractorbridge';
+
+/*DBG*/
+
+// if ($_SERVER['HTTP_HOST'] == 'localhost')
+// {
+// 	$dbuser = 'root';
+// 	$dbpass = 'ontiu17910300';
+// 	$dbhost = 'localhost';
+// 	$dbname = 'cb';
+// }
+
+?>

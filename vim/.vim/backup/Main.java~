@@ -1,0 +1,31 @@
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Main
+{
+	public static final ReentrantLock LOCK = new ReentrantLock(true);
+
+	public static void main(String[] args)
+	{
+		// create a barber shop and pass the amount of seats in waiting room as a parameter
+		WaitList wait_list = new BarberWaitList(5);
+		// pass the wait list to the barber
+		Barber barber = new Barber(wait_list);
+
+		// put the barber to work
+		barber.start();
+
+		// infinite loop to fetch the customers in to shop
+		while (true) {
+			// put the thread to sleep for 0-5s
+			try {
+				/* Thread.sleep((int)(Math.random() * 5000)); */
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			// create a new customer and pass him an entrance to the shop
+			LOCK.lock();
+			new Customer(wait_list).start();
+			LOCK.unlock();
+		}
+	}
+}

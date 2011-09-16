@@ -1,0 +1,22 @@
+$(document).ready(function() {
+	$("#button-all").click(function() {
+		if (!$("#all-table").hasClass("table-selected")) {
+			$(".results-table").removeClass("table-selected");
+			$("#all-table").addClass("table-selected");
+		}
+	});
+	
+	$("#button-artists").click(function() {
+		if (!$("#artist-table").hasClass("table-selected")) {
+			$(".results-table").removeClass("table-selected");
+			$("#artist-table").addClass("table-selected");
+		}
+	});
+	
+	$("#button-users").click(function() {
+		if (!$("#user-table").hasClass("table-selected")) {
+			$(".results-table").removeClass("table-selected");
+			$("#user-table").addClass("table-selected");
+		}
+	});
+});

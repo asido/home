@@ -1,0 +1,8 @@
+
+--This line, and those below, will be ignored--
+
+M    src/rhinestone/Control/CRUDProductController.java
+M    src/rhinestone/Control/LeasingController.java
+M    src/rhinestone/Control/CheckoutController.java
+M    src/rhinestone/Control/MainMenuController.java
+M    src/rhinestone/Main.java

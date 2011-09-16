@@ -1,0 +1,58 @@
+package Model;
+
+
+/**
+ * Abstract class Person - write a description of the class here
+ * 
+ * @author (your name here)
+ * @version (version number or date here)
+ */
+public abstract class Person
+{
+    // instance variables - replace the example below with your own
+    private String name;
+    private String address;
+    private String cpr_nr;
+    private String phoneNr;
+    
+    public Person(String name, String address, String cpr_nr, String phoneNr)
+    {
+        this.name = name;
+        this.address = address;
+        this.cpr_nr = cpr_nr;
+        this.phoneNr = phoneNr;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    public void setAddress(String address)
+    {
+        this.address = address;
+    }
+    public void setCpr_nr(String Cpr_nr)
+    {
+        cpr_nr = Cpr_nr;
+    }
+    public void setPhoneNr(String PhoneNr)
+    {
+        phoneNr = PhoneNr;
+    }
+    public String getName()
+    {
+        return name;
+    }
+    public String getAddress()
+    {
+        return address;
+    }
+    public String getCpr_nr()
+    {
+        return cpr_nr;
+    }
+    public String getPhoneNr()
+    {
+        return phoneNr;
+    }
+}

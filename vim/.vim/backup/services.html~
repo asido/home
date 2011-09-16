@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Wellington</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.4.2.js" type="text/javascript"></script>
+<script src="js/slider.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var slider = new Slider();
+</script>
+<script src="js/service.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var service = new Service();
+</script>
+</head>
+<body>
+
+<div id="header">
+
+	<div id="stripe-up"></div>
+    <div id="header-background">
+    	<div id="header-wraper">
+        	<div id="logo"><a id="logo-top" href="home.html"></a></div>
+            <div id="navigation">
+            	<table id="navigation-menu">
+                   <tr>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                	<td><div class="nav-mid"><a href="home.html">Home&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="about.html">About Us&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid nav-selected"><a href="services.html">Services&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="faq.html">FAQ&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="contact.html">Contact&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>                   
+               	   </tr>
+            	</table>
+            </div><!--navigation-->
+            <div id="navigation-shadow"></div>
+        </div><!--header-wraper-->
+    </div><!--header-background-->
+    
+    <div id="slider-container">	
+        <div id="slider">
+            <div id="slider-main">
+				<div id="slide-0">
+					<div class="slider-top">0. Lorem Ipsum Dolor Sit Amet</div>
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div>
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div>
+				</div><!--slide-0-->
+				<div id="slide-1">
+					<div class="slider-top">1. Lorem Ipsum Dolor Sit Amet</div>
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div>
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div>
+				</div><!--slide-1-->
+				<div id="slide-2">
+					<div class="slider-top">2. Lorem Ipsum Dolor Sit Amet</div>
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div>
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div>
+				</div><!--slide-2-->
+				<div id="slide-3">
+					<div class="slider-top">3. Lorem Ipsum Dolor Sit Amet</div>
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div>
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div>
+				</div><!--slide-3-->
+            </div><!--slider-main-->
+        </div><!--slider-->
+		<div class="arrows" id="arrow-left"></div>
+		<div class="arrows" id="arrow-right"></div>
+    	<div id="slider-shadow"></div>
+    </div><!--slider-container-->
+    
+</div><!--header-->
+
+
+<div id="container">
+	<div id="services-wrap">
+    
+    	<div class="sidebar sidebar-service">
+        	<div class="service-content">
+				<div class="service-content-wrap">
+					<span class="sidebar-head">Consectutor adiscipit</span><br />
+					<span class="sidebar-text">
+						Porttitor dis adipiscing mus dolor habitasse mattis rhoncus eu cras!
+					</span>
+					<div class="sidebar-links service-links"><a href="#" id="service-1-link">Read All</a></div>
+				</div><!--service-content-wrap-->
+            </div><!--service-content-->
+
+        	<div class="service-content">
+				<div class="service-content-wrap">
+					<span class="sidebar-head">Volputatem seritlis</span><br />
+					<span class="sidebar-text">
+						Dis adipiscing mus dolor habitasse mattis rho ncus eu cras!
+					</span>
+					<div class="sidebar-links service-links"><a href="#" id="service-1-link">Read All</a></div>
+				</div><!--service-content-wrap-->
+            </div><!--service-content-->
+
+        	<div class="service-content">
+				<div class="service-content-wrap">
+					<span class="sidebar-head">Consectutor adiscipit</span><br />
+					<span class="sidebar-text">
+						Porttitor dis adipiscing mus dolor habitasse mattis rhoncus eu cras!
+					</span>
+					<div class="sidebar-links service-links"><a href="#" id="service-1-link">Read All</a></div>
+				</div><!--service-content-wrap-->
+            </div><!--service-content-->
+
+        	<div class="service-content">
+				<div class="service-content-wrap">
+					<span class="sidebar-head">Consectutor adiscipit</span><br />
+					<span class="sidebar-text">
+						Porta nunc pulvinar magnis auctor sociis elementum purus et.
+					</span>
+					<div class="sidebar-links service-links"><a href="#" id="service-1-link">Read All</a></div>
+				</div><!--service-content-wrap-->
+            </div><!--service-content-->
+
+        	<div class="service-content">
+				<div class="service-content-wrap">
+					<span class="sidebar-head">Consectutor adiscipit</span><br />
+					<span class="sidebar-text">
+						Parturient tempor parturient duis, vut arcu, mid!
+					</span>
+					<div class="sidebar-links service-links"><a href="#" id="service-1-link">Read All</a></div>
+				</div><!--service-content-wrap-->
+            </div><!--service-content-->
+        </div><!--sidebar-->
+        
+        <div class="content-right content-visible" id="service-1">
+        	<span class="content-title">Default Service 1</span>
+            <br /><hr />
+            <p><span class="content-head">Adiscipit Consectutor</span></p>
+            <p><span class="content-text"> Lorem dolor ipsum sit amet, adipiscing consectetur elit. 
+            		Integer at nibh sit amet ligula lacinia et condimentum sit amet orci. 
+                	Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non nisl porta.
+            	</span>    
+            </p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+					Morbi ultricies facilisis nunc, vel luctus lacus lacinia id.
+            	</span>    
+            </p>
+            <p><span class="content-text"> Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, 
+            		id consectetur risus risus ac nisl. Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                </span>
+            </p>
+            <div id="services-img"></div>
+            <br />
+            <span class="content-title">How Will Our Service Help Your Business?</span>
+            <br /><hr />
+            <p><span class="content-head">Simple and Easy</span></p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+                </span>
+            </p>
+            <p><span class="content-text"> Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, 
+            		id consectetur risus risus ac nisl. Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna. 
+            	</span>
+            </p>
+		</div><!--content-right--><!--service-1-->
+
+        <div class="content-right" id="service-2">
+        	<span class="content-title">Default Service 2</span>
+            <br /><hr />
+            <p><span class="content-head">Consectutor Adiscipit</span></p>
+            <p><span class="content-text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            		Integer at nibh sit amet ligula lacinia condimentum et sit amet orci. 
+                	Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+                </span>
+            </p>
+            <p><span class="content-text"> Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, 
+            		id consectetur risus risus ac nisl. Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna. 
+            	</span>
+            </p>
+            <div id="services-img"></div>
+            <br />
+            <span class="content-title">How Will Our Service Help Your Business?</span>
+            <br /><hr />
+            <p><span class="content-head">Simple and Easy</span></p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+                </span>
+            </p>
+            <p><span class="content-head">Consectutor Adiscipit</span></p>
+            <p><span class="content-text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            		Integer at nibh sit amet ligula lacinia condimentum et sit amet orci. 
+                	Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+            	</span>    
+            </p>
+            <div id="services-img"></div>
+            <br />
+            <span class="content-title">How Will Our Service Help Your Business?</span>
+            <br /><hr />
+            <p><span class="content-head">Simple and Easy</span></p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+                </span>
+            </p>
+            <p><span class="content-text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            		Integer at nibh sit amet ligula lacinia condimentum et sit amet orci. 
+                	Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+            	</span>    
+            </p>
+		</div><!--content-right--><!--service-2-->
+
+        <div class="content-right" id="service-3">
+        	<span class="content-title">Default Service 3</span>
+            <br /><hr />
+            <p><span class="content-head">Consectutor Adiscipit</span></p>
+            <div id="services-img"></div>
+            <br />
+            <span class="content-title">How Will Our Service Help Your Business?</span>
+            <br /><hr />
+            <p><span class="content-head">Simple and Easy</span></p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+                </span>
+            </p>
+            <p><span class="content-text"> Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, 
+            		id consectetur risus risus ac nisl. Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna. 
+            	</span>
+            </p>
+		</div><!--content-right--><!--service-3-->
+
+        <div class="content-right" id="service-4">
+        	<span class="content-title">Default Service 4</span>
+            <br /><hr />
+            <p><span class="content-head">Consectutor Adiscipit</span></p>
+            <p><span class="content-text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            		Integer at nibh sit amet ligula lacinia condimentum et sit amet orci. 
+                	Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, 
+            		id consectetur risus risus ac nisl. Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                </span>
+            </p>
+            <div id="services-img"></div>
+            <br />
+            <span class="content-title">How Will Our Service Help Your Business?</span>
+            <br /><hr />
+            <p><span class="content-head">Simple and Easy</span></p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+                </span>
+            </p>
+            <p><span class="content-text"> Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, 
+            		id consectetur risus risus ac nisl. Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna. 
+            	</span>
+            </p>
+            <p><span class="content-head">Consectutor Adiscipit</span></p>
+            <p><span class="content-text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            		Integer at nibh sit amet ligula lacinia condimentum et sit amet orci. 
+                	Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, 
+            		id consectetur risus risus ac nisl. Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                </span>
+            </p>
+		</div><!--content-right--><!--service-4-->
+
+        <div class="content-right" id="service-5">
+        	<span class="content-title">Default Service 5</span>
+            <br /><hr />
+            <p><span class="content-head">Consectutor Adiscipit</span></p>
+            <p><span class="content-text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            		Integer at nibh sit amet ligula lacinia condimentum et sit amet orci. 
+                	Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+            	</span>    
+            </p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+            	</span>    
+            </p>
+            <br />
+            <span class="content-title">How Will Our Service Help Your Business?</span>
+            <br /><hr />
+            <p><span class="content-head">Simple and Easy</span></p>
+            <p><span class="content-text"> Sed nunc magna, congue in molestie vel, varius a nulla. Proin eleifend, sem at tempor iaculis, 
+                	erat diam aliquam metus, pharetra suscipit diam risus at neque. Phasellus in tortor velit. 
+                </span>
+            </p>
+            <p><span class="content-text"> Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, 
+            		id consectetur risus risus ac nisl. Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna. 
+            	</span>
+            </p>
+		</div><!--content-right--><!--service-5-->
+    </div><!--services-wrap-->
+</div><!--container-->
+
+
+
+<div id="footer">
+	<div id="footer-background">
+    	<div id="footer-wrap">
+        	<div id="footer-left">
+            	<div id="footer-up">
+                	<span><a id="f-home" href="home.html"> Home  </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-about" href="about.html"> About Us </a></span> &nbsp; &frasl; &nbsp;
+                    <span><a id="f-serv" class="link-selected" href="services.html"> Services </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-faq" href="faq.html"> FAQ </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-contact" href="contact.html"> Contact </a></span>
+                </div>
+                <div id="footer-down"> &copy; Copyrights 2011 - www.wllingtonconsulting.com - All rights reserved. </div>
+            </div>
+        	<div id="footer-logo"><a id="logo-down" href="home.html"></a></div>
+        </div><!--footer-wrap-->
+    </div><!--footer-background-->
+    <div id="stripe-down"></div>
+</div><!--footer-->
+
+</body>
+</html>

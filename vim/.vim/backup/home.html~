@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Wellington</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.4.2.js" type="text/javascript"></script>
+<script src="js/slider.js" type="text/javascript"></script>
+<script src="js/popup.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var slider = new Slider();
+</script>
+</head>
+<body>
+
+<div id="subscribe-popup">
+	<iframe id="subscribe-popup-frame" name="subscribe" width="395" height="196" src="popup/subscribe/subscribe.html"></iframe>
+</div>
+
+<div id="header">
+
+	<div id="stripe-up"></div>
+    <div id="header-background">
+    	<div id="header-wraper">
+        	<div id="logo"><a id="logo-top" href="home.html"></a></div>
+            <div id="navigation">
+            	<table id="navigation-menu">
+                   <tr>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                	<td><div class="nav-mid nav-selected"><a href="home.html">Home&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="about.html">Strategies&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="services.html">Services&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="faq.html">FAQ&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="contact.html">Contact&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>                   
+               	   </tr>
+            	</table>
+            </div><!--navigation-->
+            <div id="navigation-shadow"></div>
+        </div><!--header-wraper-->
+    </div><!--header-background-->
+    
+    <div id="slider-container">	
+        <div id="slider">
+            <div id="slider-main">
+				<div id="slide-0">
+					<div class="slider-top">0. Lorem Ipsum Dolor Sit Amet</div>
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div>
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div>
+				</div><!--slide-0-->
+				<div id="slide-1">
+					<div class="slider-top">1. Lorem Ipsum Dolor Sit Amet</div>
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div>
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div>
+				</div><!--slide-1-->
+				<div id="slide-2">
+					<div class="slider-top">2. Lorem Ipsum Dolor Sit Amet</div>
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div>
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div>
+				</div><!--slide-2-->
+				<div id="slide-3">
+					<div class="slider-top">3. Lorem Ipsum Dolor Sit Amet</div>
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div>
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div>
+				</div><!--slide-3-->
+            </div><!--slider-main-->
+        </div><!--slider-->
+		<div class="arrows" id="arrow-left"></div>
+		<div class="arrows" id="arrow-right"></div>
+    	<div id="slider-shadow"></div>
+    </div><!--slider-container-->
+    
+</div><!--header-->
+
+<div id="container">
+	<div id="news-slide">
+        
+        <div id="news-main">
+        	<div class="article" id="art-1">
+            	<span class="art-title">Customer Retention <br/>Strategies that Work</span><br /><br />
+                <span class="art-text">Drive higher profits with Wellington's CRM solutions.<br /><br />			
+				<a href="#">Learn More &gt; </a>
+            	</span>
+            </div><!--art-1-->
+        	<div class="art-spacer" id="art-s1"></div>
+
+        	<div class="article" id="art-2">
+            	<span class="art-title">Professional Marketing Services</span><br /><br />
+                <div class="art-img"></div> <br />
+                <span class="art-text"> Our 100% customizable marketing services will allow you to contact your customers 
+                						<span class="verdana-bold">exactly</span> the way you'd like to. <br /><br />			
+				<a href="#">Learn More &gt; </a>
+            	</span>
+            </div><!--art-2-->
+        	<div class="art-spacer" id="art-s2"></div>
+            
+        	<div class="article" id="art-3">
+            	<span class="art-title">Newsletter Sign-up</span><br /><br />
+                <span class="art-text">	Learn about new solutions, product feature highlights and more! <br /><br /></span>
+                <div id="newsletter-img">Newsletter sign-up here!</div>
+            </div><!--art-3-->
+        	<div class="art-spacer" id="art-s3"></div>
+            
+        	<div class="article" id="art-4">
+            	<span class="art-title">Testimonial</span><br /><br />
+                <span class="art-text">"Wellington are really nice and are very handsome people" <br/>
+                	<span class="verdana-bold">-Billy Joe</span><br /><br />			
+				<a href="#">Read All &gt; </a>
+            	</span>
+            </div><!--art-4-->                       
+        
+        </div><!--news-main-->
+        
+    </div><!--news-slide-->
+</div><!--container-->
+
+<div id="footer">
+	<div id="footer-background">
+    	<div id="footer-wrap">
+        	<div id="footer-left">
+            	<div id="footer-up">
+                	<span><a id="f-home" class="link-selected" href="home.html"> Home  </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-about" href="about.html"> Strategies </a></span> &nbsp; &frasl; &nbsp;
+                    <span><a id="f-serv" href="services.html"> Services </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-faq" href="faq.html"> FAQ </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-contact" href="contact.html"> Contact </a></span>
+                </div>
+                <div id="footer-down"> &copy; Copyrights 2011 - www.wellingtonconsulting.com - All rights reserved. </div>
+            </div>
+        	<div id="footer-logo"><a id="logo-down" href="home.html"></a></div>
+        </div><!--footer-wrap-->
+    </div><!--footer-background-->
+    <div id="stripe-down"></div>
+</div><!--footer-->
+
+</body>
+</html>

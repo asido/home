@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+
+$ans = max(45, 64, 8, 12, 54);
+print "Maximum value is $ans.\n";
+
+sub max() {
+	my $biggest = shift;	# Assign first and shift the rest of the arguments to max()
+	for(@_) {
+		$biggest = $_ if $_ > $biggest;
+#		if($_ > $biggest) {
+#			$biggest = $_;
+#		}
+	}
+	return $biggest;
+}

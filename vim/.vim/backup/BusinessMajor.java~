@@ -1,0 +1,32 @@
+public class BusinessMajor implements Student {
+	private String name;
+	private String phone;
+	private int germanGrade;
+
+	public BusinessMajor(String name, String phone) {
+		this.name = name;
+		this.phone = phone;
+	}
+	
+	public boolean passed() {
+		if(germanGrade >= 4)
+			return true;
+		return false;
+	}	
+
+	public int getGermanGrade() {
+		return germanGrade;
+	}
+
+	public void setGermanGrade(int germanGrade) {
+		this.germanGrade = germanGrade;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public String getName() {
+		return name;
+	}
+}

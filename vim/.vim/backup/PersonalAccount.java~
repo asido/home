@@ -1,0 +1,9 @@
+public class PersonalAccount extends BankAccount {
+	public PersonalAccount(int balance) {
+		super(balance, 0);
+	}
+
+	public int getAvailableBalance() {
+		return getBalance();
+	}
+}

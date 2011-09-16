@@ -1,0 +1,44 @@
+<?php
+require_once 'man_functions.php';
+
+	$id=8;
+
+$page=loadpage($id);
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo $page['title']; ?> | EURO</title>
+<meta name="description" content="<?php echo $page['meta_description']; ?>" />
+<meta name="keywords" content="<?php echo $page['meta_keyword']; ?>" />
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/video-js.css" type="text/css" media="screen" title="Video JS" />
+
+  <script src="js/video.js" type="text/javascript" charset="utf-8"></script>
+
+  <script type="text/javascript">
+    VideoJS.setupAllWhenReady();
+  </script>
+</head>
+<body>
+<?php
+include("header.php");
+?>
+<div class="eurocontent">
+<div id="eurocontentinner">
+<h1><?php echo $page['title']; ?></h1>
+<div class="euroline"></div>
+<div style="text-align:justify">
+<?php echo $page['content']; ?>
+</div>
+
+
+</div>
+<div id="euroshade"></div>
+</div>
+<?php
+include("footer.php");
+?>
+</body>
+</html>

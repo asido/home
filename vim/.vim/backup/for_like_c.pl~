@@ -1,0 +1,5 @@
+#!/usr/bin/perl -w
+
+for($var = 0; $var < 10; $var++) {
+	print "$var\n";
+}

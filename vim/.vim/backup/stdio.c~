@@ -1,0 +1,414 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <stdint.h>
+#include <ctype.h>
+
+// video memory
+static uint16_t *video_memory = (uint16_t *) 0xB8000;
+
+// current position
+static uint8_t cursor_x = 0;
+static uint8_t cursor_y = 0;
+
+// current color
+static uint8_t	_color = 0;
+// saved color
+static uint8_t saved_color = 0;
+
+static void move_csr(void);
+
+/*************************************************************
+ * 					STD LIBC ROUTINES
+*************************************************************/
+
+/* Puts a single character on the screen */
+int putchar(int c)
+{
+    uint16_t attribute = _color << 8;
+
+    //! backspace character
+    if (c == 0x08 && cursor_x)
+        cursor_x--;
+
+    //! tab character
+    else if (c == 0x09)
+        cursor_x = (cursor_x+8) & ~(8-1);
+
+    //! carriage return
+    else if (c == '\r')
+        cursor_x = 0;
+
+    //! new line
+	else if (c == '\n') {
+        cursor_x = 0;
+        cursor_y++;
+	}
+
+    //! printable characters
+    else if(c >= ' ') {
+
+		//! display character on screen
+        uint16_t* location = video_memory + (cursor_y*80 + cursor_x);
+        *location = c | attribute;
+        cursor_x++;
+    }
+
+    //! if we are at edge of row, go to new line
+    if (cursor_x >= 80) {
+
+        cursor_x = 0;
+        cursor_y++;
+    }
+	move_csr();
+	return c;
+}
+
+/* Uses the above routine to output a string... */
+int puts(const char *text)
+{
+	if (!text)
+		return EOF;
+
+	while (*text)
+		putchar(*text++);
+	/* putchar('\n'); */
+
+	return 0;
+}
+
+int printf(const char *format, ...)
+{
+	/* if (!format) */
+	/* 	return EOF; */
+	
+	va_list args;
+	va_start(args, format);
+
+	size_t i;
+	for (i = 0; format[i]; ++i) {
+		switch (format[i]) {
+			case '%':
+				switch (format[i+1]) {
+					// characters
+					case 'c': {
+						char c = va_arg(args, char);
+						putchar(c);
+						++i;	// go to next character
+						break;
+					}
+					// address of
+					case 's': {
+						int c = (int) va_arg(args, int);
+						char str[32] = {0};
+						itoa_s(c, str, 16);
+						puts((char *)c);
+						++i;	// go to next character
+						break;
+					}
+					// integers
+					case 'd':
+					case 'i': {
+						int c = (int) va_arg(args, int);
+						char str[32] = {0};
+						itoa_s(c, str, 10);
+						puts(str);
+						++i;	// go to next character
+						break;
+					}
+					// display in hex
+					case 'X':
+					case 'x': {
+						int c = va_arg (args, int);
+						char str[32]={0};
+						itoa_s(c, str, 16);
+						puts(str);
+						i++;		// go to next character
+						break;
+					}
+					default:
+						va_end(args);
+						return 1;
+				}
+				break;
+			default:
+				putchar(format[i]);
+				break;
+		}
+	}
+	va_end(args);
+	return EOF;
+}
+
+
+/*************************************************************
+ * 				NON-STD LIBC CUSTOM ROUTINES
+*************************************************************/
+
+/* Clears the screen */
+void clear_screen()
+{
+	int i;
+
+	//! clear video memory by writing space characters to it
+	for (i = 0; i < 80*25; i++)
+        video_memory[i] = ' ' | (_color << 8);
+
+    //! move position back to start
+    goto_xy (0,0);
+}
+
+/* Sets the forecolor and backcolor that we will use */
+void set_color(unsigned char forecolor, unsigned char backcolor)
+{
+    /* Top 4 bytes are the background, bottom 4 bytes
+    *  are the foreground color */
+    _color = (backcolor << 4) | (forecolor & 0x0F);
+	/* _color = (new_color & 0x0F) | (new_color << 4); */
+}
+
+// returns the forground color
+unsigned char get_fg()
+{
+	return _color & 0x04;
+}
+// returns the background color
+unsigned char get_bg()
+{
+	return _color << 4;
+}
+
+void save_color()
+{
+	saved_color = _color;
+}
+void restore_color()
+{
+	_color = saved_color;
+}
+
+//! Sets new position
+void goto_xy(unsigned x, unsigned y) {
+
+	/* if (cursor_x <= 80) */
+	    cursor_x = x;
+
+	/* if (cursor_y <= 25) */
+	    cursor_y = y;
+}
+
+// returns cursor position
+void get_xy(unsigned *x, unsigned *y)
+{
+	if (x == 0 || y == 0)
+		return;
+
+	*x = cursor_x;
+	*y = cursor_y;
+}
+
+// returns horzontal width
+int get_screen_width()
+{
+	return 80;
+}
+
+// returns vertical height
+int get_screen_height()
+{
+	return 24;
+}
+
+/* We will use this later on for reading from the I/O ports to get data
+*  from devices such as the keyboard. We are using what is called
+*  'inline assembly' in these routines to actually do the work */
+unsigned char inportb(unsigned short _port)
+{
+    unsigned char rv;
+    __asm__ __volatile__ ("inb %1, %0" : "=a" (rv) : "dN" (_port));
+    return rv;
+}
+
+/* We will use this to write to I/O ports to send bytes to devices. This
+*  will be used in the next tutorial for changing the textmode cursor
+*  position. Again, we use some inline assembly for the stuff that simply
+*  cannot be done in C */
+void outportb (unsigned short _port, unsigned char _data)
+{
+    __asm__ __volatile__ ("outb %1, %0" : : "dN" (_port), "a" (_data));
+}
+
+static void move_csr(void)
+{
+    unsigned temp;
+
+    /* The equation for finding the index in a linear
+    *  chunk of memory can be represented by:
+    *  Index = [(y * width) + x] */
+    temp = cursor_y * 80 + cursor_x;
+
+    /* This sends a command to indicies 14 and 15 in the
+    *  CRT Control Register of the VGA controller. These
+    *  are the high and low bytes of the index that show
+    *  where the hardware cursor is to be 'blinking'. To
+    *  learn more, you should look up some VGA specific
+    *  programming documents. A great start to graphics:
+    *  http://www.brackeen.com/home/vga */
+    outportb(0x3D4, 14);
+    outportb(0x3D5, temp >> 8);
+    outportb(0x3D4, 15);
+    outportb(0x3D5, temp);
+}
+
+// converts a string to a long
+long strtol(const char *nptr, char** endptr, int base)
+{
+	const char *s = nptr;
+	unsigned long acc;
+	int c;
+	unsigned long cutoff;
+	int neg = 0, any, cutlim;
+
+	/*
+	 * Skip white space and pick up leading +/- sign if any.
+	 * If base is 0, allow 0x for hex and 0 for octal, else
+	 * assume decimal; if base is already 16, allow 0x.
+	 */
+	do {
+		c = *s++;
+	} while (isspace(c));
+	if (c == '-') {
+		neg = 1;
+		c = *s++;
+	} else if (c == '+')
+		c = *s++;
+	if ((base == 0 || base == 16) &&
+	    c == '0' && (*s == 'x' || *s == 'X')) {
+		c = s[1];
+		s += 2;
+		base = 16;
+	} else if ((base == 0 || base == 2) &&
+	    c == '0' && (*s == 'b' || *s == 'B')) {
+		c = s[1];
+		s += 2;
+		base = 2;
+	}
+	if (base == 0)
+		base = c == '0' ? 8 : 10;
+
+	/*
+	 * Compute the cutoff value between legal numbers and illegal
+	 * numbers.  That is the largest legal value, divided by the
+	 * base.  An input number that is greater than this value, if
+	 * followed by a legal input character, is too big.  One that
+	 * is equal to this value may be valid or not; the limit
+	 * between valid and invalid numbers is then based on the last
+	 * digit.  For instance, if the range for longs is
+	 * [-2147483648..2147483647] and the input base is 10,
+	 * cutoff will be set to 214748364 and cutlim to either
+	 * 7 (neg==0) or 8 (neg==1), meaning that if we have accumulated
+	 * a value > 214748364, or equal but the next digit is > 7 (or 8),
+	 * the number is too big, and we will return a range error.
+	 *
+	 * Set any if any `digits' consumed; make it negative to indicate
+	 * overflow.
+	 */
+	cutoff = neg ? -(unsigned long) LONG_MIN : LONG_MAX;
+	cutlim = cutoff % (unsigned long) base;
+	cutoff /= (unsigned long) base;
+	for (acc = 0, any = 0;; c = *s++) {
+		if (isdigit(c))
+			c -= '0';
+		else if (isalpha(c))
+			c -= isupper(c) ? 'A' - 10 : 'a' - 10;
+		else
+			break;
+		if (c >= base)
+			break;
+		if (any < 0 || acc > cutoff || (acc == cutoff && c > cutlim))
+			any = -1;
+		else {
+			any = 1;
+			acc *= base;
+			acc += c;
+		}
+	}
+	if (any < 0) {
+		acc = neg ? LONG_MIN : LONG_MAX;
+//		errno = ERANGE;
+	} else if (neg)
+		acc = -acc;
+	if (endptr != 0)
+		*endptr = (char *)(any ? s - 1 : nptr);
+	return (acc);
+}
+
+// converts a string to an unsigned long
+unsigned long strtoul(const char* nptr, char** endptr, int base)
+{
+	const char *s = nptr;
+	unsigned long acc;
+	int c;
+	unsigned long cutoff;
+	int neg = 0, any, cutlim;
+
+	/*
+	 * See strtol for comments as to the logic used.
+	 */
+	do {
+		c = *s++;
+	} while (isspace(c));
+	if (c == '-') {
+		neg = 1;
+		c = *s++;
+	} else if (c == '+')
+		c = *s++;
+	if ((base == 0 || base == 16) &&
+	    c == '0' && (*s == 'x' || *s == 'X')) {
+		c = s[1];
+		s += 2;
+		base = 16;
+	} else if ((base == 0 || base == 2) &&
+	    c == '0' && (*s == 'b' || *s == 'B')) {
+		c = s[1];
+		s += 2;
+		base = 2;
+	}
+	if (base == 0)
+		base = c == '0' ? 8 : 10;
+	cutoff = (unsigned long)ULONG_MAX / (unsigned long)base;
+	cutlim = (unsigned long)ULONG_MAX % (unsigned long)base;
+	for (acc = 0, any = 0;; c = *s++) {
+		if (isdigit(c))
+			c -= '0';
+		else if (isalpha(c))
+			c -= isupper(c) ? 'A' - 10 : 'a' - 10;
+		else
+			break;
+		if (c >= base)
+			break;
+		if (any < 0 || acc > cutoff || (acc == cutoff && c > cutlim))
+			any = -1;
+		else {
+			any = 1;
+			acc *= base;
+			acc += c;
+		}
+	}
+	if (any < 0) {
+		acc = ULONG_MAX;
+//		errno = ERANGE;
+	} else if (neg)
+		acc = -acc;
+	if (endptr != 0)
+		*endptr = (char *)(any ? s - 1 : nptr);
+	return (acc);
+}
+
+
+//! convert string to int
+int atoi(const char *str)
+{
+	return (int) strtol(str, 0, 10);
+}

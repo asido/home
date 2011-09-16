@@ -1,0 +1,166 @@
+var slideWidth 		= 723;
+var exceptions		= [];		//skipped answers
+var qa_enabled		= true;
+var category		= "";
+
+function fill_slide(data)
+{					
+	$('#answered_count')	.text ( data.answered );
+	$('#questions_count')	.text ( data.total );
+
+	if ( ! data.question )		// if theres no other question to answer
+	{
+		window.location = "category.php";
+		return;
+	}
+
+	if ( data.reset_exceptions )
+		exceptions = [];
+ 
+	// if ($('#question_id').val() != "")
+		$('#prev_question_id').val($('#question_id').val());
+	$('#question_id')		.val ( data.question_id );
+
+	var slide_cont = '<div class="slide" onLoad="$(\'#pressed\').val(0);">' 											+
+		'<div class="fullQuestion">' 																					+
+			'<div id="main-qtitle"><div id="question-string">' + data.question + '</div>'								+
+				'<div id="prof-counter"><span class="prof-white">' + ( data.answered + 1 ) + '</span></div>' 			+
+			'</div>' 																									+
+			'<div id="main-qanswers">';
+	if (data.answer_count == 0)
+		slide_cont += '<div id="main-qrows" class="main-qrows"><input value="" type="text" name="qanswer" />';
+	else {
+		slide_cont += '<div id="main-qrows-1" class="main-qrows"><input value="1" type="radio" name="qanswer" /> '+data.answer1+' </div>';
+		slide_cont += '<div id="main-qrows-2" class="main-qrows"><input value="2" type="radio" name="qanswer" /> '+data.answer2+' </div>';
+		if (data.answer_count > 2)
+			slide_cont += '<div id="main-qrows-3" class="main-qrows"><input value="3" type="radio" name="qanswer" /> '+data.answer3+' </div>';
+		if (data.answer_count > 3)
+			slide_cont += '<div id="main-qrows-4" class="main-qrows"><input value="4" type="radio" name="qanswer" /> '+data.answer4+' </div>';
+		if (data.answer_count > 4)
+			slide_cont += '<div id="main-qrows-5" class="main-qrows"><input value="5" type="radio" name="qanswer" /> '+data.answer5+' </div>';
+		if (data.answer_count > 5)
+			slide_cont += '<div id="main-qrows-6" class="main-qrows"><input value="6" type="radio" name="qanswer" /> '+data.answer6+' </div>';
+		if (data.answer_count > 6)
+			slide_cont += '<div id="main-qrows-7" class="main-qrows"><input value="7" type="radio" name="qanswer" /> '+data.answer7+' </div>';
+		if (data.answer_count > 7)
+			slide_cont += '<div id="main-qrows-8" class="main-qrows"><input value="8" type="radio" name="qanswer" /> '+data.answer8+' </div>';
+	}
+					+
+			'</div><!--main-qanswers-->'																				+
+		'</div>'																										+
+	   '</div>';
+
+	$(slide_cont).css({ 
+			width 	: slideWidth,
+			float	: "left"
+	}).appendTo( $('#slideInner') );
+
+	if ( $('.slide').length > 1 )
+			animate_slides () ;
+	else 	qa_enabled = true;
+}
+
+function getQuestion ()
+{	
+	if ($('#Qid').val() != 0)
+		Qid = $('#Qid').val();		
+	else
+		Qid = 0;
+	
+	if ( !qa_enabled ) return;
+
+	qa_enabled = false;		
+	
+	$.post ("php/users_ajax.php",
+			{
+				cmd 		: "get",
+				category	: category,
+				exceptions 	: exceptions,
+				id			: Qid
+			}, fill_slide,"json"
+	);		
+}
+
+
+function skip ()
+{
+	$('#Qid').val(0);
+	if ( !qa_enabled )
+		return;
+	var qid = $('#question_id').val ();
+	if (!qid)
+		return;
+	exceptions.push( qid );
+	getQuestion ();
+}
+
+
+function animate_slides ()
+{
+	$('#slideInner').animate ({ 'margin-left' : -slideWidth + "px" },
+								150, null,
+								function ()
+								{
+									$('.slide:first').remove();
+									$(this).css ( 'margin-left', 0 );
+
+									qa_enabled = true;	
+									$('#pressed').val(0);
+								}
+	);
+}
+
+function setAnswer ()
+{
+	$('#Qid').val(0);
+	if ( !qa_enabled ) return;
+
+	var qid = $('#question_id').val ();
+	var ans = $('#main-qanswers').find ( "input[name='qanswer']:checked" );
+	if (ans.length == 0)
+		ans = $('#main-qanswers').find("input[type=text][name='qanswer']");
+
+	if ( !qid || ( ans.length == 0 ) ) return;
+
+	qa_enabled = false;
+
+	ans		= ans.val ();
+	if (ans == "" ) return;
+	$.post(
+				"php/users_ajax.php",
+				{
+					cmd				: "set",
+					question_id		: qid,
+					category		: category,
+					answer_num		: ans
+				},
+				function ()
+				{
+					qa_enabled = true;
+					getQuestion ();
+				}
+			);
+}
+
+$(document).ready(function(){
+	category = $(document).getUrlParam("category");
+	if (category == "")
+		window.location = "category.php";
+
+	// Remove scrollbar in JS
+	$('#slidesContainer').css('overflow', 'hidden');
+
+	// Set #slideInner width equal to total width of all slides
+	$('#slideInner').css('width', slideWidth * 2);	
+
+	// Insert left and right arrow controls in the DOM
+	$('#slideshow').append(
+		$('<div class="control" id="leftControl"></div>').click (function () {
+			skip ();
+		})
+	).append($('<div class="control" id="rightControl"></div>').click (function () { setAnswer (); }));
+
+	getQuestion ();
+
+});
+

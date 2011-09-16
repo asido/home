@@ -1,0 +1,11 @@
+#ifndef GUARD_framing_h
+#define GUARD_framing_h
+
+#include <vector>
+#include <algorithm>
+#include <string>
+
+std::string::size_type width(const std::vector<std::string>&);
+std::vector<std::string> frame(const std::vector<std::string>&);
+
+#endif

@@ -1,0 +1,107 @@
+<?php
+	
+	include_once('php/auth.php');
+	$logged = $auth->logged_in();
+	
+	foreach($_GET as $key => $value)
+		$_GET[$key] = mysql_real_escape_string(stripslashes($value));
+	foreach($_POST as $key => $value)
+		$_POST[$key] = mysql_real_escape_string(stripslashes($value));
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="css/styles.css" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="js/submit.js"></script>
+<script type="text/javascript" src="js/validation.js"></script>
+<script type="text/javascript" src="js/notif.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikeMeLikeYou</title>
+</head>
+
+<body>
+
+<?php
+	include_once('php/html.php');
+
+	if ($logged)
+		HTML::show_logged_header();
+	else
+		HTML::show_header("profques.php");
+?>
+<!-- <div id="header"> -->
+<!-- 	<div id="likemelikeyou-logo"> -->
+<!--     	<div id="likemelikeyou-bg"><img alt="" class="stretch" src="images/box.png" /></div> -->
+<!--         <img alt="" src="images/LikemelikeU.png" /> -->
+<!--     </div> -->
+<!--     <div id="signup"> -->
+<!--     	<span id="signup-txt"><a href="#"> Register Now </a></span> -->
+<!--         <div id="signup-button"><a href="#"><img alt="" class="stretch" src="images/button-sign.png" /></a></div> -->
+<!--     </div> -->
+<!--  -->
+<!-- </div> -->
+
+<div id="container-prof">
+	<div id="prof-wrap">
+    	<div id="main-question">
+        	<div id="main-qtitle"> Which Soda Pop do you prefer? 
+            	<div id="prof-counter"><span class="prof-white">1</span></div>
+            </div>
+            <div id="main-qanswers">
+            	
+            	<div class="main-qrows"><input type="radio" name="qanswer" /> Center Image a</div>
+                <div class="main-qrows"><input type="radio" name="qanswer" /> Tile Image a</div>
+                <div class="main-qrows"><input type="radio" name="qanswer" /> Tile Image </div>
+                <div class="main-qrows"><input type="radio" name="qanswer" /> Tile Image </div>
+            </div><!--main-qanswers-->
+            
+            <div id="main-qbuttons"> 
+            	<div id="main-qleft">
+                	<div class="main-qtxt"><a href="#"> Skip </a></div>
+                </div>
+                <div id="main-qright">
+                	<div class="main-qtxt"><a href="#"> Answer </a></div>
+                </div>
+                
+            </div>
+        </div><!--main-question-->
+        
+    	
+    	<div id="prof-buttons"> 
+        	<div id="prof-left">
+                <span class="prof-righttxt"><a href="#"> View What people answered <br/>last Question </a></span>
+            </div>
+            <div id="prof-right">
+                <span class="prof-righttxt"><a href="#"> You have answered 1/50 <br/>Profile Questions. </a></span>
+            </div>
+        </div>
+    </div><!--prof-wrap-->
+</div><!--container-prof-->
+
+<!-- <div id="container-2"> -->
+<!-- 	<div id="c2-background"><img alt="" class="stretch" src="images/footerbg.png" /></div> -->
+<!--     <div id="c2-world"><img alt="" src="images/world2.png" /></div> -->
+<!-- </div> -->
+
+<!-- <div id="footer"> -->
+<!-- 	<span id="footer-copyright">Likemelikeu © 2011</span> -->
+<!--     <div id="footer-menu"> -->
+<!--     	<a href="#">FAQ</a> -->
+<!--         <a href="#">Contact</a> -->
+<!--         <a href="#">Terms &amp; Conditions</a> -->
+<!--         <a href="#">Privacy</a> -->
+<!--         <a href="#">Report Abuse</a> -->
+<!--         <a href="#">Report Site Problem</a> -->
+<!--     </div> -->
+<!-- </div> -->
+<?php
+	include_once('php/html.php');
+	HTML::show_background();
+	HTML::show_footer();
+?>
+
+</body>
+</html>

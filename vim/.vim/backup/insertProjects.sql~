@@ -1,0 +1,8 @@
+use Company;
+
+insert into Project values ('ProductX',1,'Bellaire',5);
+insert into Project values ('ProductY',2,'Sugarland',5);
+insert into Project values ('ProductZ',3,'Houston',5);
+insert into Project values ('Computerzation',10,'Stafford',4);
+insert into Project values ('Reorganization',20,'Houston',1);
+insert into Project values ('Newbenefits',30,'Stafford',4);

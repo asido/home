@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Contractor Bridge</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script>
+		!window.jQuery && document.write('<script src="jquery-1.4.3.min.js"><\/script>');
+	</script>
+	<script type="text/javascript" src="./fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+	<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+	<link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+    <script type="text/javascript">
+    		$(document).ready(function() {
+			
+				$("a#si-bidding1").fancybox()
+				$("a#si-bidding2").fancybox()
+				$("a#si-bidding3").fancybox()	
+			});
+	</script>
+</head>
+
+<body>
+
+
+	
+<div id="topbar"> </div> 
+    
+<div id="header-inner"> 
+	<?php include('topbar.php'); ?>  
+</div> <!--header-inner-->
+
+	<div id="post_topbar"> 
+		<table>
+			<tr>
+            	<td><a href="dashboard.php"><div> Home </div></a></td>
+                <td><a href="myprofile.php"><div> My Profile </div></a></td>
+                <td><a href="postjob.php"><div> Post A Job </div></a></td>
+                <td><a href="vcon.php"><div> View Contractors </div></a></td>
+                <td><a href="refer.php"><div> Refer A Friend </div></a></td>
+                <td id="topbar_tdfix"><a href="support.php"><div> Support </div></a></td>
+            </tr>
+        </table>
+	</div>
+
+<div id="content-tour" >
+	<span class="orange-title">Invited To Bid:</span>
+    
+    <div class="tour-row">
+    	<a id="si-bidding1" href="images/Bidding1.png"><div class="img-side" ><img src="images/Bidding1t.png";/></div></a>
+    
+    	<div class="text-side">
+            <div class="bullet-tour">1</div><span class="green-title">Where To Look? </span><br/><br/>
+            <div class="tour-text">
+                When invited to bid on jobs, you will receive an e-mail and notification indicating that you have been invited and are welcome to view the proposed project. These jobs will be placed in the "Bid Invite" tab located on your dashboard. The calendar above will display all the jobs you have been invited by other contractors. This will help you keep track of dates, times and places. 
+            </div><!--tour-text-->
+        </div><!--text-side-->
+    </div><!--tour-row-->
+    
+    <div class="tour-row">    
+    	<div class="text-side">
+            <div class="bullet-tour">2</div><span class="green-title">Viewing The Job</span><br/><br/>
+            <div class="tour-text">
+                You can view all pdf's by clicking on "View Attachements". View, download and e-mail the ones that are particularly important to you!   
+            </div><!--tour-text-->
+        </div><!--text-side-->
+        <a id="si-bidding2" href="images/bidding2.png"><div class="img-side" ><img src="images/bidding2t.png";/></div></a>
+    </div><!--tour-row-->    
+    
+    <div class="tour-row">
+    	<a id="si-bidding3" href="images/bidding3.png"><div class="img-side"><img src="images/bidding3t.png";/></div></a>
+    
+    	<div class="text-side">
+            <div class="bullet-tour">3</div><span class="green-title">Viewing The Attachements </span><br/><br/>
+            <div class="tour-text">
+                Click on "Add Contractors", this will prompt a pop-up which will allow you to invite contractors you have already added in Step 1. Simply drag your mouse over top the contractor of your choice or select multiple ones whom you would to invite to join in on this job. Are they not part of Contractor Bridge yet? Type in their e-mail in the space below, we'll invite them to join for you. 
+            </div><!--tour-text-->
+        </div><!--text-side-->
+    </div><!--tour-row-->
+</div> <!-- content -->
+</div>
+
+<div id="footer">
+	<div id="topbar" style="height:10px;"></div>
+    <div id="footer-inner">
+		<div id="aboutus">	
+        		<span id="aboutushead">About US</span>
+				<p>
+				Created by contractors for contractors, Contractor Bridge was developed out of a need for efficiency in the transfer of 
+                construction documents.After dealing with the annoyances and frustrations of too many FTP
+                uploads/downloads, we thought, "There must be a better way." 
+                </p>
+                <p>
+                With inspirations from social networking sites and the increasingly 
+                popular use of "Cloud Computing," Contractor Bridge has been developed to help
+                contractors create a network of the contractors they work with and
+                share files easily and seamlessly with all of them, all on a secure "cloud"
+                based server. 
+                </p>
+                <p>
+                No more bogging down of your server to upload FTP's and
+                no more confusion/headaches associated with this outdated process. Simply
+                upload drawings/files, and invite contractors to have access to these
+                files. Simple, easy and straightforward.
+        		</p>
+        </div> <!-- aboutus -->
+		
+        <div id="stat">
+			<p>8597 Users Online Now</p>
+            <p> Corporate Twitter <img src="images/twitter.jpg" /></p>
+            <p> Jobs on Twitter <img src="images/twitter.jpg" /></p>
+            <p>Read Our Blog <img src="images/blogicon.jpg" /></p>
+            <p>Facebook <img src="images/fbicon.jpg" /></p>
+            <p>Jobs via RSS <img src="images/blogicon.jpg" /></p>
+		</div> <!-- stat -->
+        
+        <div id="logobottom" ></div>
+		<div id="footertext">FAQ / Affiliates / Upcoming Events / Press Releases / In The News / Quotes / Top Users / Careers / Terms /Privacy Policy  &nbsp; &nbsp;© 2006–2011, Contractor Bridge
+		</div> <!-- footertext -->
+
+	</div> <!-- footer-inner -->
+</div> <!-- footer -->
+</body>
+</html>

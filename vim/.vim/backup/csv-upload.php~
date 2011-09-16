@@ -1,0 +1,43 @@
+<?php
+require_once '../connectdb.php';
+connectdb();
+
+if (isset($_FILES['csv-file']['tmp_name'])) {
+	$file = $_FILES['csv-file']['tmp_name'];
+	$stream = fopen($file, 'r');
+	$line_count = 0;
+
+	if (is_uploaded_file($file)) {
+		// skip the first header line
+		fgets($stream);
+
+		while (true) {
+			$line = fgets($stream);
+
+			if (!$line)
+				break;
+			mysql_real_escape_string(stripslashes($line));
+
+			$row = explode(",", $line);
+
+			if (count($row) != 4) {
+				echo '{ "ret": "Error in file on line '.$line_count.'. 4 columns needed." }';
+				exit;
+			}
+
+			$query = "INSERT INTO `products` (`p_name`,`cat_id`,`product_id`,`p_price`,`p_description`,`p_image`,`p_feature`,`p_status`) VALUES
+					  ('".$row[0]."',".$_POST['category'].",'".$row[1]."','".$row[2]."','".$row[3]."','noimage.jpg', 0, 1)";
+			mysql_query($query);
+			if (!mysql_error())
+				$line_count++;
+			else {
+				echo '{ "ret":"'.mysql_error().'"}';
+			}
+		}
+		fclose($stream);
+		echo '{ "ret": "'.$line_count.' questions successfully added" }';
+	} else {
+		echo '{ "ret": "Error with file upload." }';
+	}
+}
+?>

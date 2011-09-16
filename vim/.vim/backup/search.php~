@@ -1,0 +1,494 @@
+<?php session_start(); ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>YouTours</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/facebox.js"></script>
+<link rel="stylesheet" type="text/css" href="css/facebox.css"/>
+<style>
+<style>
+.dialog {
+	width: 577px;
+}
+.an_cartbutton
+{
+	background-repeat:no-repeat;}
+.an_cartbutton:hover
+{
+	background-image:url(images/cart1hover.png);
+	background-repeat:no-repeat;
+	 width: 103px; height: 22px; margin-left: 8px;}
+.cart
+{
+	width:101px;
+	height:21px;
+	
+	background-image:url(images/cartbutton_11.png);
+	position:relative;
+	left:88px;
+	top:141px;
+	}
+.cart:hover
+{
+	position:relative;
+	left:88px;
+	top:141px;
+	width:101px;
+	height:21px;
+
+	background-image:url(images/cart_03.png);
+	}
+#tu_cart_inyoutube:hover
+{
+	background-image:url(images/cart_03.png);}
+.addtocart
+{
+	width:137px;
+	height:27px;
+	background-image:url(images/m_checkout_over.png);
+	background-repeat:no-repeat;}
+.addtocart:hover
+{
+	width:137px;
+	height:27px;
+	background-image:url(images/m_checkout.png);
+	background-repeat:no-repeat;}
+
+.addtocart1
+{
+	width:137px;
+	height:27px;
+	background-image:url(images/m_continue_shopping_over.png);
+	background-repeat:no-repeat;}
+.addtocart1:hover
+{
+	width:137px;
+	height:27px;
+	background-image:url(images/m_continue_shopping.png);
+	background-repeat:no-repeat;}
+
+.dialog
+{
+	width:577px;}
+#facebox .content
+{
+	overflow:visible;
+	padding:0px;}
+#facebox .close
+{
+	width:21px;
+	height:21px;
+	position:absolute;
+	top:0px;
+	right:-8px;
+}
+	
+</style>
+</style>
+<script type="text/javascript">
+function loadcheck()
+{
+	if($('#tour1').val()!="")
+	{
+		filtervalidate();
+	}
+	else if($('#city1').val()!="")
+	{
+		filtervalidate();
+	}
+}
+function getcity()
+{
+	var country = document.getElementById("country");
+	 var country_id = country.value;
+  		
+		$.ajax({
+   type: "GET",
+   url: "loaddata.php",
+   data: "country_id="+country_id,
+   success: function(msg){
+    $('#cityid').html(msg);
+   }
+ });
+ 
+}
+function filtervalidate(page)
+{
+	QS="";
+	
+	if($('#tour1').val()!="")
+	{
+		QS+="title="+$('#tour1').val();
+	}
+	
+	if($('#city1').val()!="")
+	{
+		QS+="&&city="+$('#city1').val();
+	}
+	if($('#cityid').val()!="" && $('#cityid').val()!=0)
+	{
+		QS+="&&cityid="+$('#cityid').val();
+	}
+	if($('#country').val() !=0 && $('#country').val()!="" && $('#country').val()!=null)
+	{
+		QS+="&&country="+$('#country').val();
+	}
+	if($('#category').val()!=0 && $('#category').val()!="" &&  $('#category').val()!=null)
+	{
+		QS+="&&category="+$('#category').val();
+	}
+	if($('#language').val()!=0&& $('#language').val()!="" &&  $('#language').val()!=null)
+	{
+		QS+="&&language="+$('#language').val();
+	}
+	if($('#lessthan30').attr("checked")==true)
+	{
+		QS+="&&lessthan30";
+	}
+	if($('#30-60').attr("checked")==true)
+	{
+		QS+="&&30-60";
+	}
+	if($('#60-120').attr("checked")==true)
+	{
+		QS+="&&60-120";
+	}
+	if($('#morethan120').attr("checked")==true)
+	{
+		QS+="&&morethan120";
+	}
+	if($('#sortrating').attr("checked")==true)
+	{
+		QS+="&&sortby=rating "	
+	}
+	if($('#sortpricehigh').attr("checked")==true)
+	{
+		QS+="&&sortby=pricehigh "
+	}
+	if($('#sortpricelow').attr("checked")==true)
+	{
+		QS+="&&sortby=pricelow "
+	}
+	if($('#sortlength').attr("checked")==true)
+	{
+		QS+="&&sortby=length "
+	}
+	
+	if(page!="")
+	{
+		QS+="&&page="+page;
+	}
+	else
+	{
+		QS+="&&page=1";
+	}
+	
+	//document.write(QS);
+	/* alert(QS); */
+	$.ajax({
+   type: "GET",
+   url: "searchresults.php",
+   data: QS,
+   success: function(msg){
+	   //alert("hi");
+		$('#sv_result').html(msg);
+   }
+ });
+}
+
+function addtoCart(title,image,tour_id)
+{
+	jQuery.ajax({
+   type: "POST",
+   url: "addtocart.php",
+   data: "tour_id="+tour_id,
+   success: function(msg){}
+	});
+		document.getElementById('image1').src=image;
+		document.getElementById('title').innerHTML=title;
+
+	jQuery.facebox({div:'#box'});
+	
+
+}
+
+function closebox1()
+{
+	jQuery(document).trigger('close.facebox');
+}
+	
+</script>
+<style type="text/css">
+.si-videorate
+{
+	
+}
+.play
+{
+	
+}
+.sv-cartbutton
+{
+		margin-left: 10px;
+		background-image:url(images/addtocart.png);
+		background-position:0 21px;
+		width:102px;
+		height:21px;
+		cursor:pointer;
+		float:left;
+		margin-top:2px;
+}
+.sv-cartbutton:hover
+{
+		margin-left: 10px;
+		background-position:0 0;
+		cursor:pointer;
+}
+
+</style>
+
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+
+<div class="content">
+	<?php
+		include("header.php");
+		include("menu.php");
+	?>
+
+	<div class="an_innercontent">
+  
+		<div class="an_filtersort">
+          <form name="an_filter" id="an_filter" action="search.php" method="GET">
+          <input type="hidden" name="tour1" id="tour1" value="<?php if(isset($_GET['tour'])){echo $_GET['tour'];}else{echo"";} ?>" />
+           <input type="hidden" name="city1" id="city1" value="<?php if(isset($_GET['city'])){echo $_GET['city'];}else{echo"";} ?>" />
+         
+			<div class="an_filters">
+				<div class="an_filterheading">
+					<div class="an_filter">
+						 FILTERS
+					</div>
+					<div class="an_tourlenght">
+						 TOUR LENGTH
+					</div>
+				</div>
+				<div class="an_dropboxes">
+					<div style="vertical-align:middle !important;float:left;width:135px; height:34px;">
+                   	
+               		
+               				<select class="m_selectbox" name="country" id="country" style="opacity:1;filter:alpha(opacity=1); width:125px; height:30px;border:#b6e335 1px solid;
+
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;" onchange="getcity();" >
+  		<script>
+		$.ajax({
+   type: "GET",
+   url: "loaddata.php",
+   data: "country",
+   success: function(msg){
+    $('#country').html(msg);
+   }
+ });
+ </script>
+                                    
+                   			 </select>
+   
+                             <div id="sel_arrow" style="position: relative; top: -33px; left: 105px; background:url(images/m_arrow.png) no-repeat; height: 34px; width: 28px;"></div>
+               			  </div>
+					<div style="vertical-align:middle !important;float:left;width:135px; height:34px; margin-left:14px;">
+                   	
+               		
+               				<select class="m_selectbox" name="category" id="category" style="opacity:1;filter:alpha(opacity=1); width:125px; height:30px;border:#b6e335 1px solid;
+
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;" >
+  		<script>
+		$.ajax({
+   type: "GET",
+   url: "loaddata.php",
+	   data: "categories",
+   success: function(msg){
+    $('#category').html(msg);
+   }
+ });
+ </script>                   			 </select>
+                             <div id="sel_arrow" style="position: relative; top: -33px; left: 105px; background:url(images/m_arrow.png) no-repeat; height: 34px; width: 28px;"></div>
+               			  </div>
+					<div style="vertical-align:middle !important;float:left;width:135px; height:34px;margin-top:14px;">
+                   	
+               		
+               				<select class="m_selectbox" name="city" id="cityid" style="opacity:1;filter:alpha(opacity=1); width:125px; height:30px;border:#b6e335 1px solid;
+
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;" >
+                    			   
+                                <option value="0">CITY</option>
+                         
+                   			 </select>
+                             <div id="sel_arrow" style="position: relative; top: -33px; left: 105px; background:url(images/m_arrow.png) no-repeat; height: 34px; width: 28px;"></div>
+               			  </div>
+					<div style="vertical-align:middle !important;float:left;width:135px; height:34px; margin-left:14px; margin-top:14px;">
+                   	
+               		
+               				<select class="m_selectbox" name="language" id="language" style="opacity:1;filter:alpha(opacity=1); width:125px; height:30px;border:#b6e335 1px solid;
+
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;" >
+<script>
+		$.ajax({
+   type: "GET",
+   url: "loaddata.php",
+   data: "language",
+   success: function(msg){
+    $('#language').html(msg);
+   }
+ });
+ </script>
+				
+                                    
+                   			 </select>
+                             <div id="sel_arrow" style="position: relative; top: -33px; left: 105px; background:url(images/m_arrow.png) no-repeat; height: 34px; width: 28px;"></div>
+               			  </div>
+				</div>
+				<div class="an_tourlenghtboxes">
+					<table class="an_table">
+					<tr>
+						<td>
+							<input type="checkbox" name="an_less30" id="lessthan30" />
+						</td>
+						<td>
+							<div class="an_tourlenghtbox2">
+								< 30 min</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="an_30to60" id="30-60"/>
+							</td>
+							<td>
+								<div class="an_tourlenghtbox2">
+									30 - 60 Min
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="60-120"  name="an_60to120"/>
+							</td>
+							<td>
+								<div class="an_tourlenghtbox2">
+									60 - 120 Min
+								</div>
+							</td>
+						</tr>
+
+						<!-- <tr> -->
+						<!-- 	<td> -->
+						<!-- 		<input type="checkbox" name="gtr120" id="morethan120" /> -->
+						<!-- 	</td> -->
+						<!-- 	<td> -->
+						<!-- 		<div class="an_tourlenghtbox2"> -->
+						<!-- 			> 120 Min -->
+						<!-- 		</div> -->
+						<!-- 	</td> -->
+						<!-- </tr> -->
+						</table>
+					</div>
+					<a href="#" onclick="filtervalidate(1);"><div class="an_applyfilter">	
+                 
+                    <div class="an_bottonapplyfilter" style="margin-top:10px;"></div>
+                    				</div></a>
+				</div>
+                
+				<div class="an_sortby">
+					<div class="an_filter">
+						SORT BY
+					</div>
+					<div class="an_sort">
+						<table id="sorty">
+						<tr>
+							<td >
+							</td>
+							<td >
+								<input type="radio" name="sortd" id="sortrating" value="ratings" />&nbsp;<span class="sorttext">Ratings</span>&nbsp;
+							</td>
+							<td >
+							</td>
+							<td >
+								<input type="radio" name="sortd" id="sortpricehigh" value="pricehigh" />&nbsp;<span class="sorttext">Price (High)</span>&nbsp;
+							</td>
+							<td >
+							</td>
+							<td >
+								<input type="radio" name="sortd" id="sortpricelow" value="procelow" />&nbsp;<span class="sorttext">Price (Low)</span>&nbsp;
+							</td>
+							<td >
+							</td>
+							<td >
+								<input type="radio" name="sortd" id="sortlength" value="length" />&nbsp;<span class="sorttext">Tour Length</span>&nbsp;
+							</td>
+						</tr>
+						</table>
+						
+					</div>
+				</div></form>
+			</div>
+         
+         
+			<div class="an_largemap">
+			</div>
+            <div id="sv_result">
+			
+	
+			
+            </div>
+            
+
+		</div>
+		<?php include("footer.php"); ?>
+        <script>
+		loadcheck();
+		</script>
+	</div>
+    
+    
+   
+
+<div id="box" style="display:none;">
+
+<div class="dialog" >
+
+<div class="dialog-head">
+
+<div class="dialog-title">
+
+Tour added to your cart
+
+</div>
+
+<div class="dialog-close">
+</div>
+<div class="dialog-body">
+<table style="width:100%; height:130px;">
+<tr><td colspan="2"><span id="title"></span> added to your cart</td><td rowspan="2"><img src="" id="image1" align="middle" height="100" width="100"  /></td></tr>
+<tr></tr>
+<tr><td style="width:154px;"><div class="addtocart1" onclick="closebox1()"></div></td><td><a href="mycart.php"><div class="addtocart"></div></a></td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+	</body>
+	</html>

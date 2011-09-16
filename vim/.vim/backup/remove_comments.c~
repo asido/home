@@ -1,0 +1,63 @@
+#include <stdio.h>
+
+#define MAX_SIZE 1000
+
+int getLine(char line[]);
+void removeComments(char line[]);
+void printLine(char line[]);
+
+int main() {
+	char line[MAX_SIZE];
+	int length;
+
+	while((length = getLine(line)) > 0) {
+		removeComments(line);
+		printLine(line);
+	}
+}
+
+int getLine(char line[]) {
+	int i = 0;
+	int ch;
+	
+	while((ch = getchar()) != EOF && ch != '\n' && i < (MAX_SIZE - 1)) {
+		line[i] = ch;
+		i++;
+	}
+	if(ch == '\n')
+		line[i++] = ch;
+	line[i] = '\0';
+
+	return i;
+}
+
+void removeComments(char line[]) {
+	int i;
+	int comment;
+	int commentStart;
+
+	for(i = 0; line[i] != '\0'; i++) {
+		if(line[i] == '/' && line[i+1] == '*') {
+			comment = 1;
+			commentStart = i;
+		}
+		if(comment == 1 && line[i] == '*' && line[i+1] == '/') {
+			comment = 0;
+			int commentLength = i - commentStart + 2;
+			int t;
+			for(t = i; line[t] != '\0'; t++)
+				line[t-commentLength] = line[t];
+			line[t-commentLength] = '\0';
+			i -= commentLength;
+		}
+		if(comment == 1)
+			continue;
+
+	}
+}
+
+void printLine(char line[]) {
+	int i;
+	for(i = 0; line[i] != '\0'; i++)
+		putchar(line[i]);
+}

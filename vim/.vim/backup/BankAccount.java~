@@ -1,0 +1,32 @@
+public class BankAccount {
+	private int balance;
+	private int interestRate;
+
+	protected BankAccount(int balance, int interestRate) {
+		this.balance = balance;
+		this.interestRate = interestRate;
+	}
+
+	protected void deposit(int amount) {
+		balance += amount;
+	}
+
+	protected boolean withdraw(int amount) throws NotEnoughMoneyException {
+		if(balance < amount) 
+			throw new NotEnoughMoneyException();
+		balance -= amount;
+		return true;
+	}
+
+	protected int getBalance() {
+		return balance;
+	}
+
+	protected void setBalance(int amount) {
+		balance = amount;
+	}
+
+	protected int getAvailableBalance() {
+		return balance;
+	}
+}

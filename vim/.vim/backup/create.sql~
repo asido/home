@@ -1,0 +1,19 @@
+drop database `songbliss`;
+create database `songbliss`;
+use `songbliss`;
+
+create table `musics`
+(
+	`id` int not null auto_increment,
+	`album` varchar(100),
+	`title` varchar(100),
+	`group` varchar(100),
+	`price` decimal(8,2),
+	`rating` decimal(9,8),
+	`rating_count` int,
+	`cover` varchar(50),
+	`release_date` date,
+	`insert_time` timestamp default current_timestamp,
+	`featured` tinyint,
+	primary key (`id`)
+);

@@ -1,0 +1,9 @@
+<?php
+
+
+mysql_connect("localhost", "admin", "admin") or die(mysql_error());
+mysql_select_db("webeteer_contractorbridge") or die(mysql_error());
+/*mysql_connect("localhost", "root", "") or die(mysql_error());
+mysql_select_db("cb") or die(mysql_error());*/
+
+?>

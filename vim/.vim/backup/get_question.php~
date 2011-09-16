@@ -1,0 +1,8 @@
+<?php
+echo '{';
+echo '"qid" : "'.$_POST['qid'].'"';
+// echo '"zip" : "'.$_POST['zip'].'",';
+echo '"answers" : "'.$_POST['answers'].'"';
+echo '}';
+exit;
+?>

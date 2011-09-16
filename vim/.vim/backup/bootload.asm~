@@ -1,0 +1,266 @@
+; This is the kernel's entry point. We could either call main here,
+; or we can use this to setup the stack or other nice stuff, like
+; perhaps setting up the GDT and segments. Please note that interrupts
+; are disabled at this point!
+[BITS 16]
+[ORG 0x0]
+
+START:
+	jmp LOADER
+
+;*************************************************;
+;	OEM Parameter block / BIOS Parameter Block
+;*************************************************;
+ 
+ 							
+bpbOEM					db "AxidOS  "			; OEM identifier (Cannot exceed 8 bytes!)
+bpbBytesPerSector:  	DW 512
+bpbSectorsPerCluster: 	DB 1
+bpbReservedSectors: 	DW 1
+bpbNumberOfFATs: 		DB 2
+bpbRootEntries: 		DW 224
+bpbTotalSectors: 		DW 2880
+bpbMedia: 				DB 0xf8  ;; 0xF1
+bpbSectorsPerFAT: 		DW 9
+bpbSectorsPerTrack: 	DW 18
+bpbHeadsPerCylinder: 	DW 2
+bpbHiddenSectors: 		DD 0
+bpbTotalSectorsBig:     DD 0
+bsDriveNumber: 	        DB 0
+bsUnused: 				DB 0
+bsExtBootSignature: 	DB 0x29
+bsSerialNumber:	        DD 0xa0a1a2a3
+bsVolumeLabel: 	        DB "MOS FLOPPY "
+bsFileSystem: 	        DB "FAT12   "
+
+;--------------------------------------------------
+; Prints null terminated text in SI to the screen
+; SI => null terminated string to print
+;--------------------------------------------------
+PRINT:
+	lodsb			; Load byte from SI to AL
+	or al, al		; Check if the byte is null
+	jz PRINT_DONE	; If so, printing is done
+	mov ah, 0x0E	; No, print the char (this is BIOS VGA interrupt)
+	int 0x10		; interrupt BIOS
+	jmp PRINT		; and back up to repeat the same
+PRINT_DONE:
+	ret				; when done, return to caller
+
+
+;--------------------------------------------
+; Reads a series of sectors
+; CX	=> number of sectors to read
+; AX	=> starting sector
+; ES:BX	=> buffer to reat to
+;--------------------------------------------
+READ_SECTORS:
+	.main:
+		mov di, 0x0005					; five retries for error
+	.sectorloop:
+		push ax
+		push bx
+		push cx
+		call LBA2CHS						; convert starting sector to CHS
+		mov ah, 0x02					; BIOS read sector
+		mov al, 0x01					; read one sector
+		mov ch, BYTE [AbsoluteTrack]	; track
+		mov cl, BYTE [AbsoluteSector]	; sector
+		mov dh, BYTE [AbsoluteHead]		; head
+		mov dl, BYTE [bsDriveNumber]	; drive
+		int 0x13						; invoke BIOS
+		jnc .success					; test for read error
+		xor ax, ax						; BIOS reset disk
+		int 0x13						; invoke BIOS
+		dec di							; decrement error counter
+		pop cx
+		pop bx
+		pop ax
+		jnz .sectorloop					; attempt to read again
+		int 0x18
+	.success:
+		mov si, ProgressMsg
+		call PRINT
+		pop cx
+		pop bx
+		pop ax
+		add bx, WORD [bpbBytesPerSector]; queue next buffer
+		inc ax							; queue next sector
+		loop .main						; read next sector
+		ret
+
+;----------------------------------------------
+; Convert CHS to LBA
+; LBA = (custer - 2) * sectors per cluster
+;----------------------------------------------
+CLUSTER2LBA:
+	sub ax, 0x0002						; zero base cluster number
+	xor cx, cx
+	mov cl, BYTE [bpbSectorsPerCluster]	; convert byte to word
+	mul cx
+	add ax, WORD [Datasector]
+	ret
+
+;------------------------------------------------------------------------------
+; Convert LBA (Logical Block Address) to CHS (Cylinder/Head/Sector)
+; AX => LBA to convert
+;
+; absolute sector	= (logical sector / sectors per track) + 1
+; absolute head		= (logical sector / sectors per track) MOD number of heads
+; absolute track	= logical sector / (sectors per track * number of heads)
+;------------------------------------------------------------------------------
+LBA2CHS:
+	xor dx, dx						; prepare DX:AX for operation
+	div WORD [bpbSectorsPerTrack]	; calculate
+	inc dl							; adjust for sector 0
+	mov BYTE [AbsoluteSector], dl
+	xor dx, dx						; prepare DX:AX for operation
+	div WORD [bpbHeadsPerCylinder]	; calculate
+	mov BYTE [AbsoluteHead], dl
+	mov BYTE [AbsoluteTrack], al
+	ret
+
+;----------------------------------------------------
+; STARTING POINT OF EXECUTION
+;----------------------------------------------------
+LOADER:
+		; code located at 0000:7C00, adjust sement registers
+		cli				; disable interrupts
+		mov ax, 0x07C0	; setup registers to point to our segment
+		mov ds, ax
+		mov es, ax
+		mov fs, ax
+		mov gs, ax
+
+		; now create the stack
+		mov ax, 0x0000	; set the stack
+		mov ss, ax
+		mov sp, 0xFFFF
+		sti				; restore interrupts
+
+	LOAD_ROOT:
+		; compute size of root directory and store in CX
+		xor cx, cx
+		xor dx, dx
+		mov ax, 0x0020				; 32 byte directory entry
+		mul WORD [bpbRootEntries]	; total size of directory
+		div WORD [bpbBytesPerSector]; sectors used by directory
+		xchg ax,cx
+
+		; compute location of root directory and store in AX
+		mov al, BYTE [bpbNumberOfFATs]	; number of FATs
+		mul WORD [bpbSectorsPerFAT]		; sectors used by FATs
+		add ax, WORD [bpbReservedSectors]	; adjust for boot sector
+		mov WORD [Datasector], ax		; base of root directory
+		add WORD [Datasector], cx
+
+		; read root directory into memory (7C00:0200)
+		mov bx, 0x0200			; copy root dir above boot code
+		call READ_SECTORS
+
+		; now try to find for the file we are looking for - stage2 loader binary image
+		mov cx, [bpbRootEntries]	; the number of entries. If we reach 0, file doesn't exist
+		mov di, 0x0200				; root directory was loaded here
+	.loop:
+		push cx
+		mov cx, 11					; 11 character name
+		mov si, Stage2ImageName		; compare the 11 bytes with the name of our file
+		push di
+		rep cmpsb					; test for entry match
+		pop di
+		je LOAD_FAT					; they match, so begin loading FAT
+		pop cx
+		add di, 32					; they don't match so go to next entry (32 bytes)
+		loop .loop
+		jmp FAILURE					; no more entrys left, file doesn't exist :(
+
+	LOAD_FAT:
+		; save starting cluster of boot image
+		mov dx, WORD [di + 0x001A]
+		mov WORD [Cluster], dx		; file's first cluster
+
+		; compute size of FAT and store in CX
+		xor ax, ax
+		mov al, BYTE [bpbNumberOfFATs]	; number of FATs
+		mul WORD [bpbSectorsPerFAT]		; sectors used by FATs
+		mov cx, ax
+
+		; compute location of FAT and store in AX
+		mov ax, WORD [bpbReservedSectors]	; adjust for boot sector
+
+		; read FAT into memory (7C00:0200)
+		mov bx, 0x0200			; copy FAT above boot code
+		call READ_SECTORS
+
+		; read image file into memory (0050:0000)
+		mov ax, 0x0050
+		mov es, ax			; destination for image
+		mov bx, 0x0000		; destination for image
+		push bx
+
+	LOAD_IMAGE:
+		mov ax, WORD [Cluster]				; cluster to read
+		pop bx								; buffer to read into
+		call CLUSTER2LBA					; convert cluster to LBA
+		xor cx, cx
+		mov cl, BYTE [bpbSectorsPerCluster]	; sectors to read
+		call READ_SECTORS
+		push bx
+
+		; compute next cluster
+		mov ax, WORD [Cluster]		; identify current cluster
+		mov cx, ax					; copy current cluster
+		mov dx, ax					; copy current cluster
+		shr dx, 0x0001				; divide by two
+		add cx, dx					; sum for (3/2)
+		mov bx, 0x0200				; location of FAT in memory
+		add bx, cx					; index into FAT
+		mov dx, WORD [bx]			; read two bytes from FAT
+		test ax, 0x0001
+		jnz .ODD_CLUSTER
+
+	.EVEN_CLUSTER:
+		and dx, 0000111111111111b	; take low 12 bits
+		jmp .DONE
+
+	.ODD_CLUSTER:
+		shr dx, 0x0004				; take high 12 bits
+
+	.DONE:
+		mov WORD [Cluster], dx		; store new cluster
+		cmp dx, 0x0FF0				; test for end of file
+		jb LOAD_IMAGE
+
+	DONE:
+		mov si, NewLine
+		call PRINT
+		push WORD 0x0050
+		push WORD 0x0000
+		retf
+
+	FAILURE:
+		mov si, Stage2FileNotFoundMsg
+		call PRINT
+		mov ah, 0x00
+		int 0x16		; await keypress
+		int 0x19		; warm boot computer
+
+;-------------------------------
+; DATA SECTION
+;-------------------------------
+AbsoluteSector	db 0x00
+AbsoluteHead	db 0x00
+AbsoluteTrack	db 0x00
+
+Datasector		dw 0x0000
+Cluster			dw 0x0000
+
+Stage2ImageName:	db "STAGE2  SYS"
+
+Stage2FileNotFoundMsg:	db "MISSING OR CORRUPT STAGE.SYS. Mount the FLOPPY.IMG and copy it there.",0
+ProgressMsg:	db ".", 0x00
+NewLine:		db 0x0D, 0x0A, 0x00
+
+; Finish filling 512 bytes binary and add boot loader signature
+times 510 - ($ - $$) db 0
+dw 0xAA55

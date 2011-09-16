@@ -1,0 +1,207 @@
+{*
+ * Image Upload Module View Template
+ *
+ * Software for 68 Classifieds - Adept Marketing S.A.R.L.
+ *
+ * @author John Snyder
+ * @copyright Copyright (c) 2010, TemplateCodes.com (Adept Marketing S.A.R.L.) All Rights Reserved.
+ * @link http://www.templatecodes.com
+ * @package Image Upload Module
+ * @category Templates
+ * @version 2.3
+ * @internal For use with 68C v4.1.10 - 4.1.x
+ * @internal PHP5 or greater
+ *}
+<!--// Step 4 //-->
+{literal}
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery-1.3.2.min"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.json-1.3.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/swfupload/swfupload.js"></script>
+<script type="text/javascript" src="modules/templatecodes/scripts/jquery.swfupload.js"></script>
+<script type="text/javascript">
+if (navigator.cookieEnabled == false) {
+	$('#swfupload-control').hide();
+	$('#degradedUI').show();
+} else {
+	$(function(){
+		$('#loading').hide();
+		$('#img_header').show();
+		$('#swfupload-control').show();
+		$('#img_msg').html('').hide();
+		$('#swfupload-control').swfupload({
+			upload_url: "modules.php",
+			post_params: {
+				"listingid" : "{/literal}{$listingid}{literal}",
+				"productid" : "{/literal}{$productid}{literal}",
+				"mod" : "image_upload", 
+				"upphotos" : "{/literal}{$upphotos}{literal}"
+			},
+			file_size_limit : "{/literal}{$max_size}{literal}",	// 2MB
+			file_types : "{/literal}{$extensions}{literal}",
+			file_types_description : "{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_ALLOWED_EXTENSIONS}{literal}: {/literal}{$exts}{literal}",
+			file_upload_limit : "0",
+			// Button Settings
+			button_image_url : "modules/image_upload/images/SmallSpyGlassWithTransperancy_17x18.png",
+			button_placeholder_id : "ibutton",
+			button_width: 200,
+			button_height: 18,
+			button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+			button_cursor: SWFUpload.CURSOR.HAND,
+			// Flash Settings
+			flash_url : "modules/templatecodes/scripts/swfupload/Flash/swfupload.swf",
+			debug: false 
+		})
+		.bind('fileQueued', function(event, file){
+			// start the upload since it's queued
+			$(this).wfupload('startUpload');
+		})
+		.bind('fileQueueError', function(event, file, errorCode, message){
+			$('#plog').css('display', 'block');
+			$('#log').append('{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_UPLOAD_ERROR}{literal}<li>: ' + file.name + ' :: ' + message + '</li>');
+		})
+		.bind('uploadStart', function(event, file){
+			$('#loading').show();
+		})
+		.bind('uploadSuccess', function(event, file, serverData){
+			error = serverData.indexOf("{");
+			if (error == -1) {
+				//do some error stuff
+				$('#plog').css('display', 'block');
+				$('#log').append('<li>{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_UPLOAD_FAILED}{literal}: '+file.name+' :{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_ERROR}{literal}: ' + serverData + '</li>');
+			} else {
+				$('#plog').css('display', 'block');
+				$('#log').append('<li>{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_UPLOAD_COMPLETE}{literal}: '+file.name+'</li>');
+				serverData = $.evalJSON(serverData);
+				var li_html = '<li><form action="#"><p class="center" style="height: 100px;"><img alt="' + serverData.title + '" src="thumbs/small_' + serverData.name + '" style="max-height:100px;"></p><p><label for="title">{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_PHOTO_TITLE}{literal}:</label><input type="text" name="title" value="' + serverData.title + '" class="inputtext" /></p><p><label for="rank">{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_PHOTO_ORDER}{literal}:</label><input type="text" name="rank" value="' + serverData.rank + '" class="inputtext" /></p><p class="center"><input type="button" class="isubmit" value="{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_PHOTO_UPDATE}{literal}" /> | <input type="button" class="delete" value="{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_PHOTO_DELETE}{literal}" /></p><input type="hidden" name="iid" value="' + serverData.id + '" /><input type="hidden" name="lid" value="' + serverData.pid + '" /></form></li>';
+				$('#images').append(li_html);
+				var icount = 0;
+				icount = $('#upphotos').html();
+				icount = Math.abs(icount) + Math.abs(1);
+				$('#upphotos').html(icount);
+			}
+		})
+		.bind('uploadComplete', function(event, file){
+			// upload has completed, lets try the next one in the queue
+			$('#loading').hide();
+			$(this).swfupload('startUpload');
+		})
+		.bind('uploadError', function(event, file, errorCode, message){
+			$('#plog').css('display', 'block');
+			$('#log').append('<li>{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_NOTICE}{literal}: ' +message+'</li>');
+		});
+		$('.isubmit').live('click', function() {
+			var pform = $(this).parent().parent();
+			var ftitle = pform.find('input[name=title]').val();
+			var fid =  pform.find('input[name=iid]').val();
+			var frank = pform.find('input[name=rank]').val();
+			var lid = pform.find('input[name=lid]').val();
+			pform.hide();
+			$("#loading").show();
+			$.ajax({
+				url: 'modules.php?mod=image_upload&action=update',
+				data: 'mod=image_upload&action=update&iid=' + fid + '&title=' + ftitle + '&rank=' +  frank + '&lid=' + lid,
+				type: 'post',
+				success: function (msg) {
+					pform.show();
+					$("#loading").hide();
+					if (msg == 1) {
+						//success
+						$('#img_msg').html('{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_SUCCESS}{literal}').removeClass('error').addClass('success').show().fadeOut(5000);
+					} else {
+						//failure
+						$('#img_msg').html('{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_FAILURE}{literal}').removeClass('success').addClass('error').show().fadeOut(5000);
+					}
+				}
+			});
+		});
+		$('.delete').live('click',function() {
+			$("#loading").show();
+			var pform = $(this).parent().parent();
+			var fid =  pform.find('input[name=iid]').val();
+			var lid = pform.find('input[name=lid]').val();
+			$.ajax({
+				url: 'modules.php?mod=image_upload&action=delete',
+				data: 'mod=image_upload&action=delete&iid=' + fid + '&lid=' + lid,
+				type: 'post',
+				success: function (msg) {
+					if (msg == 1) {
+						//success
+						$('#img_msg').html('{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_DELETE_SUCCESS}{literal}').removeClass('error').addClass('success').show().fadeOut(5000);
+						pform.parent().fadeOut('2000');
+						var icount = 0;
+						icount = $('#upphotos').html();
+						icount = Math.abs(icount) - Math.abs(1);
+						$('#upphotos').html(icount);
+						$("#loading").hide();
+					} else {
+						//failure
+						$('#img_msg').html('{/literal}{$smarty.const.MOD_IMAGE_UPLOAD_DELETE_FAILURE}{literal}').removeClass('success').addClass('error').show().fadeOut(5000);
+						$("#loading").hide();
+					}
+				}
+			});
+		});
+		$('#continue').live('click', function() {
+			"{/literal}"
+			window.location = "usercheckout.php?step=6&category={$section}&listingid={$listingid}&productid={$productid}";
+			return false;
+			"{literal}"
+		});
+	});
+}
+</script>
+{/literal}
+<p id="img_header">
+	<a href="usercheckout.php?category={$category}&amp;listingid={$listingid}" class="breadcrumbs">{$smarty.const.LANG_CATEGORY}</a> &raquo;
+	<a href="usercheckout.php?category={$category}&amp;productid={$productid}&amp;step=2&amp;listingid={$listingid}" class="breadcrumbs">{$smarty.const.LANG_VERIFY_PACKAGE}</a> &raquo;
+	<a href="usercheckout.php?category={$section}&amp;listingid={$listingid}&amp;productid={$productid}&amp;step=3" class="breadcrumbs">{$smarty.const.LANG_DETAILS}</a> &raquo;
+	{$smarty.const.LANG_IMAGES}
+	<span class="notcompleted"> &raquo; {$smarty.const.LANG_CONFIRM}</span>
+</p>
+<div id="swfupload-control">
+	<fieldset>
+	<legend>Step 4 - {$smarty.const.LANG_ADD_IMAGES}</legend>
+	<div id="requirements">
+		<h3>{$smarty.const.MOD_IMAGE_UPLOAD_REQUIREMENTS}</h3>
+		<ul>
+			<li>{$smarty.const.MOD_IMAGE_UPLOAD_NUM_IMAGES_ALLOWED}: <span id="upphotos">{$upphotos}</span> {$smarty.const.MOD_IMAGE_UPLOAD_NUM_IMAGES_ALLOWED_OF} {$img_limit}</li>
+			<li>{$smarty.const.MOD_IMAGE_UPLOAD_ALLOWED_EXTENSIONS}: {$exts}</li>
+			<li>{$smarty.const.MOD_IMAGE_UPLOAD_MAX_SIZE_PER_FILE}: {$max_size}</li>
+			<li>{$smarty.const.MOD_IMAGE_UPLOAD_MAX_SIZE_COMBINED}: {$max_php_size}</li>
+			<li>{$smarty.const.MOD_IMAGE_UPLOAD_MAX_IMAGE_DIMENSIONS}: {$max_img_dimensions} {$smarty.const.MOD_IMAGE_UPLOAD_MAX_IMAGE_DIMENSIONS_NOTE}</li>
+		</ul>
+	</div>
+	<div id="movie">
+		<span id="ibutton">&nbsp;</span>
+	</div>
+	<div id="continue">
+		&nbsp;
+	</div><br />
+	<div id="plog">
+		<h3>{$smarty.const.MOD_IMAGE_UPLOAD_PROCESS_LOG}</h3>
+		<ol id="log"></ol>
+	</div>
+	</fieldset>
+	<div id="loading" class="success">{$smarty.const.MOD_IMAGE_UPLOAD_PROCESS_MESSAGE} <img src="modules/templatecodes/images/ajax-loader.gif" /></div>
+	<div id="img_msg"></div>
+	<ul id="images">
+		{foreach from=$images item=image}
+		<li>
+			<form action="#">
+				<p class="center" style="height: 100px;"><img alt="{$image.title}" src="thumbs/small_{$image.image}" style="max-height:100px;"></p>
+				<p><label for="title">{$smarty.const.MOD_IMAGE_UPLOAD_PHOTO_TITLE}:</label><input type="text" name="title" value="{$image.title}" class="inputtext" /></p>
+				<p><label for="rank">{$smarty.const.MOD_IMAGE_UPLOAD_PHOTO_ORDER}:</label><input type="text" name="rank" value="{$image.rank}" class="inputtext" /></p>
+				<p class="center"><input type="button" class="isubmit" value="{$smarty.const.MOD_IMAGE_UPLOAD_PHOTO_UPDATE}" /> | <input type="button" class="delete" value="{$smarty.const.MOD_IMAGE_UPLOAD_PHOTO_DELETE}" /></p>
+				<input type="hidden" name="iid" value="{$image.id}" />
+				<input type="hidden" name="lid" value="{$listingid}" />
+			</form>
+		</li>
+		{/foreach}
+	</ul>
+	<div id="cleanup"></div>
+</div>
+<noscript>
+<div id="degradedUI">
+    {include file="checkout/step4.tpl"}
+</div>
+</noscript>

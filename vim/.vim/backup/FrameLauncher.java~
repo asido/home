@@ -1,0 +1,18 @@
+import javax.swing.JFrame;
+
+public class Frame extends JFrame
+{
+	Frame()
+	{
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(600, 400);
+		setTitle("bla bla bla");
+	}
+
+	public static void main(String[] args)
+	{
+		Frame f = new Frame();
+		f.add(new Animal());
+		f.setVisible(true);
+	}
+}

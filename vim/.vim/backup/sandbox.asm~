@@ -1,0 +1,21 @@
+section .data
+	Snippet db "KANGAROO"
+	var		dw 0x1000
+section .bss
+section .text
+
+	global _start
+
+_start:
+	nop
+; Put your experiments between the two nops...
+
+	push var
+	push word [var]
+	mov eax, 10
+	mov ebx, [eax]
+	mov ecx, dword [eax]
+	mov edx, dword eax
+
+; Put your experiments between the two nops...
+	nop 

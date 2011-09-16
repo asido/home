@@ -1,0 +1,222 @@
+<?php
+require_once('php/auth.php');
+include_once('php/html.php');
+$logged = $auth->
+logged_in(); if (!$logged) { if (!$auth->cookie_login()) { HTML::show_header("spider.php",false); } } else { HTML::show_logged_header(); } $points = $auth->get_points($_SESSION['username']); if ($points >= 50) $questions_created = $auth->questions_created($_SESSION['username']); ?> <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>likemelikeU</title>
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+<link href="css/styles.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<style >
+.si-submain1
+{
+	margin: 10px auto 0 auto;
+	
+	height:72px;
+	width:910px;
+	background: url(../images/transparent_dotdb.png);
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	text-align:center;
+}
+a
+{
+	text-decoration:none;
+	color:#666;
+	
+		
+}
+a:hover
+{
+	color:#000;
+	
+}
+</style>
+</head>
+<body>
+<?php
+	if ( !database )
+		require ( 'database.php' );
+?>
+<script>
+	$(".dashboard-btn").addClass("bh-selected");
+</script>
+
+<?php
+	$db = database::get_instance();
+	//PROFILE QUESTIONS AND ANSWERS
+	$sql = $db->
+query("SELECT COUNT(id) AS number FROM profile_questions"); $rez = mysql_fetch_array($sql); $profile_q_no = $rez['number']; $sql = $db->query("SELECT COUNT(question_id) AS number FROM profile_answers WHERE username='".$_SESSION['username']."'"); $rez = mysql_fetch_array($sql); $profile_a_no = $rez['number']; $profile_perc = ($profile_q_no != 0 ? $profile_a_no / $profile_q_no * 100 : 0); $profile_perc = number_format( $profile_perc, 2 );  ?>
+
+
+<div id="container-admin">
+	<div class="si-main">
+		<div class="si-submain">
+			<table width="800" border="0" class="si-table1">
+			<tr>
+				<td width="321">
+					<p style="margin-top:22px; margin-left:88px;">&nbsp;
+						
+					</p>
+				</td>
+				<td width="350">
+					All Questions Uploaded To Server
+				</td>
+			</tr>
+			</table>
+            </div>
+  
+			<div class="si-mainbelow" id="si-mainbelow">
+				<div id="questions" style="position:relative; padding: 5px 0 1px 0;">
+                
+                <?
+					@session_start();
+					
+					
+					require_once('php/database.php');			
+					$db = database::get_instance();
+					
+					$page=1;
+					if(isset($_GET['page']))
+					{
+						$page = $_GET['page'];
+					}
+					//$page=1;
+					
+					$questions = array();
+					$questions_nr = 0;
+					
+					
+					search_questions($questions, $questions_nr, 'profile', $db);
+					search_questions($questions, $questions_nr, 'top100',  $db);
+					search_questions($questions, $questions_nr, 'top10',  $db);
+					search_questions($questions, $questions_nr, 'group', $db);
+					
+					/*SORT ARRAY
+					for($i=1; $i<=count($questions)-1; $i++){
+						for($j=$i+1; $j<=count($questions); $j++){
+							if($questions[$i]['answers']<$questions[$j]['answers']){
+								$aux = $questions[$i];
+								$questions[$i] = $questions[$j];
+								$questions[$j] = $aux;
+							}
+						}
+					}*/
+					
+					print_questions($questions, $questions_nr, $page);
+					
+					
+					function print_questions($v, $n, $p){
+						$i = $p * 10 - 9;
+						while(($i <= $n) && ($i <= $p*10))
+						{
+							if(isset($_SESSION['username']))
+							{
+								$code="<div class=\"si-view\"><a href=\"profques.php?category=".$v[$i]['category']."&Qid=".$v[$i]['id']."\">View		
+								</a></div>";
+						 
+							}
+							else
+							{
+								$code="";
+							}
+							if($i==($p * 10 - 9))
+							{
+								print
+									"<div class=\"si-maininner\"><p style=\"font-family:Arial, Helvetica, sans-serif; font-size:16px; 
+									color:#252929; margin-left:7px; margin-top:13px; float:left;\">".$v[$i]['id'].". ".$v[$i]['question']."</p>".
+									$code."</div>";
+							}
+							else
+							{
+								print 
+									"<div class=\"si-maininner\"><p style=\"font-family:Arial, Helvetica, sans-serif; font-size:16px; 
+									color:#252929; margin-left:7px; margin-top:13px; float:left;\">".$v[$i]['id'].". ".$v[$i]['question']."</p>".
+									$code."</div>";
+							}
+							$i++;
+						}
+						//print $p;
+						if(($n > $p*10) && ($p != 1)){
+							print "<input type=\"hidden\" id=\"h_prev\" name=\"h_prev\" value=\"1\"><input type=\"hidden\" id=\"h_next\" 
+							name=\"h_next\" value=\"1\"><input type=\"hidden\" id=\"h_page_nr\" name=\"h_page_nr\" value=\"".$p."\">";
+						}elseif(($p == 1) && ($n > $p*10)){
+							print "<input type=\"hidden\" id=\"h_prev\" name=\"h_prev\" value=\"0\"><input type=\"hidden\" id=\"h_next\" 
+							name=\"h_next\" value=\"1\"><input type=\"hidden\" id=\"h_page_nr\" name=\"h_page_nr\" value=\"".$p."\">";
+						}elseif(($p != 1) && ($n <= $p*10)){
+							print "<input type=\"hidden\" id=\"h_prev\" name=\"h_prev\" value=\"1\"><input type=\"hidden\" id=\"h_next\" 
+							name=\"h_next\" value=\"0\"><input type=\"hidden\" id=\"h_page_nr\" name=\"h_page_nr\" value=\"".$p."\">";
+						}else{
+							print "<input type=\"hidden\" id=\"h_prev\" name=\"h_prev\" value=\"0\"><input type=\"hidden\" id=\"h_next\" 
+							name=\"h_next\" value=\"0\"><input type=\"hidden\" id=\"h_page_nr\" name=\"h_page_nr\" value=\"".$p."\">";
+						}
+					
+						
+					}
+					
+					function search_questions(&$v, &$n, $obj,  $db){ 						 	
+						mysql_real_escape_string(stripslashes($obj));
+						//mysql_real_escape_string(stripslashes($key));
+					
+						$query = mysql_query("SELECT id, question FROM ".$obj."_questions");
+						//$result = $db->query($search);
+						while($data = mysql_fetch_array($query)){
+							$n++;
+							$v[$n]['id'] = $data['id'];
+							$v[$n]['question'] = $data['question'];
+							$v[$n]['category'] = $obj;
+						
+							//$select_answers = "SELECT COUNT(question_id) AS nr FROM ".$obj."_answers WHERE question_id='".$v[$n]['id']."'";
+							//$answers_nr = $db->query($select_answers);
+							//$answers = mysql_fetch_array($answers_nr);
+						
+							//$v[$n]['answers'] = $answers['nr'];
+						}
+					}
+
+?>
+                
+                
+                
+				</div>
+			</div>
+            <div  class="si-submain1">
+       			<?php
+					 $totp=round($questions_nr/10);
+					if(($page-1)<1)
+					{
+					}
+					else
+					{
+						echo '<a href="spider.php?page='.($page-1).'">Prev</a>';
+					}
+					echo " | ";
+					
+					if(($page+1)>$totp)
+					{
+					}
+					else
+					{
+						echo '<a href="spider.php?page='.($page+1).'">Next</a>';
+					}
+				 ?>
+    		</div>
+            
+		<!--</div>si-submain-->
+        
+		
+	</div><!--si-main-->
+    
+</div><!--container-admin-->
+
+<?php
+	include_once('php/html.php');
+	HTML::show_background();
+	HTML::show_footer();
+?>
+</body>
+</html>

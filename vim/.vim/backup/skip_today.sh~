@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sed -f '/^Today/ n' $1;

@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int eaccess(const char *path, int mode)
+{
+	if (access(path, F_OK) == -1) {
+		printf("File not found: %s\n", path);
+		return -1;
+	}
+
+	struct stat *file_perm = malloc(sizeof(struct stat));
+	uid_t euid = geteuid();
+	stat(path, file_perm);
+	int result;
+
+	if (file_perm->st_uid == euid)
+		file_perm->st_mode >>= 6;
+
+	result = file_perm->st_mode & mode;
+	free(file_perm);
+	if (result > 0)
+		return 0;
+	return -1;
+}
+
+int main(int argc, char *argv[])
+{
+	if (argc != 2 || strcmp(argv[1], "--help") == 0) {
+		printf("Usage: %s file\n", argv[0]);
+		exit(EXIT_SUCCESS);
+	}
+
+	printf("eaccess: %d\n", eaccess(argv[1], W_OK));
+	while (true) {}
+
+	exit(EXIT_SUCCESS);
+}

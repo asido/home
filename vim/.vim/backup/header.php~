@@ -1,0 +1,80 @@
+<script>
+$(document).ready(function() {
+	$("#mute_sound").click(function() {
+		if ($("#audio").attr("muted")) {
+			$("#audio").attr("muted", false);
+		} else {
+			$("#audio").attr("muted", true);
+		}
+		$("#mute_sound").toggleClass("muted");
+	});
+});
+</script>
+<audio id="audio" loop="loop" autoplay="autoplay">
+	<source src="http://www.cmadesignprojects.com/euro/Sovereign.mp3" type="audio/mp3" />
+</audio>
+<link href="css/caramel.css" rel="stylesheet" type="text/css" />
+<div id="eurotop"></div>
+<div class="eurohead">
+	<div id="headlogoouter">
+		<div id="mute_sound"></div>
+		<div id="eurologo"><a href="index.php?home"><img src="images/logo.png" border="none" height="79px;"/></a></div>
+	<div class="eurotitle"></div>
+	</div>
+</div>
+<?php require_once('man_functions.php');
+$menu=mainmenu();
+$menu_count=count($menu);
+?>
+<div id="nav">
+		<div class="menu">
+        <ul>
+        <?php for($i=0;$i<$menu_count;$i++)
+		{
+			?>
+			
+    	<li><a href="<?php echo $menu[$i]['link']; ?>" class="left_nosub"><?php echo $menu[$i]['name']; ?></a>
+        
+        <?php
+		$submenu=submenu($menu[$i]['id']);
+		$sub_count=count($submenu);
+		if($menu[$i]['id']==9)
+		{
+			echo '<ul>';
+			?>
+            
+            <li><a href="media.php">Media</a></li>
+            <li><a href="press.php">Press</a></li>
+            <li><a href="testimonials.php">Testimonials</a></li>
+            <?php
+		}
+		if($menu[$i]['id']==9 && $sub_count==0)
+		{
+			echo '</ul>';
+		}
+		if($sub_count!=0)
+		{
+			echo '<ul>';
+			#create loop to display sub menu
+			for($j=0;$j<$sub_count;$j++)
+			{
+			?>
+            
+            	<li><a href="<?php echo $submenu[$j]['link']; ?>"><?php echo $submenu[$j]['name']; ?></a></li>
+            
+            <?php
+			}
+			echo '</ul>';
+		}
+		?>
+        
+        </li>
+		<?php if($i!=$menu_count-1) { ?>
+        <div class="menudivider"></div>
+        <?php } ?>
+        <?php
+		}
+		?>
+    </ul>
+		</div>
+</div>

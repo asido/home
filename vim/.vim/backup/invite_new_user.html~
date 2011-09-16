@@ -1,0 +1,13 @@
+<p>Hi,</p>
+<p>You have been invited by {AUTHOR_NAME} ( {AUTHOR_EMAIL} ) to bid on his project.</p>
+<p>To bid on this project, you first have to sign up on Contractor Bridge here:</p>
+<p><a href="http://www.contractorbridge.com/index.php">SIGN UP NOW!	[ http://www.contractorbridge.com/index.php ]</a></p>
+<p>Click or open the link at the bottom to go to the project's page:</p>
+<p><a href="http://www.contractorbridge.com/bid.php?pid={PROJECT_ID}">http://www.contractorbridge.com/bid.php?pid={PROJECT_ID}</a></p>
+<div style="border: 1px solid #6F0; margin:1%; font-size:12px;">
+  <p><strong>Project name:		</strong>{PROJECT_NAME}</p>
+  <p><strong>When:	</strong>{PROJECT_DATE}</p>
+  <p><strong>Where:</strong> {PROJECT_LOCATION}</p>
+  <p><strong>Description:</strong></p>
+  <p>{PROJECT_DESCRIPTION}</p>
+</div>

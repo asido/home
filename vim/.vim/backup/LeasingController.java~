@@ -1,0 +1,75 @@
+package rhinestone.Control;
+
+import rhinestone.TUI.LeasingUI;
+import rhinestone.Model.Lease;
+
+/**
+ * Controlls all the leasing concerned things.
+ *
+ * @author Group 2
+ * @version 2010.12.12
+ */
+public class LeasingController {
+	private LeasingUI leasingUI;
+	private Lease lease;
+
+	//CONSTRUCTOR
+	public LeasingController() {
+		leasingUI = new LeasingUI(this);
+	}
+
+	/**
+	 * Calls UI to print the menu.
+	 */
+	public void startLeasing() {
+		leasingUI.startMenu();
+	}
+
+	/**
+	 * Called by UI when the employee scans machinery bar code and wants to add it the current session.
+	 */
+	public void addMachinery(String barcode) {
+		System.out.println("Machinery " + barcode + " added");
+		pause();
+	}
+
+	/**
+	 * Called by UI when the employee finishes scaning the machinery barcodes,
+	 * and wants to check the lease out.
+	 */
+	public void checkoutLease(String customerCpr) {
+		System.out.println("Lease checked out");
+		pause();
+	}
+
+	/**
+	 * Called by UI when the employee choose 'remove machinery' options,
+	 * to remove the particular machinery from the current leas.
+	 * Used if the machinery is added by mistake or something.
+	 */
+	public void removeMachinery(String barcode) {
+		System.out.println("Machinery " + barcode + " removed");
+		pause();
+	}
+
+	/**
+	 * Called by UI when the employee chooses to 'cancel lease'.
+	 * It will destroy the current session together with all scanned machinery.
+	 */
+	public void cancelLease() {
+		lease = null;
+		System.out.println("Lease canceled");
+		pause();
+	}
+
+	/**
+	 * Don't pay attention to this, it will be removed in the final application version.
+	 */
+	private void pause() {
+		try {
+			Thread.sleep(1000);
+		} catch(InterruptedException ex) {
+			ex.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "set_get_env.h"
+
+void print_env(void);
+
+int main(int argc, char* argv[])
+{
+	if (argc != 3) {
+		printf("Usage: %s env_name env_value\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+
+	printf("\n==================================================================\n\n");
+	print_env();
+	printf("\n==================================================================\n\n");
+	printf("SETTING %s=%s", argv[1], argv[2]);
+
+	if (setenv(argv[1], argv[2], 0) == -1) {
+		printf("SETTING failed\n");
+		exit(EXIT_FAILURE);
+	}
+	printf("\n+++++++++++++++++++++++++++++++++\n%s = %s\n+++++++++++++++++++++++++++++++++++\n", argv[1], getenv(argv[1]));
+
+	printf("\n==================================================================\n\n");
+	print_env();
+	printf("\n==================================================================\n\n");
+
+	unsetenv(argv[1]);
+
+	printf("\n+++++++++++++++++++++++++++++++++\n%s = %s\n+++++++++++++++++++++++++++++++++++\n", argv[1], getenv(argv[1]));
+
+	exit(EXIT_SUCCESS);
+}
+
+
+void print_env(void)
+{
+	int i = 0;
+	char *var;
+	while ((var = environ[i++]) != NULL)
+		printf("%s\n", var);
+}
+
+
+int setenv(const char *name, const char *value, int overwrite)
+{
+	if (strchr(name, '=') != NULL) {
+		errno = EINVAL;
+		return -1;
+	}
+
+	char *var = (char*) malloc(strlen(name) + strlen(value) + 1);
+	/* var[0] = '\0'; */
+	strcat(var, name);
+	strcat(var, "=");
+	strcat(var, value);
+
+	if (getenv(var) != NULL && overwrite == 0)
+		return 0;
+
+	return putenv(var);
+}
+
+int unsetenv(const char *name)
+{
+	if (strchr(name, '=') != NULL) {
+		errno = EINVAL;
+		return -1;
+	}
+
+	int i = 0;
+	char *var;
+	while ((var = environ[i++]) != NULL) {
+		if (strstr(var, name) != NULL) {
+			putenv(strtok(var, '='));
+		}
+	}
+
+	return 0;
+}

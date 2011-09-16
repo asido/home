@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Saving files in currect directory in file savethem."
+exec > savethem
+for i in *; do
+	if [[ "$i" != "savethem" ]]; then
+		echo "====================================================="
+		echo "File: $i"
+		echo "====================================================="
+		cat "$i"
+	fi
+done
+exec savefiles

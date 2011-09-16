@@ -1,0 +1,31 @@
+#!/bin/bash
+
+function locate_field() {
+	IFS=":"
+	var=(${!1})
+	found=false
+	for value in ${var[@]}; do
+		if [[ "$value" = "$2" ]]; then
+			found=true
+			break
+		fi
+	done
+	if [[ $found != "true" ]]; then
+		echo 0
+	else
+		echo 1
+	fi
+}
+
+exist=$(locate_field "$1" "$2")
+if [[ $exist = 0 ]]; then
+	TEMP=$$.tmp
+	echo "set $1=\$$1:$2" > "$TEMP"
+	. ./"$TEMP"
+	rm -f "$TEMP"
+	echo "$(basename $0): $2 added to the $1." 1>&2
+else
+	echo "$(basename $0): $2 already exist in $1." 1>&2
+fi
+
+echo $hi

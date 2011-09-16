@@ -1,0 +1,35 @@
+<?php
+
+require_once('php/database.php');
+
+$db = database::get_instance();
+$file = $_FILES['csv_file']['tmp_name'];
+$category = $_POST['category'];
+$stream = fopen($file, 'r');
+$line_count = 0;
+
+if (is_uploaded_file($file)) {
+	while (true) {
+		$line_count++;
+		$line = fgets($stream);
+		if (!$line)
+			break;
+		$row = explode(",", $line);
+		if (count($row) != 5) {
+			echo '{ "ret": "Error in file on line '.$line_count.'. 5 column needed." }';
+			exit;
+		}
+		// 0 - question, 1 - answer1, 2 - answer2, 3 - answer3, 4 - answer4
+		$query = "INSERT INTO ".$category."_questions(`question`,`answer1`,`answer2`,`answer3`,`answer4`) VALUES
+			('".$row[0]."', '".$row[1]."', '".$row[2]."', '".$row[3]."', '".$row[4]."')";
+		$db->query($query);
+		if (mysql_error())
+			$line_count--;
+	}
+	fclose($stream);
+	echo '{ "ret": "'.$line_count.' questions successfully added." }';
+} else {
+	echo '{ "ret": "Error with file upload." }';
+}
+
+?>

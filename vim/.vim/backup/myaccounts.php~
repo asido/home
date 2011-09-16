@@ -1,0 +1,788 @@
+<?php
+session_start();
+require_once("funcsv.php");
+
+connect();
+
+
+	if(!session_is_registered('user_id'))
+
+	{
+
+		header("location:login.php");	
+
+	}
+	$user_id = $_SESSION['user_id'];
+
+$imagepath=getProfilePic($user_id);
+?>
+<!DOCTYPE html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>YouTours-My Account Settings</title>
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+
+$(function(){
+
+$('.m_editname').click(function(){m_loaddiv('m_editname_div','m_editname','Edit');});
+$('.m_editemail').click(function(){m_loaddiv('m_editemail_div','m_editemail','Edit');});
+$('.m_editaddress').click(function(){m_loaddiv('m_editaddress_div','m_editaddress','Edit');});
+$('.m_editpic').click(function(){m_loaddiv('m_editpic_div','m_editpic','Change');});
+$('.m_editpw').click(function(){m_loaddiv('m_editpw_div','m_editpw','Change');});
+$('.m_editbio').click(function(){m_loaddiv('m_editbio_div','m_editbio','Change');});
+$('.m_editdtour').click(function(){m_loaddiv('m_editdtour_div','m_editdtour','View');});
+$('.m_editutour').click(function(){m_loaddiv('m_editutour_div','m_editutour','View');});
+$('.m_editstats').click(function(){m_loaddiv('m_editstats_div','m_editstats','View');});
+$('.m_editmsgs').click(function(){m_loaddiv('m_editmsgs_div','m_editmsgs','Edit');});
+});
+function m_loaddiv(divid,btid,content)
+{
+	$('#'+divid).slideToggle("fast");
+	var t =$('.'+btid).html();
+	if(t!="hide")
+	{
+		$('.'+btid).html("hide");
+	}
+	else
+	{
+		$('.'+btid).html(content);
+	}
+}
+function updateAccount(action,data)
+{
+	$('#edit_name').css('border','#BAE541 thin solid');
+	$('#edit_email').css('border','#BAE541 thin solid');
+	$('#edit_bio').css('border','#BAE541 thin solid');
+	if(action=="changeName")
+		{
+			if(data=="")
+				{	
+					$('#edit_name').css('border','#F00 thin solid');
+					return false;
+				}
+		}
+	else if(action=="changeEmail")
+		{
+			email = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+			if(data==""||email.test(data)==false)
+			{
+				$('#edit_email').css('border','#F00 thin solid');
+				return false;
+			}
+			
+		
+	
+		}
+	else if(action=="changeBio")
+		{
+			if(data=="")
+				{	
+					$('#edit_bio').css('border','#F00 thin solid');
+					return false;
+				}
+		}			
+		
+	$.ajax({
+   type: "POST",
+   url: "accountAction.php",
+   data: "action="+action+"&data="+data,
+   success: function(msg){
+	   switch(action)
+	   {
+		   case "changeName":$('#dis_name').html(data);
+		   					
+		   					m_loaddiv('m_editname_div','m_editname','Edit');
+							break;
+			case "changeEmail":$('#dis_email').html(data);
+	   						m_loaddiv('m_editemail_div','m_editemail','Edit');
+							break;
+			case "changeBio":
+	   						m_loaddiv('m_editbio_div','m_editbio','Change');
+							break;
+		}
+	   if(msg=="success")
+	    {
+		   $('#editmsg').html("Settings Saved Succesfully");
+		}
+		else
+		{
+			$('#editmsg').html("Error Saving Settings");
+		}
+    
+   }
+ });
+ return false;
+}
+function getstate()
+{
+		countryId=$('#edit_country').val();
+		$.ajax({
+   type: "GET",
+   url: "loaddata.php",
+   data: "statew="+countryId,
+   success: function(msg){
+	  
+     $('#edit_state').html(msg);
+   }
+ });
+}
+function updateAddress()
+{ 
+	
+$('#edit_street').css('border','#BAE541 thin solid');
+$('#edit_zip').css('border','#BAE541 thin solid');
+
+	countryId=$('#edit_country').val();
+	stateId=$('#edit_state').val();
+	street=$('#edit_street').val();
+	if(street=="")
+	{
+		$('#edit_street').css('border','#F00 thin solid');
+		return false;
+	}
+	if(countryId==0)
+	{
+		$('#edit_country').css('border','#F00 thin solid');
+		return false;
+	}
+	if(stateId==0)
+	{
+		$('#edit_state').css('border','#F00 thin solid');
+		return false;
+	}
+	
+	
+	zip=$('#edit_zip').val();
+	num = /^[0-9]/;
+	if(zip=="" || num.test(zip)==false)
+	{
+		$('#edit_zip').css('border','#F00 thin solid');
+		return false;
+	}
+	action="changeAddress";
+	country=$('#edit_country option:selected').html();
+	
+	$.ajax({
+   type: "POST",
+   url: "accountAction.php",
+   data: "action="+action+"&countryId="+countryId+"&stateId="+stateId+"&street="+street+"&zip="+zip,
+   success: function(msg){
+   							 $('#dis_country').html(country);
+		   						m_loaddiv('m_editaddress_div','m_editaddress','Edit');
+  
+				  if(msg=="success")
+						{
+						   $('#editmsg').html("Settings Saved Succesfully");
+						}
+						else
+						{
+							$('#editmsg').html("Error Saving Settings");
+						}
+   }
+   });
+ 
+}
+function picval()
+{
+		pic=$('#file').val();
+	if(pic=="")
+	{
+	  $('#editmsg').html("Select a file");
+		return false;
+	}
+	picx = pic.slice(-3);
+	if(picx!='jpg'&& picx!='jpeg'&& picx!='gif'&&picx!='png'&&picx!='JPG'&& picx!='JPEG'&& picx!='GIF'&&picx!='PNG')
+	{
+		$('#editmsg').html("Select a valid picture");
+		return false;
+	}
+	document.forms["ac_f_change_profpic"].action="updatepic.php";
+	document.forms["ac_f_change_profpic"].method="post";
+	document.forms["ac_f_change_profpic"].submit();
+}
+function updatePassword()
+{
+	$('#edit_pswd').css('border','#BAE541 thin solid');
+	$('#edit_psd1').css('border','#BAE541 thin solid');
+	$('#edit_psd2').css('border','#BAE541 thin solid');
+
+	pswd1=$('#edit_pswd').val();
+	pswd2=$('#edit_psd1').val();
+	pswd3=$('#edit_psd2').val();
+	action="changePassword";
+	if(pswd1=="")
+	{
+		$('#edit_pswd').css('border','#F00 thin solid');
+		return false;
+	}
+	if(pswd2=="")
+	{
+		$('#edit_psd1').css('border','#F00 thin solid');
+		return false;
+	}
+	if(pswd3=="")
+	{
+		$('#edit_psd2').css('border','#F00 thin solid');
+		return false;
+	}
+	if((pswd2==pswd3) && pswd2.length>=6)
+	{
+	$.ajax({
+   type: "POST",
+   url: "accountAction.php",
+   data: "action="+action+"&pswd1="+pswd1+"&pswd2="+pswd2,
+   success: function(msg){
+ // alert (msg);
+   							
+		   						
+  
+				  if(msg=="success")
+						{
+						   $('#editmsg').html("Settings Saved Succesfully");
+						   m_loaddiv('m_editpw_div','m_editpw','Change');
+						}
+					else if(msg=="incorrect")
+						{
+							 $('#editmsg').html("Please enter correct password");
+							 $('#edit_pswd').css('border','#F00 thin solid');
+						}
+						else
+						{
+							$('#editmsg').html("Error Saving Settings");
+							m_loaddiv('m_editpw_div','m_editpw','Change');
+						}
+						
+  
+   }
+ });
+	}
+	else
+	{
+		$('#edit_psd1').css('border','#F00 thin solid');
+		$('#edit_psd2').css('border','#F00 thin solid');
+
+	}
+}
+</script>
+</head>
+<body>
+<div class="content">
+	<?php include("header.php"); ?>
+     <nav>
+    	<a href="index.php" style="text-decoration:none"><div class="menuitem">Home</div></a>
+        <a href="aboutus.php" style="text-decoration:none"><div class="menuitem">About US</div></a>
+        <a href="uploadtours.php" style="text-decoration:none"><div class="menuitem">Post A Tour</div></a>
+        <a href="search.php" style="text-decoration:none"><div class="menuitem">Find A Tour</div></a>
+        <a href="contactus.php" style="text-decoration:none"><div class="menuitem">Contact Us</div></a>
+    
+    </nav> 
+	<div id="ac_area">
+		<div id="ac_innerarea">
+			<div id="ac_acc_head">
+            <h1 class="myaccsett myacch">
+				MY ACCOUNT SETTINGS</h1>
+			</div>
+			<div id="ac_area_white">
+            <div class="editmsg" id="editmsg">
+            <?php if(isset($_GET['success']))
+					{
+					?>
+					Settings Saved Succesfully
+					
+					<?php		
+					}
+			
+			 ?>
+            
+            </div>
+				<div class="ac_bars_settings" id="ac_bar1">
+					<div class="ac_bar1_1">
+						<b>Name</b>
+					</div>
+					<div class="ac_bar1_2 m_editname m_editbox">
+						<b>Edit</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						Your actual Name
+					</div>
+					<div class="ac_bar1_4" id="dis_name">
+						<?php echo  getFullname($user_id); ?>
+					</div>
+				</div>
+				<div id="m_editname_div" class="m_div_display">
+					<form id="ac_f_editname" name="ac_f_editname">
+						<table>
+						<tr>
+							<td class="ac_f1_td">
+								Name
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="text" id="edit_name" name="ac_f_editname_fname" class="ac_edit_txtb" value="<?php echo  getFullname($user_id); ?>"/>
+							</td>
+							<td>
+							</td>
+						</tr>
+						
+					<!--	<tr>
+							<td class="ac_f1_td">
+								User Name
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="text" name="ac_f_editname_uname" class="ac_edit_txtb"/>
+							</td>
+							<td>
+								<input type="button" value="check availability" class="ac_un_check_availability"/>
+							</td>
+						</tr>-->
+						<tr>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+								<input type="button" value="save" class="ac_edit_savebtn" onClick="updateAccount('changeName',$('#edit_name').val());"/>
+							</td>
+							<td>
+							</td>
+						</tr>
+						</table>
+					</form>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar2">
+					<div class="ac_bar1_1">
+						<b>Email Address</b>
+					</div>
+					<div class="ac_bar1_2 m_editemail m_editbox">
+						<b>Edit</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						Set your email contact information
+					</div>
+					<div class="ac_bar1_4" id="dis_email">
+						<?php echo  getEmail($user_id); ?>
+					</div>
+				</div>
+				<div id="m_editemail_div" class="m_div_display">
+					<form id="ac_f_editmail" name="ac_f_editmail">
+						<table>
+						<tr>
+							<td class="ac_f1_td">
+								Change Email
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="text" id="edit_email" name="ac_f_editmail_email" class="ac_edit_txtb"  value="<?php echo  getEmail($user_id); ?>"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+								
+                                <input type="button" value="Save Email" class="ac_edit_savebtn" onClick="updateAccount('changeEmail',$('#edit_email').val());"/>
+							</td>
+						</tr>
+						</table>
+					</form>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar3">
+					<div class="ac_bar1_1">
+						<b>Address</b>
+					</div>
+					<div class="ac_bar1_2 m_editaddress m_editbox">
+						<b>Edit</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						Change your address
+					</div>
+					<div class="ac_bar1_4" id="dis_country">
+						<?php echo getCountryname($user_id);?>
+					</div>
+				</div>
+				<div id="m_editaddress_div" class="m_div_display">
+					<form id="ac_f_editaddress" name="ac_f_editaddress">
+						<table>
+						<tr>
+							<td class="ac_f1_td">
+								Country
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<select name="ac_f_editaddress_country" id="edit_country" onChange="getstate()" class="ac_edit_txtb">
+									<option value="0">-----select-----</option>
+									
+									
+									<?php						
+									$usercountry = getCountryname($user_id);
+									$query = "SELECT * FROM country";
+									//echo $query;
+									$r = mysql_query($query);
+									if(mysql_num_rows($r)>0)
+									{
+										while($onerow=mysql_fetch_array($r))
+										{
+											if($usercountry==$onerow['country_name'])
+											{
+												echo "<option  value=".$onerow['country_id']." selected>".$onerow['country_name']."</option>";
+											}
+											else
+											{
+											echo "<option value=".$onerow['country_id'].">".$onerow['country_name']."</option>";
+											}
+										}
+									}
+							?>	</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="ac_f1_td">
+								state
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<select id="edit_state" name="ac_f_editaddress_state" class="ac_edit_txtb">
+                                	<option value="0">-----select-----</option>
+								
+								<?php						
+									$usercountry = getState($user_id);
+									$usercountryID = getCountryId($user_id);
+									$query = "SELECT * FROM state WHERE country_id='$usercountryID'";
+									//echo $query;
+									$r = mysql_query($query);
+									if(mysql_num_rows($r)>0)
+									{
+										while($onerow=mysql_fetch_array($r))
+										{
+											if($usercountry==$onerow['state_name'])
+											{
+												echo "<option  value=".$onerow['state_id']." selected>".$onerow['state_name']."</option>";
+											}
+											else
+											{
+											echo "<option value=".$onerow['state_id'].">".$onerow['state_name']."</option>";
+											}
+										}
+									}
+							?>	
+                                
+                                </select>
+							</td>
+						</tr>
+						<tr>
+							<td class="ac_f1_td">
+								Street
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="text" id="edit_street" name="ac_f_editaddress_street" class="ac_edit_txtb" value="<?php echo getStreet($user_id); ?>"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="ac_f1_td">
+								Zip code
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="text" id="edit_zip" name="ac_f_editaddress_zip" class="ac_edit_txtb" value="<?php echo  getZip($user_id); ?>"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+								
+                                 <input type="button" value="Save" class="ac_edit_savebtn" onClick="updateAddress();"/>
+							</td>
+						</tr>
+						</table>
+					</form>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar4">
+					<div class="ac_bar1_1">
+						<b>Profile Picture</b>
+					</div>
+					<div class="ac_bar1_2 m_editpic m_editbox">
+						<b>Change</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						Change your profile picture
+					</div>
+					<div class="ac_bar1_4">
+					</div>
+				</div>
+				<div id="m_editpic_div" class="m_div_display">
+					<form id="ac_f_change_profpic" name="ac_f_change_profpic"  enctype="multipart/form-data">
+						<table width="100%">
+						<tr>
+							<td class="ac_f1_td">
+								Profile Picture
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="hidden" name="MAX_FILE_SIZE" value="50000000"/>
+								<input type="file" name="file" id="file"/>
+                               
+                                </td>
+                                <td>
+                                <div class="profilepic" style="width:75px;height:75px; float:right; background-color:#CCC;"><?php echo "<img src='$imagepath' style='width:75px;height:75px;'/>"; ?></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+	
+                                 <input type="button" value="Change" class="ac_edit_savebtn" onClick="picval();">
+						</td>
+						</tr>
+						</table>
+					</form>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar5">
+					<div class="ac_bar1_1">
+						<b>Password</b>
+					</div>
+					<div class="ac_bar1_2 m_editpw m_editbox">
+						<b>Change</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						Change your password
+					</div>
+					<div class="ac_bar1_4">
+						
+					</div>
+				</div>
+				<div id="m_editpw_div" class="m_div_display">
+					<form id="ac_f_changepassword" name="ac_f_changepassword">
+						<table>
+						<tr>
+							<td class="ac_f1_td">
+								Current password
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="password" name="ac_f_changepassword_old" id="edit_pswd" class="ac_edit_txtb"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="ac_f1_td">
+								New password
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="password" name="ac_f_changepassword_new" id="edit_psd1" class="ac_edit_txtb"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="ac_f1_td">
+								Confirm password
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<input type="password" name="ac_f_changepassword_confirm" id="edit_psd2" class="ac_edit_txtb"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+								   						
+                                <input type="button" value="save changes" class="ac_edit_savebtn" onClick="updatePassword();"/>
+							</td>
+						</tr>
+						</table>
+					</form>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar6">
+					<div class="ac_bar1_1">
+						<b>Biography</b>
+					</div>
+					<div class="ac_bar1_2 m_editbio m_editbox">
+						<b>Edit</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						Edit your biography
+					</div>
+					<div class="ac_bar1_4">
+					</div>
+				</div>
+				<div id="m_editbio_div" class="m_div_display">
+					<form id="ac_f_biography" name="ac_f_biography">
+						<table>
+						<tr>
+							<td class="ac_f1_td">
+								Biography
+							</td>
+							<td>
+								:
+							</td>
+							<td>
+								<textarea rows="2" cols="20" id="edit_bio"><?php echo getBio($user_id); ?></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+								
+                                <input type="button" value="save changes" class="ac_edit_savebtn" onClick="updateAccount('changeBio',$('#edit_bio').val());"/>
+							</td>
+						</tr>
+						</table>
+					</form>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar7">
+					<div class="ac_bar1_1">
+						<b>Downloaded Tours</b>
+					</div>
+					<div class="ac_bar1_2 m_editdtour m_editbox">
+						<b>View</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3 m_editbox">
+						View downloaded tours,Request refund,Review all tours
+					</div>
+					<div class="ac_bar1_4" id="dis_name1">
+						
+					</div>
+				</div>
+				<div id="m_editdtour_div" class="m_div_display">
+					<a href="downloadedtours.php">
+					<div class="ac_settings_link">
+						View Downloaded tours
+					</div>
+					</a><a href="downloadedtours.php">
+					<div class="ac_settings_link">
+						Request a refund
+					</div>
+					</a>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar8">
+					<div class="ac_bar1_1">
+						<b>Uploaded tours</b>
+					</div>
+					<div class="ac_bar1_2 m_editutour m_editbox">
+						<b>View</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						View your uploaded tours
+					</div>
+					<div class="ac_bar1_4">
+					</div>
+				</div>
+				<div id="m_editutour_div" class="m_div_display">
+					<a href="uploadedtours.php">
+					<div class="ac_settings_link">
+						View uploaded tours
+					</div>
+					</a>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar9">
+					<div class="ac_bar1_1">
+						<b>Statistics</b>
+					</div>
+					<div class="ac_bar1_2 m_editstats m_editbox">
+						<b>View</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						View statistics of uploaded tours
+					</div>
+					<div class="ac_bar1_4">
+					</div>
+				</div>
+				<div id="m_editstats_div" class="m_div_display">
+					 <a href="statistics.php">
+					<div class="ac_settings_link">
+						View your statistics
+					</div>
+					</a>
+				</div>
+				<div class="ac_bars_settings" id="ac_bar10">
+					<div class="ac_bar1_1">
+						<b>My messages</b>
+					</div>
+					<div class="ac_bar1_2 m_editmsgs m_editbox">
+						<b>Edit</b>
+					</div>
+					<div class="ac_br_line">
+					</div>
+					<div class="ac_bar1_3">
+						View your messages
+					</div>
+					<div class="ac_bar1_4">
+					</div>
+				</div>
+				<div id="m_editmsgs_div" class="m_div_display">
+					 <a href="messages.php">
+					<div class="ac_settings_link">
+						Go to My Messages
+					</div>
+					</a>
+				</div>
+			</div>
+			<div id="ac_area_shadow">
+			</div>
+		</div>
+		<!--innerarea-->
+	</div>
+	<!--ac_area-->
+	<?php include("footer.php"); ?>
+</div>
+<!--end of footer-->
+
+<!--end of content-->
+</body>
+</html>

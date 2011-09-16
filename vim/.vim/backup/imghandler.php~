@@ -1,0 +1,104 @@
+<?php
+
+if (!defined("ROOT")) define ("ROOT", $_SERVER['DOCUMENT_ROOT'].'/');
+
+class ImageHandler
+{
+	private static function getImage($path)
+	{
+		$filename = basename($path);
+		$ext = strtolower(substr(strrchr($filename,"."),1));
+		
+		switch ($ext)
+		{
+			case 'jpg':
+			case 'jpeg':
+				return imagecreatefromjpeg(ROOT.$path);
+			
+			case 'png':
+				return imagecreatefrompng(ROOT.$path);
+			
+			case 'gif':
+				return imagecreatefromgif(ROOT.$path);
+		}
+	}
+	
+	private static function saveImage($path, $image_rsc, $quality = 100)
+	{
+		$filename = basename($path);
+		$ext = strtolower(substr(strrchr($filename,"."),1));
+		
+		switch ($ext)
+		{
+			case 'jpg':
+			case 'jpeg':
+				return imagejpeg($image_rsc, ROOT.$path, $quality);
+			
+			case 'png':
+				return imagepng($image_rsc, ROOT.$path, $quality);
+			
+			case 'gif':
+				return imagegif($image_rsc, ROOT.$path, $quality);
+		}
+	}
+	
+	private static function getAspectRatioSize($width, $height, $originalSize)
+	{
+		$percent = $width < $height ? $width / $originalSize['width'] : $height / $originalSize['height'];
+		
+		$originalSize['width'] *= $percent;
+		$originalSize['height'] *= $percent;
+		
+		return $originalSize;
+	}
+	
+	public static function getSize($image)
+	{
+		if ( is_string($image) ) $image = ImageHandler::getImage($image); // IF PASSED STRING AS $image CREATES AN INSTANCE OF IMAGE
+		if (!$image) return false;
+		
+		$size = array (
+							'width'		=>	imagesx($image),
+							'height'	=>	imagesy($image)
+						);
+		
+		return $size;
+	}
+	
+	public static function resize($path, $width, $height, $aspectRatio = false, $forceSize = false, $quality = 100)  
+																				// $forceSize => If image is smaller than the desired size, its size is increased
+	{
+		$image = ImageHandler::getImage($path);
+		if ($image == false) return false;
+		
+		$image_size = ImageHandler::getSize($image);
+		
+		if ( 
+				($width >= $image_size['width']) && 
+				($height >= $image_size['height']) && 
+				($forceSize == false) ) 
+					
+					{
+						return true;
+					}
+		
+		if ($aspectRatio)
+		{
+			$thumb_size = ImageHandler::getAspectRatioSize($width, $height, $image_size);
+		}
+		else
+		{
+			$thumb_size = array(
+									'width' => $width,
+									'height'=> $height
+									);
+		}
+		
+		$thumb = 	imagecreatetruecolor($thumb_size['width'], $thumb_size['height']);
+					imagecopyresampled($thumb, $image, 0, 0, 0, 0, $thumb_size['width'], $thumb_size['height'], $image_size['width'], $image_size['height']);	
+		
+		return ImageHandler::saveImage($path, $thumb, $quality);
+	}
+}
+
+?>

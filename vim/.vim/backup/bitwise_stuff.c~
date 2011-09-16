@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int rightrot(int x, int n);
+
+int main() {
+	int nr, n;
+	printf("Digit: ");
+	scanf("%d", nr);
+	printf("Shift value: ");
+	scanf("%d", n);
+	printf("%d\n", rightrot(nr, n));
+}
+
+int rightrot(int x, int n) {
+	return (x >> n);
+}

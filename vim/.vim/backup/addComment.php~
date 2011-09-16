@@ -1,0 +1,30 @@
+<?
+foreach($_GET as $key => $value)
+	$_GET[$key] = mysql_real_escape_string($value);
+foreach($_POST as $key => $value)
+	$_POST[$key] = mysql_real_escape_string($value);
+
+require_once('../php/database.php');			
+$db = database::get_instance();
+@session_start();
+$user = $_SESSION['admin_username'];
+
+if($_POST['comment'] != "") {
+	$query = "INSERT INTO comments(username, comment, data) VALUES
+			('".$user."', '".$_POST['comment']."', '".date('Y-m-d')."')";
+	$insert = $db->query($query);
+
+	print_comment($user, $_POST['comment']);
+}
+
+function print_comment($user, $comment) {
+	print
+	"<div class=\"comments-box\">
+    	<div class=\"comments-left\">
+        	<div class=\"comments-image\"></div>
+            <div class=\"comments-name\">".$user."</div>
+        </div>
+        <div class=\"comments-right\">".$comment."</div>
+    </div>";
+}
+?>

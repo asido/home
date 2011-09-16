@@ -1,0 +1,12 @@
+#ifndef GUARD_analyses_h
+#define GUARD_analyses_h
+
+template <class F>
+double analysis(const vector<Student_info>& students, F func) {
+	vector<double> grades;
+
+	transform(students.begin(), students.end(), back_inserter(grades), func);
+	return median(grades);
+}
+
+#endif

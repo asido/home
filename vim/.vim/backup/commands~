@@ -1,0 +1,127 @@
+///////////////////////////////////////
+///				TIPS				///
+///////////////////////////////////////
+
+mkdir file{A,B,C,D} [creates 4 folders named 'fileA' 'fileB' fileC' and 'fileD'. can be usable when copying files or something]
+ctrl+z [pause command - suspend]
+fg [moves a process to the foreground ('&' by the end of the any command makes it run in foreground mode)]
+bg [moves a process to the background (you are able to do multitasking on the same shell). Usage: bg %1 (runs program in background mode which job id is 1)]
+ctrl+d [abort command (similar to ctrl+c, but seems this one is not so aggresive)]
+/dev/null [device of data sink. Redirect all the data you don't want to see there and the output will disappear without a trace. Usage: echo 'hi there' > /dev/null]
+/dev/tty  [the screen device if used for output and keyboard if used for input. you can redirect everything there to ensure the user to see the output (even i.e. if the output of the script is redirected to a file, things which are specified to /dev/tty will appear on the screen, not in the file)]
+| [pipe - redirects programs output to the following programs input]
+& [runs program in a background mode]
+
+$$ [the shell stores the PID number of the process that is executing it]
+$! [stores the value of last proccess ran in background PID]
+$? [stores the exit return code of the last command]
+!! [runs the previous command. you can use it in example when creating directories: mkdir src ; !!/build ; !!/cpp. This makes /src/build/cpp (but easier to use mkdir -p /src/build/cpp)]
+
+ENVIRONMENT VARIABLES:
+	person=max [creates variable 'person' with the value 'max']
+	echo $person [prints 'max']
+	lt=${person}as [creates a variables lt with the value 'maxas']
+	max= [deletes max variable value. NOTE: the value of lt doesn't changes. you have to reset it to feel the change]
+	unset max [removes variable max. NOTE: like above, the value of lt remains the same]
+	readonly lt [makes lt variable read-only. in other words, the value cannot be changed (in attempt to do it, the shell prints an error)]
+	readonly [prints all the environmental variables which are set to read-only]
+	declare -r person=max [creates variable person with value max and makes it read-only with the attribute -r]
+		OTHER ATTRIBUTES:
+		-r [read-only]
+		-a [declares a variable as an array]
+		-i [declares a variable to be type of integer]
+		-f [declares a variable to be a function name]
+		-x [makes the variable global (exports it)]
+		TIP: you can use + instead of - in order to remove the attribute from the variable.
+			 declare == typeset (completely the same commands)
+			 if you don't give any arguments, the command prints all the existing variables with defined attribute
+	PROMPTS:
+		PS1 [users primary prompt]
+		PS2 [secondary prompt used in example when you issue a command 'echo "hi' (waits to finish the string)]
+		PS3 [menu prompt]
+		PS4 [debugging prompt]
+	NOTE: check keyword_variables.png for more variables.
+
+
+
+WILDCARDS:
+	'?' [matches any single character]
+	'*' [matches any number of characters, including zero characters]
+	'[]' [inside brackets the list of characters is defined. It behaves similary like '?', only more strictly. one pair of brackets represents one character. USAGE: [6-9] represents 6, 7, 8, 9. [a-zA-Z] reprents all letters upper/lower case. WARNING: [0-35] doesn't represent from 0 to 35. it represents 0, 1, 2, 3 and 5. To do 1-35 in example of file test1-35.txt, it would look like this: cat text[1-9].txt text[12][0-9].txt text[3][0-5].txt. ALSO: '^' and '!' follows opening '[' bracket, it means NOT, so [^abc] represents everything except a, b and c. You can match ']' or '-' characters by putting them just before closing bracket ']']
+
+
+///////////////////////////////////////
+///	    		COMMANDS		   	///
+///////////////////////////////////////
+
+ssh slacker@asido [login remotly]
+ps [shows running utilities & commands]
+pstree -p [shows running utilities & commands in hierarchical mode]
+stty -a [terminal settings]
+whatis lpr [shows info about lpr utility (man -f alternative)]
+echo 'xxxxxx <ctrl+v> <ctrl+u>' | od -c [od -c filters the output to see what signal the system gets]
+hostname [display the system name]
+lpr [Line Printer. places one or more files in a print queue for printing. usage: cat file.txt | lpr]
+lpq [displays the print queue]
+lprm [removes print job from the queue]
+lpstat [displays status information about the current classes, jobs and printers]
+grep 'credit' memo [Global Regular Expression Print. searches for the word 'credit' in file 'memo']
+head memo [prints 10 first lines of the file 'memo']
+tail memo [prints 10 last lines of the file 'memo']
+sort memo [prints all the content of the file 'memo' after sorting it visually (doesn't change the content inside)]
+uniq memo [prints the content of file 'memo' skipping the duplicated lines]
+diff memo1 memo2 [shows the difference between those 2 files in content]
+file memo [use it to learn about the content of the file without having to open and examine it yourself]
+cat memo | wc -w [wc - Word Count. -w parameters tells to count the words (you can use -l for lines, -c for bytes...]
+script [starts to record everything printed in the terminal in current session ('exit' to finish) (to see the file properly in text editor, first need to eliminate ^M... with fromdos or unix2dos)]
+todos < text1 > text2 [takes text1, converts the text compatible on windows and saves in text2 file]
+fromdos ...... [opposite then above]
+tr -d '\r' [maps one string of characters to another. usage: cat file.txt | tr -d '\r' >> file2.txt]
+bzip2 -v img.jpg [compresses img.jpg file. -v = shows statistic. -k = keep original file (.bz2 extension)]
+bunzip2 img.jpg.bz2 [decompress img.jpg.bz2, which was compressed with the command above]
+bzcat img.jpg.bz2 | head -2 [same as 'cat', just for compressed *.bz2 files]
+bzip2recover img.jpg.bz2 [recovers the corrupted file if it's possible]
+gzip [all 3 following commands does same as bzip2 commands, only that this is older technology and not so efficient (.gz extension)]
+gunzip
+zcat
+type echo [checks if 'echo' command is a built-in in the shell or not]
+slocate motd [searches for motd files on the local system]
+who [shows who is logged in in the system, the devices each person is using, and the time each person has logged in]
+w [the 2 following commands does the same as 'who', just gives more information]
+finger [for security reasons, some administrators disable this function, because it can reveal information that can help a malicious user break into a system]
+who am i [basicaly it is the same as the commands above, it just prints your information only]
+write asido [when you check who is logged in, you can write him with this command (in this case to user named 'asido'). If the user has * in 'Tty' column (device name), it means that the user has blocked messages sent directly to his terminal (refer to 'mesg' command)]
+mesg y ['y' = allows other users to write you with 'write' command. 'n' = block messages]
+uuencode [encodes binary file to ASCII. USAGE: to encode 'img.jpg' to a 'encoded.txt' file: 'uuencode img.jpg img.jpg > encoded.txt'. To decode: 'uudecode encoded.txt' and the original img.jpg will appear in the directory (usable for emailing data which doesn't support attached binary files)]
+pwd [print working directory]
+getfacl [displays a file's ACL]
+setfacl [modifies a file's ACL]
+tee [sends standard input to both a file  standard output. Usage: date | tee time.txt]
+jobs [displays a list of suspended jobs and jobs running in the background. INTENTION: to check the job number to kill the process you have forgotten it]
+fg [moves a process to the foreground ('&' by the end of the any command makes it run in foreground mode)]
+bg [moves a process to the background (you are able to do multitasking on the same shell). Usage: bg %1 (runs program in background mode which job id is 1)]
+pr [converts text files for printing. USAGE EXAMPLE IN VIM: :%!pr]
+. ~/.zshrc [. (dot) runs the configuration file, so you don't need to restart the shell after changes]
+dirs [the following 3 commands manipulates the directory stack]
+pushd
+popd
+history [displays the list of recently typed commands. HISTSIZE variable is responsible for the size. HISTFILE variables stores file path to the file, where all the history is saved whenever you exit from the shell]
+fc -l [FixCommand. shows recent typed commands. USAGE: 'fc 1050'. this command prompts vim with the 1100th command from the history. when you exit file, the commands in file will be executed. if you don't want that, just delete it]
+!! [executes the most recent command from the 'fc']
+!1100 [executes the command from 'fc' marked as 1100]
+alias [displays current aliases]
+unalias al [removes alias named 'al']
+\ls [runs 'ls' utility skipping the alias (runs the origina one)]
+set [displays all shell variables]
+set -o [displays all shells turned off and on features. by adding a feature name you can turn it on that way (+o = turn off | -o = turn on)]
+set -x [turns shell debugging on (+x turns off)]
+find . -name README -print [finds the files with filename 'README']
+find . -name orb\* -exec rm {} \; [finds files which begins with 'orb' and deletes them. another way: find . -name orb\* | xargs rm] 
+bash -x links.sh [-x runs the script in debug mode]
+aspell list < text [checks file 'text' for spelling mistakes and prints those words]
+kill [-signal] PID [terminates the process definied by PID. -signal is optional (default is 2 (== ctrl+c)). USAGE: kill -1 15849. 'kill -l' displays all signal list. actually -9 option is a "sure kill". it cannot be trapped]
+ls -l ~ | cut -d ' ' -f1,8 [cut here cuts the output of ls into pieces delimiting by spaces and takes the 1st and the 8th fields (which are the permissions and the file name)]
+tac file [reversed cat. outputs everything not top down, but down top]
+ss [socket investigation]
+sync [the sync command runs the sync subroutine. If the system must be stopped, run the sync command to ensure file system integrity. The sync command writes all unwritten system buffers to disk including modified i-nodes, delayed block I/O, and read-write mapped files]
+tset [initializes terminals]

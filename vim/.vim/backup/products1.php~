@@ -1,0 +1,714 @@
+<script type="text/javascript" src="<?php echo SITELINK;?>swfobject.js"></script>
+<?php
+//include controller
+include(CONDIR.DS."products.php");
+include(INCDIR.DS."class.php");
+$class = new sax;
+
+//SEO related things here
+$product=$class->F($class->where(TB_PRODUCT,"id",$QST2));
+
+$recentimg=$class->F($class->where(TB_PRODUCT_IMAGE,"reference",$product['reference']));
+$title = $product['productname'];
+//$metadesc = $homerowfetch['title'];
+//compare
+if($QST3=="compare")
+{
+	$_SESSION['SaxCompare'].=$QST2.",";	
+	echo $class->R(SITELINK."products/".$QST2."/".$QST4);
+}
+
+if(isset($_POST['AddtoCart']))
+{
+	if(!isset($_SESSION['CartReference']))
+	{
+		$ref=$class->createRandomPassword();
+		$_SESSION['CartReference']=$ref;
+	}
+	else
+	{
+		$ref=$_SESSION['CartReference'];
+	}
+	$itempord=$class->F($class->where(TB_PRODUCT,"reference",$QST3));
+	$amt=$itempord['cost'];
+	
+	$str="insert into ".TB_CART." set productid='".$product['reference']."',quantity='1',item_option='".$_POST['option1']."',";
+	$str.="option2='".$_POST['option2']."',option3='".$_POST['option3']."',state_tax='".$db['default']['usashippingtax']."',";
+	$str.="totalamount='".$product['cost']."',price='".$product['cost']."',username='".$_SESSION['LinbyStationSignin']."',";
+	$str.="reference='".$ref."',adddate='".date("Y-m-d")."',ipaddress='".$_SERVER['REMOTE_ADDR']."'";
+	//}
+	//echo $str;
+	$exe=$class->Q($str);
+	if($exe)
+	{
+		echo $class->R(SITEROOTSECURE."index.php/cart/S/Shopping_Cart");		
+	}
+	else
+	print $class->R(SITELINK);	
+	//echo $class->R(SITELINK."cart/add/".$product['reference']."/Shopping_Cart");
+}
+$title=$class->F($class->where(TB_PRODUCT,"id",$QST2));
+$catg=$class->F($class->where(TB_CATEGORY,"id",$title['categoryid']));
+$subcatg=$class->F($class->where(TB_SUBCATEGORY,"id",$title['subcategoryid']));
+?>
+<script type="text/javascript" language="javascript">
+function checkvalid()
+{
+	if(document.getElementById('hiddenopt1').value=="nil1" && document.getElementById('option1').value=="")
+	{
+		alert('Please Select any one Option');
+		return false;
+	}
+	if(document.getElementById('hiddenopt2').value=="nil2" && document.getElementById('option1').value=="")
+	{
+		alert('Please Select any one Option');
+		return false;
+	}
+	if(document.getElementById('hiddenopt3').value=="nil3" && document.getElementById('option1').value=="")
+	{
+		alert('Please Select any one Option');
+		return false;
+	}
+}
+</script>
+<div class="content_areaInRight">
+          
+          <!-- Begin contentBoxArea -->
+          <div class="contentBoxArea">
+            <!-- Begin contentBoxAreaLeft -->
+            <div class="contentBoxAreaLeft">
+              <div style="width:655px;">
+              <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+              <tr>
+                <td align="left" valign="top" class="font2">
+				<?php /*?><a href="<?php echo SITELINK;?>" class="font2">Home</a>
+                &raquo;
+                <a href="<?php echo SITELINK;?>shop/<?php echo $title['categoryid'];?>/<?php echo $catg['category']?>" class="font2"><?php echo $catg['category']?></a>
+                &raquo;
+                <a href="<?php echo SITELINK;?>category/<?php echo $title['subcategoryid'];?>/<?php echo $subcatg['subcategory']?>" class="font2"><?php echo $subcatg['subcategory']?></a>
+                &raquo;
+                <?php echo $title['productname']?><?php */?>
+                </td>
+              </tr>
+            </table>
+                <form action="" method="post" name="form1" onsubmit="return checkvalid();">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td width="51%" align="center" valign="top">
+                    <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" style="width:300px; height:300px;">
+                      <tr>
+                        <td align="center" valign="top">
+                        <script type="text/javascript">
+                        function showimg(str)
+						{
+							if(str=="1")
+							{
+								document.getElementById('img1').style.display="block";
+								document.getElementById('img2').style.display="none";
+								document.getElementById('img3').style.display="none";
+							}
+							if(str=="2")
+							{
+								document.getElementById('img1').style.display="none";
+								document.getElementById('img2').style.display="block";
+								document.getElementById('img3').style.display="none";
+							}
+							if(str=="3")
+							{
+								document.getElementById('img1').style.display="none";
+								document.getElementById('img2').style.display="none";
+								document.getElementById('img3').style.display="block";
+							}
+						}
+                        </script>
+                        <?php
+						if($product['big1']!="")
+						$imgg1=SITEPRO."big/".$product['big1'];
+						else
+						$imgg1=SITEIMG."noimg.jpg";
+						if($product['big2']!="")
+						$imgg2=SITEPRO."big/".$product['big2'];
+						else
+						$imgg2=SITEIMG."noimg.jpg";
+						if($product['big3']!="")
+						$imgg3=SITEPRO."big/".$product['big3'];
+						else
+						$imgg3=SITEIMG."noimg.jpg";
+						?>
+                        <div id="img1" style="display:block;">
+                        <img src="<?php echo $imgg1; ?>" alt="" title="<?php echo $product['productname']?>" style="border:4px double #D4D4D4;"  border="0"/></div>
+                        <div id="img2" style="display:none;">
+                        <img src="<?php echo $imgg2; ?>" alt="" title="<?php echo $product['title1']?>" style="border:4px double #D4D4D4;" border="0"/></div>
+                        <div id="img3" style="display:none;">
+                        <img src="<?php echo $imgg3; ?>" alt="" title="<?php echo $product['title2']?>" style="border:4px double #D4D4D4;" border="0"/></div>
+                        </td>
+                      </tr>
+                    </table></td>
+                    <td width="49%" align="left" valign="top">
+                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:4px double #3474B1;">
+                      <tr>
+                        <td height="18" colspan="3" align="center" valign="middle" bgcolor="#3474B1" class="white12" style="font-size:11px;" <?php if($product['productname']!=""){?> <?php }?>>
+						<b><?php echo $product['productname']?></b></td>
+                      </tr>
+                      <tr>
+                        <td height="18" colspan="3" align="center" valign="middle" bgcolor="#3474B1" class="white12" style="font-size:11px;" <?php if($product['title1']!=""){?> <?php }?>>
+                        <b><?php echo $product['title1']?></b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height="18" colspan="3" align="center" valign="middle" bgcolor="#3474B1" class="white12" style="font-size:11px;" <?php if($product['title2']!=""){?> <?php }?>>
+                        <b><?php echo $product['title2']?></b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height="30" colspan="3" align="left" valign="middle">
+                        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                          <?php if($product['listprice_status']=="1"){?>
+                          <tr>
+                            <td height="30" align="center" valign="middle" class="font2" style="padding-right:5px;">
+                            <span class="font2">List Price:</span>
+                            <span style="text-decoration:line-through;">$<?php echo number_format($product['listprice'],2);?></span></td>
+                          </tr>
+                          <?php }?>
+                          <tr>
+                            <td height="1" align="center" valign="middle" bgcolor="#E4E4E4" class="font3" style="padding-right:5px;"></td>
+                          </tr>
+                          <tr>
+                            <td height="30" align="center" valign="middle" class="font3" style="padding-right:5px;">Sale Price:
+                            $<?php echo number_format($product['cost'],2);?></td>
+                          </tr>
+                          <tr>
+                            <td height="1" align="right" valign="middle" bgcolor="#E4E4E4" class="font3" style="padding-right:5px;"></td>
+                          </tr>
+                        <?php
+                        if($product['make_offer']=="1")
+						{
+							?>
+							<tr>
+                            <?php /*?><td height="30" align="center" valign="middle" class="font3" style="padding-right:5px;"><a href="#" onclick="window.open('<?php echo SITELINK;?>offer.php?product=<?php echo $product['id']; ?>','offeerwin','location=no,menubar=no,scrollbars=yes,status=no,titlebar=no,toolbar=no,resizable=yes,width=430,height=360,directories=no')">Make an Offer</a></td><?php */?>
+                            <td height="30" align="center" valign="middle" class="font3" style="padding-right:5px;" ><img src="<?php echo SITEIMG?>shipping1.gif" border="0" alt="Make an Offer" onclick="window.open('<?php echo SITELINK;?>offer.php?product=<?php echo $product['id']; ?>', 'offeerwin', 'location=no, menubar=no, scrollbars=yes, status=no, titlebar=no, toolbar=no, resizable=yes, width=550, height=600, directories=no')" style="cursor:pointer;" /></td>
+                          </tr>
+							<?php
+						}
+						?>
+                        </table></td>
+                      </tr>
+                      <input type="hidden" name="hiddenopt1" id="hiddenopt1" value="<?php echo ($product['option1']!="")? $product['option1'] : "nil1";?>" />
+                      <input type="hidden" name="hiddenopt2" id="hiddenopt2" value="<?php echo ($product['option2']!="")? $product['option2'] : "nil2";?>" />
+                      <input type="hidden" name="hiddenopt3" id="hiddenopt3" value="<?php echo ($product['option3']!="")? $product['option3'] : "nil3";?>" />
+                      <?php if($product['option1']!="" || $product['option2']!="" || $product['option3']!=""){?>
+                      <tr>
+                        <td height="22" colspan="3" align="center" valign="middle" bgcolor="#D8D8D8" class="font2"><b>Options</b></td>
+                      </tr>
+                      <?php }?>
+                      <tr>
+                        <td colspan="2" align="center" valign="middle" class="font2" >
+                        <div id="opt" style="display:block;">
+                        <?php
+                        if($product['option1']!="" || $product['option2']!="" || $product['option3']!="")
+						{
+						?>
+                        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                           <?php if($product['option1']!="")
+						{
+							$spt=explode(":",$product['option1']);
+							$valopt1=explode(",",$spt[1]);
+							$tot=count($valopt1);
+							?>
+                          <tr>
+                            <td width="50%" height="30" align="right" valign="middle" class="font2" style="padding-right:8px;"><span class="font2"><?php echo $spt[0];?></span></td>
+                            <td width="50%" align="left" valign="middle">
+                            <select name="option1" id="option1" style="width:auto; border:1px solid #999;">
+                            <option value="">Select Option</option>
+							  <?php for($i=0;$i<$tot;$i++)
+                              {?>
+                              <option value="<?php echo $valopt1[$i]?>"><?php echo $valopt1[$i]?></option>
+                              <?php }?>
+                            </select>
+                            </td>
+                          </tr>
+                          <?php }?>
+                      <?php if($product['option2']!="")
+					  	 {
+						  $spt=explode(":",$product['option2']);
+						  $valopt2=explode(",",$spt[1]);
+						  $tot=count($valopt2);
+						  ?>  
+                          <tr>
+                            <td height="30" align="right" valign="middle" class="font2" style="padding-right:8px;"><span class="font2"><?php echo $spt[0];?></span></td>
+                            <td align="left" valign="middle">
+                            <?php if($product['option2']!="")
+							 {
+							?>
+							<select name="option2" id="option2" style="width:auto; border:1px solid #999;">
+							<option value="">Select Option</option>
+							<?php for($i=0;$i<$tot;$i++)
+							{?>
+							<option value="<?php echo $valopt2[$i]?>"><?php echo $valopt2[$i]?></option>
+							<?php }?>
+							</select>
+							<?php }?>
+                            </td>
+                          </tr>
+                          <?php }?>
+						  <?php if($product['option3']!="")
+                          {
+                            $spt=explode(":",$product['option3']);
+                            $valopt3=explode(",",$spt[1]);
+                            $tot=count($valopt3);
+                          ?>
+                          <tr>
+                            <td height="30" align="right" valign="middle" class="font2" style="padding-right:8px;"><span class="font2"><?php echo $spt[0];?></span>
+                            </td>
+                            <td align="left" valign="middle">
+                            <select name="option3" id="option3" style="width:auto; border:1px solid #999;">
+							  <option value="">Select Option</option>
+							  <?php for($i=0;$i<$tot;$i++)
+                              {?>
+                              <option value="<?php echo $valopt3[$i]?>"><?php echo $valopt3[$i]?></option>
+                              <?php }?>
+                              </select>
+                            </td>
+                          </tr>
+                          <?php }?>
+                        </table>
+                        <?php
+						}
+						?>
+                        </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height="60" colspan="3" align="center" valign="middle" bgcolor="#D8D8D8" class="font2">
+                          <input type="submit" name="AddtoCart" value="" class="shopbutton" />                          
+                       </td>
+                      </tr>
+                      <tr>
+                        <td height="1" colspan="3" align="right" valign="middle" bgcolor="#D8D8D8" class="font2"></td>
+                      </tr>
+                      <tr>
+                        <td height="25" colspan="3" align="center" valign="middle" bgcolor="#D8D8D8" class="font2">
+                        <a href="#" onmouseover="showamt('1');" onmouseout="showamt('0');" class="font2">
+                        <img src="<?php echo SITEIMG?>newship.gif.png" border="0" alt="Shipping Charges" /></a>
+                        <script type="text/javascript" language="javascript">
+                        function showamt(str)
+						{
+							if(str=="1")
+							document.getElementById('amt').style.display="block";
+							if(str=="0")
+							document.getElementById('amt').style.display="none";
+						}
+                        </script>
+                        <div id="amt" style="display:none;" align="center">
+                        <table width="100%"  border="0" cellpadding="0" cellspacing="1" style="border:1px solid #333; background-color:#D4D4D4;">
+                            <tr>
+                              <td>
+                              <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="0" >
+                                   <tr align="left" valign="middle">
+                                     <td height="27" class="font3" style="padding-left:10px;"><span class="font2">USA</span></td>
+                                    </tr>
+                                    <?php
+									$shipping_usa=0;
+                                    if($product['usa_standard']!="" && is_numeric($product['usa_standard'])) $shipping_usa=(float)$product['usa_standard'];
+									
+									if($product['usa_priority']!="" && is_numeric($product['usa_priority']) && (float)$product['usa_priority']>(float)$product['usa_standard'])
+										$shipping_usa=(float)$product['usa_priority'];
+										?>
+                                   <tr align="left" valign="middle">
+                                  <td height="20" class="font2" style="padding-left:10px;">$<?php echo number_format($shipping_usa,2)?>- USA Shipping</td>
+                                  </tr>
+                                   <tr align="left" valign="middle">
+                                     <td height="20" class="font3" style="padding-left:10px;"><span class="font2">INTERNATIONAL</span></td>
+                                    </tr>
+                                    <?php if($product['int_standard']!=""){?>
+                                   <tr align="left" valign="middle">
+                                     <td height="20" class="font2" style="padding-left:10px;">
+                                     $<?php echo number_format($product['int_standard'],2)?>- International Shipping</td>
+                                    </tr>
+                                    <?php }if($product['int_priority']!=""){?>
+                                   <tr align="left" valign="middle">
+                                     <td height="20" class="font2" style="padding-left:10px;">$<?php echo number_format($product['int_priority'],2)?>- Priority Mail</td>
+                                    </tr>
+                                    <?php }if($product['int_express']!=""){?>
+                                   <tr align="left" valign="middle">
+                                     <td height="20" class="font2" style="padding-left:10px;">$<?php echo number_format($product['int_express'],2)?>- Express Mail</td>
+                                   </tr>
+                                   <?php }?>
+                              </table></td>
+                            </tr>
+                          </table>
+                        </div>
+                        </td>
+                      </tr>
+                      
+                    </table>
+                    
+                    </td>
+                  </tr>
+                  <tr>
+                    <td height="5" colspan="2" align="right" valign="middle"></td>
+                  </tr>
+                  <tr>
+                    <td height="1" colspan="2" align="left" valign="middle" bgcolor="#C5C5C5"></td>
+                  </tr>
+                  <tr>
+                    <td height="8" colspan="2" align="left" valign="middle"></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" align="left" valign="top" style="padding-left:5px;">
+                      <?php
+                      if($product['image1']!="")
+					  $pimg1=SITEPRO."small/".$product['image1'];
+					  if($product['image2']!="")
+					  $pimg2=SITEPRO."small/".$product['image2'];
+					  if($product['image3']!="")
+					  $pimg3=SITEPRO."small/".$product['image3'];
+					  ?>
+                      <?php if($product['image1']!=""){?>
+                      <img src='<?php echo $pimg1;?>' alt='<?php echo $product['image1']?>' title="<?php echo $product['image1']?>" border="0" style="border:4px double #E4E4E4; cursor:pointer;" onclick="showimg('1');"/>
+                      <?php }if($product['image2']!=""){?>
+                      <img src='<?php echo $pimg2;?>' alt='<?php echo $product['image2']?>' title="<?php echo $product['image2']?>" border="0" style="border:4px double #E4E4E4; cursor:pointer;" onclick="showimg('2');"/>
+                      <?php }if($product['image3']!=""){?>                      
+                      <img src='<?php echo $pimg3;?>' alt='<?php echo $product['image3']?>' title="<?php echo $product['image3']?>" border="0" style="border:4px double #E4E4E4; cursor:pointer;" onclick="showimg('3');"/>
+                      <?php }?>                      
+                    </td>
+                  </tr>
+                  <tr>
+                    <td height="8" colspan="2" align="left" valign="middle"></td>
+                  </tr>
+                  <tr>
+                    <td height="1" colspan="2" align="left" valign="middle" bgcolor="#C5C5C5"></td>
+                  </tr>
+                  <tr>
+                    <td height="5" align="left" valign="top" class="font2">&nbsp;</td>
+                    <td width="49%" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <script type="text/javascript" language="javascript">
+                  function showdiv(str)
+				  {
+						if(str=="1")  
+						{
+							document.getElementById('des').style.display="block";
+							document.getElementById('rev').style.display="none";
+							document.getElementById('relate').style.display="none";
+						}
+						if(str=="2")  
+						{
+							document.getElementById('des').style.display="none";
+							document.getElementById('rev').style.display="block";
+							document.getElementById('relate').style.display="none";
+						}
+						if(str=="3")  
+						{
+							document.getElementById('des').style.display="none";
+							document.getElementById('rev').style.display="none";
+							document.getElementById('relate').style.display="block";
+						}
+				  }
+                  </script>
+                  <tr>
+                    <td colspan="2" align="center" valign="top">
+                    <a href="#" name="r"></a><div id="des" style="display:block">
+                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="left" valign="middle">
+                        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:1px solid #D4D4D4;">
+                          <tr>
+                            <td width="7%" height="30" align="left" valign="middle" bgcolor="#999999"><span class="desription" style="padding-left:10px; color:#FFF;">description</span></td>
+                            <td width="93%" align="left" valign="middle" bgcolor="#999999">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td align="right" valign="middle" class="font2">&nbsp;</td>
+                            <td align="right" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td width="2%" align="center" valign="middle" class="font2"><?php if($product['audioclip']!=""){?>
+                                <b>Listen Here :</b>
+                              <?php }?></td>
+                            <td width="98%" align="left" valign="middle"><span class="font2">
+                              <?php if($product['audioclip']!=""){?>
+
+
+
+ <script type="text/javascript" src="<?php echo SITELINK;?>audio-player.js"></script>  
+<script type="text/javascript">  
+AudioPlayer.setup("<?php echo SITELINK;?>player.swf", {  
+width: 290  
+});  
+</script> 
+<p id="audioplayer_1">Audio Player Loading...</p>  
+<script type="text/javascript">  
+AudioPlayer.embed("audioplayer_1", {soundFile: "<?php echo SITEPRO;?><?php echo $product['audioclip']?>"});  
+</script> 
+
+
+
+                              <?php /*?><script type='text/javascript' src='<?php echo SITELINK;?>js/swfobject.js?ver=2.1'></script>
+								  <script type='text/javascript' src='<?php echo SITELINK;?>js/audio-player-noswfobject.js?ver=2.0'></script>
+                                  <!-- /all in one seo pack -->
+                                  <!-- Podcasting 2.3.9.1: http://podcastingplugin.com/ -->
+                                  <script type="text/javascript">
+                                            AudioPlayer.setup("http://www.neffmusic.com/blog/wp-content/plugins/podcasting/player/player.swf", {  
+                                            width: 290			});
+                                          </script>
+                                  <span id="pod_audio_1">&nbsp;</span>
+                                  <script type="text/javascript">  
+                                                AudioPlayer.embed("pod_audio_1", {soundFile: "<?php echo SITEPRO;?><?php echo $product['audioclip']?>"});  
+                                </script><?php */ ?>
+                              <?php /* ?><object type="application/x-shockwave-flash" data="<?php echo SITELINK;?>dewplayer.swf?mp3=<?php echo "/Sax/property/";//SITEPRO;?><?php echo $product['audioclip']?>" width="200" height="20" id="dewplayer">
+                                <param name="wmode" value="transparent" />
+                                <param name="movie" value="<?php echo SITELINK;?>dewplayer.swf?mp3=<?php echo "/Sax/property/";//SITEPRO;?><?php echo $product['audioclip']?>" />
+                              </object><?php */ ?>
+                              <?php }?>
+                             <?php /* ?> </span><?php */ ?>
+                                <?php /* if($product['audiosound2']!=""){?>
+                                <object type="application/x-shockwave-flash" data="<?php echo SITELINK;?>dewplayer.swf?mp3=<?php echo "/Sax/property/";//SITEPRO;?><?php echo $product['audiosound2']?>" width="200" height="20" id="dewplayer">
+                                  <param name="wmode" value="transparent" />
+                                  <param name="movie" value="<?php echo SITELINK;?>dewplayer.swf?mp3=<?php echo "/Sax/property/";//SITEPRO;;?><?php echo $product['audiosound2']?>" />
+                                </object>
+                                <?php }*/?>                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" align="right" valign="middle" class="font2">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" align="left" valign="middle" class="font2" style="padding:5px 5px 5px 5px;">
+							<?php 
+							$vals= str_replace("~","'",$product['description']);
+							echo str_replace("line-height: 115%","line-height: 20px",$vals);
+							?></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" align="right" valign="middle" class="font2">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" align="right" valign="middle"><span class="font2">
+                              </span>                              </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                        </table>
+                        </td>
+                      </tr>
+                    </table>
+                    </div>
+                    <div id="rev" style="display:none">
+                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td width="129" height="30" align="center" style="background-image:url(<?php echo SITEIMG; ?>upb.png); background-repeat:no-repeat; cursor:pointer;" valign="middle" class="font3" onclick="showdiv('1');">
+                        <span class="font2" style="padding-right:16px;">Description</span></td>
+                        <td width="129" align="center" valign="middle" class="font3" style="background-image:url(<?php echo SITEIMG; ?>downb.png); background-repeat:no-repeat; cursor:pointer;" onclick="showdiv('2');">
+                        <span class="font2" style="padding-right:16px;">Reviews</span></td>
+                        <td width="125" align="center" valign="middle" class="font3" style="background-image:url(<?php echo SITEIMG; ?>upb.png); background-repeat:no-repeat; cursor:pointer;" onclick="showdiv('3');">
+                        <span class="font2" style="padding-right:16px;">Similar Items</span></td>
+                        <td width="163" align="center" valign="middle" class="font2">&nbsp;</td>
+                        <td width="103" align="center" valign="middle">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td colspan="5" align="left" valign="middle">
+                        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:1px solid #FFE2BE;">
+                          <tr>
+                            <td height="35" align="left" valign="middle" class="font2" style="padding:5px 5px 5px 5px;">
+                            <span class="font3"><?php echo $product['productname']?></span></td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="middle" class="font2">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="middle" style="padding-left:10px;">
+                            <a href="<?php echo SITELINK;?>reviews/<?php echo $QST2;?>/<?php echo $product['productname'].".html";?>" class="font2">
+                            Write a Review</a> <img src="<?php echo SITEIMG; ?>pen.jpg" border="0" /></td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <?php $tot=$class->C($class->where(TB_REVIEW,"reviewid",$QST2));?>
+                          <tr>
+                            <td align="left" valign="middle" class="font3" style="padding-left:10px;">
+                            <span class="font2">Average of <span class="font3"><?php echo $tot;?></span> User Ratings</span></td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="middle" class="bgDotted">&nbsp;</td>
+                          </tr>
+                          <?php
+                          $rev=$class->Q($class->where(TB_REVIEW,"reviewid",$QST2));
+						  while($review=$class->E($rev))
+						  {
+						  ?>
+                          <tr>
+                            <td height="25" align="left" valign="middle">
+                              <table width="97%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:1px solid #E4E4E4; padding:5px 5px 5px 5px;">
+                                <tr>
+                                  <td width="24%" height="25" align="left" valign="middle" class="font3">
+                                  <span class="font2">Overall</span></td>
+                                  <td width="25%" align="left" valign="middle"><span class="font3"><span class="font2">Quality</span></span></td>
+                                  <td width="27%" align="left" valign="middle"><span class="font3"><span class="font2">Features</span></span></td>
+                                  <td width="24%" align="left" valign="middle"><span class="font3"><span class="font2">Value</span></span></td>
+                                </tr>
+                                <tr>
+                                  <td height="25" align="left" valign="middle" class="font3"><?php 
+								  for($i=1;$i<=$review['rate_overall'];$i++){
+								  ?>
+                                    <img src="<?php echo SITEIMG; ?>staron.gif" border="0" />
+                                  <?php }?></td>
+                                  <td align="left" valign="middle">
+								  <?php 
+								  for($i=1;$i<=$review['rate_quality'];$i++){
+								  ?><img src="<?php echo SITEIMG; ?>staron.gif" border="0" />
+                                  <?php }?>
+								  </td>
+                                  <td align="left" valign="middle"><?php 
+								  for($i=1;$i<=$review['rate_features'];$i++){
+								  ?>
+                                    <img src="<?php echo SITEIMG; ?>staron.gif" border="0" />
+                                  <?php }?></td>
+                                  <td align="left" valign="middle"><?php 
+								  for($i=1;$i<=$review['rate_value'];$i++){
+								  ?>
+                                    <img src="<?php echo SITEIMG; ?>staron.gif" border="0" />
+                                  <?php }?></td>
+                                </tr>
+                            </table></td>
+                          </tr>
+                          <tr>
+                            <td height="30" align="left" valign="middle" class="font3" style="padding-left:10px;"><?php echo $review['review_title']?></td>
+                          </tr>
+                          <tr>
+                            <td height="25" align="left" valign="middle" class="font2" style="padding-left:10px;"><?php echo $review['comments']?></td>
+                          </tr>
+                          <tr>
+                            <td height="25" align="right" valign="middle" class="font2" style="padding-right:20px;">
+                            <?php 
+							$sp=explode("-",$review['post_date']);
+							?>
+                            Posted by <?php echo $review['username']?> from <?php echo $review['living']?> on <?php echo $class->month($sp[1]).", ".$sp[2]." ".$sp[0];?></td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="middle" class="bgDotted">&nbsp;</td>
+                          </tr>
+                          <?php }
+						  $totrev=$class->C($class->where(TB_REVIEW,"reviewid",$QST2));
+						  if($totrev<=0){
+						  ?>
+                          <tr>
+                            <td align="left" valign="middle" class="red" style="padding-left:20px;">~ No Reviews Found ~</td>
+                          </tr>
+                          <?php }?>
+                          <tr>
+                            <td align="left" valign="middle" class="font2">&nbsp;</td>
+                          </tr>
+                        </table>
+                        </td>
+                      </tr>
+                    </table>
+                    </div>
+                    <div id="relate" style="display:none">
+                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td width="129" height="30" align="center" style="background-image:url(<?php echo SITEIMG; ?>upb.png); background-repeat:no-repeat; cursor:pointer;" valign="middle" class="font3" onclick="showdiv('1');">
+                        <span class="font2" style="padding-right:16px;">Description</span></td>
+                        <td width="129" align="center" valign="middle" class="font3" style="background-image:url(<?php echo SITEIMG; ?>upb.png); background-repeat:no-repeat; cursor:pointer;" onclick="showdiv('2');">
+                        <span class="font2" style="padding-right:16px;">Reviews</span></td>
+                        <td width="125" align="center" valign="middle" class="font3" style="background-image:url(<?php echo SITEIMG; ?>downb.png); background-repeat:no-repeat; cursor:pointer;" onclick="showdiv('3');">
+                        <span class="font2" style="padding-right:16px;">Similar Items</span></td>
+                        <td width="163" align="center" valign="middle" class="font2">&nbsp;</td>
+                        <td width="103" align="center" valign="middle">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td colspan="5" align="left" valign="middle">
+                        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:1px solid #FFE2BE;">
+                          <tr>
+                            <td align="left" valign="middle" class="font2" style="padding:5px 5px 5px 5px;">
+							<div class="contentBoxAreaLeft" style="width:640px;">
+							<?php
+                              $query=$class->where(TB_PRODUCT,"categoryid",$product['categoryid'])." and id!='".$QST2."' order by id DESC limit 0,3";
+                              $rp=$class->Q($query);
+                              while($resent=$class->E($rp))
+                              {
+                                  $recentimg=$class->F($class->where(TB_PRODUCT_IMAGE,"reference",$resent['reference']));
+								  if($recentimg['prop_image']!="")
+								  $imgpath=SITEPRO.$recentimg['prop_image'];
+								  else
+								  $imgpath=SITEIMG."noimg.jpg";
+                              ?>
+                              <div class="recentlyaddedBox" style="width:315px;">
+                                <table width="300" border="0" align="center">
+                                  <tr>
+                                    <td rowspan="4" style="border:1px solid #D7D7D7">
+                                    <img src="<?php echo $imgpath; ?>" width="124" height="113" alt="" /></td>
+                                    <td colspan="2"  class="font1"><?php echo $resent['productname']?></td>
+                                  </tr>
+                                  <tr class="font2">
+                                    <td>List Price:</td>
+                                    <td>$<?php echo number_format($resent['listprice']);?></td>
+                                  </tr>
+                                  <tr class="font3">
+                                    <td>Price:</td>
+                                    <td>$<?php echo number_format($resent['cost']);?></td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2" align="right">
+                                    <?php $itm=str_replace(" ","_",$resent['productname'].".html");?>
+                                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                        <td align="center" valign="middle">
+                                        <a href="#" onclick="MM_showHideLayers('Layer1<?php echo $resent['id'];?>','','show')">
+                                    <img src="<?php echo SITEIMG; ?>addtocart.jpg" border="0" alt="Add to Cart" /></a>
+                                        </td>
+                                        <td align="center" valign="middle">
+                                        <a href="<?php echo SITELINK;?>products/<?php echo $resent['id']?>/<?php echo $itm;?>">
+                                    <img src="<?php echo SITEIMG; ?>readmore_btn.jpg" width="89" height="28" alt="Read More" /></a>
+                                        </td>
+                                      </tr>
+                                    </table></td>
+                                  </tr>
+                                </table>
+                              </div>
+                              <?php }
+                              $totrec=$class->C($query);
+                              if($totrec<=0){echo "<br><br><span class='red' style='padding-left:100px;'>~ No Products Found in this Category ~</span>";}
+                              ?>
+                            </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                        </table>
+                        </td>
+                      </tr>
+                    </table>
+                    </div></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" align="center" valign="top">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" align="center" valign="top">&nbsp;
+                    
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" align="center" valign="top">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" align="center" valign="top">&nbsp;
+                    
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="51%" align="center" valign="top">&nbsp;</td>
+                    <td align="right" valign="middle">&nbsp;</td>
+                  </tr>
+                </table>
+                </form>
+              </div>
+            </div>
+            <!-- End contentBoxAreaLeft -->
+          </div>
+          <!-- End contentBoxArea -->
+        </div>

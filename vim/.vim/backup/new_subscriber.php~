@@ -1,0 +1,19 @@
+<?php
+	require_once("lib/swift_mailer/swift_required.php");
+
+	$message = "A new subscriber arrived:
+	Name: ".$_POST['name']."
+	Company: ".$_POST['company']."
+	E-mail: ".$_POST['email'];
+
+	$transport = Swift_SmtpTransport::newInstance();
+	$mailer = Swift_Mailer::newInstance($transport);
+	$msg = Swift_Message::newInstance("Yayks! A new subscriber!")
+		->setFrom(array('wellington@wellington.com' => "Wellington"))
+		->setTo(array("byrontyers@gmail.com" => ""))
+		->setBody($message);//'Here is the message itself');
+	$result = $mailer->send($msg);
+
+	header("Location: contact.html");
+
+?>

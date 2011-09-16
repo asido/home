@@ -1,0 +1,18 @@
+function Service() {
+	var self = this;
+
+	$(document).ready(function() {
+		$('#service-1-link').click(function() {
+			if(!$('#service-1').hasClass('content-visible')) {
+				self.clearVisible();
+				$('#service-1').addClass('content-visible');
+			}
+		});
+	});
+}
+
+Service.prototype = {
+	clearVisible : function() {
+		$('.content-visible').removeClass('content-visible');
+	},
+}

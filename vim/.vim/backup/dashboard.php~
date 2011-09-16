@@ -1,0 +1,341 @@
+<?php
+	error_reporting( 0 );
+	require('php/auth/auth.php');
+	require_once('php/config.php');
+	require_once('php/output/json.php');
+	
+	$logged = $auth->logged_in(true);
+	if ($logged == false) 
+	{ 
+		if (!$auth->cookie_log_in()) { header('Location:index.php'); exit; }
+	}
+	$logged = $auth->logged_in(true);
+
+	$st = $_GET['st']; if (empty($st)) $st = 0;
+	
+	$db = SCONFIG::dbconnect(); if (!$db) header('index.php?logout=1');
+	
+	
+	/* UPDATING PROJECTS STATUS */
+	
+	STEMPLATE::maintain_projects();
+	
+	/* END UPDATE */
+
+	/* IF DELETE IS SET */
+	if (isset($_GET['delete']) && isset($_GET['pid'])) {
+		$query = "SELECT `invited` FROM `projects` WHERE `id`=".$_GET['pid']." AND `invited` LIKE '%".$logged['email']."%'";
+		$r = $db->query($query);
+		$r = $db->to_array($r);
+		if (count($r) == 1) {
+			$r['invited'] = str_replace($logged['email'], "", $r['invited']);
+			$query = "UPDATE `projects` SET `invited`='".$r['invited']."' WHERE `id`=".$_GET['pid']." AND `invited` LIKE '%".$logged['email']."%'";
+			$db->query($query);
+		} else {
+			echo "WTF";
+			exit;
+		}
+	}
+
+	$query = $st < 3 ?	
+						'SELECT p.`id`, p.`author`, p.`name`, p.`description`, p.`date`, p.`location`, p.`invited`, p.`viewed`, p.`status`, u.`name` AS `author_name` FROM `projects` p, `users` u WHERE p.`status` = 0 AND p.`author`=u.`id` ORDER BY p.`date`' : 
+						'SELECT p.`id`, p.`author`, p.`name`, p.`description`, p.`date`, p.`location`, p.`viewed`, p.`invited` FROM `projects` p WHERE p.`author`='.$logged['id'].' ORDER BY p.`date`';
+	$r = $db->query($query);
+	$r = $db->to_array($r);
+	/*print_r($r); exit; */
+	
+	$jobs = array(); 
+	$added = 0;
+	if ($st < 3)
+	{
+		foreach ($r as $proj)
+		{
+			$invited = $proj['invited'];
+			$invited = explode(',', $invited);
+			if (in_array($logged['email'], $invited))
+			{
+				array_push($jobs, $proj);
+				$viewed_id = explode(',', $proj['viewed']);
+				if(!in_array($logged['id'], $viewed_id)){
+					$jobs[$added]['viewed'] = "1";
+				}else{
+					$jobs[$added]['viewed'] = "0";
+				}
+				$added ++;
+			}
+		}
+		
+		/* GETTING EXPIRED JOBS */
+		
+		$expired	= $db->query('SELECT p.`id`, p.`author`, p.`name`, p.`description`, p.`date`, p.`location`, p.`invited`, p.`viewed`, p.`status`, u.`name` AS `author_name` FROM `projects` p, `users` u WHERE p.`status` = 2 AND p.`author`=u.`id` ORDER BY p.`date`');
+		
+		$expired	= $db->to_array( $expired );
+		
+		foreach ( $expired as $proj )
+		{
+			$invited	= $proj['invited'];
+			$invited	= explode(',', $invited);
+			if ( in_array ( $logged['email'], $invited ) )
+			{
+				array_push($jobs, $proj);
+				$viewed_id = explode(',', $proj['viewed']);
+				if(!in_array($logged['id'], $viewed_id)){
+					$jobs[$added]['viewed'] = "1";
+				}else{
+					$jobs[$added]['viewed'] = "0";
+				}
+				$added ++;
+			}
+		}
+	}
+	else
+	{
+		foreach ($r as $job)
+		{
+			$job['author_name'] = $logged['name'];
+			array_push($jobs, $job);
+			$viewed_id = explode(',', $proj['viewed']);
+				if(!in_array($logged['id'], $viewed_id)){
+					$jobs[$added]['viewed'] = "1";
+				}else{
+					$jobs[$added]['viewed'] = "0";
+				}
+				$added ++;
+		}
+	}
+	
+	$pids  = SCONFIG::to_jquery_string($jobs, 'id', '');
+	$js	   = SCONFIG::to_jquery_string($jobs, 'id', "#project_");
+	$jobs  = STEMPLATE::to_dashboard_table($jobs, $st);
+	
+	$account_type	= $auth->account_type();
+	$account_type	= $account_type['account_type'];
+	$upgrade		= 	$account_type == 0 ?
+					   'upgrade' : 
+					   ($account_type == 1 ?
+					   'bronze' :
+					   ($account_type == 2 ?
+					   'silver' :
+					   ($account_type == 3 ?
+					   'gold' : 'upgrade' ) ) );
+					   
+	// jsCalendar
+	
+	$events		= $db->query(
+					'	SELECT id, name, invited, date
+						FROM projects ' );
+	
+	$myevents	= array ();
+	
+	while ( $event = $db->fetch( $events ) )
+	{
+		$invited	= explode ( ',', $event[ 'invited' ] );
+		
+		if ( ! in_array( $logged['email'], $invited ) ) continue;
+		
+		$timestamp	= strtotime( $event['date'] );
+		$evdate		= getdate( $timestamp );
+		
+		$myevent	= array (
+						'name'	=> $event['name'],
+						'date'	=> array(
+									'd'	=> $evdate['mday'],
+									'm'	=> $evdate['mon'] - 1,
+									'y'	=> $evdate['year']
+									),
+						'data'	=> $event['id']
+						);
+		
+		array_push ( $myevents, $myevent );
+	}
+	
+	$json	= new json_printer();
+	
+	// upload left
+	
+	$upload_left	= $auth->left_uploaded_size();
+	$upload_left	= SCONFIG::size_to_string( $upload_left );
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Contractor Bridge</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css" />
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/autocomplete.js" type="text/javascript"></script>
+<script src="js/carousel.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready( function ()
+{
+	var pids = [<?php echo $pids; ?>];
+		
+	$("<?php echo $js; ?>").each ( function ( i )
+	{
+		$(this).click( function ()
+		{
+			window.location = "bid.php?pid="+pids[i];
+		});
+	});
+});
+
+
+</script>
+<script type="text/javascript">
+$(document).ready( function() {
+	$("#post_topbar tr td").mouseover( function() { 
+							$(this).addClass("post_topbarh") 
+								})
+							.mouseout( function() { 
+							$(this).removeClass("post_topbarh")
+								})
+	});
+</script>
+
+<script type="text/javascript" src="js/calendar.js"></script>
+<script type="text/javascript">
+	
+	var dash_up_height 			= 390;		//default dash_up height
+	var max_js_calendar_height	= 250;		//maximum value before chaning dash_up size
+	
+	function moveEvent ( )	//changing dash_up height when calendar changes
+	{
+		var height		= $('#jsCalendar').height ();
+		var addition	= 	height > max_js_calendar_height ?
+							height - 
+							max_js_calendar_height : 0;
+							
+			height		= 	dash_up_height	+
+							addition;
+			
+		
+		var minHeight	= parseInt(	$('#content')	.css('min-height') );
+		
+		$('#content')
+			.css({
+				'top' 			: addition,
+				'min-height'	: minHeight + addition
+			});
+			
+		$('#dash_up')
+			.css( 'height',
+				
+				height
+				
+			);
+	}
+	
+	function eventClicked ( id )
+	{
+		if ( ! id ) return;
+		window.location		= 'bid.php?pid=' + id;
+	}
+
+	var js_calendar	= new jsCalendar(
+								'jsCalendar',
+								<?php
+									
+									$json->json_print( $myevents );
+								
+								?>,
+								eventClicked,
+								moveEvent
+						);
+
+</script>
+
+<style type="text/css">
+.job {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+	
+	<div id="topbar">
+    
+    </div>
+    
+<div id="header-inner">
+	<?php include('topbar.php'); ?>  
+</div>
+</div>
+
+	<div id="post_topbar"> 
+		<table>
+			<tr>
+            	<td class="selected"><a href="dashboard.php"><div> Home </div></a></td>
+                <td><a href="myprofile.php"><div> My Profile </div></a></td>
+                <td><a href="postjob.php"><div> Post A Job </div></a></td>
+                <td><a href="vcon.php"><div> View Contractors </div></a></td>
+                <td><a href="refer.php"><div> Refer A Friend </div></a></td>
+                <td id="topbar_tdfix"><a href="support.php"><div> Support </div></a></td>
+            </tr>
+        </table>
+	</div>
+
+
+	<div id="intro">
+    	<div id="up_stripe"> </div>
+        <div id="dashup_container">
+        	<div id="dash_title"> <img src="images/dash_arrows.png" width="20px" height="13px" /> </div>
+            <div id="dash_up"> 
+            	<div id="up_header">
+                	<div id="upload_left_dash"> You have <?php echo $upload_left; ?> space available.</div>
+                    
+                    <div class="<?php  echo $upgrade; ?>-button"><a id="upgrade-link" href="payment.php">&nbsp;</a></div>
+                   
+                   	<div id="jsCalendar"></div>
+                </div> <!-- up_header -->
+            </div> <!-- dash_up -->
+		</div> <!-- dashup_container -->
+	</div> <!-- intro --> 
+	<div id="content" style="padding-bottom: 50px;">
+    
+		<div id="dashdown_container">
+        
+        	<div id="dash_down">
+            	<div id="down_track"> 
+                	<table>
+                    	<tr>
+                        	<td><a href="dashboard.php?st=0"><div class="d_buttons<?php if ($st == 0) echo ' d_selected'; ?>" id="d_button1"> Bid Invites </div></a></td>
+                    		<!-- <td><a href="dashboard.php?st=2"><div class="d_buttons<?php if ($st == 2) echo ' d_selected'; ?>" id="d_button3"> Jobs Finished </div></a></td> -->
+                            <td><a href="dashboard.php?st=3"><div class="d_small_buttons<?php if ($st == 3) echo ' d_small_selected'; ?>" id="d_button4"> My Planroom </div></a></td>
+                		</tr>
+                    </table>
+                </div> <!-- down_track -->
+                
+                <div id="dash_dwrap">	
+                    <div id="dash_dbody">
+            			<table id="dash_dtable">
+                        	<tr id="th">
+                            	<td class="p_name"> Project Name </td>
+                                <td class="p_holder"> Project Holder </td>
+                                <td class="p_date"> When </td>
+                                <td class="p_loc"> Where </td>
+                                <td></td>
+                            </tr>
+                            <tbody>
+                           	<?php echo $jobs; ?>                                            
+                            </tbody>
+                     </table>
+                     <div id="d_footer">
+                     </div> <!-- d_footer -->
+                </div> <!-- dash_dbody -->
+            </div> <!-- dash_dwrap -->
+        </div> <!-- dash_down -->
+    </div> <!-- dashdown_container -->
+
+
+		<div id="content-inner">
+		</div>
+	</div>
+    
+<?php include("footer.php"); ?>
+</body>
+</html>

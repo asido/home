@@ -1,0 +1,223 @@
+<?php
+//include controller
+include(CONDIR.DS."refer.php");
+include(CONDIR.DS."cart.php");
+include(INCDIR.DS."class.php");
+$class = new sax;
+
+if(isset($_POST['SubmitReview']))
+{
+	$from=$_POST['txtfromemail'];	
+	$name=$_POST['txtfromname'];
+	$frd=explode(",",$_POST['txtfriends']);
+	$subject=$_POST['txtsubject'];
+	//$message=$_POST['txtcomments'];
+	$message="<table width='79%' border='0' align='center' cellpadding='0' cellspacing='0' style='border:1px solid #000'>
+  <tr>
+    <td height='183' align='left' valign='middle' style='background-image:url(".SITEIMG."header.jpg); background-repeat:no-repeat; background-position:center; padding-left:20px; padding-bottom:30px;'>
+    <img src='".SITEIMG."logo_new.png' border='0'>
+    </td>
+  </tr>
+  <tr>
+    <td align='center' valign='middle' style='padding-left:10px;'>&nbsp;</td>
+  </tr>
+  <tr>
+    <td height='25' align='left' valign='middle' style='padding-left:10px; font-family:Verdana, Geneva, sans-serif; font-size:12px;'>Hi , ".$_POST['txtfromname']." has sent you a message!</td>
+  </tr>
+  <tr>
+    <td height='25' align='left' valign='middle' style='padding-left:10px; font-family:Verdana, Geneva, sans-serif; font-size:12px;'>
+	The following message was sent to you by ".$_POST['txtfromname']." regarding the web page below.</td>
+  </tr>
+  <tr>
+    <td height='25' align='left' valign='middle' style='padding-left:10px; font-family:Verdana, Geneva, sans-serif; font-size:12px;'>".$_POST['txtsubject']."</td>
+  </tr>
+  <tr>
+    <td height='25' align='left' valign='middle' style='padding-left:10px; font-family:Verdana, Geneva, sans-serif; font-size:12px;'>".$_POST['txtcomments']." - ".$_POST['txtfromname']."</td>
+  </tr>
+  <tr>
+    <td height='25' align='left' valign='middle' style='padding-left:10px; font-family:Verdana, Geneva, sans-serif; font-size:12px;'>Address: <a href='".SITELINK."'>".SITELINK."</a></td>
+  </tr>
+  <tr>
+    <td align='left' valign='middle' style='padding-left:10px; font-family:Verdana, Geneva, sans-serif; font-size:12px;'>
+    This message was sent to you using the Tell-A-Friend feature at <a href='".SITELINK."'>".SITELINK."</a> If you think it was sent in error, or to report abuse, please visit our website or contact us.</td>
+  </tr>
+  <tr>
+    <td align='left' valign='middle' style='padding-left:10px;'>&nbsp;</td>
+  </tr>
+</table>";
+//echo $comm;
+	$count=count($frd);
+	$header = "From: ".$from."\n"; 
+	$header.="Content-Type: text/html; charset=iso-8859-1";
+	for($i=0;$i<($count);$i++)
+	{
+	// Enter your email address
+	$to =$frd[$i];  
+	$sent=mail($to,$subject,$message,$header);
+	}
+	//if($sent)
+	echo $class->R(SITELINK."refer/succ/Tell Your Friends!");
+	//else
+	//echo $class->R(SITELINK."refer/err/Tell Your Friends!");
+}
+?>
+<div class="content_areaInRight">
+          
+          <!-- Begin contentBoxArea -->
+          <div class="contentBoxArea">
+            <!-- Begin contentBoxAreaLeft -->
+            <div class="contentBoxAreaLeft">
+              <div style="width:655px;"><span class="title">Tell Your Friends</span>
+                <form action="" method="post" name="fomr1" onsubmit="return refervalid();">
+                <table width="100%" border="0" align="center">
+                  <tr>
+                    <td width="6" align="left" valign="middle">&nbsp;
+                    <?php 
+					if($QST2=="succ"){echo "<span class='green'>Successfully Mail sent</span>";}
+					if($QST2=="err"){echo "<span class='red'>Error, while sending mail, please try again.</span>";}
+					?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:1px solid #F7D1B1;">
+                      <tr>
+                        <td width="27%" height="25" align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                        <td width="73%" align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="35" align="left" valign="middle" class="font3" style="padding-left:15px;">
+                        <span class="font2">Your Name</span></td>
+                        <td align="left" valign="middle" class="font3" style="padding-left:15px;">
+                        <input type="text" name="txtfromname" id="txtfromname" class="txtborder" style="width:200px;" /></td>
+                      </tr>
+                      <tr>
+                        <td height="35" align="left" valign="middle" class="font3" style="padding-left:15px;">
+                        <span class="font2">Your Email</span></td>
+                        <td align="left" valign="middle" class="font3" style="padding-left:15px;">
+                        <input type="text" name="txtfromemail" id="txtfromemail" class="txtborder" style="width:200px;"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height="70" align="left" valign="middle" class="font3" style="padding-left:15px;">
+                        <span class="font2">Friend's Email</span></td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">
+                        <textarea name="txtfriends" class="txtborder" id="txtfriends" style="width:300px;"></textarea>
+                        (separate by comma)
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height="35" align="left" valign="middle" class="font3" style="padding-left:15px;">
+                        <span class="font2">Subject</span></td>
+                        <td align="left" valign="middle" class="font3" style="padding-left:15px;">
+                          <input type="text" name="txtsubject" id="txtsubject" class="txtborder" style="width:200px;"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height="25" align="left" valign="middle" class="font3" style="padding-left:15px;">
+                        <span class="font2">Comments</span></td>
+                        <td align="left" valign="middle" class="font3" style="padding-left:15px;">
+                          <textarea name="txtcomments" class="txtborder" id="txtcomments" style="width:300px; height:100px;"></textarea>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height="25" align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="25" align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" class="font3" style="padding-left:15px;">
+                        <input type="submit" name="SubmitReview" class="buttonbg" value="Send" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height="25" align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                    </table></td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                </table>
+                </form>
+              </div>
+            </div>
+            <!-- End contentBoxAreaLeft -->
+          </div>
+          <!-- End contentBoxArea -->
+        </div>
+<script type="text/javascript" language="javascript">
+function refervalid()
+{
+	if(document.getElementById('txtfromname').value=="")	
+	{
+		document.getElementById('txtfromname').style.borderColor="red";
+		document.getElementById('txtfromname').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('txtfromname').style.borderColor="#006633";
+	}
+	
+	if(document.getElementById('txtfromemail').value=="")	
+	{
+		document.getElementById('txtfromemail').style.borderColor="red";
+		document.getElementById('txtfromemail').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('txtfromemail').style.borderColor="#006633";
+	}
+	
+	if(document.getElementById('txtfromemail').value!="")
+	{
+		var x = document.getElementById('txtfromemail').value;
+		var filter  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if (filter.test(x))
+		{
+			 document.getElementById('txtfromemail').style.borderColor="#006633";
+		}
+		else 
+		{
+	 	 document.getElementById('txtfromemail').style.borderColor="red";
+		 document.getElementById('txtfromemail').focus();
+		 return false;
+		}
+	}	
+	
+	if(document.getElementById('txtfriends').value=="")	
+	{
+		document.getElementById('txtfriends').style.borderColor="red";
+		document.getElementById('txtfriends').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('txtfriends').style.borderColor="#006633";
+	}
+	
+	if(document.getElementById('txtsubject').value=="")	
+	{
+		document.getElementById('txtsubject').style.borderColor="red";
+		document.getElementById('txtsubject').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('txtsubject').style.borderColor="#006633";
+	}
+	
+	if(document.getElementById('txtcomments').value=="")	
+	{
+		document.getElementById('txtcomments').style.borderColor="red";
+		document.getElementById('txtcomments').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('txtcomments').style.borderColor="#006633";
+	}
+}
+</script>        

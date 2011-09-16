@@ -1,0 +1,66 @@
+package TUI;
+
+import java.util.Scanner;
+
+import rhinestone.Control.LeasingController;
+
+public class LeasingUI {
+	private LeasingController controller;
+
+	public LeasingUI(LeasingController controller) {
+		this.controller = controller;
+	}
+
+	public void startMenu() {
+		boolean finished = false;
+		while(!finished) {
+			printMenu();
+			int choice = promptChoiceInput();
+			switch(choice) {
+				case 1:
+					controller.addMachinery(promptBarcodeInput());
+					break;
+				case 2:
+					controller.checkoutLease(promptCprInput());
+					finished = true;
+					break;
+				case 3:
+					controller.removeMachinery(promptBarcodeInput());
+					break;
+				case 4:
+					controller.cancelLease();
+					finished = true;
+					break;
+				default:
+					System.err.println("ERR: LeasingUI default option");
+					break;
+			}
+		}
+	}
+
+	private void printMenu() {
+		System.out.println(" ----- LEASING MENU -----");
+		System.out.println("\t(-1-) Scan machinery");
+		System.out.println("\t(-2-) Checkout lease");
+		System.out.println("\t(-3-) Remove machinery");
+		System.out.println("\t(-4-) Cancel lease");
+	}
+
+	private int promptChoiceInput() {
+		System.out.print("Your choice: ");
+		int choice = new Scanner(System.in).nextInt();
+		return choice;
+	}
+
+	private String promptBarcodeInput() {
+		System.out.print("Machinery barcode: ");
+		String barcode = new Scanner(System.in).nextLine();
+		return barcode;
+	}
+
+	private String promptCprInput() {
+		System.out.print("Customer CPR: ");
+		String cpr = new Scanner(System.in).nextLine();
+		return cpr;
+	}
+}

@@ -1,0 +1,23 @@
+function dialogbox(query)
+{
+	var o = $(query);
+	o.each ( function ()
+	{
+		$(this).find(">*").each ( function ()
+		{
+			$(this).parent().show();
+			var t = ( $(window).height() - $(this).height() )*0.5;
+			var l = ( $(window).width() - $(this).width() ) * 0.5;
+			$(this).css({'position' : 'relative', 'top' : t+"px", 'left' : l+"px"});
+			$(this).parent().hide();
+		});
+	});
+	
+	return o;
+}
+
+$(document).ready(function() {
+	$("#iframe-x").click(function() {
+		dialogbox("#frame-div").fadeOut();
+	});
+});

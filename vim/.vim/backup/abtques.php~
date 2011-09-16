@@ -1,0 +1,145 @@
+<?php
+/*
+require_once('php/auth.php');
+
+$logged = $auth->logged_in();
+
+if (!$logged) {
+	if (!$auth->cookie_login()) {
+		header('Location: login.php');
+		exit;
+	}
+}
+*/
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikemelikeU</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript">
+	$(document).ready ( function (){
+		$('#prev').hide();
+		$('#next').hide();
+		$('#search_btn').click(function() {				
+			// if ($("#search_input").val() == "")
+				return;
+
+			$.ajax({
+			   type: "POST",
+			   url: "searchQuestion.php",
+			   data: { search_question:$('#search_input').val(), page:1 },
+			   responseType:'text',
+			   success: function(response){				   		
+					$('#questions').html(response);	
+					if($('#h_prev').val() == 0){
+						$('#prev').hide();
+					}else{
+						$('#prev').show();
+					}
+					if($('#h_next').val() == 0){
+						$('#next').hide();
+					}else{
+						$('#next').show();
+					}
+			   }
+			 });				
+		});			
+		
+		$('#prev').click(function() {				
+				$.ajax({
+				   type: "POST",
+				   url: "searchQuestion.php",
+				   data: { search_question:$('#search_input').val(), page:(parseInt($('#h_page_nr').val()) - 1) },
+				   responseType:'text',
+				   success: function(response){				   		
+						$('#questions').html(response);								   		
+						if($('#h_prev').val() == 0){
+							$('#prev').hide();
+						}else{
+							$('#prev').show();
+						}
+						if($('#h_next').val() == 0){
+							$('#next').hide();
+						}else{
+							$('#next').show();
+						}
+				   }
+				 });
+		});
+		
+		$('#next').click(function() {				
+				$.ajax({
+				   type: "POST",
+				   url: "searchQuestion.php",
+				   data: { search_question:$('#search_input').val(), page:(parseInt($('#h_page_nr').val()) + 1) },
+				   responseType:'text',
+				   success: function(response){				   											   		
+						$('#questions').html(response);	
+						if($('#h_prev').val() == 0){
+							$('#prev').hide();
+						}else{
+							$('#prev').show();
+						}
+						if($('#h_next').val() == 0){
+							$('#next').hide();
+						}else{
+							$('#next').show();
+						}
+				   }
+				 });
+		});	
+		
+		
+	});
+	
+	
+</script>
+</head>
+
+<body>
+
+<?php
+	require_once('php/html.php');
+
+	if ($logged)
+		HTML::show_logged_header();
+	else
+		HTML::show_header("summary.php");
+?>
+
+
+<div id="container-admin">
+    <div class="si-main">
+        <div class="si-submain">
+            <table width="800" border="0" class="si-table1">
+              <tr>
+                <td width="250"><p style="margin-top:22px; margin-left:88px;">Question About :</p></td>
+                <td width="400"><input type="text" name="search_input" id="search_input" class="si-textbx" style="margin-top:10px;"/></td>
+                <td width="110">&nbsp;<div class="si-searchbtn"><p style="margin-top:8px; margin-left:15px; color:#FFF;" id="search_btn">SEARCH</p></div></td>
+              </tr>
+            </table>
+    
+        </div>
+        <div class="si-mainbelow" id="si-mainbelow">  
+            <div id="questions" style="position:relative; padding: 5px 0 0 0;">
+                <input type="hidden" id="h_page_nr" name="h_page_nr" value="1">
+            </div>
+            <div class="si-page"><span class="si-arrows" id="prev"> &laquo; </span>&nbsp;&nbsp;<span class="si-arrows" id="next"> &raquo; </span></div>
+        </div>    
+        
+    </div>
+    </div>
+</div>
+<?php
+	include_once('php/html.php');
+	HTML::show_background();
+	HTML::show_footer();
+?>
+
+</body>
+</html>

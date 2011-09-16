@@ -1,0 +1,17 @@
+$(document).ready(function() {
+	$("#signup-button").click(toggle_login_box);
+});
+
+function toggle_login_box()
+{
+		var ok = false;
+		if(!ok)	{
+			$('#signup-button').css({ 'background-image':'url(images/button-signinS.png)', 'height':'35px' });
+			ok = true;
+		}
+		else {
+			$('#signup-button').css({ 'background-image':'url(images/button-signin.png)' });
+			ok = false;
+		}
+		$('#login-right-profile').toggle();
+}

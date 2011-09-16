@@ -1,0 +1,9 @@
+#include <stdio.h>
+#include <limits.h>
+
+int main() {
+	printf("Max int: %d\n", INT_MAX);
+	printf("Amount of bits in a char: %d\n", CHAR_BIT);
+
+	return 0;
+}

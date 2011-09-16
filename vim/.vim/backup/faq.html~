@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Wellington</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.4.2.js" type="text/javascript"></script> 
+<script src="js/slider.js" type="text/javascript"></script> 
+<script type="text/javascript"> 
+	var slider = new Slider();
+</script> 
+<script src="js/faq_toggle.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div id="header">
+
+	<div id="stripe-up"></div>
+    <div id="header-background">
+    	<div id="header-wraper">
+        	<div id="logo"><a id="logo-top" href="home.html"></a></div>
+            <div id="navigation">
+            	<table id="navigation-menu">
+                   <tr>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                	<td><div class="nav-mid"><a href="home.html">Home&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="about.html">About Us&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="services.html">Services&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid nav-selected"><a href="faq.html">FAQ&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>
+                    <td><div class="nav-mid"><a href="contact.html">Contact&nbsp;</a></div></td>
+                    <td><div class="nav-spacer">&nbsp;</div></td>                   
+               	   </tr>
+            	</table>
+            </div><!--navigation-->
+            <div id="navigation-shadow"></div>
+        </div><!--header-wraper-->
+    </div><!--header-background-->
+    
+    <div id="slider-container">	
+        <div id="slider"> 
+            <div id="slider-main"> 
+				<div id="slide-0"> 
+					<div class="slider-top">0. Lorem Ipsum Dolor Sit Amet</div> 
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div> 
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div> 
+				</div><!--slide-0--> 
+				<div id="slide-1"> 
+					<div class="slider-top">1. Lorem Ipsum Dolor Sit Amet</div> 
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div> 
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div> 
+				</div><!--slide-1--> 
+				<div id="slide-2"> 
+					<div class="slider-top">2. Lorem Ipsum Dolor Sit Amet</div> 
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div> 
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div> 
+				</div><!--slide-2--> 
+				<div id="slide-3"> 
+					<div class="slider-top">3. Lorem Ipsum Dolor Sit Amet</div> 
+					<div class="slider-mid">	
+							Elit facilisis sociis ac tincidunt, penatibus, ultrices integer 
+							magna arcu scelerisque dis, duis velit porttitor egestas 
+							integer dis! Augue porta, proin, elementum platea sit, 
+							purus, augue vel!
+					</div> 
+					<div class="slider-bottom"><a href="http://webeteerprojects.com/byron/about.html">About Us</a></div> 
+				</div><!--slide-3--> 
+            </div><!--slider-main--> 
+        </div><!--slider--> 
+		<div class="arrows" id="arrow-left"></div> 
+		<div class="arrows" id="arrow-right"></div> 
+    	<div id="slider-shadow"></div> 
+    </div><!--slider-container--> 
+
+    
+</div><!--header-->
+
+<div id="container">
+	<div id="faq-wrap">
+		<div id="faq-title-wrap">
+			<div class="content-title">FAQ</div>
+			<div id="faq-button-all">
+				<div id="faq-hide-all"></div>
+				<div id="faq-show-all"></div>
+			</div>
+		</div>
+        
+    	<div class="faq-question" id="faq-q1">
+        	<div class="faq-title" id="faq-title1">
+            	<p><span class="content-head">Nullam non porta si ante integer volputatem?</span></p>
+                <div class="faq-button" id="faq-b1"></div>
+            </div>
+            <div class="faq-text" id="faq-txt1">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt1-->
+        </div><!--faq-q1-->
+        
+    	<div class="faq-question" id="faq-q2">
+        	<div class="faq-title" id="faq-title2">
+            	<p><span class="content-head">Integer partitum soluratium?</span></p>
+                <div class="faq-button" id="faq-b2"></div>
+            </div>
+            <div class="faq-text" id="faq-txt2">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt2-->
+        </div><!--faq-q2-->        
+        
+    	<div class="faq-question" id="faq-q3">
+        	<div class="faq-title" id="faq-title3">
+            	<p><span class="content-head">Soluracium belvederum ipsum?</span></p>
+                <div class="faq-button" id="faq-b3"></div>
+            </div>
+            <div class="faq-text" id="faq-txt3">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt3-->
+        </div><!--faq-q3-->        
+        
+    	<div class="faq-question" id="faq-q4">
+        	<div class="faq-title" id="faq-title4">
+            	<p><span class="content-head">Partiro consare da verdi in sioma noi?</span></p>
+                <div class="faq-button" id="faq-b4"></div>
+            </div>
+            <div class="faq-text" id="faq-txt4">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt4-->
+        </div><!--faq-q4-->        
+ 
+    	<div class="faq-question" id="faq-q5">
+        	<div class="faq-title" id="faq-title5">
+            	<p><span class="content-head">Voluptatem solerescum?</span></p>
+                <div class="faq-button" id="faq-b5"></div>
+            </div>
+            <div class="faq-text" id="faq-txt5">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt5-->
+        </div><!--faq-q5--> 
+        
+        <div class="faq-question" id="faq-q6">
+        	<div class="faq-title" id="faq-title6">
+            	<p><span class="content-head">Voluptatem solerescum?</span></p>
+                <div class="faq-button" id="faq-b6"></div>
+            </div>
+            <div class="faq-text" id="faq-txt6">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt6-->
+        </div><!--faq-q6--> 
+        
+        <div class="faq-question" id="faq-q7">
+        	<div class="faq-title" id="faq-title7">
+            	<p><span class="content-head">Voluptatem solerescum?</span></p>
+                <div class="faq-button" id="faq-b7"></div>
+            </div>
+            <div class="faq-text" id="faq-txt7">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt7-->
+        </div><!--faq-q7--> 
+        
+        <div class="faq-question" id="faq-q8">
+        	<div class="faq-title" id="faq-title8">
+            	<p><span class="content-head">Voluptatem solerescum?</span></p>
+                <div class="faq-button" id="faq-b8"></div>
+            </div>
+            <div class="faq-text" id="faq-txt8">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt8-->
+        </div><!--faq-q8--> 
+        
+        <div class="faq-question" id="faq-q9">
+        	<div class="faq-title" id="faq-title9">
+            	<p><span class="content-head">Voluptatem solerescum?</span></p>
+                <div class="faq-button" id="faq-b9"></div>
+            </div>
+            <div class="faq-text" id="faq-txt9">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt9-->
+        </div><!--faq-q9--> 
+        
+        <div class="faq-question" id="faq-q10">
+        	<div class="faq-title" id="faq-title10">
+            	<p><span class="content-head">Voluptatem solerescum?</span></p>
+                <div class="faq-button" id="faq-b10"></div>
+            </div>
+            <div class="faq-text" id="faq-txt10">
+            	<hr />
+                <p><span class="content-text">
+                	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at nibh sit amet ligulalacinia 
+                	condimentum et sit amet orci. Morbi ultricies facilisis nunc, vel luctus lacus lacinia id. Nullam non porta nisl. 
+                    </span>
+                </p>
+                <p><span class="content-text">
+                	Curabitur posuere, ante eget mollis eleifend, nibh ipsum sollicitudin sapien, id consectetur risus risus ac nisl. 
+                    Etiam pharetra eleifend elit id luctus. Donec eu faucibus nibh. Sed sit amet felis urna.
+                    </span>
+                </p>
+            </div><!--faq-txt10-->
+        </div><!--faq-q10--> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+        
+    
+    </div><!--faq-wrap-->
+</div><!--container-->
+
+<div id="footer">
+	<div id="footer-background">
+    	<div id="footer-wrap">
+        	<div id="footer-left">
+            	<div id="footer-up">
+                	<span><a id="f-home" href="home.html"> Home  </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-about" href="about.html"> About Us </a></span> &nbsp; &frasl; &nbsp;
+                    <span><a id="f-serv" href="services.html"> Services </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-faq" class="link-selected" href="faq.html"> FAQ </a></span> &nbsp; &frasl; &nbsp; 
+                    <span><a id="f-contact" href="contact.html"> Contact </a></span>
+                </div>
+                <div id="footer-down"> &copy; Copyrights 2011 - www.wllingtonconsulting.com - All rights reserved. </div>
+            </div>
+        	<div id="footer-logo"><a id="logo-down" href="home.html"></a></div>
+        </div><!--footer-wrap-->
+    </div><!--footer-background-->
+    <div id="stripe-down"></div>
+</div><!--footer-->
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<?php
+
+
+mysql_connect("localhost","brian393_admindb","bgs@54113");
+
+mysql_select_db("brian393_brian0393") or die();
+
+
+
+$qry="select * from sax_newsletter";
+
+
+
+$result=@mysql_query($qry);
+
+$out = '';
+
+// Get all fields names in table "name_list" in database "tutorial".
+
+$fields = @mysql_list_fields("brian393_brian0393","sax_newsletter");
+
+// Count the table fields and put the value into $columns.
+
+$columns = @mysql_num_fields($fields);
+
+// Put the name of all fields to $out.
+
+for ($i = 0; $i < $columns; $i++) {
+
+$l=mysql_field_name($fields, $i);
+
+$out .= '"'.$l.'",';
+
+}
+
+$out .="\n";
+
+// Add all values in the table to $out.
+
+while ($l = mysql_fetch_array($result)) {
+
+for ($i = 0; $i < $columns; $i++) {
+
+$out .='"'.$l["$i"].'",';
+
+}
+
+$out .="\n";
+
+}
+
+// Open file export.csv.
+
+$f = fopen ('export.csv','w');
+
+// Put all values from $out to export.csv.
+
+fputs($f, $out);
+
+fclose($f);
+
+header('Content-type: application/csv');
+
+header('Content-Disposition: attachment; filename="export.csv"');
+
+readfile('export.csv');
+
+?>

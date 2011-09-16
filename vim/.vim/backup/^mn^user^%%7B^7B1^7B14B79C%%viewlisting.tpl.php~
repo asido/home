@@ -1,0 +1,328 @@
+<?php /* Smarty version 2.6.22, created on 2011-08-11 09:24:03
+         compiled from viewlisting.tpl */ ?>
+<?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
+smarty_core_load_plugins(array('plugins' => array(array('block', 'dynamic', 'viewlisting.tpl', 58, false),array('block', 'html_table_adv', 'viewlisting.tpl', 80, false),array('function', 'modulehook', 'viewlisting.tpl', 65, false),array('modifier', 'format_money', 'viewlisting.tpl', 149, false),array('modifier', 'date_format', 'viewlisting.tpl', 156, false),array('modifier', 'nl2br', 'viewlisting.tpl', 180, false),)), $this); ?>
+<?php $this->_cache_serials['/home/bimbb/public_html/beta1/templates_c/^mn^user^%%7B^7B1^7B14B79C%%viewlisting.tpl.inc'] = '1b619ec67445a73b03522cfddd2f028f'; ?>
+
+
+
+<!--code from new structure goes here-->
+<?php echo '
+<script type="text/javascript" src="templates/mn/scripts/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="templates/mn/css/layout/jquery.ad-gallery.css">
+  <script type="text/javascript" src="templates/mn/scripts/jquery.ad-gallery.js"></script>
+  <script type="text/javascript">
+ $(function() {
+	 
+   jQuery(\'img.image0\').data(\'ad-desc\', \'name of the image\');
+   jQuery(\'img.image1\').data(\'ad-desc\', \'name of the image\');
+    jQuery(\'img.image2\').data(\'ad-desc\', \'name of the image\');
+    jQuery(\'img.image3\').data(\'ad-desc\', \'name of the image\');
+	jQuery(\'img.image4\').data(\'ad-desc\', \'name of the image\');
+	jQuery(\'img.image5\').data(\'ad-desc\', \'name of the image\');
+	jQuery(\'img.image6\').data(\'ad-desc\', \'name of the image\');
+	jQuery(\'img.image7\').data(\'ad-desc\', \'name of the image\');
+	jQuery(\'img.image8\').data(\'ad-desc\', \'name of the image\');
+    var galleries = $(\'.ad-gallery\').adGallery();
+    jQuery(\'#switch-effect\').change(
+      function() {
+        galleries[0].settings.effect = $(this).val();
+        return false;
+      }
+    );
+    jQuery(\'#toggle-slideshow\').click(
+      function() {
+        galleries[0].slideshow.toggle();
+        return false;
+      }
+    );
+    jQuery(\'#toggle-description\').click(
+      function() {
+        if(!galleries[0].settings.description_wrapper) {
+          galleries[0].settings.description_wrapper = $(\'#descriptions\');
+        } else {
+          galleries[0].settings.description_wrapper = false;
+        }
+        return false;
+      }
+    );
+  });
+  </script>
+'; ?>
+
+
+
+<div class="ri_newlist" style="min-height:290px; /*width:680px; margin-left:0px;*/">
+<div class="ri_newlisttop">
+<?php if ($this->_tpl_vars['preview'] != 'Y'): ?>
+		<div id="bread"><?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "categories/breadcrumb.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?></div>
+	
+		<?php if ($this->caching && !$this->_cache_including): echo '{nocache:1b619ec67445a73b03522cfddd2f028f#0}'; endif;$this->_tag_stack[] = array('dynamic', array()); $_block_repeat=true;smarty_block_dynamic($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start(); ?>
+	<?php if ($_SESSION['userlevel'] == 1): ?>
+		<?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "viewlisting/listingadminlinks.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+	<?php endif; ?>
+	<?php $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo smarty_block_dynamic($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); if ($this->caching && !$this->_cache_including): echo '{/nocache:1b619ec67445a73b03522cfddd2f028f#0}'; endif;?>
+<?php endif; ?>
+
+<?php echo smarty_function_modulehook(array('function' => 'tpl_viewlisting_head','options' => ""), $this);?>
+
+
+
+<?php if ($this->_tpl_vars['viewphotos'] == 'Y' && $this->_tpl_vars['data'] <> ''): ?>
+
+<div id="container">
+	<div id="gallery" class="ad-gallery">
+		<div class="ad-image-wrapper" style=" width:250px; height:250px;">
+		</div>
+		<div class="ad-controls">
+		</div>
+		<div class="ad-nav">
+			<div class="ad-thumbs" style="width:248px;">
+				<ul class="ad-thumb-list">
+					 <!--<?php $this->_tag_stack[] = array('html_table_adv', array('loop' => $this->_tpl_vars['data'],'cols' => $this->_tpl_vars['cols'],'table_attr' => 'width="100%"')); $_block_repeat=true;smarty_block_html_table_adv($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start(); ?>--> 
+					<li>
+                    <a href="photos/[[image]]">
+					<!--<img src="../css/images/100.jpg" class="image0">-->
+					<img src="watermark.php?path=photos/[[image]]" alt="[[title]]" height="62px" width="62px"/>
+                    </a>
+					</li>
+					<!--<a href="photos/[[image]]" title="[[title]]" class="thickbox" rel="gallery">-->
+					<!--<img src="watermark.php?path=thumbs/small_[[image]]" alt="[[title]]" />-->
+					<!--<img src="watermark.php?path=photos/[[image]]" alt="[[title]]" height="250px" width="250px" style="margin: 20px 0px 0px 30px;"" />-->
+					<!-- </a><br />-->
+					 <!--<?php $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo smarty_block_html_table_adv($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); ?> <?php else: ?>--> 
+					<!--<img src="templates/<?php echo @MAIN_TEMPLATE; ?>
+/images/nophoto.gif" width="250" hspace="5" vspace="5" border="1" />-->
+					 <!--<?php endif; ?>-->
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div id="descriptions">
+		QWERTY
+	</div>
+</div>
+            
+<br />
+</div><!--ri_newlisttop close-->
+<table class="ri_newlisttble">
+  <?php if ($this->_tpl_vars['viewseller'] == 'Y'): ?>
+  <tr class="ri_newlisttbletr">
+  
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_SELLER; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <?php if ($this->_tpl_vars['preview'] != 'Y'): ?>
+    <td class="ri_newlisttbletd3"><a href="viewmember.php?member=<?php echo $this->_tpl_vars['owner']; ?>
+"><?php echo $this->_tpl_vars['username']; ?>
+</a><?php else: ?>
+						<?php echo $this->_tpl_vars['username']; ?>
+
+					<?php endif; ?></td>
+                    
+  </tr>
+  <?php endif; ?>
+  <?php if ($this->_tpl_vars['viewaddress'] == 'Y'): ?>
+ <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_ADDRESS; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><div class="ri_addrfld" style="min-height:0px"><?php echo $this->_tpl_vars['address']; ?>
+</div></td>
+  </tr>
+  <?php endif; ?>
+  <?php if ($this->_tpl_vars['viewcity'] == 'Y'): ?>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_CITY; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><?php echo $this->_tpl_vars['city']; ?>
+</td>
+  </tr>
+  <?php endif; ?>
+  <?php if ($this->_tpl_vars['viewstate'] == 'Y'): ?>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_STATE; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><?php echo $this->_tpl_vars['state']; ?>
+</td>
+  </tr>
+  <?php endif; ?>
+  <?php if ($this->_tpl_vars['viewcountry'] == 'Y'): ?>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_COUNTRY; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><?php echo $this->_tpl_vars['country']; ?>
+</td>
+  </tr>
+  <?php endif; ?>
+  <?php if ($this->_tpl_vars['viewprice'] == 'Y'): ?>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_PRICE; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><?php if ($this->_tpl_vars['price'] == '0.00'): ?> <?php echo @MOD_LANG_ZERO_PRICE; ?>
+ <?php else: ?> <?php echo ((is_array($_tmp=$this->_tpl_vars['price'])) ? $this->_run_mod_handler('format_money', true, $_tmp) : smarty_modifier_format_money($_tmp)); ?>
+<?php endif; ?></td>
+  </tr>
+  <?php endif; ?>
+  <?php if ($this->_tpl_vars['viewdate'] == 'Y'): ?>
+   <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_DATE_ADDED; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><?php echo ((is_array($_tmp=$this->_tpl_vars['dateadded'])) ? $this->_run_mod_handler('date_format', true, $_tmp, $this->_tpl_vars['dateformat']) : smarty_modifier_date_format($_tmp, $this->_tpl_vars['dateformat'])); ?>
+</td>
+  </tr>
+  <?php endif; ?>
+  <?php if ($this->_tpl_vars['viewexpiration'] == 'Y'): ?>
+   <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_EXPIRATION; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><?php echo $this->_tpl_vars['expirationdays']; ?>
+ <?php echo @LANG_DAYS; ?>
+</td>
+  </tr>
+  <?php endif; ?>
+  <?php if ($this->_tpl_vars['viewhits'] == 'Y'): ?>
+   <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo @LANG_VIEWS; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><?php echo $this->_tpl_vars['hitcount']; ?>
+</td>
+  </tr>
+  <?php endif; ?>
+    <?php $_from = $this->_tpl_vars['extrafields']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['extras']):
+?>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong><?php echo $this->_tpl_vars['extras']['title']; ?>
+</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><?php if (isset ( $this->_tpl_vars['extras']['value'] )): ?>
+					  <?php $_from = $this->_tpl_vars['extras']['value']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['key'] => $this->_tpl_vars['item']):
+?>
+						<?php echo ((is_array($_tmp=$this->_tpl_vars['item'])) ? $this->_run_mod_handler('nl2br', true, $_tmp) : smarty_modifier_nl2br($_tmp)); ?>
+<br />
+						<?php endforeach; else: ?>
+						<?php echo $this->_tpl_vars['extras']['value']; ?>
+
+					  <?php endif; unset($_from); ?>
+					 <?php endif; ?></td>
+  </tr>
+  <?php endforeach; endif; unset($_from); ?>
+  <!--   <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>Bathrooms</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong>2</strong></td>
+  </tr>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>BFloor Area</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong>1000</strong></td>
+  </tr>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>Land Area </strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong>1400</strong></td>
+  </tr>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>Property Features</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong>Bars in Windows</strong></td>
+  </tr>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>Ceiling Fans  </strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong></strong></td>
+  </tr>
+ <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>Detached</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong></strong></td>
+  </tr>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>Fenced</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong></strong></td>
+  </tr>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>Off Street Parking</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong></strong></td>
+  </tr>
+  <tr class="ri_newlisttbletr">
+    <td class="ri_newlisttbletd1"><strong>Description</strong></td>
+    <td class="ri_newlisttbletd2">:</td>
+    <td class="ri_newlisttbletd3"><strong></strong></td>
+  </tr>-->
+</table>
+
+<!--<div class="ri_newdown">
+<div class="ri_newdowninn">
+<div class="ri_newdowninn1">
+<div class="ri_inn1img"></div>
+<div class="ri_inn1imgtxt"><a href="#" class="downa"><strong>Add to favorites</strong></a></div>
+</div>
+<div class="ri_newdowninn2">
+<div class="ri_inn2img"></div>
+<div class="ri_inn1imgtxt"><a href="#" class="downa"><strong>More add from this seller</strong></a></div>
+</div>
+<div class="ri_newdowninn3">
+<div class="ri_inn3img"></div>
+<div class="ri_inn1imgtxt"><a href="#" class="downa"><strong>Email A Friend</strong></a></div>
+</div>
+<div class="ri_newdowninn4">
+<div class="ri_inn4img"></div>
+<div class="ri_inn1imgtxt"><a href="#" class="downa"><strong>Printer - friendly version</strong></a></div>
+</div>
+<div class="ri_newdowninn5">
+<div class="ri_inn5img"></div>
+<div class="ri_inn1imgtxt"><a href="#" class="downa"><strong>Contact The Owner</strong></a></div>
+</div>
+</div><!--ri_newdowninn close-->
+
+
+<!--</div>--><!--ri_newdown close-->
+
+<?php if ($this->_tpl_vars['preview'] != 'Y'): ?>
+	<?php if ($this->caching && !$this->_cache_including): echo '{nocache:1b619ec67445a73b03522cfddd2f028f#1}'; endif;$this->_tag_stack[] = array('dynamic', array()); $_block_repeat=true;smarty_block_dynamic($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start(); ?>
+	<?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "viewlisting/listingextras.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+	<?php $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo smarty_block_dynamic($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); if ($this->caching && !$this->_cache_including): echo '{/nocache:1b619ec67445a73b03522cfddd2f028f#1}'; endif;?>
+<?php endif; ?>
+<?php if ($this->caching && !$this->_cache_including): echo '{nocache:1b619ec67445a73b03522cfddd2f028f#2}'; endif;$this->_tag_stack[] = array('dynamic', array()); $_block_repeat=true;smarty_block_dynamic($this->_tag_stack[count($this->_tag_stack)-1][1], null, $this, $_block_repeat);while ($_block_repeat) { ob_start(); ?>
+<?php if ($this->_tpl_vars['pmon'] == 'Y' && $_SESSION['uid'] > 0): ?>
+	
+<?php elseif ($this->_tpl_vars['allowcontact'] == 'Y' && $this->_tpl_vars['display'] == 'Y'): ?>
+	<?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "contact/contactowner.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+<?php endif; ?>
+<?php $_block_content = ob_get_contents(); ob_end_clean(); $_block_repeat=false;echo smarty_block_dynamic($this->_tag_stack[count($this->_tag_stack)-1][1], $_block_content, $this, $_block_repeat); }  array_pop($this->_tag_stack); if ($this->caching && !$this->_cache_including): echo '{/nocache:1b619ec67445a73b03522cfddd2f028f#2}'; endif;?>
+
+<?php echo smarty_function_modulehook(array('function' => 'tpl_viewlisting_footer','options' => ""), $this);?>
+
+
+
+
+</div><!--ri_newlist close-->
+<!--code from new structure ends here-->

@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/style.css" type="text/css" rel="stylesheet" />
+<title>PlanToTeach</title>
+</head>
+
+<?php
+	require_once('php/html.php');
+	HTML::show_logged_header('lessons');
+?>
+
+<div id="lessons-wrap" class="content-wrap">
+	<div id="schemepg-wrap" class="content content-small">
+    	
+        <div class="row">
+            <div class="box scheme-big-box">
+                <div class="header title"><span class="red f17">Unit:</span><span class="font-content f17"> Name of the Unit</span></div>
+                <div id="plan-table" class="table-wrap">
+                    <table class="box-table">
+                        <tr>
+                        	<td width="150px" class="th">Date</td>
+                            <td width="150px" class="th">Period</td>
+                            <td width="150px" class="th">Week/No.</td>
+                            <td width="100px" class="th">Room</td>
+                            <td width="100px" class="th">Year</td>
+                            <td width="100px" class="th">Class</td>
+                            <td width="80px" class="th">Tier</td>
+                        </tr>
+                        <tr>
+                            <td width="150px" class="td-odd">10-03-2010,Tue</td>
+                            <td width="150px" class="td-even">1st Period</td>
+                            <td width="150px" class="td-odd">2nd Week</td>
+                        	<td width="100px" class="td-even">101</td>
+                            <td width="100px" class="td-odd">7th Year</td>
+                        	<td width="100px" class="td-even">102</td>
+                            <td width="80px" class="td-odd">2 Tier</td>
+                        </tr>
+                        <tr>
+                            <td width="150px" class="td-odd">10-03-2010,Tue</td>
+                            <td width="150px" class="td-even">1st Period</td>
+                            <td width="150px" class="td-odd">2nd Week</td>
+                        	<td width="100px" class="td-even">101</td>
+                            <td width="100px" class="td-odd">7th Year</td>
+                        	<td width="100px" class="td-even">102</td>
+                            <td width="80px" class="td-odd">2 Tier</td>
+                        </tr>
+                   </table>
+               </div><!--table-wrap-->
+            </div><!--box-->
+    	</div><!--row-->
+    	<div class="row">
+            <div class="box scheme-box">
+                <div class="banner">Functional Skills</div>
+                <input type="text" class="input-gray" placeholder=" + Add" />
+            </div><!--box-->
+            <div class="box scheme-box abs-right">
+                <div class="banner">Vocabulary</div>
+                <input type="text" class="input-gray" />
+            </div><!--box-->
+    	</div>
+        <div class="row">
+            <div class="box scheme-box">
+                <div class="banner">Homework</div>
+                <input type="text" class="input-gray" placeholder=" + Add" />
+            </div><!--box-->
+            <div class="box scheme-box abs-right">
+                <div class="banner banner-mid">Differentiation Issues</div>
+                <input type="text" class="input-gray" />
+            </div><!--box-->
+    	</div>
+        <div class="row">
+            <div class="box scheme-box">
+                <div class="banner">Resources</div>
+                <input type="text" class="input-gray" placeholder=" + Add" />
+            </div><!--box-->
+    	</div>
+        <div class="row">
+            <div class="box scheme-big-box">
+                <div class="banner banner-big">Objectives (We are learning to )</div>
+                <input type="text" class="input-gray input-big" placeholder=" + Add" /><br/>
+                <input type="text" class="input-gray input-big" /><br/>
+                <input type="text" class="input-gray input-big" /><br/><br/>
+            </div><!--box-->
+    	</div>
+        
+        <div class="row">
+            <div class="box scheme-big-box">
+                <div class="header title"><span class="red f17">Outcomes:</span></div>
+                <div id="plan-table" class="table-wrap">
+                    <table class="box-table">
+                        <tr>
+                        	<td width="250px" class="th td-border">All pupils will:</td>
+                            <td width="250px" class="th td-border">Most pupils will:</td>
+                            <td width="250px" class="th">Some pupils will:</td>
+                        </tr>
+                        <tr>
+                            <td width="250px" class="td-even td-border"></td>
+                            <td width="250px" class="td-even td-border"></td>
+                            <td width="250px" class="td-even"></td>
+                        </tr>
+                        <tr>
+                            <td width="250px" class="td-even td-border"></td>
+                            <td width="250px" class="td-even td-border"></td>
+                            <td width="250px" class="td-even"></td>
+                        </tr>
+                   </table>
+               </div><!--table-wrap-->
+            </div><!--box-->
+    	</div><!--row-->
+        
+        <div class="row">
+            <div class="box scheme-big-box">
+                <div class="banner banner-mid">Introductory activity</div>
+                <textarea class="input-gray tarea-big"></textarea>
+            </div><!--box-->
+    	</div>
+        <div class="row">
+            <div class="box scheme-big-box">
+                <div class="banner banner-mid">Main activity</div>
+                <textarea class="input-gray tarea-big"></textarea>
+            </div><!--box-->
+    	</div>
+        <div class="row">
+            <div class="box scheme-big-box">
+                <div class="banner banner-mid">Plenary activity</div>
+                <textarea class="input-gray tarea-big"></textarea>
+            </div><!--box-->
+    	</div>
+        <div class="row">
+            <div class="box scheme-big-box">
+                <div class="banner banner-mid">Homework</div>
+                <textarea class="input-gray tarea-big"></textarea>
+            </div><!--box-->
+    	</div>
+        <div class="row">
+            <div class="box scheme-big-box">
+                <div class="banner banner-xxl">Evaluation (Information for future planning)</div>
+                <textarea class="input-gray tarea-big"></textarea>
+            </div><!--box-->
+    	</div>
+       
+        
+        
+    </div><!--content-->
+</div><!--content-wrap-->
+
+<?php
+	HTML::show_footer();
+?>
+
+<body>
+</body>
+</html>

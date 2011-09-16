@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/asido/.purple'
+let g:netrw_dirhist_2='/home/asido/src/linux-2.6'
+let g:netrw_dirhist_3='/home/asido/src/scripts/find_all_modules.sh'
+let g:netrw_dirhist_4='/home/asido/src/linux/linux-3.0.4/drivers/staging/brcm80211'
+let g:netrw_dirhist_5='/home/asido/Tok-tok/magicons-preview'

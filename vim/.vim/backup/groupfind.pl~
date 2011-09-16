@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+
+$user = shift || $ENV{"USER"};
+print "User $user belongs to these groups:\n";
+@list = ();
+# pipe '|' in the following line tells perl to run that command in shell and takes it's standard output.
+open(my $fh, "grep $user /etc/group ");# || die("Error: $!\n");
+while($group = <$fh>) {
+	chomp($group);
+	$group =~ s/(.*?):.*/$1/;
+	push(@list, $group);
+}
+close($fh);
+@sorted_list = sort(@list);
+print "@sorted_list\n";

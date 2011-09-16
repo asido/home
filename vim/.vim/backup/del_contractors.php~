@@ -1,0 +1,12 @@
+<?php
+
+require_once('config.php');
+
+$db = SCONFIG::dbconnect();
+$query = "DELETE FROM frndrequest
+		  WHERE fid = ".$_POST['fid']."
+		  AND uid = ".$_POST['uid'];
+$result = $db->query($query);
+echo '{ "result" : "'.$result.'" }';
+
+?>

@@ -1,0 +1,21 @@
+import java.io.Serializable;
+
+public class BudgetAccount extends BankAccount {
+	private int max;
+
+	public BudgetAccount(int max) {
+		super(1000, 1);
+		this.max = max;
+	}
+
+	public boolean withdraw(int amount) throws NotEnoughMoneyException {
+		if(amount >= max + getBalance()) 
+			throw new NotEnoughMoneyException();
+		setBalance(getBalance() - amount);
+		return true;
+	}
+
+	public int getAvailableBalance() {
+		return max + getBalance();
+	}
+}

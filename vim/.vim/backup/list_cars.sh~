@@ -1,0 +1,21 @@
+#!/bin/bash
+
+trap 'rm -f $$.tmp > /dev/null; echo $0 aborted.; exit 1' 1 2 15;
+echo -n "Price range (for example , 5000 7500): ";
+read lowrange hirange;
+
+echo '
+					Miles
+Make		Model		Year	(000)		Price
+-----------------------------------------------------------' > $$.tmp;
+
+gawk < CARS '
+	$5 >= '$lowrange' && $5 <= '$hirange' {
+		if($1 ~ /ply/)
+			$1 = "plymouth";
+		if($1 ~ /chev/)
+			$1 = "chevrolet";
+		printf "%-10s	%-08s	%2d	%5d		$ %8.2f\n", $1, $2, $3, $4, $5;
+	}' | sort -n +5 >> $$.tmp;
+cat $$.tmp;
+rm $$.tmp;

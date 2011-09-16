@@ -1,0 +1,41 @@
+public class LanguageMajor implements Student {
+	private String name;
+	private String phone;
+	private int germanGrade;
+	private int noOfLan;
+
+	public LanguageMajor(String name, String phone) {
+		this.name = name;
+		this.phone = phone;
+	}
+
+	public boolean passed() {
+		if(germanGrade >= 7)
+			return true;
+		return false;
+	}
+
+	public void setNoOfLan(int noOfLan) {
+		this.noOfLan = noOfLan;
+	}
+
+	public void setGermanGrade(int germanGrade) {
+		this.germanGrade = germanGrade;
+	}
+
+	public int getNoOfLan() {
+		return noOfLan;
+	}
+
+	public int getGermanGrade() {
+		return germanGrade;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public String getName() {
+		return name;
+	}
+}

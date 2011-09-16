@@ -1,0 +1,20 @@
+#!/bin/bash
+
+files=("$@")
+
+index=0
+for file in ${files[@]}; do
+	if [[ $file = */ ]]; then
+		# Deletes suffix '/' if the name ends with it.
+		files[index]=${file%/}
+		file=${files[index]}
+	fi
+	# Removes all the prefix until last '/' symbol.
+	files[index]=${file##*/}
+	((index++))
+done
+
+# Prints all edited arguments.
+for file in ${files[@]}; do
+	echo "$file"
+done

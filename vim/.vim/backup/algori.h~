@@ -1,0 +1,107 @@
+#ifndef GUARD_algori_h
+#define GUARD_algori_h
+
+#include <algorithm>
+
+template <class InputIterator1, class InputIterator2>
+bool my_equal(InputIterator1 begin, const InputIterator1 end, InputIterator2 compare_to) {
+	while(begin != end) {
+		if(*begin != *compare_to)
+			return false;
+		begin++; compare_to++;
+	}
+	return true;
+}
+
+template <class InputIterator, class Value>
+InputIterator my_find(InputIterator begin, InputIterator end, const Value& value) {
+	while(begin != end) {
+		if(*begin == value)
+			break;
+		++begin;
+	}
+	return begin;
+}
+
+template <class InputIterator, class OutputIterator>
+OutputIterator my_copy(InputIterator begin, InputIterator end, OutputIterator dest) {
+	for(; begin != end; begin++, dest++)
+		*dest = *begin;
+	return dest;
+}
+
+template <class InputIterator, class OutputIterator, class Func>
+OutputIterator my_remove_copy_if(InputIterator begin, InputIterator end, OutputIterator dest, Func condition_function) {
+	for(; begin != end; ++begin)
+		if(condition_function(*begin))
+			*dest = *begin;
+	return dest;
+}
+
+template <class InputIterator, class OutputIterator, class Func>
+OutputIterator my_transform(InputIterator begin, InputIterator end, OutputIterator dest, Func operation) {
+	for(; begin != end; begin++)
+		*dest = operation(*begin);
+	return dest;
+}
+
+template <class InputIterator, class Value>
+Value my_accumulate(InputIterator begin, InputIterator end, Value value) {
+	for(; begin != end; begin++)
+		value += *begin;
+	return value;
+}
+
+template <class RandomAccessIterator1, class RandomAccessIterator2>
+RandomAccessIterator1 my_search(RandomAccessIterator1 begin1, RandomAccessIterator1 end1,
+								RandomAccessIterator2 begin2, RandomAccessIterator2 end2) {
+	for(; begin1 != end1; ++begin1) {
+		if(*begin1 == *begin2 && my_equal(begin1, begin1 + (end2 - begin2), begin2))
+			break;
+	}
+	return begin1;
+}
+
+template <class InputIterator, class Func>
+InputIterator my_find_if(InputIterator begin, InputIterator end, Func condition) {
+	for(; begin != end; begin++)
+		if(condition(*begin))
+			break;
+	return begin;
+}
+
+template <class InputIterator, class OutputIterator, class Value>
+OutputIterator my_remove_copy(InputIterator begin, InputIterator end, OutputIterator dest, Value value) {
+	for(; begin != end; begin++)
+		if(*begin != value)
+			*dest++ = *begin;
+	return dest;
+}
+
+template <class ForwardIterator, class Value>
+ForwardIterator my_remove(ForwardIterator begin, ForwardIterator end, const Value value) {
+	ForwardIterator ret = begin;
+	for(; begin != end; ++begin) {
+		if(*begin != value)
+			*ret++ = *begin;
+	}
+	return ret;
+}
+
+template <class ForwardIterator, class Func>
+ForwardIterator my_partition(ForwardIterator begin, ForwardIterator end, Func condition) {
+	while(true) {
+		while(begin != end && condition(*begin))
+			++begin;
+		if(begin == end--)
+			break;
+		while(begin != end && !condition(*begin))
+			--end;
+		if(begin == end)
+			break;
+		std::swap(*begin++, *end);
+	}
+	return begin;
+}
+
+#endif

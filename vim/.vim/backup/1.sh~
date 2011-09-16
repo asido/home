@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for fruit in oranges apples bananas pears
+do
+	echo "$fruit"
+done
+
+echo "----------\nTask done"

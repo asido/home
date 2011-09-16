@@ -1,0 +1,66 @@
+#include <stdio.h>
+
+int getLine(char line[]);
+void reverseLine(char line[], int line_size);
+void copyArray(char to[], char from[]);
+void printLine(char line[]);
+
+int main() {
+	char line[1000];
+	int line_size;
+
+	while((line_size = getLine(line)) > 0) {
+		reverseLine(line, line_size);
+		printLine(line);
+	}
+
+	return 0;
+}
+
+int getLine(char line[]) {
+	int c;
+	int i = 0;
+	
+	while((c = getchar()) != '\n' && c != '\0') {
+		line[i] = c;
+		i++;
+	}
+
+	if(c == '\n') {
+		line[i] = c;
+		i++;
+	}
+
+	line[i] = '\0';
+	
+	return i;
+}
+
+void reverseLine(char line[], int line_size) {
+	char rev_line[line_size];
+	int i;
+	int j = 0;
+
+	for(i = line_size; i >= 0; i--) {
+		if(line[i] != '\n' && line[i] != '\0')
+			rev_line[j++] = line[i];
+	}
+	rev_line[j++] = '\n';
+	rev_line[j] = '\0';
+
+	copyArray(line, rev_line);
+}
+
+void copyArray(char to[], char from[]) {
+	int i;
+	for(i = 0; from[i] != '\0'; i++)
+		to[i] = from[i];
+}
+
+void printLine(char line[]) {
+	int i = 0;
+	while(line[i] != '\0') {
+		putchar(line[i]);
+		i++;
+	}
+}

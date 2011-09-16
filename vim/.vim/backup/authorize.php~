@@ -1,0 +1,258 @@
+<?php
+foreach($_GET as $key => $value)
+	$_GET[$key] = mysql_real_escape_string($value);
+foreach($_POST as $key => $value)
+	$_POST[$key] = mysql_real_escape_string($value);
+
+//include controller
+include(CONDIR.DS."confirm.php");
+include(INCDIR.DS."class.php");
+include(VIEWDIR.DS."simlib.php");
+$class = new sax;
+?>
+<script type="text/javascript" language="javascript">
+function addvalue()
+{
+	if(document.getElementById('samevalue').checked==true)	
+	{
+		document.getElementById('shp_fullname').value=document.getElementById('cus_fullname').value;
+		document.getElementById('shp_email').value=document.getElementById('cus_email').value;
+		document.getElementById('shp_address').value=document.getElementById('cus_address').value;
+		document.getElementById('shp_city').value=document.getElementById('cus_city').value;
+		document.getElementById('shp_state').value=document.getElementById('cus_state').value;
+		document.getElementById('shp_non_us').value=document.getElementById('cus_non_us').value;
+		document.getElementById('shp_country').value=document.getElementById('cus_country').value;
+		document.getElementById('shp_zip').value=document.getElementById('cus_zip').value;
+		document.getElementById('shp_phone').value=document.getElementById('cus_phone').value;
+	}
+	else
+	{
+		document.getElementById('shp_fullname').value="";
+		document.getElementById('shp_email').value="";
+		document.getElementById('shp_address').value="";
+		document.getElementById('shp_city').value="";
+		document.getElementById('shp_state').value="";
+		document.getElementById('shp_non_us').value="";
+		document.getElementById('shp_country').value="";
+		document.getElementById('shp_zip').value="";
+		document.getElementById('shp_phone').value="";
+	}
+}
+
+function getval(str)
+{
+	if(str!="United States of America")	
+	{
+		document.getElementById('cus_state').disabled=true;
+	}
+	else
+	{
+		document.getElementById('cus_state').disabled=false;
+	}
+}
+
+function sgetval(str)
+{
+	if(str!="United States of America")	
+	{
+		document.getElementById('shp_state').disabled=true;
+	}
+	else
+	{
+		document.getElementById('shp_state').disabled=false;
+	}
+}
+</script>
+<?php
+if(isset($_POST['SubmitConfirm']))
+{
+	$expire=$_POST['expmm']."-".$_POST['expyy'];
+
+$cardnnb = strrev($_POST['card_number']);
+
+	$str="UPDATE ".TB_CONFIRM." SET payment_type='Authorize',cardnumber='".$cardnnb."',expiredate='".$expire."',card_type='".$_POST['card_type']."',";
+	$str.="cardholdername='".$_POST['cardholdername']."',security_code='".$_POST['security_code']."' where reference='".$_SESSION['CartReference']."'";	
+	$exe=$class->Q($str);
+	if($exe) {
+		echo $class->R(SITEROOTSECURE."index.php/authorize_payment/S/Payment_Transation");
+	}
+	else {echo "CANNOT PAY\n";exit;}
+}
+$details=$class->F($class->where(TB_CONFIRM,"reference",$_SESSION['CartReference']));
+?>
+<div class="content_areaInRight">
+          
+          <!-- Begin contentBoxArea -->
+          <div class="contentBoxArea">
+            <!-- Begin contentBoxAreaLeft -->
+            <div class="contentBoxAreaLeft">
+              <div style="width:655px;"><span class="title">Payment Details</span>
+                <form action="" method="post" name="mainform" onsubmit="return confirmvalid();">
+                <table width="100%" border="0" align="center">
+                  <tr>
+                    <td width="6" align="left" valign="middle">&nbsp;
+                    <?php 
+					if($QST2=="succ"){echo "<span class='green'>Successfully Mail sent</span>";}
+					if($QST2=="err"){echo "<span class='red'>Error, while adding info., please try again.</span>";}
+					?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:1px solid #F7D1B1;">
+                      <tr>
+                        <td height="35" colspan="2" align="left" valign="middle" class="font3" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">Card Type</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">
+                        <select name="card_type" id="card_type" class="txtborder">
+                        <option value="Visa">Visa</option>
+                        <option value="Mastercard">Mastercard</option>
+                        <option value="Discover">Discover</option>
+                        <option value="American Express">American Express</option>
+                        </select></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">
+                        <span id="cn">Card holder Name</span></td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">
+                        <input type="text" name="cardholdername" id="cardholdername" class="txtborder" /></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td width="32%" height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">
+                        <span id="cc">Credit Card Number</span></td>
+                        <td width="68%" align="left" valign="middle" class="font2" style="padding-left:15px;">
+                          <input type="text" name="card_number" id="card_number" class="txtborder" /></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">Security Code</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">
+                          <input type="text" name="security_code" id="security_code" class="txtborder"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td height="30" align="left" valign="middle" class="font2" style="padding-left:15px;">Expiration Date</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">
+                        <select name="expmm" id="expmm" class="txtborder" style="width:80px;">
+                        <option value="">MM</option>
+                        <?php for($i=1;$i<=12;$i++){?>
+                        <option value="<?php echo $i?>"><?php echo $i?></option>
+                        <?php }?>
+                        </select>
+                        <select name="expyy" id="expyy" class="txtborder"  style="width:100px;">
+                        <option value="">YYYY</option>
+                        <?php 
+						$curr=date("Y");
+						for($i=$curr;$i<=($curr+10);$i++){?>
+                        <option value="<?php echo $i?>"><?php echo $i?></option>
+                        <?php }?>
+                        </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">&nbsp;</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" align="left" valign="middle" class="font2" style="padding-left:15px;">
+                        <span class="font2" style="padding-left:15px;">
+                        <input type="checkbox" name="terms" id="terms" value="1" />
+                        <span id="trs">
+                        I have read and agree to the <strong>sax-ccessories</strong></span> 
+                        <a href="<?php echo SITELINK;?>page/1/Return_Policy" class="menutitle" style="font-weight:normal; font-size:12px;">Return Policy</a></span> </span></td>
+                      </tr>
+                      <tr>
+                        <td align="left" valign="middle" class="font2" style="padding-left:15px;">&nbsp;</td>
+                        <td align="left" valign="middle" style="padding-left:15px;" class="font2">&nbsp;</td>
+                      </tr>
+                    </table></td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="border:1px solid #F7D1B1;">
+                      <tr>
+                        <td width="100%" height="40" align="right" valign="middle" class="font2" style="padding-right:15px;">
+                        <input type="submit" name="SubmitConfirm" value="" class="confirmbutton" /></td>
+                      </tr>
+                    </table></td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                </table>
+                </form>
+              </div>
+            </div>
+            <!-- End contentBoxAreaLeft -->
+          </div>
+          <!-- End contentBoxArea -->
+        </div>
+<script type="text/javascript" language="javascript">
+function confirmvalid()
+{
+	if(document.getElementById('cardholdername').value=="")	
+	{
+		document.getElementById('cardholdername').style.borderColor="red";
+		document.getElementById('cardholdername').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('cardholdername').style.borderColor="#006633";
+	}
+	
+	if(document.getElementById('card_number').value=="")	
+	{
+		document.getElementById('card_number').style.borderColor="red";
+		document.getElementById('card_number').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('card_number').style.borderColor="#006633";
+	}
+	
+	if(document.getElementById('security_code').value=="")	
+	{
+		document.getElementById('security_code').style.borderColor="red";
+		document.getElementById('security_code').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('security_code').style.borderColor="#006633";
+	}
+	
+	if(document.getElementById('terms').checked==false)	
+	{
+		document.getElementById('trs').style.color="red";
+		return false;
+	}
+	else
+	{
+		document.getElementById('trs').style.color="#006633";
+	}
+}
+</script>        

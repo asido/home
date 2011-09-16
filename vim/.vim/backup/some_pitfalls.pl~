@@ -1,0 +1,17 @@
+#!/usr/bin/perl -w
+
+# This will fail, because parenthesis are a special character.
+if("ag(ed)" =~ /ag(ed)/) {
+	print "/ag(ed)/ =~ true\n";
+}
+else {
+	print "/ag(ed)/ =~ false\n";
+}
+
+# Parenthesis need to be quoted.
+if("ag(ed)" =~ /ag\(ed\)/) {
+	print "/ag\\(ed\\)/ =~ true\n";
+}
+else {
+	print "/ag\\(ed\\)/ =~ false\n";
+}

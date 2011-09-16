@@ -1,0 +1,564 @@
+<?php
+
+
+
+require_once('database.php');
+
+if (!isset($_SESSION))
+
+			session_start();
+
+class user
+
+{
+	static $top_questions;
+
+	public static function get_question ( $exceptions, $category )		// returns false if there's no other question to answer
+	{
+		$exceptions 	= isset($exceptions) && is_array($exceptions) ? $exceptions : array ();
+		$questions 		= user::questions_num($category);
+		$answers		= user::get_answered($category);
+
+		$answers_len 	= count ( $answers );
+		$exceptions_len = count ( $exceptions );
+
+		if ( $answers_len + $exceptions_len >= $questions )
+		{
+			if ( $answers_len >= $questions ) return false;
+
+			$exceptions 		= array ();
+			$exceptions_len		= 0;
+			$exceptions_reset	= true;
+		}
+		
+		$question	= false;
+
+		$db 		= database::get_instance();
+		$category	= $db->format_string( $category );
+
+		while (!$question)
+		{
+			$query = "	SELECT *
+								FROM `".$category."_questions`
+								WHERE `id` NOT IN (SELECT `question_id`
+												   FROM ".$category."_answers
+											   	   WHERE username = '".$_SESSION['username']."')
+								AND `id` NOT IN ".self::build_exception_query($exceptions)."
+								ORDER BY `id` ASC
+								LIMIT 1 ";
+			//echo $query;
+			$r		= $db->query($query);
+			$r		= $db->fetch( $r );
+
+		//	if (	! in_array ( $r['id'], $answers ) &&
+		//		 	! in_array ( $r['id'], $exceptions )
+		//		) 
+					$question = $r;
+		}
+		
+		$question['reset_exceptions'] = $exceptions_reset ? 'true' : 'false';
+
+		return $question;
+
+	}
+
+	private static function build_exception_query($exceptions)
+	{
+		$count = count($exceptions);
+		$query = "(";
+		if ($count == 0)
+			$query .= "''";
+		else
+			for ($i = 0; $i < $count; $i++) {
+				if ($i != 0)
+					$query .= ",";
+				$query .= $exceptions[$i];
+			}
+		$query .= ")";
+		return $query;
+	}
+
+	public static function get_question_by_id ( $exceptions, $category, $id )		
+	{
+
+		$exceptions 	= isset($exceptions) && is_array($exceptions) ? $exceptions : array ();
+
+		$questions 		= user::questions_num($category);
+
+		$answers		= user::get_answered($category);
+
+		
+
+		$answers_len 	= count ( $answers );
+
+		$exceptions_len = count ( $exceptions );
+
+		
+
+		if ( $answers_len + $exceptions_len >= $questions )
+
+		{
+
+			if ( $answers_len >= $questions ) return false;
+
+			
+
+			$exceptions 		= array ();
+
+			$exceptions_len		= 0;
+
+			$exceptions_reset	= true;
+
+		}
+
+		
+
+		$question	= false;
+		
+		$db 		= database::get_instance();
+		$category	= $db->format_string( $category );
+
+		$r		= $db->query(	
+
+						"	SELECT *
+
+							FROM `".$category."_questions`
+
+							WHERE `id` = ".$id." " );
+
+		$r		= $db->fetch( $r );
+
+		$question = $r;
+
+		$question['reset_exceptions'] = $exceptions_reset ? 'true' : 'false';
+
+		return $question;
+
+	}
+
+
+	public static function questions_num ($category)
+
+	{
+
+		$db = database::get_instance();
+
+		$r	= $db->query(
+
+				'	SELECT *
+
+					FROM `'.$category.'_questions` ' );
+
+		
+
+		return $r ? mysql_num_rows($r) : 0;
+
+	}
+
+
+
+	public static function get_answered ($category)		//returns answered id's
+
+	{
+
+		$db = database::get_instance();
+
+		
+
+		$r	= $db->query(
+
+					'	SELECT `question_id`
+
+						FROM `'.$category.'_answers`
+
+						WHERE username = \''.$_SESSION['username'].'\' ' );
+
+		
+
+		if ( ! $r ) return false;
+
+		
+
+		$qid = array ();
+
+		while ($row = $db->fetch( $r )) array_push ( $qid, $row[0] );
+
+		
+
+		return $qid;
+
+	}
+
+
+
+	public static function get_answers ($category)		//returns all answered questions by this user
+
+	{
+
+		$db = database::get_instance();
+
+		
+
+		$r	= $db->query(
+
+					'	SELECT *
+
+						FROM `'.$category.'_answers`
+
+						WHERE `username` = \''.$_SESSION['username'].'\' ' );
+
+						
+
+		$r	= $db->to_array( $r );
+
+		// if (!isset($_COOKIE['username']))
+
+		// 	return array("12","2");
+
+		
+
+		return $r;
+
+	}
+
+
+
+	public static function set_answer( $category, $question_id, $answer_num )
+
+	{
+
+		// if ( 	($answer_num < 1) ||
+
+		// 		($answer_num > 4)
+
+		// 	)
+
+		// 		return;
+
+		
+
+		$db 	= database::get_instance();
+
+		//check if question exists
+
+		$qid 	= $db->get_field_value( $category.'_questions', 'question', '`id`='.$question_id );
+
+		if ( !$qid ) { return false; }
+
+		
+
+		//checks if question if answered
+
+		$ans	= $db->get_field_value( $category.'_answers', 'answer', '`username`=\''.$_SESSION['username'].'\' AND `question_id`='.$question_id );
+
+		if ( $ans !== false ) { return false; }
+
+		$db->format_string($answer_num);
+
+		$r		= $db->query(
+
+						'	INSERT
+
+							INTO `'.$category.'_answers` ()
+
+							VALUES ( '.$question_id.', \''.$_SESSION['username'].'\', \''.$answer_num.'\', CURDATE() )' );
+
+		$db->query("UPDATE `users`
+					SET `points` = `points` + 1
+					WHERE `username` = '".$_SESSION['username']."'");
+		$db->query("UPDATE `users`
+					SET `questions_answered` = `questions_answered` + 1
+					WHERE `username` = '".$_SESSION['username']."'");
+
+		return $r ? true : false;
+
+	}
+	
+	public static function get_random_question ( $exceptions )
+	{
+		$categories		= array ( 'profile', 'sports', 'music', 'politics' );
+		$categories_len	= count( $categories );
+		$category_num	= rand(	0, 
+								$categories_len - 1 );
+		$i				= $category_num + 1;
+		if ( $i > $categories_len ) $i = 0;
+		
+		$question		= false;
+		
+		while (
+				( $question == false ) &&
+				( $i !== $category_num ) )
+		{		
+					$question		= user::get_question( $exceptions, $categories[ $i ] );
+					
+					if ( ! $question )
+					{
+						++ $i ;
+						if ( $i > $categories_len ) $i = 0;
+					}
+		}
+		
+		if ( $question )
+		{
+			$question['category']	= $categories[ $i ];
+			$question['answered']	= false;
+			
+			return $question;
+		}
+		
+		return false;
+	}
+	
+	public static function get_top_questions ( $limit )
+	{	
+		$categories		= array ( 'profile', 'sports', 'music', 'politics' );
+		$db				= database::get_instance();
+		$username		= $db->format_string( $_SESSION['username'] );
+		
+		$questions		= array ();
+		
+		foreach ( $categories as $category )
+		{
+			$result = $db->query('	SELECT *
+									FROM ' . $category . '_answers' );
+			
+			while ( $answer = $db->fetch( $result ) )
+			{
+				if ( isset( $questions[ $answer['question_id'] ] ) )
+				{
+					$questions[ $answer['question_id'] ]['rate'] ++;
+				}
+				else
+				{
+					// getting the question
+					$q	= $db->query('	SELECT *
+										FROM ' . $category . '_questions
+										WHERE id = ' . $answer['question_id'] );
+					$q	= $db->fetch( $q );
+					
+					$q['category']	= $category;
+					$q['answered']	= false;
+					$q['rate']		= 1;
+					
+					$questions[ $answer['question_id'] ]	  = $q;
+				}
+				
+				if ( $answer['username'] == $username )
+				{
+					$questions[ $answer['question_id'] ]['answered'] = true;
+				}
+			}
+		}
+		
+		// getting top questions
+		$top_questions	= array ();
+		$questions_len	= count( $questions );
+		$len			= min( $questions_len, $limit );
+		
+		for ( $i = 0; $i < $len; $i ++ )
+		{
+			$pos = false;
+			foreach ( $questions as $question )
+			{
+				if ( $pos )
+				{
+					if ( $questions[ $pos ]['rate'] > $question['rate'] )
+					{
+						$pos	= $question['id'];
+					}
+				}
+				else
+				{
+					$pos		= $question['id'];
+				}
+			}
+			
+			if ( $pos )
+			{
+				array_push( $top_questions, $questions[ $pos ] );
+				unset( $questions[ $pos ] );
+			}
+		}
+		
+		// populating top questions
+		
+		$i = count( $top_questions );
+		
+		for ( $i; $i < $limit; $i++ )
+		{
+			$question	= user::get_random_question( false );
+			
+			array_push( $top_questions, $question );
+		}
+		
+		// resorting the array
+		
+		$questions		= array ();
+		
+		foreach ( $top_questions as $question )
+		{
+			array_push ( $questions, $question );
+		}
+		
+		user::$top_questions	= $questions;
+		
+		return $questions;
+	}
+	
+	public static function get_top_question( $exceptions, $limit )
+	{
+		$exceptions 		= isset($exceptions) && is_array($exceptions) ? $exceptions : array ();
+		
+		$questions			= user::get_top_questions( $limit );
+			
+		$exceptions_len		= count( $exceptions );
+		$questions_len		= count( $questions );
+		$answered_len		= user::top_answered_num( $limit );
+		
+		$exceptions_reset	= false;
+		
+		if ( $exceptions_len + $answered_len >= $limit )
+		{
+			if ( $answered_len >= $limit ) return false;
+			
+			$exceptions			= array ();
+			$exceptions_len		= 0;
+			$exceptions_reset	= true;
+		}
+		
+		// setting exceptions
+		foreach ( $exceptions as $exception )
+		{
+			for ( $i = 0; $i < $questions_len; $i ++ )
+			{
+				if ( 	( $exception['id'] 			== $questions[ $i ]['id'] ) &&
+						( $exception['category'] 	== $questions[ $i ]['category'] ) )
+				{
+					$questions[ $i ]['exception']	= true;
+				}
+				else
+				{
+					$questions[ $i ]['exception']	= false;
+				}
+			}
+		}
+		
+		//getting one question
+		$question			= false;
+		while ( !$question )
+		{
+			$qpos	= rand( 0, $questions_len - 1 );
+			
+			if (	( ! $questions[ $qpos ]['answered'] ) &&
+					( ! $questions[ $qpos ]['exception'] )	)
+			{
+				$question	= $questions[ $qpos ];
+			}
+		}
+		
+		return $question;
+	}
+	
+	static $top_answered;
+	
+	public static function top_answered ( $limit = false )
+	{
+		if ( ! isset( user::$top_questions ) ) 
+		{
+			if ( $limit === false ) return false;
+			
+			user::get_top_questions( false, $limit );
+		}
+		
+		$questions		= user::$top_questions;
+		$answered		= array ();
+		foreach ( $questions as $question )
+		{
+			if ( $question['answered'] ) array_push( $answered, $question );
+		}
+		
+		user::$top_answered = $answered;
+		
+		return $answered;
+	}
+	
+	public static function top_answered_num ( $limit = false )
+	{
+		if ( !isset( user::$top_answered ) )
+		{
+			if ( $limit === false ) return false;
+			
+			user::top_answered( $limit );
+		}
+		
+		return count( user::$top_answered );
+	}
+
+	public static function get_answers_by_id($category, $question_id, $user_zip = "", $extra_where = "")
+	{
+		$db = database::get_instance();
+		$db->format_string($category);
+		$db->format_string($question_id);
+		$db->format_string($user_zip);
+		$db->format_string($extra_where);
+
+		$query = "SELECT `answer`,`username` FROM `".$category."_answers` WHERE `question_id`=".$question_id;
+		if ($user_zip != "")
+			$query .= " AND `username` IN (SELECT `username` FROM `users` WHERE `zip`='".$user_zip."')";
+		if ($extra_where != "")
+			$query .= " AND ".$extra_where;
+		return $db->to_array($db->query($query));
+	}
+
+	public static function get_answer_count($category, $question_id)
+	{
+		$db = database::get_instance();
+		$db->format_string($category);
+		$db->format_string($question_id);
+
+		$query = "SELECT `answer_count` FROM `".$category."_questions` WHERE `id`=".$question_id;
+		$query = $db->query($query);
+		$query = $db->to_array($query);
+		return $query['answer_count'];
+	}
+	
+	public static function is_skipped($category, $qid)
+	{
+		$db = database::get_instance();
+		$db->format_string($category);
+		$db->format_string($qid);
+		
+		$query = "SELECT `question` FROM `".$category."_questions` WHERE `id`=".$qid;
+		$question = $db->fetch($db->query($query));
+		$question = $question['question'];
+		
+		$query = "SELECT COUNT(`id`) AS `count` FROM `skipped_questions` WHERE `question`='".$question."'";
+		$count = $db->fetch($db->query($query));
+		$count = $count['count'];
+		if ($count != 0)
+			return true;
+		return false;
+	}
+	
+	public static function add_to_skipped($category, $qid)
+	{
+		$db = database::get_instance();
+		$db->format_string($category);
+		$db->format_string($qid);
+		
+		$query = "SELECT * FROM `".$category."_questions` WHERE `id`=".$qid;
+		$question = $db->fetch($db->query($query));
+		
+		$query = "INSERT INTO `skipped_questions` (`answer_count`,`question`,`answer1`,`answer2`,`answer3`,`answer4`,`answer5`,`answer6`,`answer7`,`answer8`)
+			VALUES (".$question['answer_count'].", '".$question['question']."', '".$question['answer1']."', '".$question['answer2']."', '".$question['answer3']."', '".$question['answer4']."', '".$question['answer5']."', '".$question['answer6']."', '".$question['answer7']."', '".$question['answer8']."')";
+		$db->query($query);
+		if (mysql_affected_rows() == -1)
+			return false;
+		return true;
+	}
+}
+
+
+
+?>
+

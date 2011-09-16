@@ -1,0 +1,28 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['sql'])) {
+	echo "NOT FOUND";
+	exit;
+}
+
+$fd = fopen("../admin/users.csv", "w") or die("can't create file");
+$count = count($_SESSION['sql']);
+for ($i = 0; $i < $count; $i++) {
+	fwrite($fd, $_SESSION['sql'][$i]['username']."\n");
+}
+fclose($fd);
+
+// set the header values 
+// header("Content-Type: application/force-download\n");
+// header("Content-Disposition: attachment; filename=../admin/users.csv");
+//  
+// //set the value of the fields in Opened dailog box
+// header('Content-Disposition: attachment; filename="../admin/users.csv"');
+//  
+// // echo the content to the client browser
+// readfile("../admin/users.csv");
+echo '{"url" : "../admin/users.csv"}';
+exit;
+
+?>

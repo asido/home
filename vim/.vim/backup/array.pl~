@@ -1,0 +1,31 @@
+#!/usr/bin/perl -w
+
+$v1=5; $v2=8;
+$va="Sam"; $vb="uel";
+@array=("kaboom", $v1, $v1 * 2, $v1 * $v2, "Max", "Zach", $va . $vb);
+
+print @array[2], "\n";		# one element of an array is a scalar
+print @array[2,4], "\n";	# two elements of an array are a list
+print @array[2..4], "\n";	# a slice
+print "@array[2,4]\n";		# surrounding with " separates every array element with space.
+print "@array[2..4]\n";
+print "@array\n";
+
+print "\n\n\n";
+
+# shift function (shifts all elements to the left by removing the first element)
+print "shift: ", shift(@array), "\n";
+print "shifted array: @array\n";
+
+# push function (adds element to the end of the array)
+push(@array, "heya!");
+print "pushed array: @array\n";
+
+# pop function (removes the last element)
+pop(@array);
+print "poped array: @array\n";
+
+# splice function (replaces specified array specified elements with another specified array elements)
+@another=("what?", "bahh!");
+splice(@array, 1, 2, @another);
+print "spliced array: @array\n";

@@ -1,0 +1,5 @@
+#!/usr/bin/perl -w
+
+if(-r "memo1") {
+	print "The file 'memo1' exists and is readable.";
+}

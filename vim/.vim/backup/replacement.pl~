@@ -1,0 +1,5 @@
+#!/usr/bin/perl -w
+
+$stg = "This is the best!";
+$stg =~ s/best/worst/;
+print "$stg\n";

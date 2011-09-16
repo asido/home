@@ -1,0 +1,7 @@
+#!/bin/gawk -f
+
+{
+	if($1 ~ /chev/) $1 = "chevrolet";
+	if($1 ~ /ply/) $1 = "plymouth";
+	print
+}

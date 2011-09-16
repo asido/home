@@ -1,0 +1,185 @@
+// screen and image dimensions
+var scr_width, scr_height, img_width, img_height;
+// to center image vertically
+var img_y;
+
+// canvas context
+var ctx;
+
+// interval which triggers the draw_canvas
+var interval;
+
+// start of intro options
+var intro_opacity = 0;
+var intro_fade_ratio = 0.01;
+
+// first image options
+var img1 = new Image();
+img1.src = "intro/1.jpg";
+
+// second image options
+var img2 = new Image();
+img2.src = "intro/2.jpg";
+var img2_opacity = 0;
+var img2_fade_ratio = 0.02;
+
+// text options
+var text1 = "The richness of cultures from long past brought into your home";
+var text1_opacity = 0;
+var text1_fade_ratio = 0.01;
+var text2 = "Your home is your sanctuary where life is celebrated.";
+var text2_opacity = 0;
+var text2_fade_ratio = 0.01;
+
+//  when reaches 1, intro is over
+var end_opacity = 0;
+var end_fade_ratio = 0.027;
+// the last frame of intro
+var end_frame = 240;
+var finish = false;
+
+function draw_canvas()
+{
+	// initialize static frame counter
+	if (typeof draw_canvas.counter == 'undefined')
+		draw_canvas.counter = 0
+	else
+		draw_canvas.counter++;
+
+	// set initial transparency
+	ctx.globalAlpha = intro_opacity;
+	if (intro_opacity < 1)
+		intro_opacity += intro_fade_ratio;
+	else
+		intro_opacity = 1;
+
+	// on end_frame, finish the intro
+	if (draw_canvas.counter > end_frame)
+		finish = true;
+
+	// start the magic
+	ctx.save();
+	if (img2_opacity != 1) { // while the 2nd image is not fully shown, go here
+		// create the img object, give it src and draw it
+		ctx.drawImage(img1, 0 - draw_canvas.counter, img_y, img_width, img_height);
+
+		// draw the text
+		ctx.save();
+		set_shadow(-3, -3, 15, "rgba(255,255,255,1)");
+		ctx.fillText(text1, scr_width / 2, scr_height / 4);
+		ctx.restore();
+
+		// after a while, fade the second image in
+		if (draw_canvas.counter > 110) {
+			// alpha starts with zero
+			ctx.globalAlpha = img2_opacity;
+			// slowly fading it in
+			if (img2_opacity < 1)
+				img2_opacity += img2_fade_ratio;
+			else
+				img2_opacity = 1;
+			ctx.drawImage(img2, 110 - draw_canvas.counter, img_y, img_width, img_height);
+		}
+	} else if (end_opacity != 1) { // when 2nd image is fully shown, go here
+		// continue animate the second image
+		ctx.drawImage(img2, 110 - draw_canvas.counter, img_y, img_width, img_height);
+		// fade the 2nd text in
+		ctx.save();
+		ctx.globalAlpha = text2_opacity;
+		text2_opacity += text2_fade_ratio;
+		if (text2_opacity < 1)
+			text2_opacity += text2_fade_ratio;
+		else
+			text2_opacity = 1;
+		set_shadow(-3, -3, 15, "rgba(255,255,255,1)");
+		ctx.fillText(text2, scr_width / 2, scr_height / 4);
+		ctx.restore();
+	}
+	if (finish)
+		finish_intro();
+
+	ctx.restore();
+
+	draw_skip_intro();
+};
+
+// draws the 'skip intro' text on top left corner
+function draw_skip_intro()
+{
+	ctx.save();
+	ctx.font = "normal 14px Dear Sarah PRO";
+	ctx.textAlign = "start";
+	ctx.fillText("skip intro", 15, 30);
+	ctx.restore();
+};
+
+// fades the intro out
+function finish_intro()
+{
+	ctx.globalAlpha = end_opacity;
+	if (end_opacity < 1)
+		end_opacity += end_fade_ratio;
+	else {
+		clearInterval(interval);
+		$("#canvas-intro").hide();
+		$("#page-wrapper").fadeIn(1000);
+	}
+	ctx.fillStyle = "#ffffff";
+	ctx.fillRect(0, 0, scr_width, scr_height);
+}
+
+// sets the shadows
+function set_shadow(x, y, blur, rgba)
+{
+	ctx.shadowOffsetX	= x;
+	ctx.shadowOffsetY	= y;
+	ctx.shadowBlur		= blur;
+	ctx.shadowColor		= rgba;
+}
+
+window.onload = function() {
+	// fuck off IE
+	if (jQuery.browser.msie && jQuery.browser.version < 9)
+		return;
+
+	$("#page-wrapper").hide();
+	// screen size
+	scr_width = $(document).width();
+	scr_height = $(document).height();
+
+	// init images according to screen size
+	img_width = img1.width;
+	img_height = img1.height;
+	var ratio = Math.max(scr_width / img_width, scr_height / img_height);
+	// increase a little bit the ratio to have space for sliding the background
+	ratio += 0.07;
+	img_width *= ratio;
+	img_height *= ratio;
+	// vertically center the image
+	img_y = -(img_height - scr_height) / 2;
+
+	// init canvas
+	ctx = document.getElementById("canvas-intro").getContext("2d");
+	ctx.canvas.width	= scr_width;
+	ctx.canvas.height	= scr_height;
+	// text options
+	ctx.font			= "normal 36px Dear Sarah PRO";
+	ctx.textAlign		= "center";
+	// start with absolute transparency, which slowly fades in
+	ctx.globalAlpha		= 0;
+
+	// the main loop
+	interval = setInterval(draw_canvas, 50);
+
+	// attach event listeners for skip intro
+	$("#canvas-intro").mousemove(function(evt) {
+		if (evt.pageX > 10 && evt.pageX < 80 && evt.pageY > 10 && evt.pageY < 35)
+			$(this).css("cursor", "pointer");
+		else
+			$(this).css("cursor", "auto");
+	});
+	$("#canvas-intro").click(function(evt) {
+		if (evt.pageX > 10 && evt.pageX < 80 && evt.pageY > 10 && evt.pageY < 35)
+			finish = true;
+	});
+};

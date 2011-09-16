@@ -1,0 +1,133 @@
+let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
+argglobal
+nnoremap <buffer> <silent> g} :exe        "ptjump =RubyCursorIdentifier()"
+nnoremap <buffer> <silent> } :exe          "ptag =RubyCursorIdentifier()"
+nnoremap <buffer> <silent> g] :exe      "stselect =RubyCursorIdentifier()"
+nnoremap <buffer> <silent> g :exe        "stjump =RubyCursorIdentifier()"
+nnoremap <buffer> <silent>  :exe v:count1."stag =RubyCursorIdentifier()"
+nnoremap <buffer> <silent> ] :exe v:count1."stag =RubyCursorIdentifier()"
+nnoremap <buffer> <silent>  :exe  v:count1."tag =RubyCursorIdentifier()"
+nnoremap <buffer> <silent> g] :exe       "tselect =RubyCursorIdentifier()"
+nnoremap <buffer> <silent> g :exe         "tjump =RubyCursorIdentifier()"
+setlocal autoindent
+setlocal balloonexpr=RubyBalloonexpr()
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=:#
+setlocal commentstring=#\ %s
+setlocal complete=.,w,b,u,U,t,i,d
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal cursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal noexpandtab
+if &filetype != 'ruby'
+setlocal filetype=ruby
+endif
+setlocal foldcolumn=3
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=^\\s*\\<\\(load\\|w*require\\)\\>
+setlocal includeexpr=substitute(substitute(v:fname,'::','/','g'),'$','.rb','')
+setlocal indentexpr=GetRubyIndent()
+setlocal indentkeys=0{,0},0),0],!^F,o,O,e,=end,=elsif,=when,=ensure,=rescue,==begin,==end
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=ri
+setlocal linebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:],<:>
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=syntaxcomplete#Complete
+setlocal path=.,NOTE:\ Gem.all_load_paths\ is\ deprecated\ with\ no\ replacement.\ It\ will\ be\ removed\ on\ or\ after\ 2011-10-01.\
+Gem.all_load_paths\ called\ from\ <internal:gem_prelude>:345.\
+NOTE:\ Gem.all_partials\ is\ deprecated\ with\ no\ replacement.\ It\ will\ be\ removed\ on\ or\ after\ 2011-10-01.\
+Gem.all_partials\ called\ from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:258.\
+NOTE:\ Gem.all_partials\ is\ deprecated\ with\ no\ replacement.\ It\ will\ be\ removed\ on\ or\ after\ 2011-10-01.\
+Gem.all_partials\ called\ from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:258.\
+/usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:259:in\ `block\ (2\ levels)\ in\ all_load_paths':\ undefined\ method\ `add'\ for\ \"/usr/lib/ruby/gems/1.9.1\":String\ (NoMethodError)\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:427:in\ `block\ (2\ levels)\ in\ each_load_path'\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:426:in\ `each'\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:426:in\ `block\ in\ each_load_path'\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:421:in\ `each'\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:421:in\ `each_load_path'\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:258:in\ `block\ in\ all_load_paths'\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:257:in\ `each'\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems.rb:257:in\ `all_load_paths'\
+\	from\ /usr/lib/ruby/site_ruby/1.9.1/rubygems/deprecate.rb:62:in\ `block\ (2\ levels)\ in\ deprecate'\
+\	from\ <internal:gem_prelude>:345:in\ `method_missing'\
+\	from\ -e:1:in\ `<main>'\
+
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal nosmartindent
+setlocal softtabstop=0
+setlocal nospell
+setlocal spellcapcheck=
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=.rb
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'ruby'
+setlocal syntax=ruby
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=500
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 34 - ((33 * winheight(0) + 33) / 66)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+34
+normal! 0
+let &so = s:so_save | let &siso = s:siso_save
+doautoall SessionLoadPost
+" vim: set ft=vim :

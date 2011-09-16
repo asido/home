@@ -1,0 +1,29 @@
+#!/bin/bash
+
+function printUsage() {
+	echo "Usage: $(basename $0) folder1/folder2..." 1>&2
+}
+
+set -o xtrace
+
+# If argument count != 1, print usage message and exit.
+if [ "$#" != 1 ]; then
+	printUsage
+	exit 1
+fi
+
+# If given directory to create ends with '/', remove it before continuing.
+if [[ "$1" = "*/" ]]; then
+	1=${1%/}
+fi
+
+# If directory the user asks to create already exists, inform about that and exit.
+if [ -d "$1" ]; then
+	echo -e "$(basename $0): directory \"$1\" already exists."
+fi
+
+IFS="/"
+files=("$@")
+for dir in ${files[@]}; do
+	echo "$dir"
+done

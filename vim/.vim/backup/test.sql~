@@ -1,0 +1,21 @@
+/* 283 page 8.21 a) */
+-- select Employee.fname, Employee.lname
+-- from Employee
+-- where Employee.dno = (
+-- 	select Employee.dno
+-- 	from Employee
+-- 	where Employee.salary = (SELECT MAX(Employee.salary) from Employee))
+
+/* 283 page 8.21 b) */
+-- select Employee.fname, Employee.lname
+-- from Employee
+-- where Employee.superssn in (select Employee.ssn
+-- 	from Employee
+-- 	where Employee.superssn = 888665555)
+
+/* 284 page 8.21 c) */
+select Employee.fname, Employee.lname
+from Employee
+where Employee.salary >= 10000 + (
+	select MIN(Employee.salary)
+	from Employee)

@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/style.css" type="text/css" rel="stylesheet" />
+<title>PlanToTeach</title>
+</head>
+
+<?php
+	require_once('php/html.php');
+	HTML::show_logged_header('profile');
+?>
+
+<div id="edit-profile" class="content-wrap">
+	<div class="content content-small">
+        <div id="update" class="box">
+        	<form id="edit-profile-form" action="">
+            	<div class="row">
+                	<span class="font-content f13 strong">First Name : </span>
+                	<input type="text" id="fname" class="input-pink" /><br/>
+                </div>
+                <div class="row">
+                	<span class="font-content f13 strong">Last Name : </span>
+                	<input type="text" id="lname" class="input-pink" /><br/>
+                </div>
+                <div class="row">
+                	<span class="font-content f13 strong">School Name : </span>
+                	<input type="text" id="sname" class="input-pink" /><br/>
+                </div>
+                <div class="row">
+                	<span class="font-content f13 strong">Province : </span>
+                	<input type="text" id="province" class="input-pink" /><br/>
+                </div>
+                <div class="row">
+                	<span class="font-content f13 strong">School Address : </span>
+                	<input type="text" id="address" class="input-pink" /><br/>
+                </div>
+                <div class="row">
+                	<span class="font-content f13 strong">Department : </span>
+                	<input type="text" id="dep" class="input-pink" /><br/>
+                </div>
+                <div class="row">
+                	<span class="font-content f13 strong">Profile Picture : </span>
+                    <div id="profile-pic">
+                    	<div id="profile-img"></div>
+                        <div id="button-change"></div>
+                    </div>
+                </div>
+                <div id="button-update">UPDATE</div>
+            </form>
+        </div><!--update-->
+        
+        <div id="up-password" class="box">
+        	<form id="edit-password-form" action="">
+            	<div class="row">
+                	<span class="font-content f13 strong">Old Password : </span>
+                	<input type="text" id="old-password" class="input-pink input-smaller" /><br/>
+                </div>
+				<div class="row">
+                	<span class="font-content f13 strong">New Password : </span>
+            		<input type="text" id="new-password" class="input-pink input-smaller" /><br/>
+                </div>
+            	<div class="row">
+                	<span class="font-content f13 strong">Confirm password : </span>
+            		<input type="text" id="confirm-password" class="input-pink input-smaller" /><br/>
+                </div>
+                <div class="row">
+                	<div id="button-password"></div>
+                </div>  
+            </form>
+        </div><!--up-password-->
+        
+    
+    </div><!--content-->
+</div><!--content-wrap-->
+
+<?php
+	HTML::show_footer();
+?>
+
+<body>
+</body>
+</html>

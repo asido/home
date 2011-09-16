@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <errno.h>
+
+size_t strlen(const char *string) {
+	const char *s;
+
+	s = string;
+	while (*s)
+		s++;
+	return s - string;
+}
+
+char *strrev(char *str) {
+	char *p1, *p2;
+
+	if (!str || !*str)
+		return str;
+
+	for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2) {
+		*p1 ^= *p2;
+		*p2 ^= *p1;
+		*p1 ^= *p2;
+	}
+
+	return str;
+}
+
+char *itoa(int n, char *s, int b)
+{
+	static char digits[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+	int i=0, sign;
+    
+	if ((sign = n) < 0)
+		n = -n;
+
+	do {
+		s[i++] = digits[n % b];
+	} while ((n /= b) > 0);
+
+	if (sign < 0)
+		s[i++] = '-';
+	s[i] = '\0';
+
+	return strrev(s);
+}
+
+void print_errno()
+{
+	switch (errno) {
+		case EACCES:		printf("EACCES\n");		break;
+		case EEXIST:		printf("EEXIST\n");		break;
+		case EFAULT:		printf("EFAULT\n");		break;
+		case ELOOP:			printf("ELOOP\n");		break;
+		case ENAMETOOLONG:	printf("ENAMETOOLONG\n");break;
+		case ENOENT:		printf("ENOENT\n");		break;
+		case ENOMEM:		printf("ENOMEM\n");		break;
+		case ENOSPC:		printf("ENOSPC\n");		break;
+		case ENOTDIR:		printf("ENOTDIR\n");	break;
+		case EPERM:			printf("EPERM\n");		break;
+		case EROFS:			printf("EROFS\n");		break;
+		case EISDIR:		printf("EISDIR\n");		break;
+		case EMFILE:		printf("EMFILE\n");		break;
+		case ENFILE:		printf("ENFILE\n");		break;
+		case ENODEV:		printf("ENODEV\n");		break;
+		case ENXIO:			printf("ENXIO\n");		break;
+		case EOVERFLOW:		printf("EOVERFLOW\n");		break;
+		case ETXTBSY:		printf("ETXTBSY\n");		break;
+		case EWOULDBLOCK:	printf("EWOULDBLOCK\n");		break;
+		default:			printf("UNKNOWN\n");
+	}
+}
+
+int main(int argc, char* argv[])
+{
+	if (argc != 3 || strcmp(argv[1], "--help") == 0) {
+		printf("Usage: %s filecount foldercount\n", argv[0]);
+		exit(EXIT_SUCCESS);
+	}
+
+	int i, j, fd;
+	int filecount = atoi(argv[1]);
+	int foldercount = atoi(argv[2]);
+	int filesperfolder = filecount / foldercount;
+
+	struct timeval *starttime = malloc(sizeof(struct timeval));
+	struct timeval *endtime = malloc(sizeof(struct timeval));
+	gettimeofday(starttime, NULL);
+
+	for (i = 0; i < foldercount; ++i) {
+		char foldername[255];
+		foldername[0] = '\0';
+		itoa(i, foldername, 10);
+		if (mkdir(foldername, 0777) == -1)
+			print_errno();
+		
+		for (j = 0; j < filesperfolder; ++j) {
+			char filepath[255];
+			char filename[255];
+			strcpy (filepath, foldername);
+			itoa(j, filename, 10);
+			strcat(filepath, "/");
+			strcat(filepath, filename);
+			if ((fd = open(filepath, O_CREAT, S_IRUSR | S_IRGRP | S_IROTH)) == -1)
+				print_errno();
+			close(fd);
+		}
+	}
+
+	gettimeofday(endtime, NULL);
+	long int s = endtime->tv_sec - starttime->tv_sec;
+	long int ms = endtime->tv_usec - starttime->tv_usec;
+	long elapsed = s * 1000 + ms / 1000.0 + 0.5;
+	printf("Finished in: %ldms\n", elapsed);
+
+	free(starttime);
+	free(endtime);
+
+	exit(EXIT_SUCCESS);
+}

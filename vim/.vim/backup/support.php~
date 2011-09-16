@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Contractor Bridge</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<script src="js/jquery.js" type="text/javascript"></script>
+<script>
+$(document).ready( function() {
+	$("#post_topbar tr td").mouseover( function() { 
+							$(this).addClass("post_topbarh") 
+								})
+							.mouseout( function() { 
+							$(this).removeClass("post_topbarh")
+								})
+});
+</script>
+
+<style type="text/css">
+.job {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+.si-buttons
+{
+	width:250px;
+	height:200px;
+	background-color:#d8f7af;
+	float:left;
+	position:absolute;
+	left: 500px;
+	top: -80px;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+.si-header
+{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	font-weight:bold;
+	color:#747373;
+	margin-left:30px;
+	margin-top:20px;
+}
+.si-innerbuttons1
+{
+	width:191px;
+	height:37px;
+	margin-top:23px;
+	margin-left:30px;
+	background-image:url(images/tourblue.png);
+}
+.si-innerbuttons1:hover
+{
+	width:191px;
+	height:37px;
+	margin-top:23px;
+	margin-left:30px;
+	background-image:url(images/tourgreen.png);
+}
+.si-buttonfont
+{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	font-weight:bold;
+	color:#FFF;
+	width:180px;
+	height:30px;
+	margin-left:40px;
+	padding-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="subcontractors-dialog" style="display:none">
+	<iframe name="invframe" width="580" height="600" src="invite.php">
+    </iframe>
+</div>
+	
+<div id="topbar"> </div> 
+    
+<div id="header-inner"> 
+	<?php include('topbar.php'); ?>    
+</div> <!--header-inner-->
+
+	<div id="post_topbar"> 
+		<table>
+			<tr>
+            	<td><a href="dashboard.php"><div> Home </div></a></td>
+                <td><a href="myprofile.php"><div> My Profile </div></a></td>
+                <td><a href="postjob.php"><div> Post A Job </div></a></td>
+                <td><a href="vcon.php"><div> View Contractors </div></a></td>
+                <td><a href="refer.php"><div> Refer A Friend </div></a></td>
+                <td class="selected" id="topbar_tdfix"><a href="support.php"><div> Support </div></a></td>
+            </tr>
+        </table>
+	</div>
+
+<div id="content" style="min-height:816px;">
+	<div id="suport-wrap"> 
+    	<div id="suport-title">Customer Suport</div>
+        <?php if(isset($_GET['m']))
+		{
+			?>
+            <div id="msg">
+        	Message sent successfully
+        	</div>
+        <?php
+		}
+		?>
+        <form action="sendmail.php" method="post">
+        <div class="sup-row" id="sup-row1">
+        	<div class="sup-rtitle">First Name : </div>
+            <div class="sup-rtxt"><input class="sup-input" id="sup-input1" type="text" name="fname" /></div>
+        </div>
+        <div class="sup-row" id="sup-row2">
+        	<div class="sup-rtitle">Last Name : </div>
+            <div class="sup-rtxt"><input class="sup-input" id="sup-input2" type="text" name="lname" /></div>
+        </div>
+        <div class="sup-row" id="sup-row3">
+        	<div class="sup-rtitle">Email : </div>
+            <div class="sup-rtxt"><input class="sup-input" id="sup-input3" type="text" name="email" /></div>
+        </div>
+        <div class="sup-row" id="sup-row4">
+        	<div class="sup-rtitle">Subject Of Inquiry :</div>
+            <div class="sup-rtxt"><input class="sup-input" id="sup-input4" type="text" name="subject" /></div>
+        </div>
+        <div class="sup-row" id="sup-row5">
+        	<div class="sup-rtitle">Message : </div>
+            <div class="sup-rtxt"><textarea class="sup-input" id="sup-tarea" type="text" name="message" style="float:left;"></textarea></div>
+<div class="si-buttons">
+<div class="si-header">Take A Tour</div>
+	<a href="#" style="text-decoration:none;"><div class="si-innerbuttons1"><div class="si-buttonfont">Creating a Job</div></div></a>
+	<a href="#" style="text-decoration:none;"><div class="si-innerbuttons1"><div class="si-buttonfont" style="margin-left:15px;">Invited to bid on a Job</div></div></a>
+</div>
+        </div>
+    	
+    	<div><input id="sup-sbutton" style="border:none" type="submit" value="SUBMIT" /></div>
+    </form>
+    	<div id="sup-cloud"> 
+        	<div id="cloud-title">Contractor Bridge Inc.<br /></div>
+            <div id="cloud-main">
+            	<p>8609 North Division Street<br />
+                Spokane, WA 99208<br />
+                Telephone : +1 509-789-1273<br />
+                FAX : +1 509-323-8541<br /></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="content-inner" class="post_contentinner" >
+</div> <!-- content-inner -->
+</div> <!-- content -->
+</div>
+
+<div id="footer" style="margin-top:-322px;">
+	<div id="topbar" style="height:10px;"></div>
+    <div id="footer-inner">
+		<div id="aboutus">	
+        		<span id="aboutushead">About US</span>
+				<p>
+				Created by contractors for contractors, Contractor Bridge was developed out of a need for efficiency in the transfer of 
+                construction documents.After dealing with the annoyances and frustrations of too many FTP
+                uploads/downloads, we thought, "There must be a better way." 
+                </p>
+                <p>
+                With inspirations from social networking sites and the increasingly 
+                popular use of "Cloud Computing," Contractor Bridge has been developed to help
+                contractors create a network of the contractors they work with and
+                share files easily and seamlessly with all of them, all on a secure "cloud"
+                based server. 
+                </p>
+                <p>
+                No more bogging down of your server to upload FTP's and
+                no more confusion/headaches associated with this outdated process. Simply
+                upload drawings/files, and invite contractors to have access to these
+                files. Simple, easy and straightforward.
+        		</p>
+        </div> <!-- aboutus -->
+		
+        <div id="stat">
+			<p>8597 Users Online Now</p>
+            <p> Corporate Twitter <img src="images/twitter.jpg" /></p>
+            <p> Jobs on Twitter <img src="images/twitter.jpg" /></p>
+            <p>Read Our Blog <img src="images/blogicon.jpg" /></p>
+            <p>Facebook <img src="images/fbicon.jpg" /></p>
+            <p>Jobs via RSS <img src="images/blogicon.jpg" /></p>
+		</div> <!-- stat -->
+        
+        <div id="logobottom" ></div>
+		<div id="footertext">FAQ / Affiliates / Upcoming Events / Press Releases / In The News / Quotes / Top Users / Careers / Terms /Privacy Policy  &nbsp; &nbsp;© 2006–2011, Contractor Bridge
+		</div> <!-- footertext -->
+
+	</div> <!-- footer-inner -->
+</div> <!-- footer -->
+</body>
+</html>

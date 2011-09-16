@@ -1,0 +1,196 @@
+<?php
+
+require_once('php/auth.php');
+require_once('php/database.php');
+
+$logged = $auth->logged_in();
+
+if (!$logged) {
+	if (!$auth->cookie_login()) {
+		header('Location: login.php');
+		exit;
+	}
+}
+
+if (isset($_POST['oldpass']) && isset($_POST['newpass']) && isset($_POST['cpass']))
+	$psw_changed = $auth->change_password($_POST['oldpass'], $_POST['newpass']);
+
+$db = database::get_instance();
+$sql = $db->query("SELECT * FROM `users` WHERE `username`='".$_SESSION['username']."'");
+$user_info = mysql_fetch_array($sql);
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikemelikeU</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script type="text/javascript" src="js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="js/submit.js"></script>
+<script type="text/javascript">
+	$(document).ready ( function (){
+		$('#prev').hide();
+		$('#next').hide();
+		$('#search_btn').click(function() {				
+				$.ajax({
+				   type: "POST",
+				   url: "searchQuestion.php",
+				   data: { search_question:$('#search_input').val(), page:1 },
+				   responseType:'text',
+				   success: function(response){				   		
+						$('#questions').html(response);	
+						if($('#h_prev').val() == 0){
+							$('#prev').hide();
+						}else{
+							$('#prev').show();
+						}
+						if($('#h_next').val() == 0){
+							$('#next').hide();
+						}else{
+							$('#next').show();
+						}
+				   }
+				 });				
+		});			
+		
+		$('#prev').click(function() {				
+				$.ajax({
+				   type: "POST",
+				   url: "searchQuestion.php",
+				   data: { search_question:$('#search_input').val(), page:(parseInt($('#h_page_nr').val()) - 1) },
+				   responseType:'text',
+				   success: function(response){				   		
+						$('#questions').html(response);								   		
+						if($('#h_prev').val() == 0){
+							$('#prev').hide();
+						}else{
+							$('#prev').show();
+						}
+						if($('#h_next').val() == 0){
+							$('#next').hide();
+						}else{
+							$('#next').show();
+						}
+				   }
+				 });
+		});
+		
+		$('#next').click(function() {				
+				$.ajax({
+				   type: "POST",
+				   url: "searchQuestion.php",
+				   data: { search_question:$('#search_input').val(), page:(parseInt($('#h_page_nr').val()) + 1) },
+				   responseType:'text',
+				   success: function(response){				   											   		
+						$('#questions').html(response);	
+						if($('#h_prev').val() == 0){
+							$('#prev').hide();
+						}else{
+							$('#prev').show();
+						}
+						if($('#h_next').val() == 0){
+							$('#next').hide();
+						}else{
+							$('#next').show();
+						}
+				   }
+				 });
+		});	
+		
+		
+	});
+	
+	
+</script>
+</head>
+
+<body>
+
+<?php
+	include_once('php/html.php');
+
+	if ( !database )
+		require ( 'database.php' );
+
+	HTML::show_logged_header();
+?>
+<script>
+	$(".myaccount-btn").addClass("bh-selected");
+</script>
+
+<div id="container-admin">
+        
+    <div class="mid-container mid-small-padding margin-fix">
+    	<span class="ab17-gray">My Account</span>
+        <div id="myaccount-container">
+        	<div id="ma-left">
+                <form id="my-account-form" method="POST" enctype="multipart/form-data">
+                <div class="ma-row">
+                    <label class="ma-labels" for="fname">First Name:</label>
+                    <input type="text" name="fname" class="ma-inputs" />
+                </div>
+                <div class="ma-row">
+                    <label class="ma-labels" for="lname">Last Name:</label>
+                    <input type="text" name="fname" class="ma-inputs" />
+                </div>
+                <div class="ma-row">
+                    <label class="ma-labels" for="uname">Username:</label>
+                    <input type="text" name="uname" class="ma-inputs" />
+                </div>
+                <div class="ma-row">
+                    <label class="ma-labels" for="email">Email:</label>
+					<input type="text" name="email" class="ma-inputs" value="<?php echo $user_info['username']; ?>" />
+            	</div>
+                <div class="ma-row">
+                	<label class="ma-labels">Avatar:</label>
+                    <div id="ma-img">
+                    <img id="avatar-img" src="<?php $avatar = $auth->get_avatar(); echo ($avatar == "" ? "" : 'avatars/'.$avatar); ?>"></img>
+					</div>
+					<input type="file" name="avatar-file" id="avatar-file-browse" />
+					<div id="ma-upload">UPLOAD</div>
+                </div>
+                <div class="ma-row">
+                	<input class="ma-submit" type="submit" value="SUBMIT" />
+                </div>
+                </form>
+            </div><!--ma-left-->
+            <div id="ma-right">
+            	<form action="myaccount.php" method="POST">
+            	<div class="ma-row ma-big">
+                	<label class="ma-labels" for="oldpass">Old Password:</label>
+                    <input type="password" name="oldpass" class="ma-inputs" />
+                </div>
+                <div class="ma-row ma-big">
+                	<label class="ma-labels" for="newpass">New Password:</label>
+                    <input type="password" name="newpass" class="ma-inputs" />
+                </div>
+                <div class="ma-row ma-big">
+                	<label class="ma-labels" for="cpass">Confirm Password:</label>
+                    <input type="password" name="cpass" class="ma-inputs" />
+                </div>
+				<?php if (isset($psw_changed)) {
+					echo "<div>".($psw_changed ? "Your password has been successfuly changed" : "The old password is not correct")."</div>";
+				} ?>
+                <div class="ma-row">
+                	<input id="ma-change" class="ma-submit"type="submit" value="CHANGE" />
+                </div>
+                </form>
+            </div>
+        </div>
+            
+    </div><!--mid-container-->
+    
+</div>
+
+<?php
+	include_once('php/html.php');
+	HTML::show_background();
+	HTML::show_footer();
+?>
+
+</body>
+</html>

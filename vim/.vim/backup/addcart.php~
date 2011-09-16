@@ -1,0 +1,56 @@
+<?php
+
+//include controller
+include(CONDIR.DS."addcart.php");
+//echo $_GET['prdid'];
+//SEO related things here
+//$title =$row_rspageselect['title'];
+//$metadesc = $row_rspageselect['title'];
+include(CONDIR.DS."category.php");
+include(INCDIR.DS."class.php");
+$class = new sax;
+
+echo "Entered page";
+if($QST3!="")
+{
+	$chkitem=$class->C($class->login(TB_CART,"productid","reference",$QST3, escape($_SESSION['CartReference'])));
+	if($chkitem>0)
+	{
+		$item=$class->F($class->login(TB_CART,"productid","reference",$QST3,$_SESSION['CartReference']));
+		$qty=($item['quantity']+1);
+		$totalprice=($qty*$item['price']);
+		$str="update ".TB_CART." set quantity='".$qty."',totalamount='".$totalprice."' where ";
+		$str.="productid='".$QST3."' and reference='".$_SESSION['CartReference']."'";
+	}
+	else
+	{
+		if(!isset($_SESSION['CartReference']))
+		{
+			$ref=$class->createRandomPassword();
+			$_SESSION['CartReference']=$ref;
+		}
+		else
+		{
+			$ref=$_SESSION['CartReference'];
+		}
+		$itempord=$class->F($class->where(TB_PRODUCT,"reference",$QST3));
+		$amt=$itempord['cost'];
+		
+		$str="insert into ".TB_CART." set productid='".$QST3."',quantity='1',item_option='".$QST4."',";
+		$str.="totalamount='".$amt."',price='".$amt."',username='".$_SESSION['LinbyStationSignin']."',";
+		$str.="reference='".$ref."',adddate='".date("Y-m-d")."'";
+	}
+	//echo $str;
+	$exe=$class->Q($str);
+	if($exe)
+	{
+		echo "<script>document.getElementById('answer').innerHTML='';</script>";
+		echo "Product Added";
+	}
+	else
+	print $class->R(SITELINK);
+}
+else
+echo "Error";
+?>
+

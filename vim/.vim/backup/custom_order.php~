@@ -1,0 +1,602 @@
+<?php
+//include controller
+include(CONDIR.DS."custom_order.php");
+include(INCDIR.DS."class.php");
+$class = new sax;
+include("Sax/fckeditor/fckeditor.php");
+
+//echo $QST3;
+//SEO related things here
+//$title =$row_rspageselect['title'];
+//$metadesc = $row_rspageselect['title'];
+
+if(isset($_POST['SubmitCustomOrder']))
+{
+	$rand=$class->createRandomPassword();
+	$card_expiry=$_POST['expmm']."-".$_POST['expyy'];
+
+$cardnnb = strrev($_POST['card_number']);
+
+	$str="insert into sax_custom_order set fullname='".$_POST['fullname']."',lastname='".$_POST['lastname']."',emailaddress='".$_POST['emailaddress']."',phone='".$_POST['phone']."',billing_address='".$_POST['billing_address']."',description='".str_replace("'","~",$_POST['description'])."',post_date='".date("Y-m-d")."',amount='".$_POST['amount']."',payment_type='".$_POST['payment_type']."',card_number='".$cardnnb."',card_expire='".$card_expiry."',holder_name='".$_POST['holder_name']."',reference='".$rand."',security_code='".$_POST['security_code']."',card_type='".$_POST['card_type']."',bill_city='".$_POST['bill_city']."',bill_state='".$_POST['bill_state']."',bill_country='".$_POST['bill_country']."',bill_zip='".$_POST['bill_zip']."',";
+	if($_POST['shipbill']=="1")
+	{
+	$str.="shipping_address='".$_POST['shipping_address']."',shipping_city='".$_POST['shipping_city']."',shipping_state='".$_POST['shipping_state']."',shipping_country='".$_POST['shipping_country']."',shipping_zip='".$_POST['shipping_zip']."'";
+	}
+	else
+	{
+	$str.="shipping_address='".$_POST['billing_address']."',shipping_city='".$_POST['bill_city']."',shipping_state='".$_POST['bill_state']."',shipping_country='".$_POST['bill_country']."',shipping_zip='".$_POST['bill_zip']."'";	
+	}
+	$exe=$class->Q($str);
+	if($exe)
+	{
+		$from=$db['default']['order_email'];
+		$to=$_POST['emailaddress'];
+		$comm="Custom Order Receipt from SAX-CCESSORIES,<br><br>";
+		$comm.="User Information:<br>";
+		$comm.="------------<br>";
+		$comm.="First Name : ".$_POST['fullname']."<br>";
+		$comm.="Last Name : ".$_POST['lastname']."<br>";
+		$comm.="Email Address : ".$_POST['emailaddress']."<br>";
+		$comm.="Phone Number : ".$_POST['phone']."<br>";
+		$comm.="Billing Address<br>";
+		$comm.="Street address : ".$_POST['billing_address']."<br>";
+		$comm.="City : ".$_POST['bill_city']."<br>";
+		$comm.="State : ".$_POST['bill_state']."<br>";
+		$comm.="Country : ".$_POST['bill_country']."<br>";
+		$comm.="Zip : ".$_POST['bill_zip']."<br>";
+		$comm.="Shipping Address<br>";
+		$comm.="Street address : ".$_POST['shipping_address']."<br>";
+		$comm.="City : ".$_POST['shipping_city']."<br>";
+		$comm.="State : ".$_POST['shipping_state']."<br>";
+		$comm.="Country : ".$_POST['shipping_country']."<br>";
+		$comm.="Zip : ".$_POST['shipping_zip']."<br>";
+		$comm.="------------<br>";
+		$comm.="Amount : $".$select['amount']."<br>";
+		$comm.="Product Description:<br>";
+		$comm.=$_POST['description']."<br>";
+		$comm.="------------<br>";
+		$comm.="SAX-CCESORIES <br>E-mail :$from<br>";
+		$comm.="Thank you";
+		//echo $comm;
+		$sub="Custom Order Receipt from SAX-CCESSORIES";
+		//Commented By Levo Technologies To Stop Mail
+		//$send=@$class->sentmail($to,$sub,$from,$comm);
+		$_SESSION['CustomReference']=$rand;
+		if($_POST['payment_type']=="paypal") {
+		echo $class->R(SITEROOTSECURE."index.php/custom_paypal/Custom_Order");
+		}
+		else
+		{
+		echo $class->R(SITEROOTSECURE."index.php/custom_authorize_payment/Custom_Order");
+		}
+		
+	}
+	
+	else {
+	echo $class->R(SITEROOTSECURE."index.php/custom_order/err/Custom_Order");
+	}
+}
+?>
+<div class="content_areaInRight">
+          
+          <!-- Begin contentBoxArea -->
+          <div class="contentBoxArea">
+            <div class="contentBoxAreaRight"  style="width:650px;">
+            <span class="procedures"><span class="title">CUSTOM ORDER</span>
+              
+      <ul>
+        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="bordersytle">
+          <tr> 
+            <td align="left" valign="middle" class="black12"> 
+              <form id="form1" name="form1" method="post" action="" onsubmit="return customvalid();">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr> 
+                    <td width="31%" align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12"><span id="fn">First 
+                      Name</span></td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="text" class="txtborder" name="fullname" id="fullname" style="width:200px;"/>
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12">Last Name</td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="text" class="txtborder" name="lastname" id="lastname" style="width:200px;"/>
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12"><span id="ea">Email 
+                      Address</span></td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="text" class="txtborder" name="emailaddress" id="emailaddress" style="width:200px;" />
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12"><span id="pn">Phone 
+                      Number</span></td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="text" class="txtborder" name="phone" id="phone" style="width:200px;" />
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12"><span id="ba">Street 
+                      Address</span></td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <textarea name="billing_address" class="txtborder" id="billing_address" style="width:250px;"></textarea>
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12">City</td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="text" class="txtborder" name="bill_city" id="bill_city" style="width:200px;" />
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12">State</td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="text" class="txtborder" name="bill_state" id="bill_state" style="width:200px;" />
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12">Zip Code</td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="text" class="txtborder" name="bill_zip" id="bill_zip" style="width:200px;" />
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12">Country</td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="text" class="txtborder" name="bill_country" id="bill_country" style="width:200px;" />
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td colspan="6" align="left" valign="middle" class="font12"> 
+                      <input name="shipbill" id="shipbill" type="checkbox" value="1" onclick="showship();" />
+                      Click here if shipping address does not match Billing Address. 
+                    </td>
+                  </tr>
+                  <script type="text/javascript" language="javascript">
+                        function showship()
+						{
+							if(document.getElementById('shipbill').checked==true)
+							document.getElementById('ds').style.display="block";
+							else
+							document.getElementById('ds').style.display="none";
+						}
+                        </script>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td colspan="6" align="left" valign="middle" class="font12"> 
+                      <div id="ds" style="display:none;"> 
+                        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                          <tr> 
+                            <td colspan="2" align="left" valign="middle" class="font3">Shipping 
+                              Address</td>
+                          </tr>
+                          <tr> 
+                            <td width="31%" align="left" valign="middle">Street 
+                              Address</td>
+                            <td width="69%" align="left" valign="middle"> 
+                              <textarea name="shipping_address" class="txtborder" id="shipping_address" style="width:250px;"></textarea>
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">City</td>
+                            <td align="left" valign="middle"> 
+                              <input type="text" class="txtborder" name="shipping_city" id="shipping_city" style="width:200px;" />
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">State</td>
+                            <td align="left" valign="middle"> 
+                              <input type="text" class="txtborder" name="shipping_state" id="shipping_state" style="width:200px;" />
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">Country</td>
+                            <td align="left" valign="middle"> 
+                              <input type="text" class="txtborder" name="shipping_country" id="shipping_country" style="width:200px;" />
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">Zip Code</td>
+                            <td align="left" valign="middle"> 
+                              <input type="text" class="txtborder" name="shipping_zip" id="shipping_zip" style="width:200px;" />
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td colspan="6" align="left" valign="middle" class="font12"> 
+                      <span id="pd">Product Description <span style="color:#444;">(please 
+                      include description, options, quantity, cost, and shipping)</span></span></td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td colspan="6" align="left" valign="middle"> 
+                      <textarea name="description" id="description" style="width:600px; height:150px;" class="txtborder"></textarea>
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12"><span id="pa">Amount</span></td>
+                    <td colspan="5" align="left" valign="middle">$ 
+                      <input type="text" class="txtborder" name="amount" id="amount" style="width:100px;" />
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle" class="font12">Payment Type</td>
+                    <td width="5%" align="left" valign="middle"> 
+                      <input name="payment_type" type="radio" id="payment1" onclick="showidv('0');" value="paypal" checked />
+                    </td>
+                    <td width="10%" align="left" valign="middle"><img src="<?php echo SITEIMGALT?>paypal.gif" border="0" title="Paypal" /></td>
+                    <td width="5%" align="right" valign="middle"> 
+                      <input type="radio" name="payment_type" id="payment2" onclick="showidv('1');" value="authorize" />
+                    </td>
+                    <td align="center" valign="middle"><img src="<?php echo SITEIMGALT?>authorize_log.png" border="0" title="Authorize.net" /></td>
+                    <td align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <script type="text/javascript" language="javascript">
+                        function showidv(str)
+						{
+							if(str=="1")
+							document.getElementById('aut').style.display="block";
+							else
+							document.getElementById('aut').style.display="none";
+						}
+                        </script>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="3" align="left" valign="middle">&nbsp;</td>
+                    <td width="17%" align="center" valign="middle"><img src="<?php echo SITEIMGALT?>credit.png" border="0" /></td>
+                    <td width="32%" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <div id="aut" style="display:none;"> 
+                        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle" class="font12">Card 
+                              Type</td>
+                            <td align="left" valign="middle"> 
+                              <select name="card_type" id="card_type" class="txtborder">
+                                <option value="Visa">Visa</option>
+                                <option value="Mastercard">Mastercard</option>
+                                <option value="Discover">Discover</option>
+                                <option value="American Express">American Express</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle" class="font12">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle" class="font12">Card 
+                              holder Name</td>
+                            <td align="left" valign="middle"> 
+                              <input type="text" class="txtborder" name="holder_name" id="holder_name" style="width:200px;" />
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td width="36%" align="left" valign="middle">&nbsp;</td>
+                            <td width="64%" align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle" class="font12">Credit 
+                              Card Number</td>
+                            <td align="left" valign="middle"> 
+                              <input type="text" class="txtborder" name="card_number" id="card_number" style="width:200px;" />
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle" class="font12">Expire 
+                              Date</td>
+                            <td align="left" valign="middle"><span class="font2" > 
+                              <select name="expmm" id="expmm" class="txtborder">
+                                <option value="">MM</option>
+                                <?php for($i=1;$i<=12;$i++){?>
+                                <option value="<?php echo $i?>"> 
+                                <?php echo $i?>
+                                </option>
+                                <?php }?>
+                              </select>
+                              <select name="expyy" id="expyy" class="txtborder">
+                                <option value="">YYYY</option>
+                                <?php 
+									$curr=date("Y");
+									for($i=$curr;$i<=($curr+10);$i++){?>
+                                <option value="<?php echo $i?>"> 
+                                <?php echo $i?>
+                                </option>
+                                <?php }?>
+                              </select>
+                              </span></td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle" class="font12">Security 
+                              Code Number</td>
+                            <td align="left" valign="middle"> 
+                              <input type="text" class="txtborder" name="security_code" id="security_code" style="width:200px;" />
+                            </td>
+                          </tr>
+                          <tr> 
+                            <td align="left" valign="middle">&nbsp;</td>
+                            <td align="left" valign="middle">&nbsp;</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td colspan="6" align="left" valign="middle"> 
+                      <input type="checkbox" name="checkboxread" id="checkboxread" />
+                      <span class="font12" id="rp"> I have read and agree to the 
+                      <b>sax-ccessories</b> <a href="<?php echo SITELINK;?>page/1/Return_Policy" class="font12">Return 
+                      Policy</a>. </span></td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle"> 
+                      <input type="submit" name="SubmitCustomOrder" class="buttonbg" value="Submit" />
+                    </td>
+                  </tr>
+                  <tr> 
+                    <td align="left" valign="middle">&nbsp;</td>
+                    <td colspan="5" align="left" valign="middle">&nbsp;</td>
+                  </tr>
+                </table>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </ul>
+              </span> </div>
+            <!-- End contentBoxAreaRight -->
+          </div>
+          <!-- End contentBoxArea -->
+        </div>
+
+<script type="text/javascript" language="javascript">
+function customvalid()
+{
+	if(document.getElementById('fullname').value=="")	
+	{
+		document.getElementById('fullname').style.borderColor="red";
+		document.getElementById('fn').style.color="red";
+		document.getElementById('fullname').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('fullname').style.borderColor="#006633";
+		document.getElementById('fn').style.color="#000";
+	}
+	
+	if(document.getElementById('emailaddress').value=="")	
+	{
+		document.getElementById('emailaddress').style.borderColor="red";
+		document.getElementById('ea').style.color="red";
+		document.getElementById('emailaddress').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('emailaddress').style.borderColor="#006633";
+		document.getElementById('ea').style.color="#000";
+	}
+	
+	if(document.getElementById('emailaddress').value!="")
+	{
+		var x = document.getElementById('emailaddress').value;
+		var filter  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if (filter.test(x))
+		{
+			 document.getElementById('emailaddress').style.borderColor="#006633";
+			 document.getElementById('ea').style.color="#000";
+		}
+		else 
+		{
+	 	 document.getElementById('emailaddress').style.borderColor="red";
+		 document.getElementById('ea').style.color="red";
+		 document.getElementById('emailaddress').focus();
+		 return false;
+		}
+	}
+	
+	if(document.getElementById('phone').value=="")	
+	{
+		document.getElementById('phone').style.borderColor="red";
+		document.getElementById('pn').style.color="red";
+		document.getElementById('phone').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('phone').style.borderColor="#006633";
+		document.getElementById('pn').style.color="#000";
+	}
+	
+	if(document.getElementById('billing_address').value=="")	
+	{
+		document.getElementById('billing_address').style.borderColor="red";
+		document.getElementById('ba').style.color="red";
+		document.getElementById('billing_address').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('billing_address').style.borderColor="#006633";
+		document.getElementById('ba').style.color="#000";
+	}
+	
+	if(document.getElementById('description').value=="")	
+	{
+		document.getElementById('description').style.borderColor="red";
+		document.getElementById('pd').style.color="red";
+		document.getElementById('description').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('description').style.borderColor="#006633";
+		document.getElementById('pd').style.color="#000";
+	}
+	
+	if(document.getElementById('amount').value=="")	
+	{
+		document.getElementById('amount').style.borderColor="red";
+		document.getElementById('pa').style.color="red";
+		document.getElementById('amount').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('amount').style.borderColor="#006633";
+		document.getElementById('pa').style.color="#000";
+	}
+	
+	if(document.getElementById('amount').value<=0)	
+	{
+		document.getElementById('amount').style.borderColor="red";
+		document.getElementById('pa').style.color="red";
+		alert('Payment Amount must be Greater than 0');
+		document.getElementById('amount').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('amount').style.borderColor="#006633";
+		document.getElementById('pa').style.color="#000";
+	}
+	
+	if(isNaN(document.getElementById('amount').value))	
+	{
+		document.getElementById('amount').style.borderColor="red";
+		document.getElementById('pa').style.color="red";
+		alert('Payment Amount is Not Correct');
+		document.getElementById('amount').focus();
+		return false;
+	}
+	else
+	{
+		document.getElementById('amount').style.borderColor="#006633";
+		document.getElementById('pa').style.color="#000";
+	}
+	
+	if(document.getElementById('checkboxread').checked==false)	
+	{
+		document.getElementById('rp').style.color="red";		
+		return false;
+	}
+	else
+	{
+		document.getElementById('rp').style.color="#000";
+	}
+	
+}
+</script>
+

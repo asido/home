@@ -1,0 +1,5 @@
+#!/usr/bin/perl -w
+
+$string = 'He said, "Go get me the wrench", but I didn\'t hear him.';
+$string =~ s/.*"(.*)".*/$1/;
+print "$string\n";

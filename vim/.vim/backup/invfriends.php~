@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>urThots - Invite Friends</title>
+<link href="css/invfriends-style.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="js/slider.js"></script>
+</head>
+<body>
+<div id="inv-friends-main">
+
+<div id="search-friends">
+	<div id="search-title-banner"></div>
+    <div id="search-bar">
+    	<form id="search-friends-form" method="post" action="">
+        <input type="text" id="search-input" placeholder="Search friends, artists, bands" />
+        <div id="search-button-go"><a href="#">&nbsp;</a></div>
+        </form>
+    </div><!--search-bar-->
+</div><!--search-friends-->
+
+<div class="inv-friends-featured">
+	<div class="featured-title">Featured Artists &frasl; Bands :</div>
+    <div class="toggle-bar">
+    	<ul class="toggle-bar-list">
+        	<li><div id="slideprev-up" class="toggle-arrow-left"></div></li>
+            <li><div id="slide1-up" class="toggle-text">1</div></li>
+            <li><div id="slide2-up" class="toggle-text">2</div></li>
+            <li><div id="slide3-up" class="toggle-text">3</div></li>
+            <li><div id="slidenext-up" class="toggle-arrow-right"></div></li>
+        </ul>
+    </div><!--toggle-bar-->
+    <div class="pic-row">
+		<div id="slide-wrap-up">
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>         
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>  
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>         
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>  
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>         
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>  
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>
+		</div><!-- slide-wrap-up -->
+    </div><!--pic-row-->
+</div><!--featured-->
+
+<div id="main-content">
+	<div id="main-content-header">
+    	<span class="header-green">Recommended friends on <span class="header-orange">ur</span>Thots</span>
+        <div id="main-button-invite"><a href="#">&nbsp;</a></div>
+    </div><!--main-content-header-->
+    <div id="friends-left">
+    	<div id="ribbon-left" class="friends-ribbon"></div>
+        <div id="left-wrap">
+        	<table>
+            	<tr>
+                	<td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>                    
+                    </td>
+                    <td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                </tr>
+                <tr>
+                	<td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                </tr>
+                <tr>
+                	<td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                </tr>
+           </table>
+            
+        
+        </div><!--left-wrap-->
+    </div><!--friends-left-->
+
+
+	<div id="friends-right">
+    	<div id="ribbon-right" class="friends-ribbon"></div>
+        <div id="right-wrap">
+        	<table>
+            	<tr>
+                	<td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                </tr>
+				<tr>
+                    <td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>                    
+                    </td>
+				</tr>
+                <tr>
+                    <td>
+                      <div class="friend-wrap">
+                          <div class="friend-pic-border"></div>
+                          <div class="friend-name">Jameson Dougie Archie Irvine</div>
+                      </div>
+                    </td>
+                </tr>
+            </table>
+        
+        </div><!--right-wrap-->
+    </div><!--friends-right-->
+    
+</div><!--main-content-->
+
+
+<div class="inv-friends-featured" id="featured-users">
+	<div class="featured-title">Featured Users :</div>
+    <div class="toggle-bar">
+    	<ul class="toggle-bar-list">
+        	<li><div id="slideprev-down" class="toggle-arrow-left"></div></li>
+            <li><div id="slide1-down" class="toggle-text">1</div></li>
+            <li><div id="slide2-down" class="toggle-text">2</div></li>
+            <li><div id="slide3-down" class="toggle-text">3</div></li>
+            <li><div id="slidenext-down" class="toggle-arrow-right"></div></li>
+        </ul>
+    </div><!--toggle-bar-->
+    <div class="pic-row">
+		<div id="slide-wrap-down">
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>         
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>  
+			<div class="friend-item">
+				<div class="pic-wrap">
+					<div class="pic-image"></div>
+				</div>
+				<div class="pic-name">Jamal Mashburn</div>
+			</div>
+		</div><!-- slide-wrap-down -->
+    </div><!--pic-row--> 
+</div><!--featured-->
+
+<div class="second-spacer"></div>
+
+</div>
+</body>
+</html>

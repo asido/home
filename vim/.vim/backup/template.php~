@@ -1,0 +1,401 @@
+<?php @session_start();
+foreach($_GET as $key => $value)
+	$_GET[$key] = mysql_real_escape_string($value);
+foreach($_POST as $key => $value)
+	$_POST[$key] = mysql_real_escape_string($value);
+
+include_once(INCDIR.DS."class.php");
+require_once(SITELINK."db.class.inc.php");
+$class = new sax;
+
+?>
+<?php $setting=$class->F($class->query(TB_SETTINGS));?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="google-site-verification" content="jag2Pk0jjiU6aqVG5__FFmefMmKmVSlZ__IHA8HI9fc" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php if($QST3!=""){$sub=explode("?",$QST3);}?>
+<title> <?php echo ($QST3!="")? $sub[0] : "SAX-CCESSORIES: Saxophone Accessories | MACSAX & Warburton Saxophones | http://sax-ccessories.com";?></title>
+<meta name="description" content="<?php echo $db['default']['db_meta_description']; ?>" />
+<meta name="keywords" content="<?php echo htmlentities($db['default']['db_meta_keywords']); ?>" />
+<link rel="stylesheet" href="<?php echo SITELINKALT;?>css/style.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo SITELINKALT;?>css/css.css" type="text/css" />
+<!-- <link rel="shortcut icon" href="<?php echo SITEIMGALT; ?>title.png" type="image/x-icon" /> -->
+<!--[if IE 6]>
+<link rel="stylesheet" href="<?php echo SITELINKALT; ?>css/ie6.css" type="text/css" />
+<![endif]-->
+
+<script src="<?php echo SITELINKALT;?>js/jquery-1.3.2.min.js" type="text/javascript"></script>
+<script src="<?php echo SITELINKALT;?>js/jquery.scrollable-1.0.3.min.js" type="text/javascript"></script>
+<script src="<?php echo SITELINKALT;?>Scripts/swfobject_modified.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo SITELINK;?>audio-player.js"></script>  
+<script type="text/javascript">
+AudioPlayer.setup("<?php echo SITELINK; ?>player.swf", {
+	width: 250
+});
+
+$(document).ready(function($) {
+    $("div.scrollable").scrollable({
+		interval: 6000,
+		size: 1,
+		speed: 1000,
+        loop: true
+     });
+});
+</script>
+<style type="text/css">
+img, div, input {
+	behavior: url("iepngfix.htc")
+}
+/*.header {
+	float:left;
+	width:955px;
+	height:183px;
+	background: url(<?php //echo SITELINKALT; ?><?php //echo "Sax/property/".$setting['site_header']?>);
+	background-repeat:no-repeat;
+}*/
+</style>
+</head>
+<?php
+if(isset($_POST['SearchGo']))
+{
+	echo $class->R(SITELINK."search/".$_POST['searchtext']."/Search");
+}
+?>
+<body>
+<!-- Begin Cover -->
+<div id="cover" >
+  <!-- Begin Wrapper -->
+  <div id="wrapper">
+    <!-- Begin Header -->
+    <div class="header">
+
+    <object id="FlashID" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="955" height="190">
+      <param name="movie" value="<?php echo SITELINKALT;?>header.swf" />
+      <param name="quality" value="high" />
+      <param name="wmode" value="opaque" />
+      <param name="swfversion" value="6.0.65.0" />
+      <!-- This param tag prompts users with Flash Player 6.0 r65 and higher to download the latest version of Flash Player. Delete it if you don’t want users to see the prompt. -->
+      <param name="expressinstall" value="<?php echo SITELINKALT;?>Scripts/expressInstall.swf" />
+      <!-- Next object tag is for non-IE browsers. So hide it from IE using IECC. -->
+      <!--[if !IE]>-->
+      <object type="application/x-shockwave-flash" data="<?php echo SITELINKALT;?>header.swf" width="955" height="190">
+        <!--<![endif]-->
+        <param name="quality" value="high" />
+        <param name="wmode" value="opaque" />
+        <param name="swfversion" value="6.0.65.0" />
+        <param name="expressinstall" value="<?php echo SITELINKALT;?>Scripts/expressInstall.swf" />
+        <!-- The browser displays the following alternative content for users with Flash Player 6.0 and older. -->
+        <div>
+          <h4>Content on this page requires a newer version of Adobe Flash Player.</h4>
+          <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" width="112" height="33" /></a></p>
+        </div>
+        <!--[if !IE]>-->
+      </object>
+      <!--<![endif]-->
+    </object>
+
+     </div>
+
+    <!-- End Header -->
+    <!-- Begin menu_area -->
+    <div class="menu_area">
+      <!-- Begin menu_areaLeft -->
+      <div class="menu_areaLeft">
+        <ul id="menu" style="font-size:10px;">
+          <li><a href="<?php echo SITELINK;?>" title="" <?php if($QST1==""){?> class="selects" <?php }?>>HOME</a></li>
+		   <li><a href="<?php echo SITELINK;?>page/4/MACSAX" title="MACSAX" <?php if($QST2=="4" && $QST1=="page"){?> class="selects" <?php }?>>MACSAX</a></li>
+          <li><a href="<?php echo SITELINK;?>page/3/Customer_Support" title="Customer Support" <?php if($QST2=="3" && $QST1=="page"){?> class="selects" <?php }?>>CUSTOMER SUPPORT</a></li>
+          <li><a href="<?php echo SITELINK;?>page/2/New_Saxophone" title="Sound Clips" <?php if($QST2=="2" && $QST1=="page"){?> class="selects" <?php }?>>SOUND CLIPS</a></li>
+          <li><a href="<?php echo SITELINK;?>page/1/Return_Policy" title="Return Policy" <?php if($QST2=="1" && $QST1=="page"){?> class="selects" <?php }?>>RETURN POLICY</a></li>
+          <li><a href="<?php echo SITEROOTSECURE;?>custom_order/1/Custom_Order" <?php if($QST1=="custom_order"){?> class="selects" <?php }?> title="Custom Order">CUSTOM ORDER</a></li>
+		  <li><a href="<?php echo SITEROOTSECURE."cart/S/Shopping_Cart";?>" title="Shopping Cart" <?php if($QST1=="cart"){?> class="selects" <?php }?>>SHOPPING CART</a></li>
+		</ul>
+      </div>
+      <!-- End menu_areaLeft -->
+      <!-- Begin menu_areaRight -->
+      <div class="menu_areaRight">
+      <form name="searchform" action="" method="post">
+        <table width="220" border="0" cellspacing="0" cellpadding="0" style="float:left; margin-top:6px;">
+          <tr>
+            <td  class="search_Inputfield"><input name="searchtext" type="text" style="background: none; border:0 none; padding:0px 0px 0px 5px; width:160px; font-family:Verdana, Geneva, sans-serif; font-size:12px;" onblur="if (this.value == '') {this.value = 'Search';}" onfocus="if (this.value == 'Search') {this.value = '';}" value="Search"/></td>
+            <td align="center">
+            <input type="submit" name="SearchGo" value="" class="gobutton" /></td>
+          </tr>
+        </table>
+        </form>
+      </div>
+      <!-- End menu_areaRight -->
+    </div>
+    <!-- End menu_area -->
+    <!-- Begin content_area -->
+    <div class="content_area">
+      <!-- Begin content_areaIn -->
+      <div class="content_areaIn">
+        <!-- Begin content_areaInLeft -->
+        <div class="content_areaInLeft"><!-- <span><img src="<?php //echo SITEIMGALT; ?>shop_category.jpg" width="257" height="40" alt="" /></span>-->
+          <!-- Begin arrowsidemenu Menu -->
+          <div class="arrowsidemenu" align="center">
+          <img src="<?php echo SITEIMGALT; ?>shop_category.jpg" border="0" alt="Shop By Category" />
+            <?php
+			  $clist=$class->Q($class->query(TB_CATEGORY)." order by `".TB_CATEGORY."`.`priority` ASC");
+			  while($category=$class->E($clist)){
+				$tot=$class->C($class->where(TB_SUBCATEGORY,"categoryid",$category['id']));
+				if($tot>0)
+				$imgs=SITEIMGALT."bgs1.png";
+				else
+				$imgs=SITEIMGALT."saxhead.jpg";
+			  ?>
+            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="menubordersytle">
+              <tr>
+                <td height="5" colspan="2" align="center" valign="middle"></td>
+              </tr>
+              <tr>
+                <td height="25" colspan="2" align="center" valign="middle" class="white12" style="font-size:12px; background-image:url(<?php echo SITEIMGALT;?>bg1.png);">
+                <b><?php echo htmlentities($category['category']);?></b></td>
+              </tr>
+                <?php
+				  $sclist=$class->Q($class->where(TB_SUBCATEGORY,"categoryid",$category['id'])." order by `".TB_SUBCATEGORY."`.`priority` ASC");
+				  while($sub=$class->E($sclist)){
+				  ?>
+              <tr>
+                <td width="99%" align="center" valign="middle">
+                <a href="<?php echo SITELINK;?>category/<?php echo $sub['id']?>/<?php echo urlencode(str_replace(" ","_",$sub['subcategory']));?>" class="menutitle" style="font-weight:normal; font-size:12px; font-weight:bold;"><?php echo htmlentities($sub['subcategory']); ?></a></td>
+                <td width="1%" align="center" valign="middle" style="padding-right:10px;">&nbsp;</td>
+              </tr>
+              <?php }
+			  ?>
+            </table>
+			<?php
+			  } //first while loop end
+			  ?>
+          </div>
+          <!-- End arrowsidemenu Menu -->
+          <table width="254" border="0" cellspacing="3" cellpadding="3" align="center" style="float:left; margin-top:7px; line-height:25px;">
+            <tr>
+              <td colspan="5" align="center">
+              <!-- (c) 2005, 2010. Authorize.Net is a registered trademark of CyberSource Corporation -->
+              <div class="AuthorizeNetSeal">
+			  <script type="text/javascript" language="javascript">
+			  var ANS_customer_id="5506493d-8673-429b-bb09-b0ac36f7e247";
+              </script>
+			  <script type="text/javascript" language="javascript" src="//verify.authorize.net/anetseal/seal.js" ></script>
+              <a href="http://www.authorize.net/" id="AuthorizeNetText" target="_blank">Accept Credit Cards</a>
+              </div>
+              </td>
+            </tr>
+            <tr>
+              <td align="center"><a href="#"><img src="<?php echo SITEIMGALT; ?>amex_logo.png" width="43" height="28" alt="" /></a></td>
+              <td align="center" valign="top"><a href="#"><img src="<?php echo SITEIMGALT; ?>descover_logo.png" width="43" height="23" alt="" /></a></td>
+              <td align="center"><a href="#"><img src="<?php echo SITEIMGALT; ?>master_logo.png" width="43" height="28" alt="" /></a></td>
+              <td align="center"><a href="#"><img src="<?php echo SITEIMGALT; ?>paypal_logo.png" width="43" height="28" alt="" /></a></td>
+              <td align="center"><a href="#"><img src="<?php echo SITEIMGALT; ?>visa_logo.png" width="43" height="28" alt="" /></a></td>
+            </tr>
+          </table>
+          <table width="254" border="0" cellspacing="0" cellpadding="0"  class="mailBox">
+            <tr>
+              <td height="25" colspan="2" align="left" valign="middle" class="font3">
+              <img src="<?php echo SITEIMGALT; ?>contactus.jpg" border="0" alt="Contact Us" />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center" height="5"></td>
+            </tr>
+            <tr>
+              <td height="30" align="right" valign="middle" style="padding-right:10px;">
+              <img src="<?php echo SITEIMGALT; ?>phone-icon.png" border="0" width="40" height="25" alt="Call Us" />
+              </td>
+              <td height="30" align="left" valign="middle"><?php echo $db['default']['telephone'];?></td>
+            </tr>
+            <tr>
+              <td width="41" rowspan="2" align="right" valign="middle" style="padding-right:10px;">
+              <img src="<?php echo SITEIMGALT; ?>mail-icon.png" border="0" width="30" height="29" alt="Mail Us" /></td>
+              <td width="213" height="30" align="left" valign="middle"><a href="mailto:info@sax-ccessories.com">info@sax-ccessories.com</a></td>
+            </tr>
+            <tr>
+              <td height="30" align="left" valign="top"><a href="mailto:orders@sax-ccessories.com">orders@sax-ccessories.com</a></td>
+            </tr>
+          </table>
+          <!-- Begin newsletterBoxs -->
+          <div class="newsletterBoxs">
+          <?php
+		  if(isset($_POST['SubmitNewsletter']))
+		  {
+			  $check=$class->C($class->where(TB_NEWSLETTER,"emailaddress",$_POST['txtemail']));
+			  if($check>0)
+			  echo $class->R(SITELINK."thanks/newsExits/1");
+			  else
+			  {
+				$qry="INSERT INTO ".TB_NEWSLETTER." SET fullname='".$_POST['txtname']."',emailaddress='".$_POST['txtemail']."',joindate='".date("Y-m-d")."'";
+				$exe=$class->Q($qry);
+				if($exe)
+				echo $class->R(SITELINK."thanks/Newsletter/1");
+				else
+				echo "<script>alert('Error, please try again')</script>";
+			  }
+		  }
+		  ?>
+          <form action="" method="post" name="newsform1" onsubmit="return newsvalid();">
+            <table width="235" border="0" cellspacing="4" cellpadding="0" align="center" style="line-height:23px;">
+              <tr>
+                <td colspan="3"><img src="<?php echo SITEIMGALT; ?>newsletterBox_heading.png" width="194" height="21" alt="" /></td>
+              </tr>
+              <tr>
+                <td colspan="3"><strong style="font-family:Arial, Helvetica, sans-serif; font-size:11px; color:#FFF; font-weight:bold;">for updates and special announcements</strong></td>
+              </tr>
+              <tr style="font-family:Verdana, Geneva, sans-serif; font-size:13px; color:#FFF;">
+                <td width="8">&nbsp;</td>
+                <td width="43">Name</td>
+                <td width="172" style="background:url(<?php echo SITEIMGALT; ?>newsletter_inputbg.jpg); background-repeat:repeat-x; border:1px solid #FFF; width:161px; height:22px;">
+                <input type="text" name="txtname" id="txtname" class="newsborder"/></td>
+              </tr>
+              <tr  style="font-family:Verdana, Geneva, sans-serif; font-size:13px; color:#FFF;">
+                <td>&nbsp;</td>
+                <td>Email</td>
+                <td style="background:url(<?php echo SITEIMGALT; ?>newsletter_inputbg.jpg); background-repeat:repeat-x; border:1px solid #FFF; width:161px; height:22px;">
+                <input type="text" name="txtemail" id="txtemail" class="newsborder"/></td>
+              </tr>
+              <tr  style="font-family:Verdana, Geneva, sans-serif; font-size:13px; color:#FFF;">
+                <td colspan="2">&nbsp;</td>
+                <td align="right">
+                <input type="submit" name="SubmitNewsletter" value="" class="submitbutton" />
+                </td>
+              </tr>
+            </table>
+            </form>
+          </div>
+          <script type="text/javascript" language="javascript">
+          function newsvalid()
+		  {
+			    if(document.getElementById('txtname').value=="")
+				{
+					document.getElementById('txtname').style.borderColor="red";
+					document.getElementById('txtname').focus();
+					return false;
+				}
+				else
+				{
+					document.getElementById('txtname').style.borderColor="#006633";
+				}
+				if(document.getElementById('txtemail').value=="")
+				{
+					document.getElementById('txtemail').style.borderColor="red";
+					document.getElementById('txtemail').focus();
+					return false;
+				}
+				else
+				{
+					document.getElementById('txtemail').style.borderColor="#006633";
+				}
+				if(document.getElementById('txtemail').value!="")
+				{
+					var x = document.getElementById('txtemail').value;
+					var filter  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+					if (filter.test(x))
+					{
+						 document.getElementById('txtemail').style.borderColor="#006633";
+					}
+					else
+					{
+					 document.getElementById('txtemail').style.borderColor="red";
+					 document.getElementById('txtemail').focus();
+					 return false;
+					}
+				}
+		  }
+          </script>
+          <!-- End newsletterBoxs -->
+          <span class="sendmailbox">
+          <a href="<?php echo SITELINKALT;?>refer/S/Tell Your Friends!">
+          <img src="<?php echo SITEIMGALT; ?>sendmail_btn.png" width="235" height="45" alt="" /></a></span>
+          </div>
+
+        <!-- End content_areaInLeft -->
+       <?php echo $contents;?>
+
+        <div style="clear:both;"></div>
+      </div>
+      <!-- End content_areaIn -->
+    </div>
+    <!-- End content_area -->
+    <!-- Begin footer_area -->
+    <div class="footer_area">
+      <!-- Begin footer_areaLeft -->
+      <div class="footer_areaLeft">
+        <table width="604" border="0" align="center"  class="footer_areaLeft_tbl">
+          <tr>
+            <td colspan="5" align="right" valign="middle"  class="font22"><a href="http://www.facebook.com/pages/Sax-Ccessories-Purchase-Online-Saxophones/179378068739386?v=app_4949752878&ref=sgm" target="_blank"><img src="<?php echo SITEIMGALT; ?>facebook-icon.png" width="34" height="33" alt="" /> Connect with Us on Facebook</a>
+                <?php /*?><a href="<?php echo $db['default']['twitter']; ?>" target="_blank"><img src="<?php echo SITEIMGALT; ?>twitter_logo.png" width="34" height="33" alt="" /> Twitter</a><?php */?></td>
+            <td  class="font22" valign="middle">&nbsp;</td>
+            <td  colspan="5" align="left" valign="middle"  class="font22"><a href="<?php echo $db['default']['twitter']?>" target="_blank"><img src="<?php echo SITEIMGALT; ?>twitter_logo.png" width="34" height="33" alt="" /> Connect with Us on Twitter</a></td>
+          
+          </tr>
+          <?php /*?><tr>
+          	<td colspan="5"  class="font22">Connect with Us</td>
+            <td width="1%" nowrap="nowrap"><a href="http://www.facebook.com/pages/Sax-Ccessories-Purchase-Online-Saxophones/179378068739386?v=app_4949752878&ref=sgm" target="_blank"><img src="<?php echo SITEIMGALT; ?>facebook-icon.png" width="34" height="33" alt="" /></a></td>
+            <td colspan="2"  class="font22"><a href="http://www.facebook.com/pages/Sax-Ccessories-Purchase-Online-Saxophones/179378068739386?v=app_4949752878&ref=sgm" target="_blank">Facebook</a></td>
+            <td width="1%" nowrap="nowrap"><a href="<?php echo $db['default']['twitter']; ?>" target="_blank"><img src="<?php echo SITEIMGALT; ?>twitter_logo.png" width="34" height="33" alt="" /></a></td>
+            <td colspan="2"  class="font22" align="left"><a href="<?php echo $db['default']['twitter']; ?>" target="_blank">Twitter</a></td>
+          </tr><?php */?>
+          <?php /*?><tr>
+            <td><a href="<?php echo $db['default']['twitter']; ?>"><img src="<?php echo SITEIMGALT; ?>twitter_logo.png" width="34" height="33" alt="" /></a></td>
+            <td colspan="10"  class="font22"><a href="<?php echo $db['default']['twitter']; ?>" target="_blank">Connect with us on twitter</a></td>
+          </tr><?php */?>
+          <tr>
+            <td width="54" align="center" valign="middle"><a href="<?php echo SITELINKALT;?>">Home</a></td>
+            <td width="6" align="center" valign="middle">|</td>
+			<td width="70" align="center" valign="middle"><a href="http://www.macsax.com/" target="_blank">MACSAX</a></td>
+            <td width="6" align="center" valign="middle">|</td>
+            <td width="125" align="center" valign="middle"><a href="<?php echo SITELINKALT;?>page/3/Customer_Support">Customer Support</a></td>
+            <td width="5" align="center" valign="middle">|</td>
+            <td width="82" align="center" valign="middle"><a href="<?php echo SITELINK;?>page/2/New_Saxophone">Sound Clips</a></td>
+            <td width="6" align="center" valign="middle">|</td>
+            <td width="88" align="center" valign="middle"><a href="<?php echo SITELINK;?>page/1/Return_Policy">Return Policy</a></td>
+            <!-- <td width="6" align="center" valign="middle">|</td> -->
+            <!-- <td width="95" align="center" valign="middle"><a href="<?php echo SITEROOTSECURE;?>index.php/index.php/custom_order/1/Custom_Order">Custom Order</a></td> -->
+            <!-- <td width="5" align="center" valign="middle">|</td> -->
+			<!-- <td width="86" align="center" valign="middle"><a href="<?php echo SITEROOTSECURE."index.php/cart/S/Shopping_Cart";?>">Shopping Cart</a> -->
+            <td width="5" align="center" valign="middle">|</td>
+			<td width="60" align="center" valign="middle"><a href="<?php echo SITELINK."sitemap";?>">Site Map</a></td>
+			</td>
+          </tr>
+        </table>
+      </div>
+      <!-- End footer_areaLeft -->
+      <!-- Begin footer_areaRight -->
+      <div class="footer_areaRight">
+        <table width="250" border="0" align="center"  class="footer_areaRight_tbl">
+          <tr>
+            <td align="center" valign="middle"><img src="<?php echo SITEIMGALT; ?>sax.png" width="229" height="29" alt="" /></td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle" style="display:block; position:relative; color:#CCC; padding-left:6px;">44 Knollview Court — Wood Ranch CA 93065</td>
+          </tr>
+        </table>
+      </div>
+      <!-- End footer_areaRight -->
+    </div>
+    <!-- End footer_area -->
+  </div>
+  <!-- End Wrapper -->
+</div>
+<!-- End Cover -->
+<script type="text/javascript">
+swfobject.registerObject("FlashID");
+</script>
+<script type="text/javascript">
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-15763972-2']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl : 'http://www ) + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<style>
+body {
+	padding: 0px;
+	margin: 0px;
+	background: inherit;
+}
+.make-offer-head {
+	background-image: url(../../images/make-an-offer-header.png);
+	height: 42px;
+	border: 1px solid #dcdcdc;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	font-family: Arial, sans-serif;
+	font-size: 17px;
+	color: #363636;
+	text-align: left;
+	padding-left: 15px;
+	padding-top: 11px;
+}
+#make-offer-close {
+	background-image: url(../../images/make-offer-close.png);
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	left: 760px;
+	top: 8px;
+	cursor: pointer;
+}
+#make-offer-content {
+	background-image: url(../../images/make-offer-background.png);
+	border: 1px solid #000;
+	border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	color: #fff;
+}
+input[type=text] {
+	border: 1px solid #555454;
+	border-radius: 6px 6px 6px 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	height: 28px;
+	outline: none;
+}
+input[type=submit], #offer-submit {
+	height: 23px;
+	width: 113px;
+	background-image: url(images/make-offer-submit.png);
+	padding: 0px;
+	margin: 0px;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+}
+li {
+	list-style-image: url(../../images/bullet-img.png);
+	margin-bottom: 10px;
+}
+th, td {
+	padding-left: 30px;
+}
+th {
+}
+</style>
+
+
+<?php
+
+if(isset($_GET['product']) && trim($_GET['product'])!='' && is_numeric($_GET['product']))
+{
+	$msg='';
+$db['default']['db_host'] = "localhost";
+
+$db['default']['db_name'] = "brian393_brian0393";
+
+$db['default']['db_username'] = "brian393_admindb";
+
+$db['default']['db_password'] = "bgs@321";
+	$connect=mysql_pconnect($db['default']['db_host'], $db['default']['db_username'], $db['default']['db_password']);
+	$dbselect = mysql_select_db($db['default']['db_name'], $connect);
+	$rsProd=mysql_query("select * from sax_product where id='".(int)$_GET['product']."'");
+	$rProd=mysql_fetch_assoc($rsProd);
+	if($_POST)
+	{
+		if(!isset($_POST['email']) || trim($_POST['email'])=='')
+		{
+			$msg='E-Mail is required';
+		}
+		elseif(!preg_match("/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_-]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/",$_POST['email']))
+		{
+			$msg='Invalid E-Mail';
+		}
+		elseif(!isset($_POST['amount']) || trim($_POST['amount'])=='')
+		{
+			$msg='Amount is required';
+		}
+		elseif($_POST['shipping'] == '')
+		{
+			$msg='Select the shipping type';
+		}
+		else
+		{
+			$body='<table cellpadding="5" cellspacing="0" border="0">
+    	<tr>
+    	  <th colspan="3" align="center" valign="top" nowrap><h3>Make an Offer</h3></th>
+   	  </tr>
+    	<tr>
+    	  <th nowrap align="left">Product Name</th>
+    	  <th nowrap align="left">:</th>
+    	  <td align="left" nowrap>'.$rProd['productname'].' '.$rProd['title1'].' '.$rProd['title2'].'</td>
+  	  </tr>
+      <tr>
+        	<th nowrap align="left">URL</th>
+        	<th nowrap align="left">:</th>
+            <td align="left">http://www.sax-ccessories.com/products/'.$rProd['id'].'/'.'</td>
+        </tr>
+    	<tr>
+        	<th nowrap align="left">Name</th>
+        	<th nowrap align="left">:</th>
+            <td align="left">'.$_POST['cname'].'</td>
+        </tr>
+        <tr>
+        	<th nowrap align="left">E-Mail Address</th>
+        	<th nowrap align="left">:</th>
+            <td align="left">'.$_POST['email'].'</td>
+        </tr>
+        <tr>
+        	<th nowrap align="left">Offer Amount</th>
+        	<th nowrap align="left">:</th>
+            <td align="left">'.$_POST['amount'].'</td>
+        </tr>
+        <tr>
+        	<th nowrap align="left">Quantity</th>
+        	<th nowrap align="left">:</th>
+            <td align="left">'.$_POST['qty'].'</td>
+        </tr>
+		<tr>
+        	<th nowrap align="left">Shipping</th>
+        	<th nowrap align="left">:</th>
+            <td align="left">'.$_POST['shipping'].'</td>
+		</tr>
+    </table>';
+
+			$unique_key = sha1(microtime());
+			$sql = mysql_query("INSERT INTO `sax_custom_offers` (`product_id`, `name`, `email`, `offer`, `quantity`, `status`, `unique_key`, `shipping`)
+				VALUES (".(int)$_GET['product'].", '".$_POST['cname']."', '".$_POST['email']."', ".$_POST['amount'].",
+						".$_POST['qty'].", '".(isset($_GET['counter']) ? 'Pending Counter' : 'Pending')."', '".$unique_key."', '".$_POST['shipping']."')");
+			if (!$sql) {
+				echo mysql_error();
+				echo "\nError, try again later";
+			}
+
+			require_once("class.phpmailer.php");
+			$mail = new PHPMailer();
+			$mail->IsSMTP();
+			$mail->Host       = "sax-ccessories.com";
+			$mail->AddAddress("orders@sax-ccessories.com");
+			$mail->SetFrom($_POST['email']);
+			$mail->Subject    = "[Make an Offer] Sax-Accessories.com";
+			$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!";
+			$mail->MsgHTML($body);
+			if(!$mail->Send())
+			{
+				$msg="Mailer Error: " . $mail->ErrorInfo;
+			}
+			else
+			{
+				$msg="Message sent!";
+
+				$product = $rProd['productname'].' '.$rProd['title1'].' '.$rProd['title2'];
+				$product_url = 'http://www.sax-ccessories.com/products/'.$rProd['id'].'/';
+				$name = $_POST['cname'];
+				$to = $_POST['email'];
+				$offer = $_POST['amount'];
+				$quantity = $_POST['qty'];
+				$shipping = $_POST['shipping'];
+				$status_url = "http://www.sax-ccessories.com/view/custom_offers.php?key=".$unique_key;
+
+				$message = "
+					<html>
+					<body>
+						Hello, ".$name."!<br/><br/>
+						Your offer has been registered.<br/>
+						Product: <a href=\"".$product_url."\" target=\"_blank\">".$product."</a><br/>
+						Your offer: $".$offer."<br/>
+						Quantity: ".$quantity."<br/>
+						Shipping type: ".$shipping."<br/>
+						We will send you an e-mail when this offer has been accepted or denied.
+						<br/><hr><br/>
+						<font color=\"#353535\">SAX-CCESSORIES LLC<br/>www.sax-ccessories.com<br/>info@sax-ccessories.com</font>
+					</body>
+					</html>	
+				";
+				
+				require_once('inc/class.php');
+				$class = new sax;
+				$class->sentmail ($to, "Your offer has been registered", "orders@sax-ccessoriers.com", $message);
+
+				?>
+				<script>
+					/* window.close(); */
+					/* $.post("offer_mail.php", { */
+					/* 	"product": "<?php echo $rProd['productname'].' '.$rProd['title1'].' '.$rProd['title2']; ?>", */
+					/* 	"product_url": "<?php echo 'http://www.sax-ccessories.com/products/'.$rProd['id'].'/'; ?>", */
+					/* 	"name": "<?php echo $_POST['cname']; ?>", */
+					/* 	"email": "<?php echo $_POST['email']; ?>", */
+					/* 	"offer": "<?php echo $_POST['amount']; ?>", */
+					/* 	"quantity": "<?php echo $_POST['qty']; ?>", */
+					/* 	"status_url": "<?php echo "http://www...." ?>" */
+					/* }, function() {}, "json"); */
+                </script>
+				<?php
+				// exit();
+			}
+		//	echo $msg;
+		}
+	//echo $body;
+	}
+	?>
+    <html>
+    <head>
+    <title>Make an Offer</title>
+	<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+	<script>
+	$(document).ready(function() {
+		$('#make-offer-close').click(function() {
+			window.parent.$('#make-offer-popup').fadeOut();
+		});
+	});
+
+	function enable_fields()
+	{
+		$("#offer-name-field").attr('disabled', '');
+		$("#offer-email-field").attr('disabled', '');
+		$("#offer-quantity-field").attr('disabled', '');
+		$("#shipping-dropdown").attr('disabled', '');
+	}
+	</script>
+    </head>
+    <body>
+    <form method="post" action="#">
+  <table id="make-offer-content" cellpadding="5" cellspacing="0" border="0" width="800">
+    <tr> 
+      <th class="make-offer-head" colspan="3" align="center" valign="top"> 
+        SAX-CCESSORIES - Make an Offer
+		<div id="make-offer-close"></div>
+      </th>
+    </tr>
+    <?php
+      if(trim($msg))
+	  {
+		  ?>
+	<tr> 
+	  <th colspan="3" align="center" valign="top" style="color:red;"><font face="Verdana, Arial, Helvetica, sans-serif"> 
+		<?php echo $msg; ?>
+		</font></th>
+	</tr>
+	<?php
+	  }
+	  ?>
+	<tr> 
+	  <th nowrap align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">Product 
+		Name :</font></th>
+	  <td align="left" nowrap style="color: #fabc3b; font-weight: bold;"><font face="Verdana, Arial, Helvetica, sans-serif"> 
+		<?php echo $rProd['productname'].' '.$rProd['title1'].' '.$rProd['title2']; ?>
+		</font></td>
+	</tr>
+	<tr> 
+	  <th nowrap align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">Name :</font></th>
+	  <td align="left"><font face="Verdana, Arial, Helvetica, sans-serif"> 
+		<input id="offer-name-field" type="text" name="cname" style="width:70%;" />
+		</font></td>
+	</tr>
+	<tr> 
+	  <th nowrap align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">E-Mail 
+		Address :</font></th>
+	  <td align="left"><font face="Verdana, Arial, Helvetica, sans-serif"> 
+		<input id="offer-email-field" type="text" name="email" style="width:70%;" />
+		</font></td>
+	</tr>
+	<tr> 
+	  <th nowrap align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">Offer 
+		Amount :</font></th>
+	  <td align="left"><font face="Verdana, Arial, Helvetica, sans-serif"> 
+		<input id="offer-amount-field" type="text" name="amount" style="width:70%;" />
+		</font></td>
+	</tr>
+	<tr> 
+	  <th nowrap align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">Quantity :</font></th>
+	  <td align="left"><font face="Verdana, Arial, Helvetica, sans-serif"> 
+		<input id="offer-quantity-field" type="text" name="qty" style="width:70%;" />
+		</font></td>
+	</tr>
+	<tr> 
+	  <th></th>
+	  <td align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> 
+			<select id="shipping-dropdown" name="shipping">
+				<option value="default" selected disabled="disabled">shipping</option>
+				<option value="USA">USA</option>
+				<option value="International">International</option>
+			</select>
+		</font></td>
+	</tr>
+	<tr> 
+	  <th nowrap align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"></font></th>
+	  <th nowrap align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"></font></th>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<input id="offer-submit" type="submit" name="submit" onclick="enable_fields();" value="" />
+		</td>
+	</tr>
+	<tr> 
+	  <td align="left" height="10px"><font face="Verdana, Arial, Helvetica, sans-serif"></font></td>
+	</tr>
+	<tr> 
+	  <td align="left" colspan="3">
+<p align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>Notes:</b></font></p>
+	<ul>
+		<li align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> 
+		  The offer amount does not include tax or shipping.</font></li>
+		<li align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> 
+		  If you want to make an offer for more than product, please email the 
+		  offer directly to <a href="mailto:info@sax-ccessories.com" style="color: #fff;">info@sax-ccessories.com</a>.</li>
+	    <li>You will receive an e-mail response within 48 hours if your offer 
+		  is accepted, rejected, or a counter-offer will be made.</li>
+		  </font></li>
+	</ul>
+		<p align="center" style="color: #f8c23f; font-size: 14px;"><font face="Arial, Helvetica, sans-serif"><br>
+		  <b>Thank you for shopping with SAX-CCESSORIES!</b></font></p>
+		  <br/>
+	  </td>
+	</tr>
+  </table>
+</form>
+    </body>
+    </html>
+	
+	<?php
+}
+?>
+<?php
+if (isset($_GET['counter']) && isset($_GET['id'])) {
+	$sql = mysql_fetch_array(mysql_query("SELECT * FROM `sax_custom_offers` WHERE `id`=".$_GET['id']));
+?>
+	<script language="javascript">
+	$("#offer-name-field").attr('disabled', 'disabled');
+	$("#offer-name-field").val("<?php echo $sql['name']; ?>");
+	$("#offer-email-field").attr('disabled', 'disabled');
+	$("#offer-email-field").val("<?php echo $sql['email']; ?>");
+	$("#offer-quantity-field").attr('disabled', 'disabled');
+	$("#offer-quantity-field").val("<?php echo $sql['quantity']; ?>");
+	$("#shipping-dropdown").attr('disabled', 'disabled');
+	$("#shipping-dropdown").val("<?php echo $sql['shipping']; ?>").attr('selected', true);
+	</script>
+<?php
+}
+?>

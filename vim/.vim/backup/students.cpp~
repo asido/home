@@ -1,0 +1,100 @@
+#include <string>
+#include <iostream>
+#include "students.h"
+#include "grade.h"
+
+std::string Core::name() const
+{
+	return n;
+}
+
+
+double Core::grade() const
+{
+	return ::grade(midterm, final, homework);
+}
+
+
+double Grad::grade() const
+{
+	return std::min(Core::grade(), thesis);
+}
+
+
+std::istream& Core::read_common(std::istream& in)
+{
+	// read and store the student's name and exam grades
+	in >> n >> midterm >> final;
+	return in;
+}
+
+
+// read homework grades from an input stream into a 'vector'
+std::istream& Core::read_hw(std::istream& in, std::vector<double>& hw)
+{
+	if(in) {
+		// get rid of previous contents
+		hw.clear();
+
+		// read homework grades
+		double x;
+		while(in >> x)
+			hw.push_back(x);
+
+		// clear the stream so that input will work for the next student
+		in.clear();
+	}
+	return in;
+}
+
+
+std::istream& Core::read(std::istream& in)
+{
+	read_common(in);
+	read_hw(in, homework);
+	return in;
+}
+
+
+std::istream& Grad::read(std::istream& in)
+{
+	read_common(in);
+	in >> thesis;
+	read_hw(in, homework);
+	return in;
+}
+
+
+bool compare(const Core& c1, const Core& c2)
+{
+	return c1.name() < c2.name();
+}
+
+
+bool compare_Core_ptrs(const Core* cp1, const Core* cp2)
+{
+	return compare(*cp1, *cp2);
+}
+
+
+bool compare_Core_handles(const Handle<Core> a, const Handle<Core>& b)
+{
+	return a->name() < b->name();
+}
+
+
+std::istream& Student_info::read(std::istream& is)
+{
+	char ch;
+	is >> ch;	// get record type
+
+	// alocate new object of the appropriate type
+	// use Handle<T>(T*) to build a Handle<Core> from the pointer to that object
+	// call Handle<T>::operator= to assignthe Handle<Core> to the left-hand side
+	if (ch == 'U')
+		cp = new Core(is);
+	else
+		cp = new Grad(is);
+
+	return is;
+}

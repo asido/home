@@ -1,0 +1,339 @@
+//****************************************************************************
+//**
+//**    pmm.c
+//**		-Physical Memory Manager
+//**
+//****************************************************************************
+//============================================================================
+//    IMPLEMENTATION HEADERS
+//============================================================================
+
+#include <string.h>
+#include <pmm.h>
+#include <stdio.h>
+
+//============================================================================
+//    IMPLEMENTATION PRIVATE DEFINITIONS / ENUMERATIONS / SIMPLE TYPEDEFS
+//============================================================================
+
+// 8 blocks per byte
+#define PMM_BLOCKS_PER_BYTE 8
+
+// block size (4k)
+#define PMM_BLOCK_SIZE		4096
+
+// block alignment
+#define PMM_BLOCK_ALIGN		PMMNGR_BLOCK_SIZE
+
+//============================================================================
+//    IMPLEMENTATION PRIVATE CLASS PROTOTYPES / EXTERNAL CLASS REFERENCES
+//============================================================================
+//============================================================================
+//    IMPLEMENTATION PRIVATE STRUCTURES / UTILITY CLASSES
+//============================================================================
+//============================================================================
+//    IMPLEMENTATION REQUIRED EXTERNAL REFERENCES (AVOID)
+//============================================================================
+//============================================================================
+//    IMPLEMENTATION PRIVATE DATA
+//============================================================================
+
+// size of physical memory
+static uint32_t _mmngr_memory_size	= 0;
+
+// number of blocks currently in use
+static uint32_t _mmngr_used_blocks	= 0;
+
+// maximum number of available memory blocks
+static uint32_t _mmngr_max_blocks	= 0;
+
+// memory map bit array. Each bit represents a memory block
+static uint32_t *_mmngr_memory_map	= 0;
+
+//============================================================================
+//    INTERFACE DATA
+//============================================================================
+//============================================================================
+//    IMPLEMENTATION PRIVATE FUNCTION PROTOTYPES
+//============================================================================
+
+// set any bit (frame) within the memory map bit array
+inline void mmap_set(int bit);
+
+// unset any bit (frame) within the memory map bit array
+inline void mmap_unset(int bit);
+
+// test any bit (frame) within the memory map bit array
+inline bool mmap_test(int bit);
+
+// finds first free frame in the bit array and returns its index
+int mmap_first_free();
+
+// finds first free "size" number of frames and returns its index
+int mmap_first_free_s(size_t size);
+
+//============================================================================
+//    IMPLEMENTATION PRIVATE FUNCTIONS
+//============================================================================
+
+// set any bit (frame) within the memory map bit array
+inline void mmap_set(int bit)
+{
+	_mmngr_memory_map[bit / 32] |= (1 << (bit % 32));
+}
+
+// unset any bit (frame) within the memory map bit array
+inline void mmap_unset(int bit)
+{
+	_mmngr_memory_map[bit / 32] &= ~ (1 << (bit % 32));
+}
+
+// test if any bit (frame) is set within the memory map bit array
+inline bool mmap_test(int bit)
+{
+	return _mmngr_memory_map[bit / 32] &  (1 << (bit % 32));
+}
+
+// finds first free frame in the bit array and returns its index
+int mmap_first_free()
+{
+	uint32_t i;
+	int j;
+
+	//! find the first free bit
+	for (i = 0; i < pmm_get_block_count() / 32; ++i)
+		if (_mmngr_memory_map[i] != 0xffffffff)
+			for (j = 0; j < 32; ++j) {				//! test each bit in the dword
+				int bit = 1 << j;
+				if (! (_mmngr_memory_map[i] & bit) )
+					return i * 4 * 8 + j;
+			}
+
+	return -1;
+}
+
+// finds first free "size" number of frames and returns its index
+int mmap_first_free_s(size_t size)
+{
+	if (size==0)
+		return -1;
+
+	if (size==1)
+		return mmap_first_free();
+
+	uint32_t i;
+	for (i = 0; i < pmm_get_block_count() / 32; i++)
+		if (_mmngr_memory_map[i] != 0xffffffff) {
+			int j;
+			for (j = 0; j < 32; j++) {	//! test each bit in the dword
+				int bit = 1 << j;
+				if (! (_mmngr_memory_map[i] & bit) ) {
+
+					int startingBit = i*32;
+					startingBit+=bit;		//get the free bit in the dword at index i
+
+					uint32_t free=0; //loop through each bit to see if its enough space
+					uint32_t count;
+					for (count = 0; count <= size; count++) {
+
+						if (! mmap_test(startingBit+count) )
+							free++;	// this bit is clear (free frame)
+
+						if (free == size)
+							return i * 4 * 8 + j; //free count==size needed; return index
+					}
+				}
+			}
+		}
+
+	return -1;
+}
+
+//============================================================================
+//    INTERFACE FUNCTIONS
+//============================================================================
+
+/** initializes the physical memory manager.
+ *		memSize	- total physical memory the manager should use
+ *		bitmap	- the place where manager will use for it's own purpose
+ */
+void pmm_init(size_t memSize, physical_addr bitmap)
+{
+	_mmngr_memory_size	=	memSize;
+	_mmngr_memory_map	=	(uint32_t*) bitmap;
+	_mmngr_max_blocks	=	(pmm_get_memory_size() * 1024) / PMM_BLOCK_SIZE;
+	_mmngr_used_blocks	=	_mmngr_max_blocks;
+
+	// By default, all of memory is in use
+	memset((unsigned char*) _mmngr_memory_map, 0xf, pmm_get_block_count() / PMM_BLOCKS_PER_BYTE );
+}
+
+void pmm_init_region(physical_addr base, size_t size)
+{
+	int align = base / PMM_BLOCK_SIZE;
+	int blocks = size / PMM_BLOCK_SIZE;
+
+	for (; blocks>=0; --blocks) {
+		mmap_unset(align++);
+		_mmngr_used_blocks--;
+	}
+
+	mmap_set(0);	//first block is always set. This insures allocs cant be 0
+}
+
+void pmm_deinit_region(physical_addr base, size_t size)
+{
+	int align = base / PMM_BLOCK_SIZE;
+	int blocks = size / PMM_BLOCK_SIZE;
+
+	for (; blocks >= 0; --blocks) {
+		mmap_set(align++);
+		_mmngr_used_blocks++;
+	}
+
+}
+
+void *pmm_alloc_block()
+{
+	if (pmm_get_free_block_count() <= 0)
+		return 0;	//out of memory
+
+	int frame = mmap_first_free();
+
+	if (frame == -1)
+		return 0;	//out of memory
+
+	mmap_set(frame);
+
+	physical_addr addr = frame * PMM_BLOCK_SIZE;
+	_mmngr_used_blocks++;
+
+	return (void *) addr;
+}
+
+void pmm_free_block(void *p)
+{
+	physical_addr addr = (physical_addr) p;
+	int frame = addr / PMM_BLOCK_SIZE;
+
+	mmap_unset(frame);
+
+	--_mmngr_used_blocks;
+}
+
+void *pmm_alloc_blocks(size_t size)
+{
+	if (pmm_get_free_block_count() <= size)
+		return 0;	//not enough space
+
+	int frame = mmap_first_free_s(size);
+
+	if (frame == -1)
+		return 0;	//not enough space
+
+	uint32_t i;
+	for (i = 0; i < size; i++)
+		mmap_set(frame+i);
+
+	physical_addr addr = frame * PMM_BLOCK_SIZE;
+	_mmngr_used_blocks += size;
+
+	return (void *) addr;
+}
+
+void pmm_free_blocks(void* p, size_t size)
+{
+	physical_addr addr = (physical_addr) p;
+	int frame = addr / PMM_BLOCK_SIZE;
+
+	uint32_t i;
+	for (i = 0; i < size; i++)
+		mmap_unset(frame+i);
+
+	_mmngr_used_blocks -= size;
+}
+
+size_t	pmm_get_memory_size()
+{
+	return _mmngr_memory_size;
+}
+
+uint32_t pmm_get_block_count()
+{
+	return _mmngr_max_blocks;
+}
+
+uint32_t pmm_get_use_block_count()
+{
+	return _mmngr_used_blocks;
+}
+
+uint32_t pmm_get_free_block_count()
+{
+	return _mmngr_max_blocks - _mmngr_used_blocks;
+}
+
+uint32_t pmm_get_block_size()
+{
+	return PMM_BLOCK_SIZE;
+}
+
+/* static uint32_t b_temp; */
+void pmm_paging_enable(volatile bool b)
+{
+	/* b_temp = (uint32_t) b; */
+	asm("mov eax, cr0\n");
+	asm("mov ebx, [b]\n");
+	asm("cmp ebx, 0x1\n");
+	asm("je	enable\n");
+	asm("jmp disable\n");
+asm("enable:\n");
+	asm("or eax, 0x80000000\n");	// set bit 31
+	asm("mov	cr0, eax\n");
+	asm("jmp done\n");
+asm("disable:\n");
+	asm("and eax, 0x7FFFFFFF\n");	// clear bit 31
+	asm("mov	cr0, eax\n");
+asm("done:\n");
+}
+
+static uint32_t res = 0;
+bool pmm_is_paging()
+{
+	asm("\
+		mov	eax, cr0\n\
+		mov	[res], eax\n\
+	");
+
+	if (res & 0x80000000)
+		return false;
+	return true;
+}
+
+// Sets PDBR (Page Directory Base Address)
+static physical_addr addr_temp;
+void pmm_load_PDBR(physical_addr addr)
+{
+	addr_temp = addr;
+	asm("mov eax, [addr_temp]\n");
+	asm("mov cr3, eax\n");	// PDBR is cr3 register in i86\n
+}
+
+// Returns PDBR (Page Directory Base Address)
+physical_addr temp_PDBR;
+physical_addr pmm_get_PDBR()
+{
+	asm("mov eax, cr3\n");
+	asm("mov temp_PDBR, eax\n");
+	/* asm("ret\n"); */
+	return temp_PDBR;
+}
+
+//============================================================================
+//    INTERFACE CLASS BODIES
+//============================================================================
+//****************************************************************************
+//**
+//**    END[pmm.c]
+//**
+//****************************************************************************

@@ -1,0 +1,180 @@
+<?php
+
+class HTML
+{
+	function show_header($redirect, $login_popup = true)
+	{
+		echo '
+			<div id="header">
+				<div id="likemelikeyou-logo">
+					<a href="login.php">
+					<div id="likemelikeyou-bg"><img alt="" class="stretch" src="images/box.png" /></div>
+					<img alt="" src="images/logo'.($redirect == 'login.php' ? '1.png' : '3.jpg').'" />
+					</a>
+				</div>
+				<div id="signup">
+					<span id="signup-txt"><a href="profques.php"> Register Now </a></span> ';
+		
+		if ($login_popup)
+			echo '		<div id="signup-button" class=""></div> ';
+		
+		echo '	</div>';
+				HTML::show_login($redirect);
+		echo '
+			</div>
+		';
+	}
+
+	function show_logged_header()
+	{
+		echo '
+			<div id="header">
+				<div id="likemelikeyou-logo">
+			 		<a href="category.php">
+					<div id="likemelikeyou-bg"><img alt="" class="stretch" src="images/box.png" /></div>
+					<img alt="" src="images/logo3.jpg" />
+					</a>	
+				</div>
+				<div id="signup">
+					<a id="logout-link" href="index.php?logout=1"><div class="button-head">LOGOUT</div></a>
+					<a href="category.php"><div class="button-head dashboard-btn">NAVIGATION</div></a>
+					<a href="group.php"><div class="button-head group-btn">GROUPS</div></a>
+					<a href="myaccount.php"><div class="button-head myaccount-btn">MY ACCOUNT</div></a>
+				</div>
+			</div>
+		';
+		/** OLD HEADER **/
+			// <div id="header">
+			// 	<div id="likemelikeyou-logo">
+			// 		<a href="category.php">
+			// 		<div id="likemelikeyou-bg"><img alt="" class="stretch" src="images/box.png" /></div>
+			// 		<img alt="" src="images/logo.png" />
+			// 		</a>
+			// 	</div>
+			// 	<div id="signup">
+			// 	<a id="logout-link" href="index.php?logout=1">
+			// 		<div id="logout-button"></div>
+			// 	</a>
+			// 		<div id="login-top"><img class="stretch" alt="" src="images/profile-background.png" />
+			// 			
+			// 		</div>
+			// 	</div>
+			// </div>
+	}
+
+	function show_admin_header()
+	{
+		echo '
+			<div id="header">
+				<div id="likemelikeyou-logo">
+					<a href="login.php">
+					<div id="likemelikeyou-bg"><img alt="" class="stretch" src="images/box.png" /></div>
+					<img alt="" src="images/logo3.jpg" />
+					</a>
+				</div>
+			</div>
+		';
+	}
+
+						// <img id="logout-image" alt="" class="stretch" src="images/button-logout.png"
+						// 		onmouseover="this.src=\'images/button-logout-over.png\'" onmouseout="this.src=\'images/button-logout.png\'"/>
+
+	function show_login($redirect)
+	{
+		echo '
+			<div id="login-right-profile">
+				<div id="right-icon"></div>
+				<div id="right-logintitle">Login</div>
+				
+				<form id="login-form" method="post" action="'.$redirect.'">
+					<div id="login-row1" class="login-row">
+						<div class="login-rleft"> Username : </div>
+						<input type="text" class="login-rform required username" name="username" />
+					</div>
+					<div id="login-row2" class="login-row">
+						<div class="login-rleft"> Password : </div>
+						<input type="password" class="login-rform required" name="password" />
+					</div>
+					<div id="regnotif" class="login-notif"></div>
+					<div id="login-row3" class="login-row">
+						<div id="r3-left"><input type="checkbox" name="login-remember" /> Remember me </div>
+						<div id="r3-right"><a href="reminder.php">Forgot Password?</a></div>
+					</div>
+					<div id="login-row4" class="login-row">
+						<div id="r4-left">
+							<div class="r4-txt"><a href="#">Login</a></div>
+						</div>
+				</form>
+						<div id="r4-right">
+							<div class="r4-txt"><span><a href="signup.php">Sign up now</a><span></div>
+						</div>
+					</div>
+				<div id="login-row5" class="login-row">
+					<div id="r5-left" class="r5-links"><a href="#">Privacy Policy</a></div>
+					<div id="r5-right" class="r5-links"><a href="termsofuse.php">Terms of Use</a></div>	
+				</div>
+			</div>
+		';
+	}
+
+	function show_background()
+	{
+		echo '
+			<div id="container-2">
+				<div id="c2-background"><img alt="" class="stretch" src="images/footerbg.png" /></div>
+				<div id="c2-world"><img alt="" src="images/world2.png" /></div>
+				<div id="c2-black"></div>
+			</div>
+		';
+	}
+
+	function show_footer()
+	{
+		echo '<script type="text/javascript" src="js/report_pblm.js"></script>
+			<div id="footer">
+				<span id="footer-copyright">likemelikeU © 2011</span>
+				<div id="footer-menu">
+					<a href="aboutus.php">About Us</a>
+					
+					<a href="#">FAQ</a>
+					<a href="termsofuse.php">Terms Of Use</a>
+					<a href="#">Privacy Policy</a>
+					
+					
+					<a href="#" onclick="show_report_pblm();">Report Abuse / Site Problems </a>
+					<a href="spider.php">Question Overview</a>
+					<a href="contactus.php">Contact Us</a>
+				</div>
+			</div>
+			
+			<div id="popup_report_pblm-wrap" style="display:none">
+			<div id="popup_report_pblm_outer">
+ <div id="popup_report_pblm">
+	<div id="popup_report_pblm-close" onclick="close_report_pblm();"></div> 
+    
+	 
+		<h1>Report Site Problem</h1> 
+        <form action="test.php" method="post"> 
+		<table width="100%">
+		<tr>
+		<td><label>Email : </label></td><td><input class="text" type="text" name="email"></td>
+		</tr>
+		<tr>
+		<td><label>Where did this problem occur? : </label></td><td><input class="text" type="text" name="url"></td>
+		</tr>
+		<tr>
+		<td valign="top"><label>Further Explanation : </label></td><td><textarea class="textarea" name="problem"></textarea></td>
+		</tr>
+		<tr style="height:50px;">
+		<td></td><td><input type="submit" value="send"></td>
+		</tr>  
+		</form> 
+ 
+	</div><!--popup_report_pblm--> 
+ </div>
+</div><!--popup_report_pblm-wrap-->
+		';
+	}
+}
+
+?>

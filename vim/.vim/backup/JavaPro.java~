@@ -1,0 +1,7 @@
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface JavaPro extends Remote {
+	String handShaking() throws RemoteException;
+	String getDate() throws RemoteException;
+}

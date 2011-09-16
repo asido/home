@@ -1,0 +1,17 @@
+#!/usr/bin/perl -w
+
+$one = 1;
+$two = 2;
+$ans = addplusone($one, $two);
+print "Answer is $ans\n";
+print "Value of 'lcl_one' in main: $lcl_one\n";
+print "Value of 'one' in main: $one\n";
+
+sub addplusone {
+	my ($lcl_one, $lcl_two) = @_;
+	$one++;
+	$lcl_one++;
+	$lcl_two++;
+	print "Value of 'lcl_one' in sub: $lcl_one\n";
+	return ($lcl_one + $lcl_two);
+}

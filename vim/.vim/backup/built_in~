@@ -1,0 +1,87 @@
+$$	[PID number]
+$!	[PID of the last executed command]
+$?	[exit status of the last command]
+$#	[number of arguments]
+$0	[name of the calling program]
+$1-$n [specific arguments]
+$*	[represents all arguments, only passes it as 1 element. 'set "$*"' would put all arguments in '$1']
+$@ 	[represents all arguments as well, only as array. 'set "$@"' would put all arguments in '$1' '$2'...]
+shift [promotes arguments. the $1 arguments is discarded, the $2 becomes $1 and, the $3 becomes $2 and so on. WARNING: 'unshift' does NOT exists. optional arguments defines the size of shift. default = 1]
+set me 54 [sets command-line arguments. $1 becomes 'me' and $2 becomes '54'. the existing ones are removed. 'set --' without arguments remove all $1,$2... values]
+
+$()		[replaces a command with the output of that command. USAGE: 'echo $(pwd)']
+() 		[grouping of commands. USAGE: '( a ; b ) & c &']
+(())	[logical expression. i think instead of that people use '[[ ]]' more]
+$(()) 	[arithmetic expansion (not for use with an enclosed equals sign)]
+[] 		[the 'test' command]
+[[]]	[conditional expression. similar to '[]', but adds string comparisons]
+
+
+
+////////////////////////////////
+////	EXPANDING NULLS		////
+////////////////////////////////
+
+if '${var}' or '$var' expands a value null, you have 3 options:
+	* Use a default value instead of this variable
+	* Use default value and assign it to this variable
+	* Display an error
+:- [use a default value. '${var:-default}'. if 'var' is null, that the 'default' value is used instead of that null (but not assigned to the 'var')]
+:= [use a default value and assign it to the variable. '${var:=default}']
+when i.e. '${var:=default}' is used, bash wants to execute a command with it. to stop it, use it like this:
+': ${var:=default}' in this case it just assign the value 'default' to variable 'var' if originaly it's value is null and does nothing anymore.
+:? ['${var:?message}' if the value of var is null, the the script will display an error message 'message' (if not provided, uses the default one)
+and terminates with an exit status of 1.
+
+
+
+////////////////////////////////
+////	BUILTIN COMMANDS	////
+////////////////////////////////
+
+type cat ls echo who if [display information about the commands]
+
+read var [accepts user input and assigns it to the variable 'var'. if you do not specify a variable, bash will put the value to the variable REPLY]
+read -p "Enter something: " var [variable can be omitted, so the value would be assigned to variable REPLY]
+The read builtin return an exit status of 0 if it successfully reads any data. It has a nonzero exit status when it reaches the EOF.
+
+exec [it has 2 primary purposes: to run a command without creating a new process and to redirect a file descriptor]
+'exec command arguments' [this is the syntax to run a command in the environment of the original process]
+'exec' vs '.':
+	1. '.' can run only shell scripts, 'exec' can run both, scripts and compiled programs.
+	2. '.' returns control to the original script when it finishes running, 'exec' does not, therefore can be used only as the last command in a script.
+	3. '.' gives the new program access to local variables, 'exec' does not.
+trap [catches a signal. USAGE: 'trap 1 2 3 20' (prevents these signals to terminate the script. for more info check 'loop/until/locktty.sh'). actually 'trap' is mainly used to remove the temp files if the script is terminated not to leave garbage in filesystem. most carefully written applications trap the INT(2), QUIT(3) and TERM(15) signals]
+
+
+
+
+///////////////////////////////////
+////	COMMAND CONDITIONS	   ////
+///////////////////////////////////
+
+mkdir bkup && cp -r src bkup [makes 'bkup' director and '&&' means that if the first command succeeds (returns the value 0), the next one is gong to be executed]
+mkdir bkup || echo "mkdir of bkup failed" >> /tmp/log [in this case the second command is executed only if the first one fails (return the value !=0)]
+THE 2 COMMAND ABOVE YOU CAN GROUP AS: (mkdir bkup && cp -r src bkup) || echo "mkdir failed" >> /tmp/log
+TIP: '&&' and '||' have equals precedence and are grouped from left to right.
+
+((command1 | command2) || (command3 | command4)) && (command5 | command6) [this is an example how you can prioritise the commands using '()']
+
+true || false && false [outputs 1 (you can test them in shell). in shell 1 = false, 0 = true]
+(true || false) && false [outputs 1 as well]
+false && false || true [outputs 0]
+(false && false) || true [outputs 0]
+BECAUSE '&&' AND '||' HAVE EQUAL PRECEDENCE, THE '( )' DOES NOT CHANGE THE ORDER IN THE LAST 2 EXAMPLES.
+
+
+
+////////////////////////////////
+////	STRING OPERATORS	////
+////////////////////////////////
+
+'#'	  	- removes minimal matching prefixes.
+'##'  	- removes maximal matching prefixes.
+'%'		- removes minimal matching suffixes.
+'%%'  	- removes maxhimal matching suffices.
+SYNTAX: ${varname op pattern}
+'op'- one of the 4 operators above.

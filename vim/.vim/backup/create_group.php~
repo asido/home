@@ -1,0 +1,40 @@
+<?php
+@session_start();
+require_once('database.php');
+
+if (!isset($_POST['gname']))
+	exit;
+
+$db = database::get_instance();
+$db->format_string($_POST['avatar']);
+$db->format_string($_POST['gname']);
+$filename = explode("/", $_POST['avatar']);
+$filename = $filename[1];
+$query = "SELECT * FROM `groups` WHERE `name`='".$_POST['gname']."'";
+$result = $db->query($query);
+if (mysql_num_rows($result) > 0) {
+	echo '{"ret":"A group with name '.$_POST['gname'].' already exist."}';
+	exit;
+}
+$query = "INSERT INTO `groups` (`creator_username`,`name`,`avatar`) VALUES
+		('".$_SESSION['username']."', '".$_POST['gname']."', '".($_POST['avatar'] == "" ? "groupavatar.png" : $filename)."')";
+$db->query($query);
+if (mysql_affected_rows() == 0) {
+	echo '{"ret":"ERROR"}';
+	exit;
+}
+
+$query = "SELECT `id` FROM `groups` WHERE `name`='".$_POST['gname']."'";
+$sql = $db->query($query);
+$sql = mysql_fetch_array($sql);
+$group_id = $sql['id'];
+
+$query = "INSERT INTO `groups_MTM_users` (`username`,`group_id`) VALUES ('".$_SESSION['username']."', ".$group_id.")";
+$db->query($query);
+if (mysql_affected_rows() == 0) {
+	echo '{"ret":"ERROR"}';
+	exit;
+}
+echo '{"ret":"The group has been successfully created."}';
+
+?>

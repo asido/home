@@ -1,0 +1,64 @@
+#include <stdio.h>
+
+#define TAB_SIZE 8
+#define MAX_LINE_SIZE 1000
+
+int getLine(char line[]);
+void detabLine(char line[]);
+void copy(char to[], char from[]);
+void printLine(char line[]);
+
+int main() {
+	char line[MAX_LINE_SIZE];
+
+	while(getLine(line) > 0) {
+		detabLine(line);
+		printLine(line);
+	}
+}
+
+int getLine(char line[]) {
+	int i;
+	int c;
+
+	for(i = 0; i < (MAX_LINE_SIZE - 1) && (c = getchar()) != EOF && c != '\n'; i++)
+		line[i] = c;
+	if(c == '\n')
+		line[i++] = c;
+	line[i] = '\0';
+	return i;
+}
+
+void detabLine(char line[]) {
+	char temp_line[MAX_LINE_SIZE];
+	int lineIdx;
+	int tmpLineIdx = 0;
+
+	for(lineIdx = 0; line[lineIdx] != '\0'; lineIdx++, tmpLineIdx++) {
+		if(line[lineIdx] == '\t') {
+			int i;
+			for(i = TAB_SIZE; i > 0; i--) {
+				temp_line[tmpLineIdx] = ' ';
+				if(i > 1)
+					tmpLineIdx++;
+			}
+			continue;
+		}
+		temp_line[tmpLineIdx] = line[lineIdx];
+	}
+	temp_line[tmpLineIdx] = '\0';
+
+	copy(line, temp_line);
+}
+
+void copy(char to[], char from[]) {
+	int i;
+	for(i = 0; from[i] != '\0'; i++)
+		to[i] = from[i];
+}
+
+void printLine(char line[]) {
+	int i;
+	for(i = 0; line[i] != '\0'; i++)
+		putchar(line[i]);
+}

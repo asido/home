@@ -1,0 +1,7 @@
+#!/usr/bin/perl -w
+
+$count = 0;
+while($line = <>) {
+	print ++$count, ". $line\n";
+}
+print "\n$count lines enetered.\n";

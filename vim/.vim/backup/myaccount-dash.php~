@@ -1,0 +1,158 @@
+<?php
+foreach($_GET as $key => $value)
+	$_GET[$key] = mysql_real_escape_string(stripslashes($value));
+foreach($_POST as $key => $value)
+	$_POST[$key] = mysql_real_escape_string(stripslashes($value));
+/*
+require_once('php/auth.php');
+
+$logged = $auth->logged_in();
+
+if (!$logged) {
+	if (!$auth->cookie_login()) {
+		header('Location: login.php');
+		exit;
+	}
+}
+*/
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikemelikeU</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="header">
+    <div id="likemelikeyou-logo">
+        
+        <div id="likemelikeyou-bg"><img alt="" class="stretch" src="images/box.png" /></div>
+        <img alt="" src="images/LikemelikeU.png" />
+        
+    </div>
+    <div id="signup">
+        <div class="button-head">LOGOUT</div>
+        <div class="button-head">DASHBOARD</div>
+        <div class="button-head bh-selected">MY ACCOUNT</div>
+    </div>
+</div>
+
+<div id="container-admin">
+    <div class="si-main">
+        <div class="si-submain">
+            <table width="800" border="0" class="si-table1">
+              <tr>
+                <td width="250"><p style="margin-top:22px; margin-left:88px;">Question About :</p></td>
+                <td width="400"><input type="text" name="search_input" id="search_input" class="si-textbx" style="margin-top:10px;"/></td>
+                <td width="110">&nbsp;<div class="si-searchbtn"><p style="margin-top:8px; margin-left:15px; color:#FFF;" id="search_btn">SEARCH</p></div></td>
+              </tr>
+            </table>
+    
+        </div>
+        
+        <div class="mid-container">
+        
+        	<div class="mid-option">
+            	<div id="icon-profile" class="mid-icon"></div>
+                <div class="mid-title">Profile Questions</div>
+                <div class="mid-button">Complete Answers</div>
+                <div class="option-percent">75% Complete</div>
+                <div class="option-loadwrap">
+                	<div class="option-loading" style="width: 75%"></div>
+                </div>
+            </div>
+            
+            <div class="mid-option">
+            	<div id="icon-top10" class="mid-icon"></div>
+                <div class="mid-title">Top 10 Questions</div>
+                <div class="mid-button">Answer Now</div>
+                <div class="option-percent">50% Complete</div>
+                <div class="option-loadwrap">
+                	<div class="option-loading" style="width: 50%"></div>
+                </div>
+                <div class="mid-view">View Similar Answered Questions</div>
+            </div>
+            
+            <div class="mid-option">
+            	<div id="icon-top100" class="mid-icon"></div>
+                <div class="mid-title">Top 100 Questions</div>
+                <div class="mid-button">Answer Now</div>
+                <div class="option-percent">75% Complete</div>
+                <div class="option-loadwrap">
+                	<div class="option-loading" style="width: 75%"></div>
+                </div>
+                <div class="mid-view">View Similar Answered Questions</div>
+            </div>
+            
+            <div class="mid-option">
+            	<div id="icon-skipped" class="mid-icon"></div>
+                <div class="mid-title">Top Skipped</div>
+                <div class="mid-button">Answer Now</div>
+                <div class="option-percent">75% Complete</div>
+                <div class="option-loadwrap">
+                	<div class="option-loading" style="width: 75%"></div>
+                </div>
+                <div class="mid-view">View Similar Answered Questions</div>
+            </div>
+        
+        </div><!--mid-container-->
+        
+        <div class="mid-container">
+        	<div class="pts-left">
+            	<span class="ab20-black">POINTS:</span>
+                <span class="ab20-blue">166</span>
+                <br/>
+                <span class="a12-black-under">You can Create 3 Questions</span>
+                <br/>
+                <span class="ab12-black">FRIENDS/GROUP</span>
+            </div>
+            
+            <div class="pts-right">
+            	<span class="a15-black">Questions Answered: </span>
+                <span class="ab15-blue">33</span>
+                <br/>
+            	<span class="a15-black">Questions Asked: </span>
+                <span class="ab15-blue">33</span>
+                <br/>
+                <span class="a15-black">Friends: </span>
+                <span class="ab15-blue">33</span>
+                <br/>
+                <span class="a15-black">Awaiting Confirmation</span>
+                <span class="ab15-blue">(1)</span>
+                <br/>
+                <div class="bottom-button">View Summary and Statistics</div>
+            </div>
+        </div><!--mid-container-->
+        
+        <div id="h-loadwrap" class="mid-bottom">
+        	<div id="h-loadbar" style="width: 33%"></div>
+        </div>
+        
+    </div>
+    </div>
+</div>
+
+<div id="container-2">
+    <div id="c2-background"><img alt="" class="stretch" src="images/footerbg.png" /></div>
+    <div id="c2-world"><img alt="" src="images/world2.png" /></div>
+</div>
+
+<div id="footer">
+    <span id="footer-copyright">Likemelikeu © 2011</span>
+    <div id="footer-menu">
+        <a href="#">FAQ</a>
+        <a href="#">Contact</a>
+        <a href="termsofuse.php">Terms &amp; Conditions</a>
+        <a href="#">Privacy</a>
+        <a href="#">Report Abuse</a>
+        <a href="#">Report Site Problem</a>
+    </div>
+</div>
+
+</body>
+</html>

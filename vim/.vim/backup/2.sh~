@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in *; do
+	if [ -d "$1" ]; then
+		echo "$i"
+	fi
+done

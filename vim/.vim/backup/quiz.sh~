@@ -1,0 +1,140 @@
+#!/bin/bash
+
+function initialize {
+	# initializes variables
+	trap 'summarize ; exit 0' INT	# handles user interrupts
+	num_ques=0						# number of questions asked so far
+	num_correct=0					# number of answered correctly so far
+	first_time=true					# true until first question is asked
+	cd ${QUIZDIR:=$(pwd)/quiz}
+}
+
+function choose_subj {
+	# writes choice to standard output
+	subjects=($(ls))
+	PS3="Choose a subject for the quiz from the preceding list: "
+	select subject in ${subjects[*]}; do
+		if [[ -z "$subject" ]]; then
+			echo "No subject chosen. Bye." >&2
+			exit 1
+		fi
+		echo "$subject"
+		return 0
+	done
+}
+
+function scramble {
+	# stores names of question files, scrambled,
+	# in an array variable named questions.
+	typeset -i index quescount
+	questions=($(ls))
+	quescount=${#questions[*]}	# number of elements
+	(( index=quescount-1))
+	while [[ $index > 0 ]]; do
+		((target=RANDOM & index))
+		exchange $target $index
+		((index--))
+	done
+}
+
+function exchange {
+	temp_value=${questions[$1]}
+	questions[$1]=${questions[$2]}
+	questions[$2]=$temp_value
+}
+
+function ask {
+	# read a suggestion file, asks the question, and checks the 
+	# answer. return 1 if the answer was correct, 0 otherwise.
+	# if it encounters an invalid question file, exit with status 2.
+	exec 3<$1
+	read -u3 ques || exit 2
+	read -u3 num_opts || exit 2
+
+	index=0
+	choices=()
+	while (( index < num_opts )); do
+		read -u3 next_choice || exit 2
+		choices=("${choices[@]}" "$next_choice")
+		((index++))
+	done
+	read -u3 correct_answer || exit 2
+	choices=("${choices[@]}" "$correct_answer")
+
+	# Randomly arange the choices of a question.
+	echo $num_opts
+  	for index in $(($num_opts-1)); do
+  		random=$(($RANDOM % ($num_opts + 1)))
+  		temp=${choices[random]}
+  		choices[random]=${choices[index]}
+  		choices[index]=$temp
+  	done
+
+	exec 3<&-
+
+	if [[ $first_time = true ]]; then
+		first_time=false
+		echo -e "You may press the interrupt key at any time to quit.\n"
+	fi
+
+	PS3=$ques"  "			# makes $ques the prompt to select
+							# and add some spaces for legibility.
+	select answer in "${choices[@]}"; do
+		if [[ -z "$answer" ]]; then
+			echo "Not a valid choice. Please choose again."
+		elif [[ "$answer" = "$correct_answer" ]]; then
+			echo "Correct!"
+			return 1
+		else
+			echo "No, the answer is $correct_answer."
+			return 0
+		fi
+	done
+}
+
+function summarize {
+	# presents the user score
+	echo
+	if (( num_ques == 0 )); then
+		echo "You did not answer any question"
+		exit 0
+	fi
+
+	(( percent=num_correct*100/num_ques ))
+	echo "You answered $num_correct questions correctly, out of	$num_ques total questions."
+	echo "Your score is $percent%."
+}
+
+
+# MAIN PROGRAM
+# STEP 1
+initialize
+
+# STEP 2
+subject=$(choose_subj)
+# If no valid choice, exit
+[[ $? -eq 0 ]] || exit 2
+
+# STEP 3
+cd $subject || exit 2
+echo
+
+# STEP 4
+scramble
+
+# STEP 5
+for ques in ${questions[*]}; do
+	ask $ques
+	result=$?
+	(( num_ques=num_ques+1 ))
+	if [[ $result == 1 ]]; then
+		(( num_correct += 1 ))
+	fi
+
+	echo	# skip a line between questions
+	sleep ${QUIZDELAY:=1}
+done
+
+# STEP 6
+summarize
+exit 0

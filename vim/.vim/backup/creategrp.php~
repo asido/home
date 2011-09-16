@@ -1,0 +1,101 @@
+<?php
+
+require_once('php/auth.php');
+
+$logged = $auth->logged_in();
+
+if (!$logged) {
+	if (!$auth->cookie_login()) {
+		header('Location: login.php');
+		exit;
+	}
+}
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LikemelikeU</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.4.2.js" type="text/javascript"></script>
+<script src="js/jquery.form.js" type="text/javascript"></script>
+<script src="js/popup-invite.js" type="text/javascript"></script>
+<script src="js/jquery.blockUI.js" type="text/javascript"></script>
+<script src="js/submit.js" type="text/javascript"></script>
+</head>
+
+<body>
+<?php
+	include_once('php/html.php');
+
+	if ( !database )
+		require ( 'database.php' );
+
+	HTML::show_logged_header();
+?>
+
+<div id="container-admin">
+    <div class="si-main" style="margin: 50px auto">   
+    
+    	<div id="subscribe-popup"> 
+			<iframe id="subscribe-popup-frame" name="subscribe" src="invite-popup.html"></iframe> 
+		</div>   
+        
+        <div class="mid-container">
+        	
+            <span class="ab16-black">CREATE GROUP</span>
+        	
+            <div class="group-wrapper">
+            <form id="group-form" action="" method="">
+            	<div class="group-row">
+            		<span class="a15-black">Name of the group :</span>
+                    <input type="text" name="gname" id="group-name" class="group-right" />                        
+                </div><!--group-row-->
+                
+                <div id="group-uprow" class="group-row">
+            		<span class="a15-black">Upload avatar for group :</span>
+					<div id="group-avatar" class="group-right">
+                    	<div id="group-img"><img class="avatar-img"></img></div>
+                        <div id="group-upload" class="g-btn">UPLOAD</div>                    
+                    </div><!--group-avatar-->
+					
+                </div><!--group-row-->
+                
+                <div class="group-row">
+            		<div id="group-finvites" class="g-btn group-right">INVITE FRIENDS TO BELONG TO THE GROUP</div>                    
+                </div><!--group-row-->
+                
+                <div class="group-row">
+                	<span class="a15-black">Invited Friends :</span>
+            		<textarea id="group-tarea" class="group-right"></textarea>                    
+                </div><!--group-row-->
+                
+                <div id="group-create" class="g-btn">CREATE</div>
+            </form>
+
+			
+			<form id="group-avatar-form" method="POST" enctype="multipart/form-data"><!-- group avatar upload form -->
+				<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+				<input type="file" id="group-avatar-browse" style="position: absolute; z-index: -10; left: -5000px;" name="group-avatar-file" />
+			</form><!-- group avatar upload form -->
+            
+            </div><!-- group-wrapper --> 
+        	
+        
+        </div><!--mid-container-->
+        
+        
+    </div>
+</div>
+
+<?php
+	include_once('php/html.php');
+	HTML::show_background();
+	HTML::show_footer();
+?>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+From 7f78702642088fb67f394b451337d1eb7521adb3 Mon Sep 17 00:00:00 2001
+From: Arvydas Sidorenko <asido4@gmail.com>
+Date: Sun, 4 Sep 2011 21:23:53 +0200
+Subject: [PATCH 3/3] typedef cleanup
+
+Signed-off-by: Arvydas Sidorenko <asido4@gmail.com>
+---
+ drivers/staging/crystalhd/bc_dts_types.h |   41 +-----------------------------
+ 1 files changed, 1 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/staging/crystalhd/bc_dts_types.h b/drivers/staging/crystalhd/bc_dts_types.h
+index d2131e7..42d7cfd 100644
+--- a/drivers/staging/crystalhd/bc_dts_types.h
++++ b/drivers/staging/crystalhd/bc_dts_types.h
+@@ -29,29 +29,8 @@
+ #include <stdint.h>
+ #endif
+ 
+-#ifndef PVOID
+-typedef void	*PVOID;
+-#endif
+-
+-#ifndef BOOL
+-typedef int	BOOL;
+-#endif
+-
+ #if defined(__KERNEL__) || defined(__LINUX_USER__)
+ 
+-#ifdef __LINUX_USER__	/* Don't include these for KERNEL */
+-typedef uint32_t	ULONG;
+-typedef int32_t		LONG;
+-typedef void		*HANDLE;
+-#ifndef VOID
+-typedef void		VOID;
+-#endif
+-typedef void		*LPVOID;
+-typedef uint32_t	DWORD;
+-typedef uint32_t	UINT32;
+-typedef uint32_t	*LPDWORD;
+-typedef unsigned char	*PUCHAR;
+-
+ #ifndef TRUE
+ 	#define TRUE		1
+ #endif
+@@ -70,28 +49,10 @@ typedef unsigned char	*PUCHAR;
+ #else
+ 
+ #ifndef uint64_t
+-typedef struct _uint64_t {
++struct _uint64_t {
+ 	uint32_t low_dw;
+ 	uint32_t hi_dw;
+ } uint64_t;
+ #endif
+ 
+-#ifndef int32_t
+-typedef signed long		int32_t;
+-#endif
+-
+-#ifndef uint32_t
+-typedef unsigned long	uint32_t;
+ #endif
+-
+-#ifndef uint16_t
+-typedef unsigned short	uint16_t;
+-#endif
+-
+-#ifndef uint8_t
+-typedef unsigned char	uint8_t;
+-#endif
+-#endif
+-
+-#endif
+-
+-- 
+1.7.1
+

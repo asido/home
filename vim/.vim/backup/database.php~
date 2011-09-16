@@ -1,0 +1,90 @@
+<?php
+
+require_once('config.php');
+
+class database
+{
+	private function database()
+	{
+		$connected = true;
+
+		if (!mysql_connect(CONFIG::DB_HOST, CONFIG::DB_USER, CONFIG::DB_PSW))
+			$connected = false;
+
+		if (!mysql_select_db(CONFIG::DB_DB))
+			$connected = false;
+
+		if (!$connected)
+			echo "Problems connecting to the database\n";
+	}
+
+	public static function get_instance()
+	{
+		static $db;
+		if (!is_object($db)) {
+			$db = new database();
+		}
+		return $db;
+	}
+
+	public function query($query)
+	{
+		return mysql_query($query);
+	}
+
+	public function free_field($table, $column, $value)
+	{
+		$this->format_string($column);
+		$this->format_string($value);
+
+		$result = $this->query("SELECT *
+							FROM users
+							WHERE ".$column." = '".$value."'");
+		$count = mysql_num_rows($result);
+		if ($count === 0 && $count !== false) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public static function mysql_escape($str)
+	{
+		$str = stripslashes($str);
+		$str = mysql_real_escape_string($str);
+		return $str;
+	}
+	
+	public function fetch ($result)
+	{
+		if ($result == false) return false;
+		return mysql_fetch_array( $result );
+	}
+	
+	public function to_array ($result)
+	{
+		if ($result==false) return false;
+		$a = array ();
+		while ($row = $this->fetch($result)) array_push($a, $row);
+		return $a;
+	}
+	
+	public function get_field_value ( $table, $field, $condition )
+	{
+		/*echo BR.BR.BR.'	SELECT `'.$field.'`
+							FROM `'.$table.'`' .
+							( $condition ? ' WHERE '.$condition : '' ).BR.BR.BR;*/
+		$r = $this->query(
+						'	SELECT `'.$field.'`
+							FROM `'.$table.'`' .
+							( $condition ? ' WHERE '.$condition : '' ) );
+		
+		if ( ($r == false) || ( mysql_num_rows($r) == 0 ) ) return false;
+		$r = $this->fetch($r);
+		return $r[$field];
+	}
+}
+
+?>
+
