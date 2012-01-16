@@ -1,0 +1,25 @@
+;; Object perl/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "perl/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(PERL_CFLAGS)")) nil [757 817])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [818 853])
+            ("lib_LTLIBRARIES" variable (:default-value ("perl.la")) nil [854 880])
+            ("perl_la_SOURCES" variable (:default-value ("weechat-perl.c" "weechat-perl.h" "weechat-perl-api.c" "weechat-perl-api.h")) nil [881 1027])
+            ("perl_la_LDFLAGS" variable (:default-value ("-module")) nil [1027 1053])
+            ("perl_la_LIBADD" variable (:default-value ("../lib_weechat_plugins_scripts.la" "$(PERL_LFLAGS)")) nil [1053 1119])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1120 1148]))          
+    :file "Makefile.am"
+    :pointmax 1148
+    :fsize 1147
+    :lastmodtime '(19743 15895)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!scripts!perl!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

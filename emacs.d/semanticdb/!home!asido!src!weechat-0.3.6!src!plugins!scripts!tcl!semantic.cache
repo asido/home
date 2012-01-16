@@ -1,0 +1,25 @@
+;; Object tcl/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "tcl/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(TCL_CFLAGS)")) nil [820 879])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [880 915])
+            ("lib_LTLIBRARIES" variable (:default-value ("tcl.la")) nil [916 941])
+            ("tcl_la_SOURCES" variable (:default-value ("weechat-tcl.c" "weechat-tcl.h" "weechat-tcl-api.c" "weechat-tcl-api.h")) nil [942 1083])
+            ("tcl_la_LDFLAGS" variable (:default-value ("-module")) nil [1083 1108])
+            ("tcl_la_LIBADD" variable (:default-value ("../lib_weechat_plugins_scripts.la" "$(TCL_LFLAGS)")) nil [1108 1172])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1173 1201]))          
+    :file "Makefile.am"
+    :pointmax 1201
+    :fsize 1200
+    :lastmodtime '(19743 16062)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!scripts!tcl!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

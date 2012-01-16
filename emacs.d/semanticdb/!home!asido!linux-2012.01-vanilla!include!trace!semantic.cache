@@ -1,0 +1,18 @@
+;; Object trace/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "trace/"
+  :tables (list 
+   (semanticdb-table "define_trace.h"
+    :major-mode 'c-mode
+    :tags nil
+    :file "define_trace.h"
+    :pointmax 3050
+    :fsize 3049
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!linux-2012.01-vanilla!include!trace!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

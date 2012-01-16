@@ -1,0 +1,12 @@
+HTTP/1.1 404 Not Found
+Cache-Control: max-age=300
+Content-Type: text/html; charset=utf-8
+Date: Mon, 19 Dec 2011 08:52:57 GMT
+Expires: Mon, 19 Dec 2011 08:57:57 GMT
+Last-Modified: Wed, 11 Jan 1984 08:00:00 GMT
+Server: nginx
+Via: 1.1 varnish
+X-Varnish: 3755961769
+Content-Length: 13
+
+404 Not Found

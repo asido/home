@@ -1,0 +1,2 @@
+;;; .emms-cache -*- mode: emacs-lisp; coding: utf-8; -*-
+(puthash "/home/minde/Music/other/108_central_seven_-_if_i_were_you.mp3" '(*track* (type . file) (name . "/home/minde/Music/other/108_central_seven_-_if_i_were_you.mp3") (metadata) (info-mtime 17931 58273) (last-played 20168 2095 431696) (play-count . 1)) emms-cache-db)

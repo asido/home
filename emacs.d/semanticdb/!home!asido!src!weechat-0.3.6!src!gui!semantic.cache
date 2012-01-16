@@ -1,0 +1,27 @@
+;; Object gui/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "gui/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"")) nil [757 802])
+            ("noinst_LIBRARIES" variable (:default-value ("lib_weechat_gui_common.a")) nil [803 847])
+            ("lib_weechat_gui_common_a_SOURCES" variable (:default-value ("gui-bar.c" "gui-bar.h" "gui-bar-item.c" "gui-bar-item.h" "gui-bar-window.c" "gui-bar-window.h" "gui-buffer.c" "gui-buffer.h" "gui-chat.c" "gui-chat.h" "gui-color.c" "gui-color.h" "gui-cursor.c" "gui-cursor.h" "gui-completion.c" "gui-completion.h" "gui-filter.c" "gui-filter.h" "gui-focus.c" "gui-focus.h" "gui-history.c" "gui-history.h" "gui-hotlist.c" "gui-hotlist.h" "gui-input.c" "gui-input.h" "gui-key.c" "gui-key.h" "gui-layout.c" "gui-layout.h" "gui-line.c" "gui-line.h" "gui-main.h" "gui-mouse.c" "gui-mouse.h" "gui-nicklist.c" "gui-nicklist.h" "gui-window.c" "gui-window.h")) nil [848 2794])
+            ("curses_dir" variable (:default-value ("curses")) nil [2810 2828])
+            ("wxwidgets_dir" variable (:default-value ("wxwidgets")) nil [2852 2876])
+            ("gtk_dir" variable (:default-value ("gtk")) nil [2894 2906])
+            ("qt_dir" variable (:default-value ("qt")) nil [2923 2933])
+            ("SUBDIRS" variable (:default-value ("." "$(curses_dir)" "$(wxwidgets_dir)" "$(gtk_dir)" "$(qt_dir)")) nil [2940 3004])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [3005 3033]))          
+    :file "Makefile.am"
+    :pointmax 3033
+    :fsize 3032
+    :lastmodtime '(20020 4950)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!gui!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

@@ -1,0 +1,30 @@
+;; Object fr/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "fr/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("docdir" variable (:default-value ("$(datadir)/doc/$(PACKAGE)")) nil [813 848])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt" "weechat_user.fr.txt" "weechat_plugin_api.fr.txt" "weechat_scripting.fr.txt" "weechat_faq.fr.txt" "weechat_quickstart.fr.txt" "weechat_tester.fr.txt" "$(wildcard autogen/user/*.txt)" "$(wildcard autogen/plugin_api/*.txt)")) nil [849 1203])
+            ("all-local" function (:arguments ("weechat_user.fr.html" "weechat_plugin_api.fr.html" "weechat_scripting.fr.html" "weechat_faq.fr.html" "weechat_quickstart.fr.html" "weechat_tester.fr.html")) nil [1204 1379])
+            ("weechat_user.fr.html" function (:arguments ("weechat_user.fr.txt" "$(wildcard autogen/user/*.txt)")) nil [1395 1720])
+            ("weechat_plugin_api.fr.html" function (:arguments ("weechat_plugin_api.fr.txt" "$(wildcard autogen/plugin_api/*.txt)")) nil [1744 2060])
+            ("weechat_scripting.fr.html" function (:arguments ("weechat_scripting.fr.txt")) nil [2079 2354])
+            ("weechat_faq.fr.html" function (:arguments ("weechat_faq.fr.txt")) nil [2361 2636])
+            ("weechat_quickstart.fr.html" function (:arguments ("weechat_quickstart.fr.txt")) nil [2650 2914])
+            ("weechat_tester.fr.html" function (:arguments ("weechat_tester.fr.txt")) nil [2932 3180])
+            ("install-data-hook" function nil nil [3197 3300])
+            ("uninstall-hook" function nil nil [3319 3400])
+            ("clean-local" function nil nil [3410 3438]))          
+    :file "Makefile.am"
+    :pointmax 3438
+    :fsize 3437
+    :lastmodtime '(20115 6854)
+    :unmatched-syntax '((shell-command 3424 . 3437) (bol 3423 . 3423))
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!doc!fr!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

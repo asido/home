@@ -1,0 +1,25 @@
+;; Object ja/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "ja/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("docdir" variable (:default-value ("$(datadir)/doc/$(PACKAGE)")) nil [757 792])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt" "weechat_quickstart.ja.txt")) nil [793 862])
+            ("all-local" function (:arguments ("weechat_quickstart.ja.html")) nil [863 901])
+            ("weechat_quickstart.ja.html" function (:arguments ("weechat_quickstart.ja.txt")) nil [915 1186])
+            ("install-data-hook" function nil nil [1203 1306])
+            ("uninstall-hook" function nil nil [1325 1406])
+            ("clean-local" function nil nil [1416 1444]))          
+    :file "Makefile.am"
+    :pointmax 1444
+    :fsize 1447
+    :lastmodtime '(20115 6885)
+    :unmatched-syntax '((shell-command 1430 . 1443) (bol 1429 . 1429))
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!doc!ja!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

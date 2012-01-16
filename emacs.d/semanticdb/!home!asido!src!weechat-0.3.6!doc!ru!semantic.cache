@@ -1,0 +1,25 @@
+;; Object ru/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "ru/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("docdir" variable (:default-value ("$(datadir)/doc/$(PACKAGE)")) nil [757 792])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt" "weechat_quickstart.ru.txt")) nil [793 862])
+            ("all-local" function (:arguments ("weechat_quickstart.ru.html")) nil [863 901])
+            ("weechat_quickstart.ru.html" function (:arguments ("weechat_quickstart.ru.txt")) nil [915 1179])
+            ("install-data-hook" function nil nil [1196 1299])
+            ("uninstall-hook" function nil nil [1318 1399])
+            ("clean-local" function nil nil [1409 1437]))          
+    :file "Makefile.am"
+    :pointmax 1437
+    :fsize 1436
+    :lastmodtime '(20115 6901)
+    :unmatched-syntax '((shell-command 1423 . 1436) (bol 1422 . 1422))
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!doc!ru!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

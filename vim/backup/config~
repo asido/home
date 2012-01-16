@@ -1,0 +1,31 @@
+[global_config]
+  borderless = True
+[keybindings]
+[profiles]
+  [[default]]
+    use_system_font = False
+    background_darkness = 0.73
+    scrollback_lines = 5000
+    background_type = transparent
+    scrollbar_position = hidden
+    antialias = False
+    show_titlebar = False
+    font = ProggyTinyTT 12
+    allow_bold = False
+  [[Shell Box]]
+    use_system_font = False
+    encoding = IBM850
+    background_darkness = 0.69
+    background_type = transparent
+    scrollbar_position = hidden
+    show_titlebar = False
+    font = Consolas 10
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+    [[[window0]]]
+      type = Window
+      parent = ""
+[plugins]

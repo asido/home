@@ -1,0 +1,656 @@
+;; Object asm-generic/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "asm-generic/"
+  :tables (list 
+   (semanticdb-table "atomic-long.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_GENERIC_ATOMIC_LONG_H" variable (:constant-flag t) nil [44 70])
+            ("asm/types.h" include (:system-flag t) nil [267 289])
+            ("atomic_long_t" type
+               (:typedef ("atomic64_t" type (:type "class") nil nil)
+                :superclasses "atomic64_t"
+                :type "typedef")
+                nil [548 581])
+            ("ATOMIC_LONG_INIT" variable (:constant-flag t) nil [591 607])
+            ("atomic_long_read" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [665 682]))                  
+                :type "long")
+                nil [629 753])
+            ("atomic_long_set" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [790 807])
+                    ("i" variable (:type "long") (reparse-symbol arg-sub-list) [808 815]))                  
+                :type "void")
+                nil [755 875])
+            ("atomic_long_inc" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [912 929]))                  
+                :type "void")
+                nil [877 986])
+            ("atomic_long_dec" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1023 1040]))                  
+                :type "void")
+                nil [988 1097])
+            ("atomic_long_add" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("i" variable (:type "long") (reparse-symbol arg-sub-list) [1134 1141])
+                    ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1142 1159]))                  
+                :type "void")
+                nil [1099 1219])
+            ("atomic_long_sub" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("i" variable (:type "long") (reparse-symbol arg-sub-list) [1256 1263])
+                    ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1264 1281]))                  
+                :type "void")
+                nil [1221 1341])
+            ("atomic_long_sub_and_test" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("i" variable (:type "long") (reparse-symbol arg-sub-list) [1386 1393])
+                    ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1394 1411]))                  
+                :type "int")
+                nil [1343 1487])
+            ("atomic_long_dec_and_test" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1532 1549]))                  
+                :type "int")
+                nil [1489 1622])
+            ("atomic_long_inc_and_test" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1667 1684]))                  
+                :type "int")
+                nil [1624 1757])
+            ("atomic_long_add_negative" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("i" variable (:type "long") (reparse-symbol arg-sub-list) [1802 1809])
+                    ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1810 1827]))                  
+                :type "int")
+                nil [1759 1903])
+            ("atomic_long_add_return" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("i" variable (:type "long") (reparse-symbol arg-sub-list) [1947 1954])
+                    ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1955 1972]))                  
+                :type "long")
+                nil [1905 2052])
+            ("atomic_long_sub_return" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("i" variable (:type "long") (reparse-symbol arg-sub-list) [2096 2103])
+                    ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2104 2121]))                  
+                :type "long")
+                nil [2054 2201])
+            ("atomic_long_inc_return" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2245 2262]))                  
+                :type "long")
+                nil [2203 2339])
+            ("atomic_long_dec_return" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2383 2400]))                  
+                :type "long")
+                nil [2341 2477])
+            ("atomic_long_add_unless" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("l" variable
+                       (:pointer 1
+                        :type ("atomic_long_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2521 2538])
+                    ("a" variable (:type "long") (reparse-symbol arg-sub-list) [2539 2546])
+                    ("u" variable (:type "long") (reparse-symbol arg-sub-list) [2547 2554]))                  
+                :type "long")
+                nil [2479 2637])
+            ("atomic_long_inc_not_zero" variable (:constant-flag t) nil [2647 2671])
+            ("atomic_long_cmpxchg" variable (:constant-flag t) nil [2725 2744])
+            ("atomic_long_xchg" variable (:constant-flag t) nil [2821 2837]))          
+    :file "atomic-long.h"
+    :pointmax 5245
+    :fsize 5244
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("atomic_long_cmpxchg" (spp-arg-list ("l" "old" "new") 2744 . 2757) . ((semantic-list "(atomic64_cmpxchg((atomic64_t *)(l), (old), (new)))" 2761 . 2812)))
+          ("_ASM_GENERIC_ATOMIC_LONG_H")
+          ("atomic_long_xchg" (spp-arg-list ("v" "new") 2837 . 2845) . ((semantic-list "(atomic64_xchg((atomic64_t *)(v), (new)))" 2849 . 2890)))
+          ("atomic_long_inc_not_zero" (spp-arg-list ("l") 2671 . 2674) . ((symbol "atomic64_inc_not_zero" 2675 . 2696) (semantic-list "((atomic64_t *)(l))" 2696 . 2715)))
+          ("ATOMIC_LONG_INIT" (spp-arg-list ("i") 607 . 610) . ((symbol "ATOMIC64_INIT" 611 . 624) (semantic-list "(i)" 624 . 627)))
+          )
+
+    )
+   (semanticdb-table "errno.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_GENERIC_ERRNO_H" variable (:constant-flag t) nil [38 58])
+            ("asm-generic/errno-base.h" include (:system-flag t) nil [60 95])
+            ("EDEADLK" variable (:constant-flag t) nil [105 112])
+            ("ENAMETOOLONG" variable (:constant-flag t) nil [161 173])
+            ("ENOLCK" variable (:constant-flag t) nil [210 216])
+            ("ENOSYS" variable (:constant-flag t) nil [261 267])
+            ("ENOTEMPTY" variable (:constant-flag t) nil [311 320])
+            ("ELOOP" variable (:constant-flag t) nil [358 363])
+            ("EWOULDBLOCK" variable (:constant-flag t) nil [418 429])
+            ("ENOMSG" variable (:constant-flag t) nil [473 479])
+            ("EIDRM" variable (:constant-flag t) nil [525 530])
+            ("ECHRNG" variable (:constant-flag t) nil [568 574])
+            ("EL2NSYNC" variable (:constant-flag t) nil [621 629])
+            ("EL3HLT" variable (:constant-flag t) nil [672 678])
+            ("EL3RST" variable (:constant-flag t) nil [712 718])
+            ("ELNRNG" variable (:constant-flag t) nil [751 757])
+            ("EUNATCH" variable (:constant-flag t) nil [801 808])
+            ("ENOCSI" variable (:constant-flag t) nil [856 862])
+            ("EL2HLT" variable (:constant-flag t) nil [908 914])
+            ("EBADE" variable (:constant-flag t) nil [948 953])
+            ("EBADR" variable (:constant-flag t) nil [989 994])
+            ("EXFULL" variable (:constant-flag t) nil [1040 1046])
+            ("ENOANO" variable (:constant-flag t) nil [1079 1085])
+            ("EBADRQC" variable (:constant-flag t) nil [1113 1120])
+            ("EBADSLT" variable (:constant-flag t) nil [1160 1167])
+            ("EDEADLOCK" variable (:constant-flag t) nil [1200 1209])
+            ("EBFONT" variable (:constant-flag t) nil [1227 1233])
+            ("ENOSTR" variable (:constant-flag t) nil [1273 1279])
+            ("ENODATA" variable (:constant-flag t) nil [1318 1325])
+            ("ETIME" variable (:constant-flag t) nil [1362 1367])
+            ("ENOSR" variable (:constant-flag t) nil [1400 1405])
+            ("ENONET" variable (:constant-flag t) nil [1449 1455])
+            ("ENOPKG" variable (:constant-flag t) nil [1504 1510])
+            ("EREMOTE" variable (:constant-flag t) nil [1551 1558])
+            ("ENOLINK" variable (:constant-flag t) nil [1594 1601])
+            ("EADV" variable (:constant-flag t) nil [1642 1646])
+            ("ESRMNT" variable (:constant-flag t) nil [1681 1687])
+            ("ECOMM" variable (:constant-flag t) nil [1720 1725])
+            ("EPROTO" variable (:constant-flag t) nil [1772 1778])
+            ("EMULTIHOP" variable (:constant-flag t) nil [1812 1821])
+            ("EDOTDOT" variable (:constant-flag t) nil [1858 1865])
+            ("EBADMSG" variable (:constant-flag t) nil [1903 1910])
+            ("EOVERFLOW" variable (:constant-flag t) nil [1948 1957])
+            ("ENOTUNIQ" variable (:constant-flag t) nil [2013 2021])
+            ("EBADFD" variable (:constant-flag t) nil [2066 2072])
+            ("EREMCHG" variable (:constant-flag t) nil [2120 2127])
+            ("ELIBACC" variable (:constant-flag t) nil [2169 2176])
+            ("ELIBBAD" variable (:constant-flag t) nil [2234 2241])
+            ("ELIBSCN" variable (:constant-flag t) nil [2297 2304])
+            ("ELIBMAX" variable (:constant-flag t) nil [2355 2362])
+            ("ELIBEXEC" variable (:constant-flag t) nil [2429 2437])
+            ("EILSEQ" variable (:constant-flag t) nil [2493 2499])
+            ("ERESTART" variable (:constant-flag t) nil [2540 2548])
+            ("ESTRPIPE" variable (:constant-flag t) nil [2610 2618])
+            ("EUSERS" variable (:constant-flag t) nil [2655 2661])
+            ("ENOTSOCK" variable (:constant-flag t) nil [2695 2703])
+            ("EDESTADDRREQ" variable (:constant-flag t) nil [2752 2764])
+            ("EMSGSIZE" variable (:constant-flag t) nil [2811 2819])
+            ("EPROTOTYPE" variable (:constant-flag t) nil [2854 2864])
+            ("ENOPROTOOPT" variable (:constant-flag t) nil [2913 2924])
+            ("EPROTONOSUPPORT" variable (:constant-flag t) nil [2965 2980])
+            ("ESOCKTNOSUPPORT" variable (:constant-flag t) nil [3021 3036])
+            ("EOPNOTSUPP" variable (:constant-flag t) nil [3080 3090])
+            ("EPFNOSUPPORT" variable (:constant-flag t) nil [3154 3166])
+            ("EAFNOSUPPORT" variable (:constant-flag t) nil [3214 3226])
+            ("EADDRINUSE" variable (:constant-flag t) nil [3285 3295])
+            ("EADDRNOTAVAIL" variable (:constant-flag t) nil [3336 3349])
+            ("ENETDOWN" variable (:constant-flag t) nil [3399 3407])
+            ("ENETUNREACH" variable (:constant-flag t) nil [3442 3453])
+            ("ENETRESET" variable (:constant-flag t) nil [3495 3504])
+            ("ECONNABORTED" variable (:constant-flag t) nil [3567 3579])
+            ("ECONNRESET" variable (:constant-flag t) nil [3631 3641])
+            ("ENOBUFS" variable (:constant-flag t) nil [3685 3692])
+            ("EISCONN" variable (:constant-flag t) nil [3738 3745])
+            ("ENOTCONN" variable (:constant-flag t) nil [3805 3813])
+            ("ESHUTDOWN" variable (:constant-flag t) nil [3868 3877])
+            ("ETOOMANYREFS" variable (:constant-flag t) nil [3942 3954])
+            ("ETIMEDOUT" variable (:constant-flag t) nil [4008 4017])
+            ("ECONNREFUSED" variable (:constant-flag t) nil [4057 4069])
+            ("EHOSTDOWN" variable (:constant-flag t) nil [4107 4116])
+            ("EHOSTUNREACH" variable (:constant-flag t) nil [4148 4160])
+            ("EALREADY" variable (:constant-flag t) nil [4196 4204])
+            ("EINPROGRESS" variable (:constant-flag t) nil [4253 4264])
+            ("ESTALE" variable (:constant-flag t) nil [4309 4315])
+            ("EUCLEAN" variable (:constant-flag t) nil [4357 4364])
+            ("ENOTNAM" variable (:constant-flag t) nil [4409 4416])
+            ("ENAVAIL" variable (:constant-flag t) nil [4464 4471])
+            ("EISNAM" variable (:constant-flag t) nil [4521 4527])
+            ("EREMOTEIO" variable (:constant-flag t) nil [4568 4577])
+            ("EDQUOT" variable (:constant-flag t) nil [4613 4619])
+            ("ENOMEDIUM" variable (:constant-flag t) nil [4655 4664])
+            ("EMEDIUMTYPE" variable (:constant-flag t) nil [4699 4710])
+            ("ECANCELED" variable (:constant-flag t) nil [4747 4756])
+            ("ENOKEY" variable (:constant-flag t) nil [4794 4800])
+            ("EKEYEXPIRED" variable (:constant-flag t) nil [4847 4858])
+            ("EKEYREVOKED" variable (:constant-flag t) nil [4893 4904])
+            ("EKEYREJECTED" variable (:constant-flag t) nil [4944 4956])
+            ("EOWNERDEAD" variable (:constant-flag t) nil [5029 5039])
+            ("ENOTRECOVERABLE" variable (:constant-flag t) nil [5069 5084])
+            ("ERFKILL" variable (:constant-flag t) nil [5126 5133])
+            ("EHWPOISON" variable (:constant-flag t) nil [5192 5201]))          
+    :file "errno.h"
+    :pointmax 5251
+    :fsize 5250
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("ECHRNG" . ((number "44" 576 . 578)))
+          ("ENOCSI" . ((number "50" 864 . 866)))
+          ("EL2HLT" . ((number "51" 916 . 918)))
+          ("EBADE" . ((number "52" 955 . 957)))
+          ("EBADR" . ((number "53" 996 . 998)))
+          ("ENOSTR" . ((number "60" 1281 . 1283)))
+          ("ETIME" . ((number "62" 1369 . 1371)))
+          ("ENOPKG" . ((number "65" 1512 . 1514)))
+          ("ESRMNT" . ((number "69" 1689 . 1691)))
+          ("ERESTART" . ((number "85" 2549 . 2551)))
+          ("ECONNRESET" . ((number "104" 3642 . 3645)))
+          ("ENOBUFS" . ((number "105" 3694 . 3697)))
+          ("ETIMEDOUT" . ((number "110" 4018 . 4021)))
+          ("EINPROGRESS" . ((number "115" 4265 . 4268)))
+          ("EOWNERDEAD" . ((number "130" 5040 . 5043)))
+          ("EHWPOISON" . ((number "133" 5202 . 5205)))
+          ("EL3HLT" . ((number "46" 680 . 682)))
+          ("ENOSR" . ((number "63" 1407 . 1409)))
+          ("EILSEQ" . ((number "84" 2501 . 2503)))
+          ("ENETDOWN" . ((number "100" 3408 . 3411)))
+          ("EHOSTUNREACH" . ((number "113" 4161 . 4164)))
+          ("EKEYREVOKED" . ((number "128" 4905 . 4908)))
+          ("ENODATA" . ((number "61" 1327 . 1329)))
+          ("EBADMSG" . ((number "74" 1912 . 1914)))
+          ("ENOPROTOOPT" . ((number "92" 2925 . 2927)))
+          ("EADDRINUSE" . ((number "98" 3296 . 3298)))
+          ("ENOSYS" . ((number "38" 269 . 271)))
+          ("EDEADLOCK" . ((symbol "EDEADLK" 1210 . 1217)))
+          ("ENONET" . ((number "64" 1457 . 1459)))
+          ("EOVERFLOW" . ((number "75" 1958 . 1960)))
+          ("ESTALE" . ((number "116" 4317 . 4320)))
+          ("EUCLEAN" . ((number "117" 4366 . 4369)))
+          ("EDQUOT" . ((number "122" 4621 . 4624)))
+          ("EKEYEXPIRED" . ((number "127" 4859 . 4862)))
+          ("EUNATCH" . ((number "49" 810 . 812)))
+          ("EREMOTE" . ((number "66" 1560 . 1562)))
+          ("ENOTSOCK" . ((number "88" 2704 . 2706)))
+          ("ESOCKTNOSUPPORT" . ((number "94" 3037 . 3039)))
+          ("EAFNOSUPPORT" . ((number "97" 3227 . 3229)))
+          ("ENETRESET" . ((number "102" 3505 . 3508)))
+          ("EHOSTDOWN" . ((number "112" 4117 . 4120)))
+          ("EALREADY" . ((number "114" 4205 . 4208)))
+          ("ENAMETOOLONG" . ((number "36" 174 . 176)))
+          ("EREMCHG" . ((number "78" 2129 . 2131)))
+          ("EOPNOTSUPP" . ((number "95" 3091 . 3093)))
+          ("ENOMEDIUM" . ((number "123" 4665 . 4668)))
+          ("EMEDIUMTYPE" . ((number "124" 4711 . 4714)))
+          ("ENOTEMPTY" . ((number "39" 321 . 323)))
+          ("EIDRM" . ((number "43" 532 . 534)))
+          ("ECOMM" . ((number "70" 1727 . 1729)))
+          ("EBADFD" . ((number "77" 2074 . 2076)))
+          ("ELIBACC" . ((number "79" 2178 . 2180)))
+          ("EL2NSYNC" . ((number "45" 630 . 632)))
+          ("ELNRNG" . ((number "48" 759 . 761)))
+          ("EBFONT" . ((number "59" 1235 . 1237)))
+          ("EADDRNOTAVAIL" . ((number "99" 3350 . 3352)))
+          ("ENOKEY" . ((number "126" 4802 . 4805)))
+          ("_ASM_GENERIC_ERRNO_H")
+          ("EL3RST" . ((number "47" 720 . 722)))
+          ("EADV" . ((number "68" 1648 . 1650)))
+          ("ENOTUNIQ" . ((number "76" 2022 . 2024)))
+          ("EDESTADDRREQ" . ((number "89" 2765 . 2767)))
+          ("ENAVAIL" . ((number "119" 4473 . 4476)))
+          ("EDEADLK" . ((number "35" 114 . 116)))
+          ("ENOLCK" . ((number "37" 218 . 220)))
+          ("EXFULL" . ((number "54" 1048 . 1050)))
+          ("EBADSLT" . ((number "57" 1169 . 1171)))
+          ("ENOLINK" . ((number "67" 1603 . 1605)))
+          ("EPROTO" . ((number "71" 1780 . 1782)))
+          ("EMSGSIZE" . ((number "90" 2820 . 2822)))
+          ("ESHUTDOWN" . ((number "108" 3878 . 3881)))
+          ("ECONNREFUSED" . ((number "111" 4070 . 4073)))
+          ("EREMOTEIO" . ((number "121" 4578 . 4581)))
+          ("ENOTRECOVERABLE" . ((number "131" 5085 . 5088)))
+          ("ENOMSG" . ((number "42" 481 . 483)))
+          ("ELIBBAD" . ((number "80" 2243 . 2245)))
+          ("ELIBSCN" . ((number "81" 2306 . 2308)))
+          ("EPFNOSUPPORT" . ((number "96" 3167 . 3169)))
+          ("ECANCELED" . ((number "125" 4757 . 4760)))
+          ("ELOOP" . ((number "40" 365 . 367)))
+          ("EWOULDBLOCK" . ((symbol "EAGAIN" 430 . 436)))
+          ("EBADRQC" . ((number "56" 1122 . 1124)))
+          ("EDOTDOT" . ((number "73" 1867 . 1869)))
+          ("ELIBEXEC" . ((number "83" 2438 . 2440)))
+          ("ESTRPIPE" . ((number "86" 2619 . 2621)))
+          ("EUSERS" . ((number "87" 2663 . 2665)))
+          ("EPROTONOSUPPORT" . ((number "93" 2981 . 2983)))
+          ("ENETUNREACH" . ((number "101" 3454 . 3457)))
+          ("ECONNABORTED" . ((number "103" 3580 . 3583)))
+          ("EISCONN" . ((number "106" 3747 . 3750)))
+          ("ENOTCONN" . ((number "107" 3814 . 3817)))
+          ("ETOOMANYREFS" . ((number "109" 3955 . 3958)))
+          ("EKEYREJECTED" . ((number "129" 4957 . 4960)))
+          ("ENOANO" . ((number "55" 1087 . 1089)))
+          ("EMULTIHOP" . ((number "72" 1822 . 1824)))
+          ("ELIBMAX" . ((number "82" 2364 . 2366)))
+          ("EPROTOTYPE" . ((number "91" 2865 . 2867)))
+          ("ENOTNAM" . ((number "118" 4418 . 4421)))
+          ("EISNAM" . ((number "120" 4529 . 4532)))
+          ("ERFKILL" . ((number "132" 5135 . 5138)))
+          )
+
+    )
+   (semanticdb-table "types.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_GENERIC_TYPES_H" variable (:constant-flag t) nil [38 58])
+            ("asm-generic/int-ll64.h" include (:system-flag t) nil [152 185])
+            ("umode_t" type
+               (:typedef ("unsigned short")
+                :superclasses "unsigned short"
+                :type "typedef")
+                nil [209 240]))          
+    :file "types.h"
+    :pointmax 303
+    :fsize 302
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("_ASM_GENERIC_TYPES_H")
+          )
+
+    )
+   (semanticdb-table "ioctl.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_GENERIC_IOCTL_H" variable (:constant-flag t) nil [38 58])
+            ("_IOC_NRBITS" variable (:constant-flag t) nil [920 931])
+            ("_IOC_TYPEBITS" variable (:constant-flag t) nil [942 955])
+            ("_IOC_SIZEBITS" variable (:constant-flag t) nil [1086 1099])
+            ("_IOC_DIRBITS" variable (:constant-flag t) nil [1141 1153])
+            ("_IOC_NRMASK" variable (:constant-flag t) nil [1172 1183])
+            ("_IOC_TYPEMASK" variable (:constant-flag t) nil [1215 1228])
+            ("_IOC_SIZEMASK" variable (:constant-flag t) nil [1262 1275])
+            ("_IOC_DIRMASK" variable (:constant-flag t) nil [1309 1321])
+            ("_IOC_NRSHIFT" variable (:constant-flag t) nil [1355 1367])
+            ("_IOC_TYPESHIFT" variable (:constant-flag t) nil [1378 1392])
+            ("_IOC_SIZESHIFT" variable (:constant-flag t) nil [1428 1442])
+            ("_IOC_DIRSHIFT" variable (:constant-flag t) nil [1482 1495])
+            ("_IOC_NONE" variable (:constant-flag t) nil [1659 1668])
+            ("_IOC_WRITE" variable (:constant-flag t) nil [1708 1718])
+            ("_IOC_READ" variable (:constant-flag t) nil [1757 1766])
+            ("_IOC" variable (:constant-flag t) nil [1786 1790])
+            ("_IOC_TYPECHECK" variable (:constant-flag t) nil [2236 2250])
+            ("_IO" variable (:constant-flag t) nil [2311 2314])
+            ("_IOR" variable (:constant-flag t) nil [2363 2367])
+            ("_IOW" variable (:constant-flag t) nil [2441 2445])
+            ("_IOWR" variable (:constant-flag t) nil [2520 2525])
+            ("_IOR_BAD" variable (:constant-flag t) nil [2610 2618])
+            ("_IOW_BAD" variable (:constant-flag t) nil [2682 2690])
+            ("_IOWR_BAD" variable (:constant-flag t) nil [2755 2764])
+            ("_IOC_DIR" variable (:constant-flag t) nil [2877 2885])
+            ("_IOC_TYPE" variable (:constant-flag t) nil [2940 2949])
+            ("_IOC_NR" variable (:constant-flag t) nil [3006 3013])
+            ("_IOC_SIZE" variable (:constant-flag t) nil [3066 3075])
+            ("IOC_IN" variable (:constant-flag t) nil [3178 3184])
+            ("IOC_OUT" variable (:constant-flag t) nil [3224 3231])
+            ("IOC_INOUT" variable (:constant-flag t) nil [3270 3279])
+            ("IOCSIZE_MASK" variable (:constant-flag t) nil [3330 3342])
+            ("IOCSIZE_SHIFT" variable (:constant-flag t) nil [3385 3398]))          
+    :file "ioctl.h"
+    :pointmax 3451
+    :fsize 3450
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("_IOC_NONE" . ((symbol "0U" 1669 . 1671)))
+          ("_IOC_SIZE" (spp-arg-list ("nr") 3075 . 3079) . ((semantic-list "(((nr) >> _IOC_SIZESHIFT) & _IOC_SIZEMASK)" 3081 . 3123)))
+          ("_IOC_DIRBITS" . ((number "2" 1154 . 1155)))
+          ("_IOWR_BAD" (spp-arg-list ("type" "nr" "size") 2764 . 2778) . ((symbol "_IOC" 2779 . 2783) (semantic-list "(_IOC_READ|_IOC_WRITE,(type),(nr),sizeof(size))" 2783 . 2830)))
+          ("_IOC" (spp-arg-list ("dir" "type" "nr" "size") 1790 . 1808) . ((semantic-list "(((dir)  << _IOC_DIRSHIFT) | \\
+	 ((type) << _IOC_TYPESHIFT) | \\
+	 ((nr)   << _IOC_NRSHIFT) | \\
+	 ((size) << _IOC_SIZESHIFT))" 1812 . 1936)))
+          ("_IOC_DIR" (spp-arg-list ("nr") 2885 . 2889) . ((semantic-list "(((nr) >> _IOC_DIRSHIFT) & _IOC_DIRMASK)" 2891 . 2931)))
+          ("_IOC_NRBITS" . ((number "8" 932 . 933)))
+          ("_IOC_READ" . ((symbol "2U" 1767 . 1769)))
+          ("_IOC_NR" (spp-arg-list ("nr") 3013 . 3017) . ((semantic-list "(((nr) >> _IOC_NRSHIFT) & _IOC_NRMASK)" 3019 . 3057)))
+          ("IOC_INOUT" . ((semantic-list "((_IOC_WRITE|_IOC_READ) << _IOC_DIRSHIFT)" 3280 . 3321)))
+          ("_IOC_SIZEBITS" . ((number "14" 1100 . 1102)))
+          ("_IOC_TYPEMASK" . ((semantic-list "((1 << _IOC_TYPEBITS)-1)" 1229 . 1253)))
+          ("_IOR" (spp-arg-list ("type" "nr" "size") 2367 . 2381) . ((symbol "_IOC" 2382 . 2386) (semantic-list "(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(size)))" 2386 . 2432)))
+          ("_IOR_BAD" (spp-arg-list ("type" "nr" "size") 2618 . 2632) . ((symbol "_IOC" 2633 . 2637) (semantic-list "(_IOC_READ,(type),(nr),sizeof(size))" 2637 . 2673)))
+          ("IOCSIZE_SHIFT" . ((semantic-list "(_IOC_SIZESHIFT)" 3399 . 3415)))
+          ("_IOC_TYPESHIFT" . ((semantic-list "(_IOC_NRSHIFT+_IOC_NRBITS)" 1393 . 1419)))
+          ("_IOC_DIRMASK" . ((semantic-list "((1 << _IOC_DIRBITS)-1)" 1322 . 1345)))
+          ("_IOW_BAD" (spp-arg-list ("type" "nr" "size") 2690 . 2704) . ((symbol "_IOC" 2705 . 2709) (semantic-list "(_IOC_WRITE,(type),(nr),sizeof(size))" 2709 . 2746)))
+          ("IOC_IN" . ((semantic-list "(_IOC_WRITE << _IOC_DIRSHIFT)" 3186 . 3215)))
+          ("_IOC_NRSHIFT" . ((number "0" 1368 . 1369)))
+          ("_IOC_WRITE" . ((symbol "1U" 1719 . 1721)))
+          ("_IOC_TYPECHECK" (spp-arg-list ("t") 2250 . 2253) . ((semantic-list "(sizeof(t))" 2254 . 2265)))
+          ("_IOWR" (spp-arg-list ("type" "nr" "size") 2525 . 2539) . ((symbol "_IOC" 2540 . 2544) (semantic-list "(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(size)))" 2544 . 2601)))
+          ("_IO" (spp-arg-list ("type" "nr") 2314 . 2323) . ((symbol "_IOC" 2325 . 2329) (semantic-list "(_IOC_NONE,(type),(nr),0)" 2329 . 2354)))
+          ("IOCSIZE_MASK" . ((semantic-list "(_IOC_SIZEMASK << _IOC_SIZESHIFT)" 3343 . 3376)))
+          ("_ASM_GENERIC_IOCTL_H")
+          ("_IOC_NRMASK" . ((semantic-list "((1 << _IOC_NRBITS)-1)" 1184 . 1206)))
+          ("_IOW" (spp-arg-list ("type" "nr" "size") 2445 . 2459) . ((symbol "_IOC" 2460 . 2464) (semantic-list "(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(size)))" 2464 . 2511)))
+          ("_IOC_SIZEMASK" . ((semantic-list "((1 << _IOC_SIZEBITS)-1)" 1276 . 1300)))
+          ("_IOC_SIZESHIFT" . ((semantic-list "(_IOC_TYPESHIFT+_IOC_TYPEBITS)" 1443 . 1473)))
+          ("_IOC_TYPE" (spp-arg-list ("nr") 2949 . 2953) . ((semantic-list "(((nr) >> _IOC_TYPESHIFT) & _IOC_TYPEMASK)" 2955 . 2997)))
+          ("IOC_OUT" . ((semantic-list "(_IOC_READ << _IOC_DIRSHIFT)" 3233 . 3261)))
+          ("_IOC_TYPEBITS" . ((number "8" 956 . 957)))
+          ("_IOC_DIRSHIFT" . ((semantic-list "(_IOC_SIZESHIFT+_IOC_SIZEBITS)" 1496 . 1526)))
+          )
+
+    )
+   (semanticdb-table "errno-base.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_GENERIC_ERRNO_BASE_H" variable (:constant-flag t) nil [43 68])
+            ("EPERM" variable (:constant-flag t) nil [78 83])
+            ("ENOENT" variable (:constant-flag t) nil [126 132])
+            ("ESRCH" variable (:constant-flag t) nil [177 182])
+            ("EINTR" variable (:constant-flag t) nil [217 222])
+            ("EIO" variable (:constant-flag t) nil [265 268])
+            ("ENXIO" variable (:constant-flag t) nil [297 302])
+            ("E2BIG" variable (:constant-flag t) nil [347 352])
+            ("ENOEXEC" variable (:constant-flag t) nil [394 401])
+            ("EBADF" variable (:constant-flag t) nil [438 443])
+            ("ECHILD" variable (:constant-flag t) nil [478 484])
+            ("EAGAIN" variable (:constant-flag t) nil [522 528])
+            ("ENOMEM" variable (:constant-flag t) nil [557 563])
+            ("EACCES" variable (:constant-flag t) nil [596 602])
+            ("EFAULT" variable (:constant-flag t) nil [639 645])
+            ("ENOTBLK" variable (:constant-flag t) nil [676 683])
+            ("EBUSY" variable (:constant-flag t) nil [724 729])
+            ("EEXIST" variable (:constant-flag t) nil [772 778])
+            ("EXDEV" variable (:constant-flag t) nil [809 814])
+            ("ENODEV" variable (:constant-flag t) nil [851 857])
+            ("ENOTDIR" variable (:constant-flag t) nil [891 898])
+            ("EISDIR" variable (:constant-flag t) nil [933 939])
+            ("EINVAL" variable (:constant-flag t) nil [973 979])
+            ("ENFILE" variable (:constant-flag t) nil [1015 1021])
+            ("EMFILE" variable (:constant-flag t) nil [1060 1066])
+            ("ENOTTY" variable (:constant-flag t) nil [1105 1111])
+            ("ETXTBSY" variable (:constant-flag t) nil [1147 1154])
+            ("EFBIG" variable (:constant-flag t) nil [1188 1193])
+            ("ENOSPC" variable (:constant-flag t) nil [1227 1233])
+            ("ESPIPE" variable (:constant-flag t) nil [1276 1282])
+            ("EROFS" variable (:constant-flag t) nil [1314 1319])
+            ("EMLINK" variable (:constant-flag t) nil [1360 1366])
+            ("EPIPE" variable (:constant-flag t) nil [1400 1405])
+            ("EDOM" variable (:constant-flag t) nil [1436 1440])
+            ("ERANGE" variable (:constant-flag t) nil [1495 1501]))          
+    :file "errno-base.h"
+    :pointmax 1550
+    :fsize 1549
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("ENOMEM" . ((number "12" 565 . 567)))
+          ("ENOTBLK" . ((number "15" 685 . 687)))
+          ("EINVAL" . ((number "22" 981 . 983)))
+          ("ENOENT" . ((number "2" 135 . 136)))
+          ("ESRCH" . ((number "3" 185 . 186)))
+          ("EBADF" . ((number "9" 446 . 447)))
+          ("ECHILD" . ((number "10" 486 . 488)))
+          ("EAGAIN" . ((number "11" 530 . 532)))
+          ("EINTR" . ((number "4" 225 . 226)))
+          ("ENOTDIR" . ((number "20" 900 . 902)))
+          ("EISDIR" . ((number "21" 941 . 943)))
+          ("ENOTTY" . ((number "25" 1113 . 1115)))
+          ("EXDEV" . ((number "18" 816 . 818)))
+          ("EMFILE" . ((number "24" 1068 . 1070)))
+          ("EFBIG" . ((number "27" 1195 . 1197)))
+          ("ESPIPE" . ((number "29" 1284 . 1286)))
+          ("EPIPE" . ((number "32" 1407 . 1409)))
+          ("ERANGE" . ((number "34" 1503 . 1505)))
+          ("ENODEV" . ((number "19" 859 . 861)))
+          ("EROFS" . ((number "30" 1321 . 1323)))
+          ("ENFILE" . ((number "23" 1023 . 1025)))
+          ("EDOM" . ((number "33" 1442 . 1444)))
+          ("_ASM_GENERIC_ERRNO_BASE_H")
+          ("EACCES" . ((number "13" 604 . 606)))
+          ("EEXIST" . ((number "17" 780 . 782)))
+          ("EPERM" . ((number "1" 86 . 87)))
+          ("EIO" . ((number "5" 271 . 272)))
+          ("EMLINK" . ((number "31" 1368 . 1370)))
+          ("ENXIO" . ((number "6" 305 . 306)))
+          ("E2BIG" . ((number "7" 355 . 356)))
+          ("EFAULT" . ((number "14" 647 . 649)))
+          ("ENOEXEC" . ((number "8" 404 . 405)))
+          ("EBUSY" . ((number "16" 731 . 733)))
+          ("ETXTBSY" . ((number "26" 1156 . 1158)))
+          ("ENOSPC" . ((number "28" 1235 . 1237)))
+          )
+
+    )
+   (semanticdb-table "int-ll64.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_GENERIC_INT_LL64_H" variable (:constant-flag t) nil [163 186])
+            ("asm/bitsperlong.h" include (:system-flag t) nil [188 216])
+            ("__s8" variable (:type "char") nil [377 387])
+            ("__u8" type
+               (:typedef ("unsigned char")
+                :superclasses "unsigned char"
+                :type "typedef")
+                nil [388 415])
+            ("__s16" variable (:type "short") nil [436 448])
+            ("__u16" type
+               (:typedef ("unsigned short")
+                :superclasses "unsigned short"
+                :type "typedef")
+                nil [449 478])
+            ("__s32" variable (:type "int") nil [499 509])
+            ("__u32" type
+               (:typedef ("unsigned int")
+                :superclasses "unsigned int"
+                :type "typedef")
+                nil [510 537])
+            ("__s64" variable (:type "long long") nil [588 604])
+            ("__u64" type
+               (:typedef ("unsigned long long")
+                :superclasses "unsigned long long"
+                :type "typedef")
+                nil [619 652]))          
+    :file "int-ll64.h"
+    :pointmax 1474
+    :fsize 1473
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax '((symbol 605 . 618) (symbol 577 . 587) (TYPEDEF 569 . 576) (symbol 555 . 568) (symbol 488 . 498) (TYPEDEF 480 . 487) (symbol 425 . 435) (TYPEDEF 417 . 424) (symbol 366 . 376) (TYPEDEF 358 . 365))
+    :lexical-table 
+        '(("_ASM_GENERIC_INT_LL64_H")
+          )
+
+    )
+   (semanticdb-table "param.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("__ASM_GENERIC_PARAM_H" variable (:constant-flag t) nil [39 60])
+            ("HZ" variable (:constant-flag t) nil [291 293])
+            ("EXEC_PAGESIZE" variable (:constant-flag t) nil [336 349])
+            ("NOGROUP" variable (:constant-flag t) nil [387 394])
+            ("MAXHOSTNAMELEN" variable (:constant-flag t) nil [417 431]))          
+    :file "param.h"
+    :pointmax 500
+    :fsize 499
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("__ASM_GENERIC_PARAM_H")
+          ("HZ" . ((number "100" 294 . 297)))
+          ("EXEC_PAGESIZE" . ((number "4096" 350 . 354)))
+          ("NOGROUP" . ((semantic-list "(-1)" 396 . 400)))
+          ("MAXHOSTNAMELEN" . ((number "64" 432 . 434)))
+          )
+
+    )
+   (semanticdb-table "bitsperlong.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("__ASM_GENERIC_BITS_PER_LONG" variable (:constant-flag t) nil [45 72])
+            ("__BITS_PER_LONG" variable (:constant-flag t) nil [434 449]))          
+    :file "bitsperlong.h"
+    :pointmax 875
+    :fsize 874
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("__BITS_PER_LONG" . ((number "32" 450 . 452)))
+          ("__ASM_GENERIC_BITS_PER_LONG")
+          )
+
+    )
+   )
+  :file "!home!asido!linux-2012.01-vanilla!include!asm-generic!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

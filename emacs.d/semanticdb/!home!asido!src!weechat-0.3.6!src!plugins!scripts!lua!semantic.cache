@@ -1,0 +1,25 @@
+;; Object lua/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "lua/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(LUA_CFLAGS)")) nil [823 882])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [883 918])
+            ("lib_LTLIBRARIES" variable (:default-value ("lua.la")) nil [919 944])
+            ("lua_la_SOURCES" variable (:default-value ("weechat-lua.c" "weechat-lua.h" "weechat-lua-api.c" "weechat-lua-api.h")) nil [945 1083])
+            ("lua_la_LDFLAGS" variable (:default-value ("-module")) nil [1083 1108])
+            ("lua_la_LIBADD" variable (:default-value ("../lib_weechat_plugins_scripts.la" "$(LUA_LFLAGS)")) nil [1108 1173])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1174 1202]))          
+    :file "Makefile.am"
+    :pointmax 1202
+    :fsize 1201
+    :lastmodtime '(19743 15896)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!scripts!lua!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

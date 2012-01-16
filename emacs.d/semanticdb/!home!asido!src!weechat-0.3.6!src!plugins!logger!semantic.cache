@@ -1,0 +1,25 @@
+;; Object logger/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "logger/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(LOGGER_CFLAGS)")) nil [757 819])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [820 855])
+            ("lib_LTLIBRARIES" variable (:default-value ("logger.la")) nil [856 884])
+            ("logger_la_SOURCES" variable (:default-value ("logger.c" "logger.h" "logger-buffer.c" "logger-buffer.h" "logger-config.c" "logger-config.h" "logger-info.c" "logger-info.h" "logger-tail.c" "logger-tail.h")) nil [885 1241])
+            ("logger_la_LDFLAGS" variable (:default-value ("-module")) nil [1241 1269])
+            ("logger_la_LIBADD" variable (:default-value ("$(LOGGER_LFLAGS)")) nil [1269 1306])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1307 1335]))          
+    :file "Makefile.am"
+    :pointmax 1335
+    :fsize 1334
+    :lastmodtime '(19743 13103)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!logger!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

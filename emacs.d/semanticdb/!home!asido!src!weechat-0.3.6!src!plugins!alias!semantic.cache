@@ -1,0 +1,25 @@
+;; Object alias/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "alias/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(ALIAS_CFLAGS)")) nil [757 818])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [819 854])
+            ("lib_LTLIBRARIES" variable (:default-value ("alias.la")) nil [855 882])
+            ("alias_la_SOURCES" variable (:default-value ("alias.c" "alias.h" "alias-config.c" "alias-config.h" "alias-info.c" "alias-info.h")) nil [883 1079])
+            ("alias_la_LDFLAGS" variable (:default-value ("-module")) nil [1079 1106])
+            ("alias_la_LIBADD" variable (:default-value ("$(ALIAS_LFLAGS)")) nil [1106 1141])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1142 1170]))          
+    :file "Makefile.am"
+    :pointmax 1170
+    :fsize 1169
+    :lastmodtime '(19743 12839)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!alias!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

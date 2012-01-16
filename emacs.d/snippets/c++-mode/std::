@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: std::
+# key: st
+# contributor: Andrea crotti
+# --
+std::$0

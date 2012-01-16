@@ -1,0 +1,37 @@
+;; Object bashets/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "bashets/"
+  :tables (list 
+   (semanticdb-table "date.sh"
+    :major-mode 'python-mode
+    :tags 
+        '( ("pycurl" include nil nil [180 193])
+            ("lxml" include nil nil [194 216])
+            ("Test" type
+               (:members 
+                  ( ("__init__" function (:arguments 
+                      ( ("self" variable nil (reparse-symbol function_parameters) [244 248]))                      ) (reparse-symbol indented_block_body) [231 272])
+                    ("body_callback" function (:arguments 
+                      ( ("self" variable nil (reparse-symbol function_parameters) [293 297])
+                        ("buf" variable nil (reparse-symbol function_parameters) [299 302]))                      ) (reparse-symbol indented_block_body) [275 343]))                  
+                :type "class")
+                nil [218 343])
+            ("t" variable nil nil [344 354])
+            ("c" variable nil nil [355 372])
+            ("c" code nil nil [373 463])
+            ("c" code nil nil [464 506])
+            ("c" code nil nil [507 518])
+            ("c" code nil nil [519 528])
+            ("print" code nil nil [530 547])
+            ("xml" variable nil nil [547 547]))          
+    :file "date.sh"
+    :pointmax 643
+    :fsize 609
+    :lastmodtime '(20243 23029)
+    :unmatched-syntax '(($EOI 643 . 643) (NAME 548 . 551) ($EOI 630 . 630))
+    )
+   )
+  :file "!usr!share!awesome!bashets!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

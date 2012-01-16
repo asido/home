@@ -1,0 +1,19 @@
+;; Object lmlu/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "lmlu/"
+  :tables (list 
+   (semanticdb-table "adv.html"
+    :major-mode 'html-mode
+    :tags 
+        '( ("" section nil nil [8 121]))          
+    :file "adv.html"
+    :pointmax 121
+    :fsize 120
+    :lastmodtime '(20235 23854)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!webs!lmlu!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

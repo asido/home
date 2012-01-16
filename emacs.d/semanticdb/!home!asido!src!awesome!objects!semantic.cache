@@ -1,0 +1,1070 @@
+;; Object objects/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "objects/"
+  :tables (list 
+   (semanticdb-table "client.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("AWESOME_OBJECTS_CLIENT_H" variable (:constant-flag t) nil [875 899])
+            ("mouse.h" include nil nil [901 919])
+            ("stack.h" include nil nil [920 938])
+            ("draw.h" include nil nil [939 956])
+            ("banning.h" include nil nil [957 977])
+            ("objects/window.h" include nil nil [978 1005])
+            ("common/luaobject.h" include nil nil [1006 1035])
+            ("CLIENT_SELECT_INPUT_EVENT_MASK" variable (:constant-flag t) nil [1045 1075])
+            ("FRAME_SELECT_INPUT_EVENT_MASK" variable (:constant-flag t) nil [1266 1295])
+            ("client_t" type
+               (:members 
+                  ( ("screen" variable
+                       (:pointer 1
+                        :type ("screen_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [1654 1671])
+                    ("alt_icon_name" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol classsubparts) [1699 1749])
+                    ("icon_name" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol classsubparts) [1699 1749])
+                    ("alt_name" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol classsubparts) [1699 1749])
+                    ("name" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol classsubparts) [1699 1749])
+                    ("instance" variable
+                       (:pointer 1
+                        :type "int")
+                        (reparse-symbol classsubparts) [1793 1803])
+                    ("geometry" variable (:type ("area_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1835 1851])
+                    ("sticky" variable (:type "bool") (reparse-symbol classsubparts) [1896 1908])
+                    ("urgent" variable (:type "bool") (reparse-symbol classsubparts) [1941 1953])
+                    ("hidden" variable (:type "bool") (reparse-symbol classsubparts) [1998 2010])
+                    ("minimized" variable (:type "bool") (reparse-symbol classsubparts) [2058 2073])
+                    ("fullscreen" variable (:type "bool") (reparse-symbol classsubparts) [2122 2138])
+                    ("maximized_horizontal" variable (:type "bool") (reparse-symbol classsubparts) [2199 2225])
+                    ("maximized_vertical" variable (:type "bool") (reparse-symbol classsubparts) [2284 2308])
+                    ("above" variable (:type "bool") (reparse-symbol classsubparts) [2359 2370])
+                    ("below" variable (:type "bool") (reparse-symbol classsubparts) [2421 2432])
+                    ("modal" variable (:type "bool") (reparse-symbol classsubparts) [2476 2487])
+                    ("ontop" variable (:type "bool") (reparse-symbol classsubparts) [2532 2543])
+                    ("isbanned" variable (:type "bool") (reparse-symbol classsubparts) [2712 2726])
+                    ("skip_taskbar" variable (:type "bool") (reparse-symbol classsubparts) [2803 2821])
+                    ("nofocus" variable (:type "bool") (reparse-symbol classsubparts) [2874 2887])
+                    ("group_window" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2930 2956])
+                    ("leader_window" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [3043 3070])
+                    ("protocols" variable (:type ("xcb_icccm_get_wm_protocols_reply_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [3117 3162])
+                    ("keys" variable (:type ("key_array_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [3191 3208])
+                    ("icon" variable
+                       (:pointer 1
+                        :type ("cairo_surface_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [3229 3251])
+                    ("size_hints" variable (:type ("xcb_size_hints_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [3278 3306])
+                    ("size_hints_honor" variable (:type "bool") (reparse-symbol classsubparts) [3311 3333])
+                    ("machine" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol classsubparts) [3383 3397])
+                    ("role" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol classsubparts) [3432 3443])
+                    ("pid" variable (:type ("uint32_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [3470 3483])
+                    ("transient_for" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [3526 3550]))                  
+                :type "struct")
+                nil [1574 3553])
+            ("client_class" variable (:type ("lua_class_t" type (:type "class") nil nil)) nil [3620 3645])
+            ("client_maybevisible" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3722 3733]))                  
+                :type "bool")
+                nil [3697 3734])
+            ("client_getbywin" function
+               (:prototype-flag t
+                :pointer 1
+                :arguments 
+                  ( ("" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3762 3775]))                  
+                :type ("client_t" type (:type "class") nil nil))
+                nil [3735 3776])
+            ("client_getbyframewin" function
+               (:prototype-flag t
+                :pointer 1
+                :arguments 
+                  ( ("" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3809 3822]))                  
+                :type ("client_t" type (:type "class") nil nil))
+                nil [3777 3823])
+            ("client_ban" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3841 3852]))                  
+                :type "void")
+                nil [3825 3853])
+            ("client_ban_unfocus" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3878 3889]))                  
+                :type "void")
+                nil [3854 3890])
+            ("client_unban" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3909 3920]))                  
+                :type "void")
+                nil [3891 3921])
+            ("client_manage" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3941 3954])
+                    ("" variable
+                       (:pointer 1
+                        :type ("xcb_get_geometry_reply_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [3955 3982])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [3983 3988]))                  
+                :type "void")
+                nil [3922 3989])
+            ("client_resize" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4009 4020])
+                    ("" variable (:type ("area_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4021 4028]))                  
+                :type "bool")
+                nil [3990 4029])
+            ("client_unmanage" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4051 4062])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4063 4068]))                  
+                :type "void")
+                nil [4030 4069])
+            ("client_kill" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4087 4098]))                  
+                :type "void")
+                nil [4070 4099])
+            ("client_set_sticky" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4123 4135])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4136 4140])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4141 4146]))                  
+                :type "void")
+                nil [4100 4147])
+            ("client_set_above" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4170 4182])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4183 4187])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4188 4193]))                  
+                :type "void")
+                nil [4148 4194])
+            ("client_set_below" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4217 4229])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4230 4234])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4235 4240]))                  
+                :type "void")
+                nil [4195 4241])
+            ("client_set_modal" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4264 4276])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4277 4281])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4282 4287]))                  
+                :type "void")
+                nil [4242 4288])
+            ("client_set_ontop" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4311 4323])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4324 4328])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4329 4334]))                  
+                :type "void")
+                nil [4289 4335])
+            ("client_set_fullscreen" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4363 4375])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4376 4380])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4381 4386]))                  
+                :type "void")
+                nil [4336 4387])
+            ("client_set_maximized_horizontal" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4425 4437])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4438 4442])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4443 4448]))                  
+                :type "void")
+                nil [4388 4449])
+            ("client_set_maximized_vertical" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4485 4497])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4498 4502])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4503 4508]))                  
+                :type "void")
+                nil [4450 4509])
+            ("client_set_minimized" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4536 4548])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4549 4553])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4554 4559]))                  
+                :type "void")
+                nil [4510 4560])
+            ("client_set_urgent" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4584 4596])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4597 4601])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [4602 4607]))                  
+                :type "void")
+                nil [4561 4608])
+            ("client_set_pid" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4629 4641])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4642 4646])
+                    ("" variable (:type ("uint32_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4647 4656]))                  
+                :type "void")
+                nil [4609 4657])
+            ("client_set_role" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4679 4691])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4692 4696])
+                    ("" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [4697 4704]))                  
+                :type "void")
+                nil [4658 4705])
+            ("client_set_machine" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4730 4742])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4743 4747])
+                    ("" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [4748 4755]))                  
+                :type "void")
+                nil [4706 4756])
+            ("client_set_icon_name" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4783 4795])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4796 4800])
+                    ("" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [4801 4808]))                  
+                :type "void")
+                nil [4757 4809])
+            ("client_set_alt_icon_name" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4840 4852])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4853 4857])
+                    ("" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [4858 4865]))                  
+                :type "void")
+                nil [4810 4866])
+            ("client_set_class_instance" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4898 4910])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4911 4915])
+                    ("" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [4916 4929])
+                    ("" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [4930 4943]))                  
+                :type "void")
+                nil [4867 4944])
+            ("client_set_type" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("L" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [4966 4979])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [4980 4984])
+                    ("" variable (:type ("window_type_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4985 4999]))                  
+                :type "void")
+                nil [4945 5000])
+            ("client_set_transient_for" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("L" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5031 5044])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [5045 5049])
+                    ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5050 5061]))                  
+                :type "void")
+                nil [5001 5062])
+            ("client_set_name" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("L" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5084 5097])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [5098 5102])
+                    ("" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [5103 5110]))                  
+                :type "void")
+                nil [5063 5111])
+            ("client_set_alt_name" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("L" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5137 5150])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [5151 5155])
+                    ("" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [5156 5163]))                  
+                :type "void")
+                nil [5112 5164])
+            ("client_set_group_window" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5194 5206])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [5207 5211])
+                    ("" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5212 5225]))                  
+                :type "void")
+                nil [5165 5226])
+            ("client_set_icon" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5248 5260])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [5261 5265])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [5266 5270]))                  
+                :type "void")
+                nil [5227 5271])
+            ("client_set_skip_taskbar" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5301 5313])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [5314 5318])
+                    ("" variable (:type "bool") (reparse-symbol arg-sub-list) [5319 5324]))                  
+                :type "void")
+                nil [5272 5325])
+            ("client_focus" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5344 5355]))                  
+                :type "void")
+                nil [5326 5356])
+            ("client_focus_update" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5382 5393]))                  
+                :type "void")
+                nil [5357 5394])
+            ("client_focus_refresh" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [5421 5426]))                  
+                :type "void")
+                nil [5395 5427])
+            ("client_hasproto" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5449 5460])
+                    ("" variable (:type ("xcb_atom_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5461 5472]))                  
+                :type "bool")
+                nil [5428 5473])
+            ("client_ignore_enterleave_events" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [5511 5516]))                  
+                :type "void")
+                nil [5474 5517])
+            ("client_restore_enterleave_events" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [5556 5561]))                  
+                :type "void")
+                nil [5518 5562])
+            ("client_class_setup" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5587 5599]))                  
+                :type "void")
+                nil [5563 5600])
+            ("client_raise" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("c" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [5707 5719]))                  
+                :type "void")
+                nil [5675 6331])
+            ("client_isfixed" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("c" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [6496 6508]))                  
+                :type "bool")
+                nil [6462 6895])
+            ("client_isvisible" function
+               (:typemodifiers ("static" "inline")
+                :arguments 
+                  ( ("c" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [7217 7229]))                  
+                :type "bool")
+                nil [7181 7301]))          
+    :file "client.h"
+    :pointmax 7389
+    :fsize 7391
+    :lastmodtime '(20222 45935)
+    :unmatched-syntax '((semantic-list 3663 . 3695) (symbol 3647 . 3663) (semantic-list 3566 . 3598) (symbol 3555 . 3566) (punctuation 1791 . 1792) (CLASS 1786 . 1791) (punctuation 1785 . 1786) (CHAR 1780 . 1784) (symbol 1596 . 1616))
+    :lexical-table 
+        '(("FRAME_SELECT_INPUT_EVENT_MASK" . ((semantic-list "(XCB_EVENT_MASK_STRUCTURE_NOTIFY \\
+                                       | XCB_EVENT_MASK_ENTER_WINDOW \\
+                                       | XCB_EVENT_MASK_LEAVE_WINDOW \\
+                                       | XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT)" 1296 . 1551)))
+          ("CLIENT_SELECT_INPUT_EVENT_MASK" . ((semantic-list "(XCB_EVENT_MASK_STRUCTURE_NOTIFY \\
+                                        | XCB_EVENT_MASK_PROPERTY_CHANGE \\
+                                        | XCB_EVENT_MASK_FOCUS_CHANGE)" 1076 . 1256)))
+          ("AWESOME_OBJECTS_CLIENT_H")
+          )
+
+    )
+   (semanticdb-table "window.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("AWESOME_OBJECTS_WINDOW_H" variable (:constant-flag t) nil [866 890])
+            ("strut.h" include nil nil [892 910])
+            ("objects/button.h" include nil nil [911 938])
+            ("common/luaclass.h" include nil nil [939 967])
+            ("window_type_t" type
+               (:typedef ("" type
+                     (:members 
+                        ( ("WINDOW_TYPE_NORMAL" variable
+                             (:constant-flag t
+                              :default-value (1029 1030)
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1008 1030])
+                          ("WINDOW_TYPE_DESKTOP" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1036 1056])
+                          ("WINDOW_TYPE_DOCK" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1061 1078])
+                          ("WINDOW_TYPE_SPLASH" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1083 1102])
+                          ("WINDOW_TYPE_DIALOG" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1107 1126])
+                          ("WINDOW_TYPE_MENU" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1263 1280])
+                          ("WINDOW_TYPE_TOOLBAR" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1285 1305])
+                          ("WINDOW_TYPE_UTILITY" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1310 1330])
+                          ("WINDOW_TYPE_DROPDOWN_MENU" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1401 1427])
+                          ("WINDOW_TYPE_POPUP_MENU" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1432 1455])
+                          ("WINDOW_TYPE_TOOLTIP" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1460 1480])
+                          ("WINDOW_TYPE_NOTIFICATION" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1485 1510])
+                          ("WINDOW_TYPE_COMBO" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1515 1533])
+                          ("WINDOW_TYPE_DND" variable
+                             (:constant-flag t
+                              :type "int")
+                              (reparse-symbol enumsubparts) [1538 1555]))                        
+                      :type "enum")
+                      nil nil)
+                :type "typedef")
+                nil [989 1570])
+            ("WINDOW_OBJECT_HEADER" variable (:constant-flag t) nil [1580 1600])
+            ("window_t" type
+               (:typedef ("" type
+                     (:members 
+                        ( ("window" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2119 2139])
+                          ("frame_window" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2119 2139])
+                          ("opacity" variable (:type "double") (reparse-symbol classsubparts) [2119 2139])
+                          ("strut" variable (:type ("strut_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2119 2139])
+                          ("buttons" variable (:type ("button_array_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2119 2139])
+                          ("border_color" variable (:type ("color_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2119 2139])
+                          ("border_width" variable (:type ("uint16_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2119 2139])
+                          ("type" variable (:type ("window_type_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [2119 2139]))                        
+                      :type "struct")
+                      nil nil)
+                :type "typedef")
+                nil [2098 2151])
+            ("window_class" variable (:type ("lua_class_t" type (:type "class") nil nil)) nil [2153 2178])
+            ("window_class_setup" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2204 2216]))                  
+                :type "void")
+                nil [2180 2217])
+            ("window_set_opacity" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2243 2255])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [2256 2260])
+                    ("" variable (:type "double") (reparse-symbol arg-sub-list) [2261 2268]))                  
+                :type "void")
+                nil [2219 2269])
+            ("window_set_border_width" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2299 2311])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [2312 2316])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [2317 2321]))                  
+                :type "void")
+                nil [2270 2322])
+            ("luaA_window_get_type" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2348 2360])
+                    ("" variable
+                       (:pointer 1
+                        :type ("window_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2361 2372]))                  
+                :type "int")
+                nil [2323 2373])
+            ("luaA_window_set_type" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2399 2411])
+                    ("" variable
+                       (:pointer 1
+                        :type ("window_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [2412 2423]))                  
+                :type "int")
+                nil [2374 2424])
+            ("window_translate_type" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("type" variable (:type ("window_type_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2456 2475]))                  
+                :type ("uint32_t" type (:type "class") nil nil))
+                nil [2425 2476]))          
+    :file "window.h"
+    :pointmax 2564
+    :fsize 2564
+    :lastmodtime '(20222 45935)
+    :unmatched-syntax '((symbol "LUA_OBJECT_HEADER" 2119 . 2139))
+    :lexical-table 
+        '(("WINDOW_OBJECT_HEADER" . 
+              ((symbol "LUA_OBJECT_HEADER" 1607 . 1624) (symbol "xcb_window_t" 1664 . 1676) (symbol "window" 1677 . 1683) (punctuation ";" 1683 . 1684) (symbol "xcb_window_t" 1740 . 1752) (symbol "frame_window" 1753 . 1765) (punctuation ";" 1765 . 1766) (DOUBLE "double" 1794 . 1800) (symbol "opacity" 1801 . 1808) (punctuation ";" 1808 . 1809) (symbol "strut_t" 1835 . 1842) (symbol "strut" 1843 . 1848) (punctuation ";" 1848 . 1849) (symbol "button_array_t" 1885 . 1899) (symbol "buttons" 1900 . 1907) (punctuation ";" 1907 . 1908) (symbol "color_t" 1941 . 1948) (symbol "border_color" 1949 . 1961) (punctuation ";" 1961 . 1962) (symbol "uint16_t" 1995 . 2003) (symbol "border_width" 2004 . 2016) (punctuation ";" 2016 . 2017) (symbol "window_type_t" 2053 . 2066) (symbol "type" 2067 . 2071) (punctuation ";" 2071 . 2072)))
+          ("AWESOME_OBJECTS_WINDOW_H")
+          )
+
+    )
+   (semanticdb-table "key.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("AWESOME_OBJECTS_KEY_H" variable (:constant-flag t) nil [858 879])
+            ("common/luaobject.h" include nil nil [881 910])
+            ("keyb_t" type
+               (:typedef ("keyb_t" type (:type "struct") nil nil)
+                :superclasses "keyb_t"
+                :type "typedef")
+                nil [912 1104])
+            ("keyb_t" type
+               (:members 
+                  ( ("modifiers" variable (:type ("uint16_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [986 1005])
+                    ("keysym" variable (:type ("xcb_keysym_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1028 1048])
+                    ("keycode" variable (:type ("xcb_keycode_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1072 1094]))                  
+                :type "struct")
+                nil [912 1104])
+            ("key_class" variable (:type ("lua_class_t" type (:type "class") nil nil)) nil [1106 1128])
+            ("key_class_setup" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1228 1240]))                  
+                :type "void")
+                nil [1207 1241])
+            ("luaA_key_array_set" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1267 1279])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [1280 1284])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [1285 1289])
+                    ("" variable
+                       (:pointer 1
+                        :type ("key_array_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1290 1304]))                  
+                :type "void")
+                nil [1243 1305])
+            ("luaA_key_array_get" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1329 1341])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [1342 1346])
+                    ("" variable
+                       (:pointer 1
+                        :type ("key_array_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1347 1361]))                  
+                :type "int")
+                nil [1306 1362])
+            ("luaA_pushmodifiers" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1387 1399])
+                    ("" variable (:type ("uint16_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1400 1409]))                  
+                :type "int")
+                nil [1364 1410])
+            ("luaA_tomodifiers" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("L" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1437 1450])
+                    ("ud" variable (:type "int") (reparse-symbol arg-sub-list) [1451 1458]))                  
+                :type ("uint16_t" type (:type "class") nil nil))
+                nil [1411 1459]))          
+    :file "key.h"
+    :pointmax 1548
+    :fsize 1548
+    :lastmodtime '(20222 45935)
+    :unmatched-syntax '((semantic-list 1178 . 1205) (symbol 1170 . 1178) (semantic-list 1145 . 1169) (symbol 1129 . 1145) (symbol 940 . 957))
+    :lexical-table 
+        '(("AWESOME_OBJECTS_KEY_H")
+          )
+
+    )
+   (semanticdb-table "button.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("AWESOME_OBJECTS_BUTTON_H" variable (:constant-flag t) nil [864 888])
+            ("globalconf.h" include nil nil [890 913])
+            ("button_t" type
+               (:members 
+                  ( ("modifiers" variable (:type ("uint16_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1014 1033])
+                    ("button" variable (:type ("xcb_button_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1069 1089]))                  
+                :type "struct")
+                nil [945 1092])
+            ("button_class" variable (:type ("lua_class_t" type (:type "class") nil nil)) nil [1094 1119])
+            ("luaA_button_array_get" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1240 1252])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [1253 1257])
+                    ("" variable
+                       (:pointer 1
+                        :type ("button_array_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1258 1275]))                  
+                :type "int")
+                nil [1214 1276])
+            ("luaA_button_array_set" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1304 1316])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [1317 1321])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [1322 1326])
+                    ("" variable
+                       (:pointer 1
+                        :type ("button_array_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1327 1344]))                  
+                :type "void")
+                nil [1277 1345])
+            ("button_class_setup" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1370 1382]))                  
+                :type "void")
+                nil [1346 1383]))          
+    :file "button.h"
+    :pointmax 1472
+    :fsize 1472
+    :lastmodtime '(20222 45935)
+    :unmatched-syntax '((semantic-list 1180 . 1212) (symbol 1169 . 1180) (semantic-list 1136 . 1168) (symbol 1120 . 1136) (symbol 967 . 984))
+    :lexical-table 
+        '(("AWESOME_OBJECTS_BUTTON_H")
+          )
+
+    )
+   (semanticdb-table "tag.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("AWESOME_OBJECTS_TAG_H" variable (:constant-flag t) nil [866 887])
+            ("client.h" include nil nil [889 908])
+            ("tags_get_first_selected_index" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("screen_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [944 955]))                  
+                :type "int")
+                nil [910 956])
+            ("tag_client" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [973 984]))                  
+                :type "void")
+                nil [957 985])
+            ("untag_client" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1004 1015])
+                    ("" variable
+                       (:pointer 1
+                        :type ("tag_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1016 1024]))                  
+                :type "void")
+                nil [986 1025])
+            ("is_client_tagged" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("client_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1048 1059])
+                    ("" variable
+                       (:pointer 1
+                        :type ("tag_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1060 1068]))                  
+                :type "bool")
+                nil [1026 1069])
+            ("tag_view_only_byindex" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("screen_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1097 1108])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [1109 1113]))                  
+                :type "void")
+                nil [1070 1114])
+            ("tag_append_to_screen" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1141 1153])
+                    ("" variable (:type "int") (reparse-symbol arg-sub-list) [1154 1158])
+                    ("" variable
+                       (:pointer 1
+                        :type ("screen_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1159 1170]))                  
+                :type "void")
+                nil [1115 1171])
+            ("tag_remove_from_screen" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("tag_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1200 1208]))                  
+                :type "void")
+                nil [1172 1209])
+            ("tag_unref_simplified" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 2
+                        :type ("tag_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1236 1245]))                  
+                :type "void")
+                nil [1210 1246])
+            ("tag_class_setup" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1318 1330]))                  
+                :type "void")
+                nil [1297 1331])
+            ("tag_get_selected" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("tag_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1355 1363]))                  
+                :type "bool")
+                nil [1333 1364])
+            ("tag_get_name" function
+               (:prototype-flag t
+                :pointer 1
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("tag_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1384 1392]))                  
+                :type "char")
+                nil [1365 1393]))          
+    :file "tag.h"
+    :pointmax 1481
+    :fsize 1481
+    :lastmodtime '(20222 45935)
+    :unmatched-syntax '((semantic-list 1259 . 1295) (symbol 1248 . 1259))
+    :lexical-table 
+        '(("AWESOME_OBJECTS_TAG_H")
+          )
+
+    )
+   (semanticdb-table "drawin.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("AWESOME_OBJECTS_DRAWIN_H" variable (:constant-flag t) nil [931 955])
+            ("objects/window.h" include nil nil [957 984])
+            ("common/luaobject.h" include nil nil [985 1014])
+            ("draw.h" include nil nil [1015 1032])
+            ("drawin_t" type
+               (:members 
+                  ( ("ontop" variable (:type "bool") (reparse-symbol classsubparts) [1117 1128])
+                    ("visible" variable (:type "bool") (reparse-symbol classsubparts) [1152 1165])
+                    ("cursor" variable
+                       (:pointer 1
+                        :type "char")
+                        (reparse-symbol classsubparts) [1188 1201])
+                    ("pixmap" variable (:type ("xcb_pixmap_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1257 1277])
+                    ("surface" variable
+                       (:pointer 1
+                        :type ("cairo_surface_t" type (:type "class") nil nil))
+                        (reparse-symbol classsubparts) [1328 1353])
+                    ("geometry" variable (:type ("area_t" type (:type "class") nil nil)) (reparse-symbol classsubparts) [1390 1406]))                  
+                :type "struct")
+                nil [1053 1409])
+            ("drawin_unref_simplified" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 2
+                        :type ("drawin_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1440 1452]))                  
+                :type "void")
+                nil [1411 1453])
+            ("drawin_getbywin" function
+               (:prototype-flag t
+                :pointer 1
+                :arguments 
+                  ( ("" variable (:type ("xcb_window_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1540 1553]))                  
+                :type ("drawin_t" type (:type "class") nil nil))
+                nil [1513 1554])
+            ("drawin_refresh_pixmap_partial" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("drawin_t" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1591 1602])
+                    ("" variable (:type ("int16_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1603 1611])
+                    ("" variable (:type ("int16_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1612 1620])
+                    ("" variable (:type ("uint16_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1621 1630])
+                    ("" variable (:type ("uint16_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1631 1640]))                  
+                :type "void")
+                nil [1556 1641])
+            ("drawin_class_setup" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable
+                       (:pointer 1
+                        :type ("lua_State" type (:type "class") nil nil))
+                        (reparse-symbol arg-sub-list) [1667 1679]))                  
+                :type "void")
+                nil [1643 1680])
+            ("drawin_class" variable (:type ("lua_class_t" type (:type "class") nil nil)) nil [1682 1707]))          
+    :file "drawin.h"
+    :pointmax 1795
+    :fsize 1796
+    :lastmodtime '(20222 45935)
+    :unmatched-syntax '((semantic-list 1466 . 1511) (symbol 1455 . 1466) (symbol 1075 . 1095))
+    :lexical-table 
+        '(("AWESOME_OBJECTS_DRAWIN_H")
+          )
+
+    )
+   )
+  :file "!home!asido!src!awesome!objects!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: std
+# key: std
+# contributor: Andrea crotti
+# --
+using namespace std;

@@ -1,0 +1,109 @@
+;; Object events/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "events/"
+  :tables (list 
+   (semanticdb-table "irq.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("TRACE_SYSTEM" variable (:constant-flag t) nil [29 41])
+            ("_TRACE_IRQ_H" variable (:constant-flag t) nil [118 130])
+            ("linux/tracepoint.h" include (:system-flag t) nil [132 161])
+            ("irqaction" type
+               (:prototype t
+                :type "struct")
+                nil [163 180])
+            ("softirq_action" type
+               (:prototype t
+                :type "struct")
+                nil [181 203])
+            ("softirq_name" variable (:constant-flag t) nil [213 225])
+            ("show_softirq_name" variable (:constant-flag t) nil [266 283])
+            ("TRACE_EVENT" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("irq_handler_entry" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1050 1068])
+                    ("" variable (:type ("TP_PROTO" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1071 1114])
+                    ("" variable (:type ("TP_ARGS" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1118 1138])
+                    ("" variable (:type ("TP_STRUCT__entry" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1142 1218])
+                    ("" variable (:type ("TP_fast_assign" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1222 1298])
+                    ("" variable (:type ("TP_printk" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1302 1360]))                  
+                :type "int")
+                nil [1038 1363])
+            ("TRACE_EVENT" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("irq_handler_exit" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1864 1881])
+                    ("" variable (:type ("TP_PROTO" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1884 1936])
+                    ("" variable (:type ("TP_ARGS" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1940 1965])
+                    ("" variable (:type ("TP_STRUCT__entry" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1969 2033])
+                    ("" variable (:type ("TP_fast_assign" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2037 2099])
+                    ("" variable (:type ("TP_printk" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2103 2187]))                  
+                :type "int")
+                nil [1852 2190])
+            ("DECLARE_EVENT_CLASS" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("softirq" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2212 2220])
+                    ("" variable (:type ("TP_PROTO" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2223 2252])
+                    ("" variable (:type ("TP_ARGS" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2256 2271])
+                    ("" variable (:type ("TP_STRUCT__entry" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2275 2326])
+                    ("" variable (:type ("TP_fast_assign" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2330 2373])
+                    ("" variable (:type ("TP_printk" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2377 2459]))                  
+                :type "int")
+                nil [2192 2462])
+            ("DEFINE_EVENT" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("softirq" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2698 2706])
+                    ("" variable (:type ("softirq_entry" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2707 2721])
+                    ("" variable (:type ("TP_PROTO" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2724 2753])
+                    ("" variable (:type ("TP_ARGS" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2757 2772]))                  
+                :type "int")
+                nil [2685 2775])
+            ("DEFINE_EVENT" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("softirq" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3018 3026])
+                    ("" variable (:type ("softirq_exit" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3027 3040])
+                    ("" variable (:type ("TP_PROTO" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3043 3072])
+                    ("" variable (:type ("TP_ARGS" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3076 3091]))                  
+                :type "int")
+                nil [3005 3094])
+            ("DEFINE_EVENT" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("softirq" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3334 3342])
+                    ("" variable (:type ("softirq_raise" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3343 3357])
+                    ("" variable (:type ("TP_PROTO" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3360 3389])
+                    ("" variable (:type ("TP_ARGS" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3393 3408]))                  
+                :type "int")
+                nil [3321 3411])
+            ("trace/define_trace.h" include (:system-flag t) nil [3484 3515]))          
+    :file "irq.h"
+    :pointmax 3516
+    :fsize 3515
+    :lastmodtime '(20239 8505)
+    :unmatched-syntax '((semantic-list 3400 . 3408) (semantic-list 3368 . 3389) (semantic-list 3083 . 3091) (semantic-list 3051 . 3072) (semantic-list 2764 . 2772) (semantic-list 2732 . 2753) (semantic-list 2386 . 2459) (semantic-list 2344 . 2373) (semantic-list 2291 . 2326) (semantic-list 2263 . 2271) (semantic-list 2231 . 2252) (semantic-list 2112 . 2187) (semantic-list 2051 . 2099) (semantic-list 1985 . 2033) (semantic-list 1947 . 1965) (semantic-list 1892 . 1936) (semantic-list 1311 . 1360) (semantic-list 1236 . 1298) (semantic-list 1158 . 1218) (semantic-list 1125 . 1138) (semantic-list 1079 . 1114))
+    :lexical-table 
+        '(("TRACE_SYSTEM" . ((symbol "irq" 42 . 45)))
+          ("softirq_name" (spp-arg-list ("sirq") 225 . 231) . ((semantic-list "{ sirq##_SOFTIRQ, #sirq }" 232 . 257)))
+          ("show_softirq_name" (spp-arg-list ("val") 283 . 288) . ((symbol "__print_symbolic" 295 . 311) (semantic-list "(val,				\\
+			 softirq_name(HI),		\\
+			 softirq_name(TIMER),		\\
+			 softirq_name(NET_TX),		\\
+			 softirq_name(NET_RX),		\\
+			 softirq_name(BLOCK),		\\
+			 softirq_name(BLOCK_IOPOLL),	\\
+			 softirq_name(TASKLET),		\\
+			 softirq_name(SCHED),		\\
+			 softirq_name(HRTIMER),		\\
+			 softirq_name(RCU))" 311 . 605)))
+          ("_TRACE_IRQ_H")
+          )
+
+    )
+   )
+  :file "!home!asido!linux-2012.01-vanilla!include!trace!events!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

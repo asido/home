@@ -1,0 +1,28 @@
+;; Object pl/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "pl/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("docdir" variable (:default-value ("$(datadir)/doc/$(PACKAGE)")) nil [813 848])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt" "weechat_scripting.pl.txt" "weechat_faq.pl.txt" "weechat_quickstart.pl.txt" "weechat_tester.pl.txt")) nil [849 1029])
+            ("all-local" function (:arguments ("weechat_scripting.pl.html" "weechat_faq.pl.html" "weechat_quickstart.pl.html" "weechat_tester.pl.html")) nil [1030 1149])
+            ("weechat_scripting.pl.html" function (:arguments ("weechat_scripting.pl.txt")) nil [1168 1459])
+            ("weechat_faq.pl.html" function (:arguments ("weechat_faq.pl.txt")) nil [1466 1757])
+            ("weechat_quickstart.pl.html" function (:arguments ("weechat_quickstart.pl.txt")) nil [1771 2051])
+            ("weechat_tester.pl.html" function (:arguments ("weechat_tester.pl.txt")) nil [2069 2333])
+            ("install-data-hook" function nil nil [2350 2453])
+            ("uninstall-hook" function nil nil [2472 2553])
+            ("clean-local" function nil nil [2563 2591]))          
+    :file "Makefile.am"
+    :pointmax 2591
+    :fsize 2594
+    :lastmodtime '(20117 35105)
+    :unmatched-syntax '((shell-command 2577 . 2590) (bol 2576 . 2576))
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!doc!pl!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

@@ -1,0 +1,28 @@
+;; Object scripts/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "scripts/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"")) nil [757 802])
+            ("noinst_LTLIBRARIES" variable (:default-value ("lib_weechat_plugins_scripts.la")) nil [803 855])
+            ("lib_weechat_plugins_scripts_la_SOURCES" variable (:default-value ("script.c" "script.h" "script-callback.c" "script-callback.h" "script-api.c" "script-api.h")) nil [856 1192])
+            ("perl_dir" variable (:default-value ("perl")) nil [1208 1224])
+            ("python_dir" variable (:default-value ("python")) nil [1248 1268])
+            ("ruby_dir" variable (:default-value ("ruby")) nil [1290 1306])
+            ("lua_dir" variable (:default-value ("lua")) nil [1327 1341])
+            ("tcl_dir" variable (:default-value ("tcl")) nil [1362 1376])
+            ("SUBDIRS" variable (:default-value ("." "$(perl_dir)" "$(python_dir)" "$(ruby_dir)" "$(lua_dir)" "$(tcl_dir)")) nil [1383 1455])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1456 1484]))          
+    :file "Makefile.am"
+    :pointmax 1484
+    :fsize 1483
+    :lastmodtime '(19743 15896)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!scripts!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

@@ -1,0 +1,23 @@
+;; Object gtk/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "gtk/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(GTK_CFLAGS)")) nil [757 816])
+            ("bin_PROGRAMS" variable (:default-value ("weechat-gtk")) nil [817 844])
+            ("weechat_gtk_LDADD" variable (:default-value ("./../../core/lib_weechat_core.a" "../../plugins/lib_weechat_plugins.a" "../lib_weechat_gui_common.a" "../../core/lib_weechat_core.a" "$(PLUGINS_LFLAGS)" "$(GTK_LFLAGS)" "$(GCRYPT_LFLAGS)" "$(GNUTLS_LFLAGS)")) nil [983 1349])
+            ("weechat_gtk_SOURCES" variable (:default-value ("gui-gtk-bar-window.c" "gui-gtk-chat.c" "gui-gtk-color.c" "gui-gtk-key.c" "gui-gtk-main.c" "gui-gtk-mouse.c" "gui-gtk-term.c" "gui-gtk-window.c" "gui-gtk.h")) nil [1350 1703])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1704 1732]))          
+    :file "Makefile.am"
+    :pointmax 1732
+    :fsize 1731
+    :lastmodtime '(20018 42084)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!gui!gtk!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

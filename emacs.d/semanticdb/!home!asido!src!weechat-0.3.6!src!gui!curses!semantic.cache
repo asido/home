@@ -1,0 +1,23 @@
+;; Object curses/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "curses/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(NCURSES_CFLAGS)")) nil [757 820])
+            ("bin_PROGRAMS" variable (:default-value ("weechat-curses")) nil [821 851])
+            ("weechat_curses_LDADD" variable (:default-value ("./../../core/lib_weechat_core.a" "../../plugins/lib_weechat_plugins.a" "../lib_weechat_gui_common.a" "../../core/lib_weechat_core.a" "$(PLUGINS_LFLAGS)" "$(NCURSES_LFLAGS)" "$(GCRYPT_LFLAGS)" "$(GNUTLS_LFLAGS)" "-lm")) nil [990 1413])
+            ("weechat_curses_SOURCES" variable (:default-value ("gui-curses-bar-window.c" "gui-curses-chat.c" "gui-curses-color.c" "gui-curses-key.c" "gui-curses-main.c" "gui-curses-mouse.c" "gui-curses-term.c" "gui-curses-window.c" "gui-curses.h")) nil [1414 1821])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1822 1850]))          
+    :file "Makefile.am"
+    :pointmax 1850
+    :fsize 1849
+    :lastmodtime '(20018 42084)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!gui!curses!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

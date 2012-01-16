@@ -1,0 +1,22 @@
+;; Object doc/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "doc/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("SUBDIRS" variable (:default-value ("." "en" "fr" "pl" "de" "ru" "ja" "it")) nil [813 846])
+            ("man_MANS" variable (:default-value ("weechat-curses.1")) nil [847 875])
+            ("EXTRA_DIST" variable (:default-value ("$(man_MANS)" "docgen.py" "CMakeLists.txt" "asciidoc.conf" "asciidoc.css")) nil [876 953])
+            ("uninstall-hook" function nil nil [954 1014]))          
+    :file "Makefile.am"
+    :pointmax 1014
+    :fsize 1013
+    :lastmodtime '(20115 6770)
+    :unmatched-syntax '((shell-command 971 . 1013) (bol 970 . 970))
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!doc!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

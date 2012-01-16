@@ -1,0 +1,25 @@
+;; Object fifo/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "fifo/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(FIFO_CFLAGS)")) nil [757 817])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [818 853])
+            ("lib_LTLIBRARIES" variable (:default-value ("fifo.la")) nil [854 880])
+            ("fifo_la_SOURCES" variable (:default-value ("fifo.c" "fifo.h" "fifo-info.c" "fifo-info.h")) nil [881 997])
+            ("fifo_la_LDFLAGS" variable (:default-value ("-module")) nil [997 1023])
+            ("fifo_la_LIBADD" variable (:default-value ("$(FIFO_LFLAGS)")) nil [1023 1056])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1057 1085]))          
+    :file "Makefile.am"
+    :pointmax 1085
+    :fsize 1084
+    :lastmodtime '(19743 12951)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!fifo!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

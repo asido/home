@@ -1,0 +1,25 @@
+;; Object aspell/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "aspell/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(ASPELL_CFLAGS)")) nil [818 880])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [881 916])
+            ("lib_LTLIBRARIES" variable (:default-value ("aspell.la")) nil [917 945])
+            ("aspell_la_SOURCES" variable (:default-value ("weechat-aspell.c" "weechat-aspell.h" "weechat-aspell-config.c" "weechat-aspell-config.h" "weechat-aspell-speller.c" "weechat-aspell-speller.h")) nil [946 1208])
+            ("aspell_la_LDFLAGS" variable (:default-value ("-module")) nil [1208 1236])
+            ("aspell_la_LIBADD" variable (:default-value ("$(ASPELL_LFLAGS)")) nil [1236 1273])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1274 1302]))          
+    :file "Makefile.am"
+    :pointmax 1302
+    :fsize 1301
+    :lastmodtime '(19743 12838)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!aspell!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

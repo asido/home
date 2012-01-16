@@ -1,0 +1,19 @@
+;; Object qt/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "qt/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("EXTRA_DIST" variable (:default-value ("gui-qt.c" "gui-qt.h")) nil [757 803]))          
+    :file "Makefile.am"
+    :pointmax 803
+    :fsize 802
+    :lastmodtime '(19743 12841)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!gui!qt!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

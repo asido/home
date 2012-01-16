@@ -1,0 +1,501 @@
+;; Object asm/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "asm/"
+  :tables (list 
+   (semanticdb-table "ptrace.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_X86_PTRACE_H" variable (:constant-flag t) nil [35 52])
+            ("asm/ptrace-abi.h" include (:system-flag t) nil [65 92])
+            ("asm/processor-flags.h" include (:system-flag t) nil [93 125])
+            ("pt_regs" type
+               (:members 
+                  ( ("r15" variable (:type "unsigned long") (reparse-symbol classsubparts) [523 541])
+                    ("r14" variable (:type "unsigned long") (reparse-symbol classsubparts) [543 561])
+                    ("r13" variable (:type "unsigned long") (reparse-symbol classsubparts) [563 581])
+                    ("r12" variable (:type "unsigned long") (reparse-symbol classsubparts) [583 601])
+                    ("rbp" variable (:type "unsigned long") (reparse-symbol classsubparts) [603 621])
+                    ("rbx" variable (:type "unsigned long") (reparse-symbol classsubparts) [623 641])
+                    ("r11" variable (:type "unsigned long") (reparse-symbol classsubparts) [716 734])
+                    ("r10" variable (:type "unsigned long") (reparse-symbol classsubparts) [736 754])
+                    ("r9" variable (:type "unsigned long") (reparse-symbol classsubparts) [756 773])
+                    ("r8" variable (:type "unsigned long") (reparse-symbol classsubparts) [775 792])
+                    ("rax" variable (:type "unsigned long") (reparse-symbol classsubparts) [794 812])
+                    ("rcx" variable (:type "unsigned long") (reparse-symbol classsubparts) [814 832])
+                    ("rdx" variable (:type "unsigned long") (reparse-symbol classsubparts) [834 852])
+                    ("rsi" variable (:type "unsigned long") (reparse-symbol classsubparts) [854 872])
+                    ("rdi" variable (:type "unsigned long") (reparse-symbol classsubparts) [874 892])
+                    ("orig_rax" variable (:type "unsigned long") (reparse-symbol classsubparts) [894 917])
+                    ("rip" variable (:type "unsigned long") (reparse-symbol classsubparts) [981 999])
+                    ("cs" variable (:type "unsigned long") (reparse-symbol classsubparts) [1001 1018])
+                    ("eflags" variable (:type "unsigned long") (reparse-symbol classsubparts) [1020 1041])
+                    ("rsp" variable (:type "unsigned long") (reparse-symbol classsubparts) [1043 1061])
+                    ("ss" variable (:type "unsigned long") (reparse-symbol classsubparts) [1063 1080]))                  
+                :type "struct")
+                nil [505 1107]))          
+    :file "ptrace.h"
+    :pointmax 1194
+    :fsize 1193
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("_ASM_X86_PTRACE_H")
+          )
+
+    )
+   (semanticdb-table "errno.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("asm-generic/errno.h" include (:system-flag t) nil [1 31]))          
+    :file "errno.h"
+    :pointmax 32
+    :fsize 31
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "ptrace-abi.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_X86_PTRACE_ABI_H" variable (:constant-flag t) nil [39 60])
+            ("R15" variable (:constant-flag t) nil [434 437])
+            ("R14" variable (:constant-flag t) nil [448 451])
+            ("R13" variable (:constant-flag t) nil [462 465])
+            ("R12" variable (:constant-flag t) nil [477 480])
+            ("RBP" variable (:constant-flag t) nil [492 495])
+            ("RBX" variable (:constant-flag t) nil [507 510])
+            ("R11" variable (:constant-flag t) nil [591 594])
+            ("R10" variable (:constant-flag t) nil [606 609])
+            ("R9" variable (:constant-flag t) nil [621 623])
+            ("R8" variable (:constant-flag t) nil [635 637])
+            ("RAX" variable (:constant-flag t) nil [649 652])
+            ("RCX" variable (:constant-flag t) nil [664 667])
+            ("RDX" variable (:constant-flag t) nil [679 682])
+            ("RSI" variable (:constant-flag t) nil [694 697])
+            ("RDI" variable (:constant-flag t) nil [710 713])
+            ("ORIG_RAX" variable (:constant-flag t) nil [726 734])
+            ("RIP" variable (:constant-flag t) nil [854 857])
+            ("CS" variable (:constant-flag t) nil [870 872])
+            ("EFLAGS" variable (:constant-flag t) nil [885 891])
+            ("RSP" variable (:constant-flag t) nil [904 907])
+            ("SS" variable (:constant-flag t) nil [920 922])
+            ("ARGOFFSET" variable (:constant-flag t) nil [935 944])
+            ("FRAME_SIZE" variable (:constant-flag t) nil [1008 1018])
+            ("PTRACE_GETREGS" variable (:constant-flag t) nil [1132 1146])
+            ("PTRACE_SETREGS" variable (:constant-flag t) nil [1169 1183])
+            ("PTRACE_GETFPREGS" variable (:constant-flag t) nil [1206 1222])
+            ("PTRACE_SETFPREGS" variable (:constant-flag t) nil [1243 1259])
+            ("PTRACE_GETFPXREGS" variable (:constant-flag t) nil [1280 1297])
+            ("PTRACE_SETFPXREGS" variable (:constant-flag t) nil [1317 1334])
+            ("PTRACE_OLDSETOPTIONS" variable (:constant-flag t) nil [1355 1375])
+            ("PTRACE_GET_THREAD_AREA" variable (:constant-flag t) nil [1447 1469])
+            ("PTRACE_SET_THREAD_AREA" variable (:constant-flag t) nil [1484 1506])
+            ("PTRACE_ARCH_PRCTL" variable (:constant-flag t) nil [1541 1558])
+            ("PTRACE_SYSEMU" variable (:constant-flag t) nil [1580 1593])
+            ("PTRACE_SYSEMU_SINGLESTEP" variable (:constant-flag t) nil [1608 1632])
+            ("PTRACE_SINGLEBLOCK" variable (:constant-flag t) nil [1646 1664])
+            ("linux/types.h" include (:system-flag t) nil [1731 1755]))          
+    :file "ptrace-abi.h"
+    :pointmax 1799
+    :fsize 1798
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("R13" . ((number "16" 466 . 468)))
+          ("RCX" . ((number "88" 668 . 670)))
+          ("PTRACE_GETREGS" . ((number "12" 1158 . 1160)))
+          ("PTRACE_GETFPXREGS" . ((number "18" 1306 . 1308)))
+          ("R14" . ((number "8" 452 . 453)))
+          ("RDI" . ((number "112" 714 . 717)))
+          ("RSP" . ((number "152" 908 . 911)))
+          ("R15" . ((number "0" 438 . 439)))
+          ("RBP" . ((number "32" 496 . 498)))
+          ("PTRACE_SET_THREAD_AREA" . ((number "26" 1510 . 1512)))
+          ("R8" . ((number "72" 638 . 640)))
+          ("RDX" . ((number "96" 683 . 685)))
+          ("R9" . ((number "64" 624 . 626)))
+          ("ORIG_RAX" . ((number "120" 735 . 738)))
+          ("PTRACE_SYSEMU" . ((number "31" 1597 . 1599)))
+          ("PTRACE_GETFPREGS" . ((number "14" 1232 . 1234)))
+          ("PTRACE_ARCH_PRCTL" . ((number "30" 1561 . 1563)))
+          ("ARGOFFSET" . ((symbol "R11" 945 . 948)))
+          ("RAX" . ((number "80" 653 . 655)))
+          ("RSI" . ((number "104" 698 . 701)))
+          ("EFLAGS" . ((number "144" 892 . 895)))
+          ("SS" . ((number "160" 923 . 926)))
+          ("PTRACE_SYSEMU_SINGLESTEP" . ((number "32" 1634 . 1636)))
+          ("_ASM_X86_PTRACE_ABI_H")
+          ("PTRACE_SETFPREGS" . ((number "15" 1269 . 1271)))
+          ("RBX" . ((number "40" 511 . 513)))
+          ("R10" . ((number "56" 610 . 612)))
+          ("RIP" . ((number "128" 858 . 861)))
+          ("FRAME_SIZE" . ((number "168" 1019 . 1022)))
+          ("PTRACE_SINGLEBLOCK" . ((number "33" 1665 . 1667)))
+          ("R11" . ((number "48" 595 . 597)))
+          ("CS" . ((number "136" 873 . 876)))
+          ("PTRACE_GET_THREAD_AREA" . ((number "25" 1473 . 1475)))
+          ("R12" . ((number "24" 481 . 483)))
+          ("PTRACE_SETREGS" . ((number "13" 1195 . 1197)))
+          ("PTRACE_SETFPXREGS" . ((number "19" 1343 . 1345)))
+          ("PTRACE_OLDSETOPTIONS" . ((number "21" 1381 . 1383)))
+          )
+
+    )
+   (semanticdb-table "processor-flags.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_X86_PROCESSOR_FLAGS_H" variable (:constant-flag t) nil [44 70])
+            ("X86_EFLAGS_CF" variable (:constant-flag t) nil [163 176])
+            ("X86_EFLAGS_PF" variable (:constant-flag t) nil [213 226])
+            ("X86_EFLAGS_AF" variable (:constant-flag t) nil [264 277])
+            ("X86_EFLAGS_ZF" variable (:constant-flag t) nil [324 337])
+            ("X86_EFLAGS_SF" variable (:constant-flag t) nil [373 386])
+            ("X86_EFLAGS_TF" variable (:constant-flag t) nil [422 435])
+            ("X86_EFLAGS_IF" variable (:constant-flag t) nil [471 484])
+            ("X86_EFLAGS_DF" variable (:constant-flag t) nil [525 538])
+            ("X86_EFLAGS_OF" variable (:constant-flag t) nil [579 592])
+            ("X86_EFLAGS_IOPL" variable (:constant-flag t) nil [632 647])
+            ("X86_EFLAGS_NT" variable (:constant-flag t) nil [683 696])
+            ("X86_EFLAGS_RF" variable (:constant-flag t) nil [734 747])
+            ("X86_EFLAGS_VM" variable (:constant-flag t) nil [785 798])
+            ("X86_EFLAGS_AC" variable (:constant-flag t) nil [837 850])
+            ("X86_EFLAGS_VIF" variable (:constant-flag t) nil [892 906])
+            ("X86_EFLAGS_VIP" variable (:constant-flag t) nil [955 969])
+            ("X86_EFLAGS_ID" variable (:constant-flag t) nil [1021 1034])
+            ("X86_CR0_PE" variable (:constant-flag t) nil [1117 1127])
+            ("X86_CR0_MP" variable (:constant-flag t) nil [1171 1181])
+            ("X86_CR0_EM" variable (:constant-flag t) nil [1227 1237])
+            ("X86_CR0_TS" variable (:constant-flag t) nil [1273 1283])
+            ("X86_CR0_ET" variable (:constant-flag t) nil [1323 1333])
+            ("X86_CR0_NE" variable (:constant-flag t) nil [1374 1384])
+            ("X86_CR0_WP" variable (:constant-flag t) nil [1424 1434])
+            ("X86_CR0_AM" variable (:constant-flag t) nil [1474 1484])
+            ("X86_CR0_NW" variable (:constant-flag t) nil [1525 1535])
+            ("X86_CR0_CD" variable (:constant-flag t) nil [1579 1589])
+            ("X86_CR0_PG" variable (:constant-flag t) nil [1629 1639])
+            ("X86_CR3_PWT" variable (:constant-flag t) nil [1705 1716])
+            ("X86_CR3_PCD" variable (:constant-flag t) nil [1761 1772])
+            ("X86_CR4_VME" variable (:constant-flag t) nil [1854 1865])
+            ("X86_CR4_PVI" variable (:constant-flag t) nil [1914 1925])
+            ("X86_CR4_TSD" variable (:constant-flag t) nil [1982 1993])
+            ("X86_CR4_DE" variable (:constant-flag t) nil [2047 2057])
+            ("X86_CR4_PSE" variable (:constant-flag t) nil [2111 2122])
+            ("X86_CR4_PAE" variable (:constant-flag t) nil [2176 2187])
+            ("X86_CR4_MCE" variable (:constant-flag t) nil [2248 2259])
+            ("X86_CR4_PGE" variable (:constant-flag t) nil [2306 2317])
+            ("X86_CR4_PCE" variable (:constant-flag t) nil [2363 2374])
+            ("X86_CR4_OSFXSR" variable (:constant-flag t) nil [2437 2451])
+            ("X86_CR4_OSXMMEXCPT" variable (:constant-flag t) nil [2510 2528])
+            ("X86_CR4_VMXE" variable (:constant-flag t) nil [2585 2597])
+            ("X86_CR4_RDWRGSFS" variable (:constant-flag t) nil [2649 2665])
+            ("X86_CR4_OSXSAVE" variable (:constant-flag t) nil [2715 2730])
+            ("X86_CR4_SMEP" variable (:constant-flag t) nil [2782 2794])
+            ("X86_CR8_TPR" variable (:constant-flag t) nil [2886 2897])
+            ("CX86_PCR0" variable (:constant-flag t) nil [3086 3095])
+            ("CX86_GCR" variable (:constant-flag t) nil [3109 3117])
+            ("CX86_CCR0" variable (:constant-flag t) nil [3131 3140])
+            ("CX86_CCR1" variable (:constant-flag t) nil [3154 3163])
+            ("CX86_CCR2" variable (:constant-flag t) nil [3177 3186])
+            ("CX86_CCR3" variable (:constant-flag t) nil [3200 3209])
+            ("CX86_CCR4" variable (:constant-flag t) nil [3223 3232])
+            ("CX86_CCR5" variable (:constant-flag t) nil [3246 3255])
+            ("CX86_CCR6" variable (:constant-flag t) nil [3269 3278])
+            ("CX86_CCR7" variable (:constant-flag t) nil [3292 3301])
+            ("CX86_PCR1" variable (:constant-flag t) nil [3315 3324])
+            ("CX86_DIR0" variable (:constant-flag t) nil [3338 3347])
+            ("CX86_DIR1" variable (:constant-flag t) nil [3361 3370])
+            ("CX86_ARR_BASE" variable (:constant-flag t) nil [3384 3397])
+            ("CX86_RCR_BASE" variable (:constant-flag t) nil [3411 3424]))          
+    :file "processor-flags.h"
+    :pointmax 3472
+    :fsize 3471
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("_ASM_X86_PROCESSOR_FLAGS_H")
+          ("X86_EFLAGS_AF" . ((number "0x00000010" 278 . 288)))
+          ("X86_CR0_MP" . ((number "0x00000002" 1182 . 1192)))
+          ("X86_CR0_AM" . ((number "0x00040000" 1485 . 1495)))
+          ("X86_CR0_PG" . ((number "0x80000000" 1640 . 1650)))
+          ("X86_CR3_PCD" . ((number "0x00000010" 1773 . 1783)))
+          ("X86_CR4_PVI" . ((number "0x00000002" 1926 . 1936)))
+          ("X86_CR4_PSE" . ((number "0x00000010" 2123 . 2133)))
+          ("X86_CR4_VMXE" . ((number "0x00002000" 2598 . 2608)))
+          ("X86_CR8_TPR" . ((number "0x0000000F" 2898 . 2908)))
+          ("CX86_CCR7" . ((number "0xeb" 3302 . 3306)))
+          ("X86_EFLAGS_NT" . ((number "0x00004000" 697 . 707)))
+          ("X86_EFLAGS_SF" . ((number "0x00000080" 387 . 397)))
+          ("X86_EFLAGS_IOPL" . ((number "0x00003000" 648 . 658)))
+          ("X86_EFLAGS_OF" . ((number "0x00000800" 593 . 603)))
+          ("X86_CR4_MCE" . ((number "0x00000040" 2260 . 2270)))
+          ("X86_CR4_PGE" . ((number "0x00000080" 2318 . 2328)))
+          ("X86_CR4_SMEP" . ((number "0x00100000" 2795 . 2805)))
+          ("CX86_RCR_BASE" . ((number "0xdc" 3425 . 3429)))
+          ("X86_CR0_WP" . ((number "0x00010000" 1435 . 1445)))
+          ("X86_CR4_PCE" . ((number "0x00000100" 2375 . 2385)))
+          ("X86_EFLAGS_TF" . ((number "0x00000100" 436 . 446)))
+          ("X86_EFLAGS_VM" . ((number "0x00020000" 799 . 809)))
+          ("X86_EFLAGS_VIP" . ((number "0x00100000" 970 . 980)))
+          ("X86_CR0_NE" . ((number "0x00000020" 1385 . 1395)))
+          ("X86_CR4_DE" . ((number "0x00000008" 2058 . 2068)))
+          ("X86_CR4_RDWRGSFS" . ((number "0x00010000" 2666 . 2676)))
+          ("X86_EFLAGS_CF" . ((number "0x00000001" 177 . 187)))
+          ("X86_EFLAGS_PF" . ((number "0x00000004" 227 . 237)))
+          ("X86_CR0_ET" . ((number "0x00000010" 1334 . 1344)))
+          ("CX86_PCR0" . ((number "0x20" 3096 . 3100)))
+          ("CX86_CCR0" . ((number "0xc0" 3141 . 3145)))
+          ("CX86_ARR_BASE" . ((number "0xc4" 3398 . 3402)))
+          ("CX86_CCR1" . ((number "0xc1" 3164 . 3168)))
+          ("CX86_PCR1" . ((number "0xf0" 3325 . 3329)))
+          ("X86_EFLAGS_VIF" . ((number "0x00080000" 907 . 917)))
+          ("CX86_CCR2" . ((number "0xc2" 3187 . 3191)))
+          ("X86_EFLAGS_DF" . ((number "0x00000400" 539 . 549)))
+          ("X86_EFLAGS_ID" . ((number "0x00200000" 1035 . 1045)))
+          ("X86_CR4_TSD" . ((number "0x00000004" 1994 . 2004)))
+          ("CX86_GCR" . ((number "0xb8" 3118 . 3122)))
+          ("CX86_CCR3" . ((number "0xc3" 3210 . 3214)))
+          ("CX86_DIR0" . ((number "0xfe" 3348 . 3352)))
+          ("X86_EFLAGS_ZF" . ((number "0x00000040" 338 . 348)))
+          ("X86_EFLAGS_AC" . ((number "0x00040000" 851 . 861)))
+          ("X86_CR0_NW" . ((number "0x20000000" 1536 . 1546)))
+          ("X86_CR0_CD" . ((number "0x40000000" 1590 . 1600)))
+          ("X86_CR4_VME" . ((number "0x00000001" 1866 . 1876)))
+          ("X86_CR4_OSFXSR" . ((number "0x00000200" 2452 . 2462)))
+          ("CX86_CCR4" . ((number "0xe8" 3233 . 3237)))
+          ("CX86_DIR1" . ((number "0xff" 3371 . 3375)))
+          ("X86_EFLAGS_IF" . ((number "0x00000200" 485 . 495)))
+          ("X86_CR0_PE" . ((number "0x00000001" 1128 . 1138)))
+          ("X86_CR0_TS" . ((number "0x00000008" 1284 . 1294)))
+          ("X86_CR3_PWT" . ((number "0x00000008" 1717 . 1727)))
+          ("X86_CR4_PAE" . ((number "0x00000020" 2188 . 2198)))
+          ("X86_CR4_OSXMMEXCPT" . ((number "0x00000400" 2529 . 2539)))
+          ("X86_CR4_OSXSAVE" . ((number "0x00040000" 2731 . 2741)))
+          ("CX86_CCR5" . ((number "0xe9" 3256 . 3260)))
+          ("X86_EFLAGS_RF" . ((number "0x00010000" 748 . 758)))
+          ("X86_CR0_EM" . ((number "0x00000004" 1238 . 1248)))
+          ("CX86_CCR6" . ((number "0xea" 3279 . 3283)))
+          )
+
+    )
+   (semanticdb-table "types.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_X86_TYPES_H" variable (:constant-flag t) nil [34 50])
+            ("asm-generic/types.h" include (:system-flag t) nil [52 82]))          
+    :file "types.h"
+    :pointmax 114
+    :fsize 113
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("_ASM_X86_TYPES_H")
+          )
+
+    )
+   (semanticdb-table "ioctl.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("asm-generic/ioctl.h" include (:system-flag t) nil [1 31]))          
+    :file "ioctl.h"
+    :pointmax 32
+    :fsize 31
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "posix_types.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("posix_types_64.h" include nil nil [55 84]))          
+    :file "posix_types.h"
+    :pointmax 93
+    :fsize 92
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "posix_types_64.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("_ASM_X86_POSIX_TYPES_64_H" variable (:constant-flag t) nil [43 68])
+            ("__kernel_ino_t" type
+               (:typedef ("unsigned long")
+                :superclasses "unsigned long"
+                :type "typedef")
+                nil [248 285])
+            ("__kernel_mode_t" type
+               (:typedef ("unsigned int")
+                :superclasses "unsigned int"
+                :type "typedef")
+                nil [286 323])
+            ("__kernel_nlink_t" type
+               (:typedef ("unsigned long")
+                :superclasses "unsigned long"
+                :type "typedef")
+                nil [324 363])
+            ("__kernel_off_t" type
+               (:typedef ("long")
+                :superclasses "long"
+                :type "typedef")
+                nil [364 393])
+            ("__kernel_pid_t" type
+               (:typedef ("int")
+                :superclasses "int"
+                :type "typedef")
+                nil [394 422])
+            ("__kernel_ipc_pid_t" type
+               (:typedef ("int")
+                :superclasses "int"
+                :type "typedef")
+                nil [423 455])
+            ("__kernel_uid_t" type
+               (:typedef ("unsigned int")
+                :superclasses "unsigned int"
+                :type "typedef")
+                nil [456 492])
+            ("__kernel_gid_t" type
+               (:typedef ("unsigned int")
+                :superclasses "unsigned int"
+                :type "typedef")
+                nil [493 529])
+            ("__kernel_size_t" type
+               (:typedef ("unsigned long")
+                :superclasses "unsigned long"
+                :type "typedef")
+                nil [530 568])
+            ("__kernel_ssize_t" type
+               (:typedef ("long")
+                :superclasses "long"
+                :type "typedef")
+                nil [569 600])
+            ("__kernel_ptrdiff_t" type
+               (:typedef ("long")
+                :superclasses "long"
+                :type "typedef")
+                nil [601 634])
+            ("__kernel_time_t" type
+               (:typedef ("long")
+                :superclasses "long"
+                :type "typedef")
+                nil [635 665])
+            ("__kernel_suseconds_t" type
+               (:typedef ("long")
+                :superclasses "long"
+                :type "typedef")
+                nil [666 701])
+            ("__kernel_clock_t" type
+               (:typedef ("long")
+                :superclasses "long"
+                :type "typedef")
+                nil [702 733])
+            ("__kernel_timer_t" type
+               (:typedef ("int")
+                :superclasses "int"
+                :type "typedef")
+                nil [734 764])
+            ("__kernel_clockid_t" type
+               (:typedef ("int")
+                :superclasses "int"
+                :type "typedef")
+                nil [765 797])
+            ("__kernel_daddr_t" type
+               (:typedef ("int")
+                :superclasses "int"
+                :type "typedef")
+                nil [798 828])
+            ("__kernel_caddr_t" type
+               (:typedef ("char")
+                :pointer 1
+                :superclasses "char"
+                :type "typedef")
+                nil [829 862])
+            ("__kernel_uid16_t" type
+               (:typedef ("unsigned short")
+                :superclasses "unsigned short"
+                :type "typedef")
+                nil [863 903])
+            ("__kernel_gid16_t" type
+               (:typedef ("unsigned short")
+                :superclasses "unsigned short"
+                :type "typedef")
+                nil [904 944])
+            ("__kernel_loff_t" type
+               (:typedef ("long long")
+                :superclasses "long long"
+                :type "typedef")
+                nil [962 996])
+            ("__kernel_fsid_t" type
+               (:typedef ("" type
+                     (:members 
+                        ( ("val" variable
+                             (:dereference 1
+                              :type "int")
+                              (reparse-symbol classsubparts) [1023 1034]))                        
+                      :type "struct")
+                      nil nil)
+                :type "typedef")
+                nil [1005 1053])
+            ("__kernel_old_uid_t" type
+               (:typedef ("unsigned short")
+                :superclasses "unsigned short"
+                :type "typedef")
+                nil [1055 1097])
+            ("__kernel_old_gid_t" type
+               (:typedef ("unsigned short")
+                :superclasses "unsigned short"
+                :type "typedef")
+                nil [1098 1140])
+            ("__kernel_uid32_t" type
+               (:typedef ("__kernel_uid_t" type (:type "class") nil nil)
+                :superclasses "__kernel_uid_t"
+                :type "typedef")
+                nil [1141 1181])
+            ("__kernel_gid32_t" type
+               (:typedef ("__kernel_gid_t" type (:type "class") nil nil)
+                :superclasses "__kernel_gid_t"
+                :type "typedef")
+                nil [1182 1222])
+            ("__kernel_old_dev_t" type
+               (:typedef ("unsigned long")
+                :superclasses "unsigned long"
+                :type "typedef")
+                nil [1224 1265]))          
+    :file "posix_types_64.h"
+    :pointmax 1307
+    :fsize 1306
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("_ASM_X86_POSIX_TYPES_64_H")
+          )
+
+    )
+   (semanticdb-table "param.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("asm-generic/param.h" include (:system-flag t) nil [1 31]))          
+    :file "param.h"
+    :pointmax 32
+    :fsize 31
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "bitsperlong.h"
+    :major-mode 'c-mode
+    :tags 
+        '( ("__ASM_X86_BITSPERLONG_H" variable (:constant-flag t) nil [41 64])
+            ("__BITS_PER_LONG" variable (:constant-flag t) nil [93 108])
+            ("asm-generic/bitsperlong.h" include (:system-flag t) nil [154 190]))          
+    :file "bitsperlong.h"
+    :pointmax 230
+    :fsize 229
+    :lastmodtime '(20232 21337)
+    :unmatched-syntax 'nil
+    :lexical-table 
+        '(("__ASM_X86_BITSPERLONG_H")
+          ("__BITS_PER_LONG" . ((number "64" 109 . 111)))
+          )
+
+    )
+   )
+  :file "!usr!include!asm!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

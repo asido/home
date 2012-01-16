@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: tu
+# key: tu
+# contributor: Andrea crotti
+# --
+require 'test/unit'

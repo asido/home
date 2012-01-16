@@ -1,0 +1,25 @@
+;; Object rmodifier/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "rmodifier/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(RMODIFIER_CFLAGS)")) nil [757 822])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [823 858])
+            ("lib_LTLIBRARIES" variable (:default-value ("rmodifier.la")) nil [859 890])
+            ("rmodifier_la_SOURCES" variable (:default-value ("rmodifier.c" "rmodifier.h" "rmodifier-command.c" "rmodifier-command.h" "rmodifier-completion.c" "rmodifier-completion.h" "rmodifier-config.c" "rmodifier-config.h" "rmodifier-debug.c" "rmodifier-debug.h" "rmodifier-info.c" "rmodifier-info.h")) nil [891 1407])
+            ("rmodifier_la_LDFLAGS" variable (:default-value ("-module")) nil [1407 1438])
+            ("rmodifier_la_LIBADD" variable (:default-value ("$(RMODIFIER_LFLAGS)")) nil [1438 1481])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1482 1510]))          
+    :file "Makefile.am"
+    :pointmax 1510
+    :fsize 1509
+    :lastmodtime '(19743 15900)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!rmodifier!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

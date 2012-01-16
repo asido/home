@@ -1,0 +1,25 @@
+;; Object relay/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "relay/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"")) nil [757 802])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [803 838])
+            ("lib_LTLIBRARIES" variable (:default-value ("relay.la")) nil [839 866])
+            ("relay_la_SOURCES" variable (:default-value ("relay.c" "relay.h" "relay-buffer.c" "relay-buffer.h" "relay-client.c" "relay-client.h" "relay-client-irc.c" "relay-client-irc.h" "relay-client-weechat.c" "relay-client-weechat.h" "relay-command.c" "relay-command.h" "relay-completion.c" "relay-completion.h" "relay-config.c" "relay-config.h" "relay-info.c" "relay-info.h" "relay-raw.c" "relay-raw.h" "relay-server.c" "relay-server.h" "relay-upgrade.c" "relay-upgrade.h")) nil [867 1741])
+            ("relay_la_LDFLAGS" variable (:default-value ("-module")) nil [1742 1769])
+            ("relay_la_LIBADD" variable (:default-value ("$(RELAY_LFLAGS)")) nil [1769 1804])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1805 1833]))          
+    :file "Makefile.am"
+    :pointmax 1833
+    :fsize 1832
+    :lastmodtime '(19743 13233)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!relay!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

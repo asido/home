@@ -1,0 +1,25 @@
+;; Object demo/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "demo/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(DEMO_CFLAGS)")) nil [757 817])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [818 853])
+            ("lib_LTLIBRARIES" variable (:default-value ("demo.la")) nil [854 880])
+            ("demo_la_SOURCES" variable (:default-value ("demo.c")) nil [881 906])
+            ("demo_la_LDFLAGS" variable (:default-value ("-module")) nil [906 932])
+            ("demo_la_LIBADD" variable (:default-value ("$(DEMO_LFLAGS)")) nil [932 965])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [966 994]))          
+    :file "Makefile.am"
+    :pointmax 994
+    :fsize 993
+    :lastmodtime '(19743 12952)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!demo!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

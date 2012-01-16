@@ -1,0 +1,179 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+activate	vicious-2.0.3/init.lua	/^function activate(widget)$/;"	f
+activate	vicious/init.lua	/^function activate(widget)$/;"	f
+add	vicious-2.0.3/contrib/pulse.lua	/^function add(percent, sink)$/;"	f
+addCalendarToWidget	calendar2.lua	/^function addCalendarToWidget(mywidget, custom_current_day_format)$/;"	f
+awful.button({ }, 1, function (c) client.focus 	rc.lua	/^    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),$/;"	f
+awful.key({ modkey,           }, "f",      function (c) c.fullscreen 	rc.lua	/^    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),$/;"	f
+awful.key({ modkey,           }, "n",      function (c) c.minimized 	rc.lua	/^    awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),$/;"	f
+awful.key({ modkey,           }, "t",      function (c) c.ontop 	rc.lua	/^    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),$/;"	f
+awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber	rc.lua	/^    awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),$/;"	f
+cache	vicious-2.0.3/init.lua	/^function cache(wtype)$/;"	f
+cache	vicious/init.lua	/^function cache(wtype)$/;"	f
+capitalize	vicious-2.0.3/helpers.lua	/^function capitalize(text)$/;"	f
+capitalize	vicious/helpers.lua	/^function capitalize(text)$/;"	f
+datasplit	vicious-2.0.3/contrib/sensors.lua	/^local function datasplit(str)$/;"	f
+displayMonth	calendar2.lua	/^function displayMonth(month,year,weekStart)$/;"	f
+elseif type(reg.format) 	vicious-2.0.3/init.lua	/^        elseif type(reg.format) == "function" then$/;"	f
+elseif type(reg.format) 	vicious/init.lua	/^        elseif type(reg.format) == "function" then$/;"	f
+escape	vicious-2.0.3/contrib/pulse.lua	/^local function escape(text)$/;"	f
+escape	vicious-2.0.3/helpers.lua	/^function escape(text)$/;"	f
+escape	vicious/helpers.lua	/^function escape(text)$/;"	f
+force	vicious-2.0.3/init.lua	/^function force(wtable)$/;"	f
+force	vicious/init.lua	/^function force(wtable)$/;"	f
+format	vicious-2.0.3/helpers.lua	/^function format(format, args)$/;"	f
+format	vicious/helpers.lua	/^function format(format, args)$/;"	f
+get_sink_name	vicious-2.0.3/contrib/pulse.lua	/^local function get_sink_name(sink)$/;"	f
+local sock_avail, socket 	vicious-2.0.3/contrib/pop.lua	/^local sock_avail, socket = pcall(function()$/;"	f
+mytasklist[s] 	rc.lua	/^    mytasklist[s] = awful.widget.tasklist(function(c)$/;"	f
+pacmd	vicious-2.0.3/contrib/pulse.lua	/^local function pacmd(args)$/;"	f
+pathtotable	vicious-2.0.3/helpers.lua	/^function pathtotable(dir)$/;"	f
+pathtotable	vicious/helpers.lua	/^function pathtotable(dir)$/;"	f
+reg.update 	vicious-2.0.3/init.lua	/^    reg.update = function ()$/;"	f
+reg.update 	vicious/init.lua	/^    reg.update = function ()$/;"	f
+register	vicious-2.0.3/init.lua	/^function register(widget, wtype, format, timer, warg)$/;"	f
+register	vicious/init.lua	/^function register(widget, wtype, format, timer, warg)$/;"	f
+regregister	vicious-2.0.3/init.lua	/^local function regregister(reg)$/;"	f
+regregister	vicious/init.lua	/^local function regregister(reg)$/;"	f
+scroll	vicious-2.0.3/helpers.lua	/^function scroll(text, maxlen, widget)$/;"	f
+scroll	vicious/helpers.lua	/^function scroll(text, maxlen, widget)$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/batacpi.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/batpmu.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/batproc.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/dio.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/mpc.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/net.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/netcfg.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/ossvol.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/pop.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/pulse.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/rss.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/contrib/sensors.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/bat.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/cpu.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/cpufreq.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/cpuinf.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/date.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/dio.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/fs.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/gmail.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/hddtemp.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/mbox.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/mboxc.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/mdir.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/mem.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/mpd.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/net.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/org.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/os.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/pkg.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/raid.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/thermal.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/uptime.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/volume.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/weather.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious-2.0.3/widgets/wifi.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/bat.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/cpu.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/cpufreq.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/cpuinf.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/date.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/dio.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/fs.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/gmail.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/hddtemp.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/mbox.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/mboxc.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/mdir.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/mem.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/mpd.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/net.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/org.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/os.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/pkg.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/raid.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/thermal.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/uptime.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/volume.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/weather.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+setmetatable(_M, { __call 	vicious/widgets/wifi.lua	/^setmetatable(_M, { __call = function(_, ...) return worker(...) end })$/;"	f
+suspend	vicious-2.0.3/init.lua	/^function suspend()$/;"	f
+suspend	vicious/init.lua	/^function suspend()$/;"	f
+switchNaughtyMonth	calendar2.lua	/^function switchNaughtyMonth(switchMonths)$/;"	f
+toggle	vicious-2.0.3/contrib/pulse.lua	/^function toggle(sink)$/;"	f
+truncate	vicious-2.0.3/helpers.lua	/^function truncate(text, maxlen)$/;"	f
+truncate	vicious/helpers.lua	/^function truncate(text, maxlen)$/;"	f
+uformat	vicious-2.0.3/helpers.lua	/^function uformat(array, key, value, unit)$/;"	f
+uformat	vicious/helpers.lua	/^function uformat(array, key, value, unit)$/;"	f
+unregister	vicious-2.0.3/init.lua	/^function unregister(widget, keep, reg)$/;"	f
+unregister	vicious/init.lua	/^function unregister(widget, keep, reg)$/;"	f
+update	vicious-2.0.3/init.lua	/^local function update(widget, reg, disablecache)$/;"	f
+update	vicious/init.lua	/^local function update(widget, reg, disablecache)$/;"	f
+worker	vicious-2.0.3/contrib/batacpi.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/contrib/batpmu.lua	/^local function worker(format, batid)$/;"	f
+worker	vicious-2.0.3/contrib/batproc.lua	/^local function worker(format, batid)$/;"	f
+worker	vicious-2.0.3/contrib/dio.lua	/^local function worker(format, disk)$/;"	f
+worker	vicious-2.0.3/contrib/mpc.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/contrib/net.lua	/^local function worker(format, tignorelist)$/;"	f
+worker	vicious-2.0.3/contrib/netcfg.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/contrib/ossvol.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/contrib/pop.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/contrib/pulse.lua	/^local function worker(format, sink)$/;"	f
+worker	vicious-2.0.3/contrib/rss.lua	/^local function worker(format, input)$/;"	f
+worker	vicious-2.0.3/contrib/sensors.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/bat.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/cpu.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/widgets/cpufreq.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/cpuinf.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/widgets/date.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/dio.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/widgets/fs.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/gmail.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/hddtemp.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/mbox.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/mboxc.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/mdir.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/mem.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/widgets/mpd.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/net.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/widgets/org.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/os.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/widgets/pkg.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/raid.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/thermal.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/uptime.lua	/^local function worker(format)$/;"	f
+worker	vicious-2.0.3/widgets/volume.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/weather.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious-2.0.3/widgets/wifi.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/bat.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/cpu.lua	/^local function worker(format)$/;"	f
+worker	vicious/widgets/cpufreq.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/cpuinf.lua	/^local function worker(format)$/;"	f
+worker	vicious/widgets/date.lua	/^local function worker(format)$/;"	f
+worker	vicious/widgets/dio.lua	/^local function worker(format, disk)$/;"	f
+worker	vicious/widgets/fs.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/gmail.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/hddtemp.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/mbox.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/mboxc.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/mdir.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/mem.lua	/^local function worker(format)$/;"	f
+worker	vicious/widgets/mpd.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/net.lua	/^local function worker(format)$/;"	f
+worker	vicious/widgets/org.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/os.lua	/^local function worker(format)$/;"	f
+worker	vicious/widgets/pkg.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/raid.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/thermal.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/uptime.lua	/^local function worker(format)$/;"	f
+worker	vicious/widgets/volume.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/weather.lua	/^local function worker(format, warg)$/;"	f
+worker	vicious/widgets/wifi.lua	/^local function worker(format, warg)$/;"	f
+wrequire	vicious-2.0.3/helpers.lua	/^function wrequire(table,  key)$/;"	f
+{ __index 	vicious-2.0.3/helpers.lua	/^        { __index = function(table, index)$/;"	f
+{ __index 	vicious/helpers.lua	/^        { __index = function(table, index)$/;"	f

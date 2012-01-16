@@ -1,0 +1,25 @@
+;; Object python/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "python/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(PYTHON_CFLAGS)")) nil [757 819])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [820 855])
+            ("lib_LTLIBRARIES" variable (:default-value ("python.la")) nil [856 884])
+            ("python_la_SOURCES" variable (:default-value ("weechat-python.c" "weechat-python.h" "weechat-python-api.c" "weechat-python-api.h")) nil [885 1047])
+            ("python_la_LDFLAGS" variable (:default-value ("-module")) nil [1047 1075])
+            ("python_la_LIBADD" variable (:default-value ("../lib_weechat_plugins_scripts.la" "$(PYTHON_LFLAGS)")) nil [1075 1146])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1147 1175]))          
+    :file "Makefile.am"
+    :pointmax 1175
+    :fsize 1174
+    :lastmodtime '(19743 15893)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!scripts!python!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

@@ -1,0 +1,40 @@
+;; Object plugins/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "plugins/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"")) nil [823 868])
+            ("noinst_LIBRARIES" variable (:default-value ("lib_weechat_plugins.a")) nil [869 910])
+            ("lib_weechat_plugins_a_SOURCES" variable (:default-value ("weechat-plugin.h" "plugin.c" "plugin.h" "plugin-api.c" "plugin-api.h" "plugin-config.c" "plugin-config.h")) nil [911 1240])
+            ("alias_dir" variable (:default-value ("alias")) nil [1257 1275])
+            ("aspell_dir" variable (:default-value ("aspell")) nil [1299 1319])
+            ("charset_dir" variable (:default-value ("charset")) nil [1344 1366])
+            ("demo_dir" variable (:default-value ("demo")) nil [1388 1404])
+            ("fifo_dir" variable (:default-value ("fifo")) nil [1426 1442])
+            ("irc_dir" variable (:default-value ("irc")) nil [1463 1477])
+            ("logger_dir" variable (:default-value ("logger")) nil [1501 1521])
+            ("relay_dir" variable (:default-value ("relay")) nil [1544 1562])
+            ("rmodifier_dir" variable (:default-value ("rmodifier")) nil [1589 1615])
+            ("script_dir" variable (:default-value ("scripts")) nil [1637 1658])
+            ("script_dir" variable (:default-value ("scripts")) nil [1682 1703])
+            ("script_dir" variable (:default-value ("scripts")) nil [1725 1746])
+            ("script_dir" variable (:default-value ("scripts")) nil [1767 1788])
+            ("script_dir" variable (:default-value ("scripts")) nil [1809 1830])
+            ("xfer_dir" variable (:default-value ("xfer")) nil [1852 1868])
+            ("SUBDIRS" variable (:default-value ("." "$(alias_dir)" "$(aspell_dir)" "$(charset_dir)" "$(demo_dir)" "$(fifo_dir)" "$(irc_dir)" "$(logger_dir)" "$(relay_dir)" "$(rmodifier_dir)" "$(script_dir)" "$(xfer_dir)")) nil [1875 2062])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [2063 2091])
+            ("install-data-hook" function nil nil [2117 2265])
+            ("uninstall-hook" function nil nil [2293 2358]))          
+    :file "Makefile.am"
+    :pointmax 2358
+    :fsize 2357
+    :lastmodtime '(20115 7042)
+    :unmatched-syntax '((shell-command 2310 . 2357) (bol 2309 . 2309))
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

@@ -1,0 +1,25 @@
+;; Object xfer/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "xfer/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"")) nil [757 802])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [803 838])
+            ("lib_LTLIBRARIES" variable (:default-value ("xfer.la")) nil [839 865])
+            ("xfer_la_SOURCES" variable (:default-value ("xfer.c" "xfer.h" "xfer-buffer.c" "xfer-buffer.h" "xfer-chat.c" "xfer-chat.h" "xfer-command.c" "xfer-command.h" "xfer-completion.c" "xfer-completion.h" "xfer-config.c" "xfer-config.h" "xfer-dcc.c" "xfer-dcc.h" "xfer-file.c" "xfer-file.h" "xfer-info.c" "xfer-info.h" "xfer-network.c" "xfer-network.h" "xfer-upgrade.c" "xfer-upgrade.h")) nil [866 1594])
+            ("xfer_la_LDFLAGS" variable (:default-value ("-module")) nil [1595 1621])
+            ("xfer_la_LIBADD" variable (:default-value ("$(XFER_LFLAGS)")) nil [1621 1654])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [1655 1683]))          
+    :file "Makefile.am"
+    :pointmax 1683
+    :fsize 1682
+    :lastmodtime '(19743 16059)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!xfer!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )

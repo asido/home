@@ -1,0 +1,25 @@
+;; Object charset/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "charset/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-automake-mode
+    :tags 
+        '( ("INCLUDES" variable (:default-value ("-DLOCALEDIR=\\\"$(datadir)/locale\\\"" "$(CHARSET_CFLAGS)")) nil [757 820])
+            ("libdir" variable (:default-value ("${weechat_libdir}/plugins")) nil [821 856])
+            ("lib_LTLIBRARIES" variable (:default-value ("charset.la")) nil [857 886])
+            ("charset_la_SOURCES" variable (:default-value ("charset.c")) nil [887 918])
+            ("charset_la_LDFLAGS" variable (:default-value ("-module")) nil [918 947])
+            ("charset_la_LIBADD" variable (:default-value ("$(CHARSET_LFLAGS)")) nil [947 986])
+            ("EXTRA_DIST" variable (:default-value ("CMakeLists.txt")) nil [987 1015]))          
+    :file "Makefile.am"
+    :pointmax 1015
+    :fsize 1014
+    :lastmodtime '(19743 12953)
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "!home!asido!src!weechat-0.3.6!src!plugins!charset!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.0"
+  )
