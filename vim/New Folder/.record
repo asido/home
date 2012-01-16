@@ -1,9 +1,0 @@
-perl-completion.vim
-2.42
-/home/asido/.vim/ftplugin/perl/perlomni.vim
-/home/asido/.vim/plugin/perlomni-util.vim
-/home/asido/.vim/plugin/perlomni-data.vim
-/home/asido/.vim/bin/grep-hashkeys.pl
-/home/asido/.vim/bin/grep-pattern.pl
-/home/asido/.vim/bin/grep-objvar.pl
-/home/asido/.vim//test.vim
