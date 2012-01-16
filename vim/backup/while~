@@ -1,7 +1,0 @@
-BEGIN {
-	n = 1;
-	while(n <= 5) {
-		print "2^", n, 2**n;
-		n++;
-	}
-}

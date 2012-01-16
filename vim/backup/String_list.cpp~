@@ -1,5 +1,0 @@
-#include "String_list.h"
-
-void String_list::put(std::string str) {
-	l.push_back(str);
-}

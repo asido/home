@@ -1,7 +1,0 @@
-BEGIN {
-	nam="sam"
-	if(name == "max")
-		print "nam is max"
-	else
-		print "nam is not max, it is", nam;
-}

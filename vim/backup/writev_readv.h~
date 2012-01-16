@@ -1,7 +1,0 @@
-#ifndef WRITEV_READV_H
-#define WRITEV_READV_H
-
-ssize_t readv(int fd, const struct iovec *vector, int count);
-ssize_t writev(int fd, const struct iovec *vector, int count);
-
-#endif /* end of include guard: WRITEV_READV_H */

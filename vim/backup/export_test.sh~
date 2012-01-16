@@ -1,6 +1,0 @@
-#!/bin/bash
-
-export cheese=american
-echo "$(basename $0): $cheese"
-
-echo "$(basename $0): $cheese"

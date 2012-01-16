@@ -1,8 +1,0 @@
-[ORG 0x7c00]
-
-mov al, 0x61
-mov ah, 0x0E
-int 0x10
-
-times 510 - ($ - $$) db 0
-dw 0xaa55

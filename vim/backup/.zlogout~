@@ -1,5 +1,0 @@
-# This file is executed when the login shell exits.
-# Put here whatever you want to be done before shuting down the computer.
-
-sudo rm -rf /tmp/* > /dev/null
-sudo rm -f /tmp/* > /dev/null

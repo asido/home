@@ -1,6 +1,0 @@
-#ifndef GUARD_split_h
-#define GUARD_split_h
-
-string_list& split(const std::string&);
-
-#endif

@@ -1,5 +1,0 @@
-USE likemelikeu;
-
-ALTER TABLE users
-ADD active int NOT NULL AFTER zip,
-ADD confirm_hash char(40) NOT NULL AFTER active;

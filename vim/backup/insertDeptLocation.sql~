@@ -1,7 +1,0 @@
-use company;
-
-insert into dept_Locations values(1,'Houston');
-insert into dept_Locations values(4,'Stafford');
-insert into dept_Locations values (5,'Bellaire');
-insert into dept_Locations values (5,'Sugarland');
-insert into dept_Locations values (5,'Houston');

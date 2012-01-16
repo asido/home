@@ -1,6 +1,0 @@
-BEGIN {
-	server = "/inet/tcp/0/www.microsoft.com/80";
-	print "GET /robots.txt" |& server;
-	while(server |& getline)
-		print to_upper($NF);
-}

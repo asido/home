@@ -1,6 +1,0 @@
-#!/usr/bin/perl -w
-
-print "Enter 28: ";
-$entry = <>;
-if($entry == 28);
-	print "Thank you for entering 28.\n";

@@ -1,4 +1,0 @@
-# Connect to QEMU
-target remote localhost:1234
-# Add KERNEL file for debugging information
-add-symbol-file KERNEL 0x101000

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-while [ $RANDOM -le 32000 ]; do
-	echo $RANDOM
-done

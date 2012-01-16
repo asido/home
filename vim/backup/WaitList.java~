@@ -1,9 +1,0 @@
-public abstract class WaitList
-{
-	public abstract void sit_down(Customer customer);
-	public abstract boolean is_full();
-	public abstract boolean is_empty();
-	public abstract int waiting_count();
-	public abstract void next();
-	public abstract void add_observer(Observer observer);
-}

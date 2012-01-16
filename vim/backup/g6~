@@ -1,6 +1,0 @@
-{
-	print $0 | "to_upper.sh" | getline hold;
-	#print $0 |& "to_upper.sh";
-	#"to_upper.sh" |& getline hold;
-	print hold;
-}

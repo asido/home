@@ -1,8 +1,0 @@
-#!/usr/bin/perl -w
-
-for(@ARGV) {
-	open(IN, $_) || die("Cannot open file $_: $!.\n");
-	$line = <IN>;
-	print "$_: ", $line;# = <IN>;
-	close(IN);
-}

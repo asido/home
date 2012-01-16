@@ -1,9 +1,0 @@
-#!/usr/bin/perl -w
-
-my $filename = "";
-while(<>) {
-	if($ARGV ne $filename) {
-		print "$ARGV: $_";
-		$filename = $ARGV;
-	}
-}

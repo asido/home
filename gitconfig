@@ -1,0 +1,9 @@
+[user]
+	name = Arvydas Sidorenko
+	email = asido4@gmail.com
+[sendemail]
+	smtpencryption = tls
+	smtpserver = smtp.gmail.com
+	smtpuser = asido4@gmail.com
+	smtpserverport = 587
+	chainreplyto = false

@@ -1,6 +1,0 @@
-#!/bin/bash
-# set -x
-
-while [[ read arg ]]; do
-	echo "$arg" | tr '[a-z]' '[A-Z]';
-done

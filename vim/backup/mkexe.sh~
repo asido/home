@@ -1,7 +1,0 @@
-#!/bin/bash
-
-files=("$@")
-
-for file in ${files[*]}; do
-	sudo chmod +x "$file"
-done

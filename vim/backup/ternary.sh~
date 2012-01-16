@@ -1,9 +1,0 @@
-#!/bin/bash
-
-((N = 10, Z = 0, COUNT = 1))
-((T = N > COUNT ? ++Z : --Z))
-echo $T
-echo $Z
-
-Z=$((3#111))
-echo $Z

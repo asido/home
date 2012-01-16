@@ -1,9 +1,0 @@
-public interface Student {
-	protected abstract boolean passed();
-	protected abstract void setGermanGrade(int germanGrade);
-
-	protected void setName(String name); 
-	protected void setPhone(String phone); 
-	protected String getName(); 
-	protected String getPhone(); 
-}

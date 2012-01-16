@@ -1,9 +1,0 @@
-!#/bin/bash 
-for f in `find -O3 /usr/lib  -type f -name "*.la"  -print0 | xargs -0` 
-do 
-   if [ -z `cave print-owners $f` ] 
-   then 
-      echo file is orphaned $f 
-      rm $f 
-   fi 
-done

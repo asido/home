@@ -1,4 +1,0 @@
-#!/bin/bash
-who
-date
-echo "HI"

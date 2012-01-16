@@ -1,9 +1,0 @@
-#!/bin/bash
-echo -n "How old are you? "
-read age
-echo "Wow, in $((60 - age)) you will be 60 years old!"
-
-echo "There is $((60 * 60 * 24 * 365)) seconds in a non-leap year"
-
-lineCount=$(($(wc -l < /bin/sh) / 1 ))
-echo $lineCount

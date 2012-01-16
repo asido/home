@@ -1,4 +1,0 @@
-abstract class Shape
-{
-	public draw();
-}

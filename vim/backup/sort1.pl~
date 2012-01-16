@@ -1,8 +1,0 @@
-#!/usr/bin/perl -w
-
-@colors = ("red", "Orange", "yellow", "green", "blue", "indigo", "Violet");
-
-print "@colors\n";
-
-@sorted_colors = sort {$a cmp $b} @colors;
-print "@sorted_colors\n";

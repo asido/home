@@ -1,8 +1,0 @@
-<nav>
-    	<a href="index.php" style="text-decoration:none"><div class="menuitem">Home</div></a>
-        <a href="aboutus.php" style="text-decoration:none"><div class="menuitem">About US</div></a>
-        <a href="uploadtours.php" style="text-decoration:none"><div class="menuitem">Post A Tour</div></a>
-        <a href="search.php" style="text-decoration:none"><div class="menuitem">Find A Tour</div></a>
-        <a href="contactus.php" style="text-decoration:none"><div class="menuitem">Contact Us</div></a>
-    
-    </nav> 

@@ -1,5 +1,0 @@
-#!/usr/bin/perl -w
-
-$string = "A line {remove me} may have two {keep me} pairs of braces.";
-$string =~ s/{.*?} //;
-print "$string\n";
