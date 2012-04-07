@@ -10,8 +10,6 @@ require("beautiful")
 require("naughty")
 -- Vicious widget library
 require("vicious")
--- Bashets widgets
-require("bashets")
 -- Calendar2
 require("calendar2")
 
@@ -118,7 +116,7 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 
 -- separator
 separator = wibox.widget.textbox()
-separator:set_text(" :: ")
+separator:set_text("     ::     ")
 -- spacer
 spacer = wibox.widget.textbox()
 spacer.text = "  "
@@ -126,47 +124,27 @@ spacer.text = "  "
 -- {{{ Wibox
 --
 --{{{ WIFI
--- Initialize widget
 netwidget = wibox.widget.textbox()
--- Register widget
-vicious.register(netwidget, vicious.widgets.net, '<span color="#ffffff">down: ${wlan0 down_kb}kb/s</span> <span color="#ffffff"> / up: ${wlan0 up_kb}kb/s</span>', 3)
--- Initialize network icon
-wifi_icon = wibox.widget.imagebox()
-wifi_icon:set_image(beautiful.widget_net)
---}}}
+--netwidget:set_width(100)
+vicious.register(netwidget, vicious.widgets.net, '[ <span color="#0B61A4">NET</span> down: ${wlan0 down_kb}kb/s / up: ${wlan0 up_kb}kb/s ]', 3)
 --{{{ memory
 memwidget = wibox.widget.textbox()
-vicious.register(memwidget, vicious.widgets.mem, "<span color='#fff'> $1% ($2MB/$3MB) </span>", 13)
-memicon = wibox.widget.imagebox()
-memicon:set_image(beautiful.widget_mem)
+vicious.register(memwidget, vicious.widgets.mem, "[ <span color='#0B61A4'>MEM</span> $1% ($2MB/$3MB) ]", 13)
 --}}}
 --{{{ mail
-gmailicon = wibox.widget.imagebox()
-gmailicon:set_image(beautiful.widget_mail)
+--gmailicon = wibox.widget.imagebox()
+--gmailicon:set_image(beautiful.widget_mail)
 --gmailwidget = wibox.widget.textbox()
 --vicious.register(gmailwidget, vicious.widgets.gmail, "<span color='#fff'>Mail: ${count} | ${subject} </span>", 20)
---}}}
---{{{ gmail
-gmailwidget = wibox.widget.textbox()
-bashets.register("gmail.lua", { widget = gmailwidget, update_time=10, format='Mail: $1 | $2'})
-bashets.start()
 --}}}
 
 --{{{ cpu
 cpuwidget = wibox.widget.textbox()
-vicious.register(cpuwidget, vicious.widgets.cpu, "$2% | $3% ")
-cpuicon = wibox.widget.imagebox()
-cpuicon:set_image(beautiful.widget_cpu)
+vicious.register(cpuwidget, vicious.widgets.cpu, "[ <span color='#0B61A4'>CPU</span> $1% ]")
 --}}}
 --{{{ hdd
 hddwidget = wibox.widget.textbox()
-vicious.register(hddwidget, vicious.widgets.fs, "system: ${/ used_gb}GB / ${/ size_gb}GB  |  home: ${/home used_gb}GB / ${/home size_gb}GB ")
-hddicon = wibox.widget.imagebox()
-hddicon:set_image(beautiful.widget_hdd)
---}}}
---{{{ disk I/O
-diowidget = wibox.widget.textbox()
-vicious.register(diowidget, vicious.widgets.dio, "<span color='red'> I/O</span>  read: ${sda read_mb}MB/s | write: ${sda write_mb}MB/s ", 3, "sda")
+vicious.register(hddwidget, vicious.widgets.fs, "[ <span color='#0B61A4'>SYSTEM</span> ${/ used_gb}GB / ${/ size_gb}GB  |  <span color='#0B61A4'>HOME</span> ${/home used_gb}GB / ${/home size_gb}GB  |  <span color='#0B61A4'>DATA</span> ${/home/asido/data used_gb}GB / ${/home/asido/data size_gb}GB ]")
 --}}}
 
 --{{{{ update count
@@ -176,10 +154,8 @@ vicious.register(diowidget, vicious.widgets.dio, "<span color='red'> I/O</span> 
 --updateicon.image = image(beautiful.widget_updates)
 --}}}}
 --{{{ volume
-volumeicon = wibox.widget.imagebox()
-volumeicon:set_image(beautiful.widget_volume)
 volumewidget = wibox.widget.textbox()
-vicious.register(volumewidget, vicious.widgets.volume, "$1% ", 2, "Master")
+vicious.register(volumewidget, vicious.widgets.volume, "[ <span color='#0B61A4'>VOL</span> $1% ]", 2, "Master")
 volumewidget:buttons(awful.util.table.join(
 	awful.button({ }, 1, function () exec("amixer -q set Master 2dB+", false) end)
 ))
@@ -266,7 +242,6 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
 	right_layout:add(separator)
-	right_layout:add(volumeicon)
 	right_layout:add(volumewidget)
 	right_layout:add(separator)
     right_layout:add(mytextclock)
@@ -286,24 +261,18 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the left
     left_layout = wibox.layout.fixed.horizontal()
-	left_layout:add(gmailicon)
-	left_layout:add(gmailwidget)
+	--left_layout:add(gmailicon)
+	--left_layout:add(gmailwidget)
 
     -- Widgets that are aligned to the right
     right_layout = wibox.layout.fixed.horizontal()
 	right_layout:add(separator)
-	right_layout:add(diowidget)
-	right_layout:add(separator)
-	right_layout:add(hddicon)
 	right_layout:add(hddwidget)
 	right_layout:add(separator)
-	right_layout:add(memicon)
 	right_layout:add(memwidget)
 	right_layout:add(separator)
-	right_layout:add(cpuicon)
 	right_layout:add(cpuwidget)
 	right_layout:add(separator)
-	right_layout:add(wifi_icon)
 	right_layout:add(netwidget)
 	right_layout:add(spacer)
 
@@ -350,18 +319,14 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "i",
 		function ()
-			if not client.focus then
-				awful.screen.focus(1)
-			else
-				scr_count = screen.count()
-				scr_focused = client.focus.screen
-				if scr_focused >= scr_count then
-					scr_focused = 1
-				else
-					scr_focused = scr_focused + 1
-				end
-				awful.screen.focus(scr_focused)
-			end
+            scr_count = screen.count()
+            scr_focused = mouse.screen
+            if scr_focused >= scr_count then
+                scr_focused = 1
+            else
+                scr_focused = scr_focused + 1
+            end
+            awful.screen.focus(scr_focused)
 		end),
 
     awful.key({ modkey,           }, "Tab",
@@ -407,7 +372,12 @@ globalkeys = awful.util.table.join(
 
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-    awful.key({ modkey, "Shift"   }, "f",      function (c) awful.client.maximize(c)         end),
+    awful.key({ modkey, "Shift"   }, "f",     
+                    function (c)
+                        if c then
+                            c:geometry(screen[mouse.screen].workarea)
+                        end
+                    end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
@@ -488,6 +458,10 @@ awful.rules.rules = {
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "gimp" },
+      properties = { floating = true } },
+    { rule = { class = "qemu" },
+      properties = { floating = true } },
+    { rule = { class = "MuPDF" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
