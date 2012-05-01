@@ -336,8 +336,22 @@ globalkeys = awful.util.table.join(
                 client.focus:raise()
             end
         end),
-	awful.key({ }, "F10", function () awful.util.spawn("import -window root /home/asido/screen-" .. os.time() .. ".png") end),
-	awful.key({ "Shift" }, "F10", function () awful.util.spawn("import -window " .. client.focus.window .. " /home/asido/client-" .. os.time() .. ".png") end),
+	awful.key({ }, "F10",
+        function ()
+            filename = "screen-" .. os.time() .. ".png";
+            awful.util.spawn("import -window root /home/asido/" .. filename)
+            naughty.notify({ preset = naughty.config.presets.normal,
+							 screen = mouse.screen,
+                             text = "Screenshot saved: " .. filename })
+        end),
+	awful.key({ "Shift" }, "F10",
+		function ()
+            filename = "client-" .. os.time() .. ".png";
+			awful.util.spawn("import -window " .. client.focus.window .. " /home/asido/" .. filename)
+            naughty.notify({ preset = naughty.config.presets.normal,
+							 screen = mouse.screen,
+                             text = "Screenshot saved: " .. filename })
+		end),
 	awful.key({ modkey }, "F12", function () awful.util.spawn("amixer set Master 5%+ > /dev/null") end),
 	awful.key({ modkey }, "F11", function () awful.util.spawn("amixer set Master 5%- > /dev/null") end),
 	awful.key({ modkey }, "F10", function () awful.util.spawn("amixer set Master 0% > /dev/null") end),
@@ -375,7 +389,10 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "f",     
                     function (c)
                         if c then
-                            c:geometry(screen[mouse.screen].workarea)
+							geom = screen[mouse.screen].workarea
+							geom['width'] = geom['width'] - (theme.border_width * 2)
+							geom['height'] = geom['height'] - (theme.border_width * 2)
+                            c:geometry(geom)
                         end
                     end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
