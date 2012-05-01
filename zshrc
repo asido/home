@@ -78,6 +78,9 @@ alias ls='ls --color=auto -F'
 alias offlineimap-tty='offlineimap -u TTY.TTYUI'
 alias hnb-partecs='hnb $HOME/partecs/partecs-hnb.xml'
 alias rest2html-css='rst2html --embed-stylesheet --stylesheet-path=/usr/share/python-docutils/s5_html/themes/default/print.css'
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
+alias fgrep="fgrep --color=auto"
 
 autoload compinit
 compinit
@@ -193,3 +196,4 @@ bindkey '^X^E' run_with_sudo
 
 export WINEDEBUG=-all
 export VMAIL_HOME=~/.vmail
+export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
