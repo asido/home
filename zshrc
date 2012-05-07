@@ -197,3 +197,9 @@ bindkey '^X^E' run_with_sudo
 export WINEDEBUG=-all
 export VMAIL_HOME=~/.vmail
 export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
+if [ -d "/opt/slickedit/bin" ]; then
+	export PATH="$PATH:/opt/slickedit/bin"
+fi
+
+# set/unset some option and positional parameters
+set bell-style visible

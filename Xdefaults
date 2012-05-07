@@ -12,12 +12,13 @@ URxvt*inheritPixmap: true
 URxvt*tintColor: white
 URxvt*shading: 25
 
-urxvt*font: xft:Terminus:size=8
+!urxvt*faceName: xft:Terminus:size=12
 ! urxvt*font: xft:GohuFont:size=8:antialias=false
 ! urxvt*boldFont: xft:GohuFont:size=8:antialias=false
 ! urxvt*font: xft:Terminus:size=8:antialias=false
 ! urxvt*boldFont: xft:Terminus:size=8:antialias=false
-! urxvt.font: -*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*,-misc-fixed-medium-r-normal--12-*-*-*-*-*-iso10646-1
+urxvt.font: -*-Terminus-*-*-*-*-12-*-*-*-*-*-*-*
+!urxvt*font: xft:Terminus:size=8:antialias=false
 
 URxvt*perl-ext-common:  default,matcher
 URxvt*matcher.button:   1
