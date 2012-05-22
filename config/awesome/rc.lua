@@ -389,8 +389,8 @@ clientkeys = awful.util.table.join(
                     function (c)
                         if c then
 							geom = screen[mouse.screen].workarea
-							geom['width'] = geom['width'] - (theme.border_width * 2)
-							geom['height'] = geom['height'] - (theme.border_width * 2)
+							geom['width'] = geom['width'] - (c.border_width * 2)
+							geom['height'] = geom['height'] - (c.border_width * 2)
                             c:geometry(geom)
                         end
                     end),
@@ -474,6 +474,8 @@ awful.rules.rules = {
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "gimp" },
+      properties = { floating = true } },
+    { rule = { class = "feh" },
       properties = { floating = true } },
     { rule = { class = "qemu" },
       properties = { floating = true } },
