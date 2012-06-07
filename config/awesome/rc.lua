@@ -155,9 +155,9 @@ vicious.register(hddwidget, vicious.widgets.fs, "[ <span color='#0B61A4'>SYSTEM<
 --}}}}
 --{{{ volume
 volumewidget = wibox.widget.textbox()
-vicious.register(volumewidget, vicious.widgets.volume, "[ <span color='#0B61A4'>VOL</span> $1% ]", 2, "Master")
+vicious.register(volumewidget, vicious.widgets.volume, "[ <span color='#0B61A4'>VOL</span> $1% ]", 2, "PCM")
 volumewidget:buttons(awful.util.table.join(
-	awful.button({ }, 1, function () exec("amixer -q set Master 2dB+", false) end)
+	awful.button({ }, 1, function () exec("amixer -q set PCM 2dB+", false) end)
 ))
 --}}}
 
@@ -351,9 +351,9 @@ globalkeys = awful.util.table.join(
 							 screen = mouse.screen,
                              text = "Screenshot saved: " .. filename })
 		end),
-	awful.key({ modkey }, "F12", function () awful.util.spawn("amixer set Master 5%+ > /dev/null") end),
-	awful.key({ modkey }, "F11", function () awful.util.spawn("amixer set Master 5%- > /dev/null") end),
-	awful.key({ modkey }, "F10", function () awful.util.spawn("amixer set Master 0% > /dev/null") end),
+	awful.key({ }, "#123", function () awful.util.spawn("amixer set PCM 5%+ > /dev/null") end),
+	awful.key({ }, "#122", function () awful.util.spawn("amixer set PCM 5%- > /dev/null") end),
+	awful.key({ }, "#121", function () awful.util.spawn("amixer set PCM 0% > /dev/null") end),
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
