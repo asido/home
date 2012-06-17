@@ -1,17 +1,17 @@
 -- Standard awesome library
-require("awful")
+awful = require("awful")
+awful.rules = require("awful.rules")
 require("awful.autofocus")
-require("awful.rules")
 -- Widget and layout library
-require("wibox")
+wibox = require("wibox")
 -- Theme handling library
-require("beautiful")
+beautiful = require("beautiful")
 -- Notification library
-require("naughty")
+naughty = require("naughty")
 -- Vicious widget library
-require("vicious")
+vicious = require("vicious")
 -- Calendar2
-require("calendar2")
+--require("calendar2")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -156,14 +156,11 @@ vicious.register(hddwidget, vicious.widgets.fs, "[ <span color='#0B61A4'>SYSTEM<
 --{{{ volume
 volumewidget = wibox.widget.textbox()
 vicious.register(volumewidget, vicious.widgets.volume, "[ <span color='#0B61A4'>VOL</span> $1% ]", 2, "PCM")
-volumewidget:buttons(awful.util.table.join(
-	awful.button({ }, 1, function () exec("amixer -q set PCM 2dB+", false) end)
-))
 --}}}
 
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
-calendar2.addCalendarToWidget(mytextclock)
+--calendar2.addCalendarToWidget(mytextclock)
 
 -- Create a wibox for each screen and add it
 mywibox = {}

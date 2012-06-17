@@ -200,6 +200,9 @@ export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
 if [ -d "/opt/slickedit/bin" ]; then
 	export PATH="$PATH:/opt/slickedit/bin"
 fi
+if [ -d "/opt/bin" ]; then
+	export PATH="$PATH:/opt/bin"
+fi
 
 # set/unset some option and positional parameters
 set bell-style visible
