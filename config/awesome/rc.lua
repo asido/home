@@ -16,6 +16,7 @@ vicious = require("vicious")
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
+
 if awesome.startup_errors then
     naughty.notify({ preset = naughty.config.presets.critical,
                      title = "Oops, there were errors during startup!",
@@ -484,7 +485,7 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1 and have no border
     { rule = { class = "Firefox" },
       properties = { border_width = 0 } },
-    { rule = { class = "Chromium" },
+    { rule = { class = "Google-chrome" },
       properties = { border_width = 0 } },
 	
 }
