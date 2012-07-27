@@ -29,7 +29,7 @@ URxvt*urlLauncher:      google-chrome
 
 ## Colors
 URxvt*background: #151515
-URxvt*foreground: #6BC3C5
+URxvt*foreground: #FFFFFF
 URxvt*colorUL: #4E4FFF
 !black
 *color0:  #151515
@@ -53,7 +53,7 @@ URxvt*colorUL: #4E4FFF
 *color6:               #0EA5C8
 *color14:              #058FAF
 !white
-*color7:  #6BC3C5
+*color7:  #FFFFFF
 *color15: #A0A0A0
 
 
