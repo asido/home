@@ -10,8 +10,6 @@ beautiful = require("beautiful")
 naughty = require("naughty")
 -- Vicious widget library
 vicious = require("vicious")
--- Calendar2
---require("calendar2")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -71,7 +69,6 @@ layouts =
     awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier,
 	awful.layout.suit.linear
---	awful.layout.suit.linear.horizontal
 }
 -- }}}
 
@@ -145,7 +142,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "[ <span color='#0B61A4'>CORES<
 --}}}
 --{{{ hdd
 hddwidget = wibox.widget.textbox()
-vicious.register(hddwidget, vicious.widgets.fs, "[ <span color='#0B61A4'>SYSTEM</span> ${/ used_gb}GB / ${/ size_gb}GB  |  <span color='#0B61A4'>HOME</span> ${/home used_gb}GB / ${/home size_gb}GB  |  <span color='#0B61A4'>DATA</span> ${/home/asido/data used_gb}GB / ${/home/asido/data size_gb}GB ]")
+vicious.register(hddwidget, vicious.widgets.fs, "[ <span color='#0B61A4'>SYSTEM</span> ${/ used_gb}GB / ${/ size_gb}GB ]")
 --}}}
 
 --{{{{ update count
@@ -239,6 +236,15 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
 	right_layout:add(separator)
+	right_layout:add(hddwidget)
+	right_layout:add(separator)
+	right_layout:add(memwidget)
+	right_layout:add(separator)
+	right_layout:add(cpuwidget)
+	right_layout:add(separator)
+	right_layout:add(netwidget)
+	right_layout:add(spacer)
+	right_layout:add(separator)
 	right_layout:add(volumewidget)
 	right_layout:add(separator)
     right_layout:add(mytextclock)
@@ -251,34 +257,6 @@ for s = 1, screen.count() do
     layout:set_right(right_layout)
 
     mywibox[s]:set_widget(layout)
-
-
-	-- Create the bottom wibox
-	mywibox_bottom[s] = awful.wibox({ position = "bottom", screen = s })
-
-    -- Widgets that are aligned to the left
-    left_layout = wibox.layout.fixed.horizontal()
-	--left_layout:add(gmailicon)
-	--left_layout:add(gmailwidget)
-
-    -- Widgets that are aligned to the right
-    right_layout = wibox.layout.fixed.horizontal()
-	right_layout:add(separator)
-	right_layout:add(hddwidget)
-	right_layout:add(separator)
-	right_layout:add(memwidget)
-	right_layout:add(separator)
-	right_layout:add(cpuwidget)
-	right_layout:add(separator)
-	right_layout:add(netwidget)
-	right_layout:add(spacer)
-
-	-- Now bring it all together
-	layout = wibox.layout.align.horizontal()
-	layout:set_left(left_layout)
-	layout:set_right(right_layout)
-
-	mywibox_bottom[s]:set_widget(layout)
 end
 -- }}}
 
