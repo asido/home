@@ -10,6 +10,7 @@ beautiful = require("beautiful")
 naughty = require("naughty")
 -- Vicious widget library
 vicious = require("vicious")
+gears = require("gears")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -40,6 +41,9 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/usr/share/awesome/themes/arch/theme.lua")
+for s = 1, screen.count() do
+    gears.wallpaper.maximized(beautiful.wallpaper, s)
+end
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -153,7 +157,7 @@ vicious.register(hddwidget, vicious.widgets.fs, "[ <span color='#0B61A4'>SYSTEM<
 --}}}}
 --{{{ volume
 volumewidget = wibox.widget.textbox()
-vicious.register(volumewidget, vicious.widgets.volume, "[ <span color='#0B61A4'>VOL</span> $1% ]", 2, "PCM")
+vicious.register(volumewidget, vicious.widgets.volume, "[ <span color='#0B61A4'>VOL</span> $1% ]", 2, "Master")
 --}}}
 
 -- Create a textclock widget
@@ -327,9 +331,9 @@ globalkeys = awful.util.table.join(
 							 screen = mouse.screen,
                              text = "Screenshot saved: " .. filename })
 		end),
-	awful.key({ }, "#123", function () awful.util.spawn("amixer set PCM 5%+ > /dev/null") end),
-	awful.key({ }, "#122", function () awful.util.spawn("amixer set PCM 5%- > /dev/null") end),
-	awful.key({ }, "#121", function () awful.util.spawn("amixer set PCM 0% > /dev/null") end),
+	awful.key({ }, "#123", function () awful.util.spawn("amixer set Master 5%+ > /dev/null") end),
+	awful.key({ }, "#122", function () awful.util.spawn("amixer set Master 5%- > /dev/null") end),
+	awful.key({ }, "#121", function () awful.util.spawn("amixer set Master 0% > /dev/null") end),
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
