@@ -142,7 +142,7 @@ vicious.register(memwidget, vicious.widgets.mem, "[ <span color='#0B61A4'>MEM</s
 
 --{{{ cpu
 cpuwidget = wibox.widget.textbox()
-vicious.register(cpuwidget, vicious.widgets.cpu, "[ <span color='#0B61A4'>CORES</span> $2% | $3% ]")
+vicious.register(cpuwidget, vicious.widgets.cpu, "[ <span color='#0B61A4'>CORES</span> $2% | $3% | $4% | $5% ]")
 --}}}
 --{{{ hdd
 hddwidget = wibox.widget.textbox()
